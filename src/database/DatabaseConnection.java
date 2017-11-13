@@ -109,7 +109,7 @@ public class DatabaseConnection {
                 props.put("user", "root"/*ServerProperties.getProperty("KinMS.User")*/);
                 props.put("password", ServerProperties.getProperty("KinMS.Pass"));
                 props.put("autoReconnect", "true");
-                final Connection con = DriverManager.getConnection("jdbc:mysql://127.0.0.1:13889/lsj?autoReconnect=true&maxReconnects=999&characterEncoding=gbk"/*ServerProperties.getProperty("KinMS.Url")*/, props);
+                final Connection con = DriverManager.getConnection("jdbc:mysql://127.0.0.1:" + ServerProperties.getProperty("KinMS.Port", "3306") + "/" + ServerProperties.getProperty("KinMS.Db", "maple") + "?autoReconnect=true&maxReconnects=999&characterEncoding=gbk", props);
                 allConnections.add(con);
                 return con;
             } catch (SQLException e) {
