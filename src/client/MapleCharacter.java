@@ -4917,6 +4917,105 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
         return bookCover;
     }
 
+    public int getBossLog2(String boss) {
+        return getBossLog2(boss, 0);
+    }
+
+    public int getBossLog2(String boss, int type) {
+        try {
+            int count = 0;
+
+            Connection con = DatabaseConnection.getConnection();
+            PreparedStatement ps = con.prepareStatement("SELECT * FROM bosslog WHERE characterid = ? AND bossid = ?");
+            ps.setInt(1, this.id);
+            ps.setString(2, boss);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                count = rs.getInt("count");
+                Timestamp bossTime = rs.getTimestamp("time");
+                rs.close();
+                ps.close();
+                if (type == 0) {
+                    if (bossTime != null) {
+                        Calendar cal = Calendar.getInstance();
+                        cal.setTimeInMillis(bossTime.getTime());
+                        if ((cal.get(5) + 1 <= Calendar.getInstance().get(5)) || (cal.get(2) + 1 <= Calendar.getInstance().get(2))) {
+                            count = 0;
+                            ps = con.prepareStatement("UPDATE bosslog SET count = 0  WHERE characterid = ? AND bossid = ?");
+                            ps.setInt(1, this.id);
+                            ps.setString(2, boss);
+                            ps.executeUpdate();
+                        }
+                    }
+                    rs.close();
+                    ps.close();
+                    ps = con.prepareStatement("UPDATE bosslog SET time = CURRENT_TIMESTAMP() WHERE characterid = ? AND bossid = ?");
+                    ps.setInt(1, this.id);
+                    ps.setString(2, boss);
+                    ps.executeUpdate();
+                }
+            } else {
+                PreparedStatement psu = con.prepareStatement("INSERT INTO bosslog (characterid, bossid, count, type) VALUES (?, ?, ?, ?)");
+                psu.setInt(1, this.id);
+                psu.setString(2, boss);
+                psu.setInt(3, 0);
+                psu.setInt(4, type);
+                psu.executeUpdate();
+                psu.close();
+            }
+            rs.close();
+            ps.close();
+            return count;
+        } catch (Exception Ex) {
+            // log.error("Error while read bosslog.", Ex);
+        }
+        return -1;
+    }
+
+    public void setBossLog2(String boss) {
+        setBossLog2(boss, 0);
+    }
+
+    public void setBossLog2(String boss, int type) {
+        setBossLog2(boss, type, 1);
+    }
+
+    public void setBossLog2(String boss, int type, int count) {
+        int bossCount = getBossLog2(boss, type);
+        try {
+            Connection con = DatabaseConnection.getConnection();
+            PreparedStatement ps = con.prepareStatement("UPDATE bosslog SET count = ?, type = ?, time = CURRENT_TIMESTAMP() WHERE characterid = ? AND bossid = ?");
+            ps.setInt(1, bossCount + count);
+            ps.setInt(2, type);
+            ps.setInt(3, this.id);
+            ps.setString(4, boss);
+            ps.executeUpdate();
+            ps.close();
+        } catch (Exception Ex) {
+            // log.error("Error while set bosslog.", Ex);
+        }
+    }
+
+    public void resetBossLog2(String boss) {
+        resetBossLog2(boss, 0);
+    }
+
+    public void resetBossLog2(String boss, int type) {
+        try {
+            Connection con = DatabaseConnection.getConnection();
+
+            PreparedStatement ps = con.prepareStatement("UPDATE bosslog SET count = ?, type = ?, time = CURRENT_TIMESTAMP() WHERE characterid = ? AND bossid = ?");
+            ps.setInt(1, 0);
+            ps.setInt(2, type);
+            ps.setInt(3, this.id);
+            ps.setString(4, boss);
+            ps.executeUpdate();
+            ps.close();
+        } catch (Exception Ex) {
+            // log.error("Error while reset bosslog.", Ex);
+        }
+    }
+
     public int getBossLog(String bossid) {
         Connection con1 = DatabaseConnection.getConnection();
         try {
@@ -4955,12 +5054,16 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     public void dropMessage(int type, String message) {
-        if (type == -1) {
-            client.getSession().write(UIPacket.getTopMsg(message));
-        } else if (type == -2) {
-            client.getSession().write(PlayerShopPacket.shopChat(message, 0)); //0 or what
-        } else {
-            client.getSession().write(MaplePacketCreator.serverNotice(type, message));
+        switch (type) {
+            case -1:
+                client.getSession().write(UIPacket.getTopMsg(message));
+                break;
+            case -2:
+                client.getSession().write(PlayerShopPacket.shopChat(message, 0)); //0 or what
+                break;
+            default:
+                client.getSession().write(MaplePacketCreator.serverNotice(type, message));
+                break;
         }
     }
 
