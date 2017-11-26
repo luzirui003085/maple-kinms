@@ -1,23 +1,4 @@
-/*
- This file is part of the OdinMS Maple Story Server
- Copyright (C) 2008 ~ 2010 Patrick Huy <patrick.huy@frz.cc> 
- Matthias Butz <matze@odinms.de>
- Jan Christian Meyer <vimes@odinms.de>
 
- This program is free software: you can redistribute it and/or modify
- it under the terms of the GNU Affero General Public License version 3
- as published by the Free Software Foundation. You may not use, modify
- or distribute this program under any other version of the
- GNU Affero General Public License.
-
- This program is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- GNU Affero General Public License for more details.
-
- You should have received a copy of the GNU Affero General Public License
- along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
 package server.maps;
 
 import java.awt.Point;
@@ -27,11 +8,14 @@ import java.util.Comparator;
 import java.util.List;
 import client.MapleCharacter;
 import client.MapleClient;
-import handling.world.MaplePartyCharacter;
 import java.lang.ref.WeakReference;
 import server.MaplePortal;
 import tools.MaplePacketCreator;
 
+/**
+ *
+ * @author zjj
+ */
 public class MapleDoor extends AbstractMapleMapObject {
 
     private WeakReference<MapleCharacter> owner;
@@ -41,9 +25,15 @@ public class MapleDoor extends AbstractMapleMapObject {
     private int skillId, ownerId;
     private Point targetPosition;
 
+    /**
+     *
+     * @param owner
+     * @param targetPosition
+     * @param skillId
+     */
     public MapleDoor(final MapleCharacter owner, final Point targetPosition, final int skillId) {
         super();
-        this.owner = new WeakReference<MapleCharacter>(owner);
+        this.owner = new WeakReference<>(owner);
         this.ownerId = owner.getId();
         this.target = owner.getMap();
         this.targetPosition = targetPosition;
@@ -53,9 +43,13 @@ public class MapleDoor extends AbstractMapleMapObject {
         this.skillId = skillId;
     }
 
+    /**
+     *
+     * @param origDoor
+     */
     public MapleDoor(final MapleDoor origDoor) {
         super();
-        this.owner = new WeakReference<MapleCharacter>(origDoor.owner.get());
+        this.owner = new WeakReference<>(origDoor.owner.get());
         this.town = origDoor.town;
         this.townPortal = origDoor.townPortal;
         this.target = origDoor.target;
@@ -66,16 +60,24 @@ public class MapleDoor extends AbstractMapleMapObject {
         setPosition(townPortal.getPosition());
     }
 
+    /**
+     *
+     * @return
+     */
     public final int getSkill() {
         return skillId;
     }
 
+    /**
+     *
+     * @return
+     */
     public final int getOwnerId() {
         return ownerId;
     }
 
     private final MaplePortal getFreePortal() {
-        final List<MaplePortal> freePortals = new ArrayList<MaplePortal>();
+        final List<MaplePortal> freePortals = new ArrayList<>();
 
         for (final MaplePortal port : town.getPortals()) {
             if (port.getType() == 6) {
@@ -108,6 +110,10 @@ public class MapleDoor extends AbstractMapleMapObject {
         return freePortals.iterator().next();
     }
 
+    /**
+     *
+     * @param client
+     */
     @Override
     public final void sendSpawnData(final MapleClient client) {
         if (getOwner() == null) {
@@ -122,6 +128,10 @@ public class MapleDoor extends AbstractMapleMapObject {
         }
     }
 
+    /**
+     *
+     * @param client
+     */
     @Override
     public final void sendDestroyData(final MapleClient client) {
         if (getOwner() == null) {
@@ -136,6 +146,11 @@ public class MapleDoor extends AbstractMapleMapObject {
         }
     }
 
+    /**
+     *
+     * @param chr
+     * @param toTown
+     */
     public final void warp(final MapleCharacter chr, final boolean toTown) {
         if (chr.getId() == getOwnerId() || (getOwner() != null && getOwner().getParty() != null && getOwner().getParty().getMemberById(chr.getId()) != null)) {
             if (!toTown) {
@@ -148,26 +163,50 @@ public class MapleDoor extends AbstractMapleMapObject {
         }
     }
 
+    /**
+     *
+     * @return
+     */
     public final MapleCharacter getOwner() {
         return owner.get();
     }
 
+    /**
+     *
+     * @return
+     */
     public final MapleMap getTown() {
         return town;
     }
 
+    /**
+     *
+     * @return
+     */
     public final MaplePortal getTownPortal() {
         return townPortal;
     }
 
+    /**
+     *
+     * @return
+     */
     public final MapleMap getTarget() {
         return target;
     }
 
+    /**
+     *
+     * @return
+     */
     public final Point getTargetPosition() {
         return targetPosition;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public final MapleMapObjectType getType() {
         return MapleMapObjectType.DOOR;

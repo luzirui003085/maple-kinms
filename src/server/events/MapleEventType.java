@@ -21,16 +21,51 @@
  */
 package server.events;
 
+/**
+ *
+ * @author zjj
+ */
 public enum MapleEventType {
 
+    /**
+     *
+     */
     Coconut("椰子比赛", new int[]{109080000}), //just using one
+
+    /**
+     *
+     */
     CokePlay("打瓶蓋", new int[]{109080010}), //just using one
+
+    /**
+     *
+     */
     Fitness("向高地", new int[]{109040000, 109040001, 109040002, 109040003, 109040004}),
+
+    /**
+     *
+     */
     OlaOla("上楼~上楼~", new int[]{109030001, 109030002, 109030003}),
+
+    /**
+     *
+     */
     OxQuiz("快速OX猜题", new int[]{109020001}),
    // Survival("不知道是什么",new int[]{809040000, 809040100}),
-    Snowball("雪球赛", new int[]{109060000}); //just using one
+
+    /**
+     *
+     */
+    Snowball("雪球赛", new int[]{109060000}); //just using one//just using one
+
+    /**
+     *
+     */
     public String command;
+
+    /**
+     *
+     */
     public int[] mapids;
 
     private MapleEventType(String comm, int[] mapids) {
@@ -38,6 +73,11 @@ public enum MapleEventType {
         this.mapids = mapids;
     }
 
+    /**
+     *
+     * @param splitted
+     * @return
+     */
     public static final MapleEventType getByString(final String splitted) {
         for (MapleEventType t : MapleEventType.values()) {
             if (t.command.equalsIgnoreCase(splitted)) {

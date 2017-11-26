@@ -116,6 +116,11 @@ public class HexTool {
         return "";
     }
 
+    /**
+     *
+     * @param bytes
+     * @return
+     */
     public static final String toPaddedStringFromAscii(final byte[] bytes) {
         final String str = toStringFromAscii(bytes);
         StringBuilder ret = new StringBuilder(str.length() * 3);
@@ -168,6 +173,11 @@ public class HexTool {
         return baos.toByteArray();
     }
 
+    /**
+     *
+     * @param op
+     * @return
+     */
     public static final String getOpcodeToString(final int op) {
         return "0x" + StringUtil.getLeftPaddedStr(Integer.toHexString(op).toUpperCase(), '0', 4);
     }

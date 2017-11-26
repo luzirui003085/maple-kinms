@@ -20,36 +20,45 @@
  */
 package handling.channel.handler;
 
-import client.inventory.Equip;
-import client.inventory.IItem;
-import client.inventory.MapleInventoryType;
-import client.MapleClient;
 import client.MapleCharacter;
-import constants.GameConstants;
+import client.MapleClient;
 import client.MapleQuestStatus;
 import client.RockPaperScissors;
+import client.inventory.Equip;
+import client.inventory.IItem;
 import client.inventory.ItemFlag;
+import client.inventory.MapleInventoryType;
+import constants.GameConstants;
 import handling.SendPacketOpcode;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import scripting.NPCConversationManager;
+import scripting.NPCScriptManager;
 import server.AutobanManager;
-import server.MapleShop;
 import server.MapleInventoryManipulator;
+import server.MapleItemInformationProvider;
+import server.MapleShop;
 import server.MapleStorage;
 import server.life.MapleNPC;
 import server.quest.MapleQuest;
-import scripting.NPCScriptManager;
-import scripting.NPCConversationManager;
-import server.MapleItemInformationProvider;
 import tools.ArrayMap;
 import tools.MaplePacketCreator;
 import tools.Pair;
 import tools.data.input.SeekableLittleEndianAccessor;
 import tools.data.output.MaplePacketLittleEndianWriter;
 
+/**
+ *
+ * @author zjj
+ */
 public class NPCHandler {
 
+    /**
+     *
+     * @param slea
+     * @param c
+     */
     public static final void NPCAnimation(final SeekableLittleEndianAccessor slea, final MapleClient c) {
         MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter();
         mplew.writeShort(SendPacketOpcode.NPC_ACTION.getValue());
@@ -67,6 +76,12 @@ public class NPCHandler {
         c.getSession().write(mplew.getPacket());
     }
 
+    /**
+     *
+     * @param slea
+     * @param c
+     * @param chr
+     */
     public static final void NPCShop(final SeekableLittleEndianAccessor slea, final MapleClient c, final MapleCharacter chr) {
         final byte bmode = slea.readByte();
         if (chr == null) {
@@ -111,6 +126,12 @@ public class NPCHandler {
         }
     }
 
+    /**
+     *
+     * @param slea
+     * @param c
+     * @param chr
+     */
     public static final void NPCTalk(final SeekableLittleEndianAccessor slea, final MapleClient c, final MapleCharacter chr) {
         if (chr == null || chr.getMap() == null) {
             return;
@@ -139,6 +160,12 @@ public class NPCHandler {
         }
     }
 
+    /**
+     *
+     * @param slea
+     * @param c
+     * @param chr
+     */
     public static final void QuestAction(final SeekableLittleEndianAccessor slea, final MapleClient c, final MapleCharacter chr) {
         final byte action = slea.readByte();
         short quest = slea.readShort();
@@ -204,6 +231,12 @@ public class NPCHandler {
         }
     }
 
+    /**
+     *
+     * @param slea
+     * @param c
+     * @param chr
+     */
     public static final void Storage(final SeekableLittleEndianAccessor slea, final MapleClient c, final MapleCharacter chr) {
         final MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
         final byte mode = slea.readByte();
@@ -235,8 +268,8 @@ public class NPCHandler {
                     }
                     storage.sendTakenOut(c, GameConstants.getInventoryType(item.getItemId()));
                 } else {
-                    //AutobanManager.getInstance().autoban(c, "Trying to take out item from storage which does not exist.");
-                    return;
+                //AutobanManager.getInstance().autoban(c, "Trying to take out item from storage which does not exist.");
+
                 }
                 break;
             }
@@ -339,6 +372,11 @@ public class NPCHandler {
         }
     }
 
+    /**
+     *
+     * @param slea
+     * @param c
+     */
     public static final void NPCMoreTalk(final SeekableLittleEndianAccessor slea, final MapleClient c) {
         final byte lastMsg = slea.readByte(); // 00 (last msg type I think)
         final byte action = slea.readByte(); // 00 = end chat, 01 == follow
@@ -352,12 +390,16 @@ public class NPCHandler {
         if (lastMsg == 2) {
             if (action != 0) {
                 cm.setGetText(slea.readMapleAsciiString());
-                if (cm.getType() == 0) {
-                    NPCScriptManager.getInstance().startQuest(c, action, lastMsg, -1);
-                } else if (cm.getType() == 1) {
-                    NPCScriptManager.getInstance().endQuest(c, action, lastMsg, -1);
-                } else {
-                    NPCScriptManager.getInstance().action(c, action, lastMsg, -1);
+                switch (cm.getType()) {
+                    case 0:
+                        NPCScriptManager.getInstance().startQuest(c, action, lastMsg, -1);
+                        break;
+                    case 1:
+                        NPCScriptManager.getInstance().endQuest(c, action, lastMsg, -1);
+                        break;
+                    default:
+                        NPCScriptManager.getInstance().action(c, action, lastMsg, -1);
+                        break;
                 }
             } else {
                 cm.dispose();
@@ -374,12 +416,16 @@ public class NPCHandler {
                 return;//h4x
             }
             if (selection >= -1 && action != -1) {
-                if (cm.getType() == 0) {
-                    NPCScriptManager.getInstance().startQuest(c, action, lastMsg, selection);
-                } else if (cm.getType() == 1) {
-                    NPCScriptManager.getInstance().endQuest(c, action, lastMsg, selection);
-                } else {
-                    NPCScriptManager.getInstance().action(c, action, lastMsg, selection);
+                switch (cm.getType()) {
+                    case 0:
+                        NPCScriptManager.getInstance().startQuest(c, action, lastMsg, selection);
+                        break;
+                    case 1:
+                        NPCScriptManager.getInstance().endQuest(c, action, lastMsg, selection);
+                        break;
+                    default:
+                        NPCScriptManager.getInstance().action(c, action, lastMsg, selection);
+                        break;
                 }
             } else {
                 cm.dispose();
@@ -387,6 +433,10 @@ public class NPCHandler {
         }
     }
 
+    /**
+     *
+     * @param c
+     */
     public static final void repairAll(final MapleClient c) {
         if (c.getPlayer().getMapId() != 240000000) {
             return;
@@ -396,7 +446,7 @@ public class NPCHandler {
         int price = 0;
         Map<String, Integer> eqStats;
         final MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
-        final Map<Equip, Integer> eqs = new ArrayMap<Equip, Integer>();
+        final Map<Equip, Integer> eqs = new ArrayMap<>();
         final MapleInventoryType[] types = {MapleInventoryType.EQUIP, MapleInventoryType.EQUIPPED};
         for (MapleInventoryType type : types) {
             for (IItem item : c.getPlayer().getInventory(type)) {
@@ -425,6 +475,11 @@ public class NPCHandler {
         }
     }
 
+    /**
+     *
+     * @param slea
+     * @param c
+     */
     public static final void repair(final SeekableLittleEndianAccessor slea, final MapleClient c) {
         if (c.getPlayer().getMapId() != 240000000 || slea.available() < 4) { //leafre for now
             return;
@@ -454,6 +509,11 @@ public class NPCHandler {
         c.getPlayer().forceReAddItem(eq.copy(), type);
     }
 
+    /**
+     *
+     * @param slea
+     * @param c
+     */
     public static final void UpdateQuest(final SeekableLittleEndianAccessor slea, final MapleClient c) {
         final MapleQuest quest = MapleQuest.getInstance(slea.readShort());
         if (quest != null) {
@@ -461,6 +521,11 @@ public class NPCHandler {
         }
     }
 
+    /**
+     *
+     * @param slea
+     * @param c
+     */
     public static final void UseItemQuest(final SeekableLittleEndianAccessor slea, final MapleClient c) {
         final short slot = slea.readShort();
         final int itemId = slea.readInt();
@@ -491,6 +556,11 @@ public class NPCHandler {
         }
     }
 
+    /**
+     *
+     * @param slea
+     * @param c
+     */
     public static final void RPSGame(final SeekableLittleEndianAccessor slea, final MapleClient c) {
         if (slea.available() == 0 || !c.getPlayer().getMap().containsNPC(9000019)) {
             if (c.getPlayer().getRPS() != null) {

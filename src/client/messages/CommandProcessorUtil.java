@@ -8,6 +8,12 @@ import tools.StringUtil;
  */
 public class CommandProcessorUtil {
 
+    /**
+     *
+     * @param splitted
+     * @param str
+     * @return
+     */
     public static String joinAfterString(String splitted[], String str) {
         for (int i = 1; i < splitted.length; i++) {
             if (splitted[i].equalsIgnoreCase(str) && i + 1 < splitted.length) {
@@ -17,6 +23,13 @@ public class CommandProcessorUtil {
         return null;
     }
 
+    /**
+     *
+     * @param splitted
+     * @param position
+     * @param def
+     * @return
+     */
     public static int getOptionalIntArg(String splitted[], int position, int def) {
         if (splitted.length > position) {
             try {
@@ -28,6 +41,13 @@ public class CommandProcessorUtil {
         return def;
     }
 
+    /**
+     *
+     * @param splitted
+     * @param startpos
+     * @param name
+     * @return
+     */
     public static String getNamedArg(String splitted[], int startpos, String name) {
         for (int i = startpos; i < splitted.length; i++) {
             if (splitted[i].equalsIgnoreCase(name) && i + 1 < splitted.length) {
@@ -37,6 +57,13 @@ public class CommandProcessorUtil {
         return null;
     }
 
+    /**
+     *
+     * @param splitted
+     * @param startpos
+     * @param name
+     * @return
+     */
     public static Long getNamedLongArg(String splitted[], int startpos, String name) {
         String arg = getNamedArg(splitted, startpos, name);
         if (arg != null) {
@@ -49,6 +76,13 @@ public class CommandProcessorUtil {
         return null;
     }
 
+    /**
+     *
+     * @param splitted
+     * @param startpos
+     * @param name
+     * @return
+     */
     public static Integer getNamedIntArg(String splitted[], int startpos, String name) {
         String arg = getNamedArg(splitted, startpos, name);
         if (arg != null) {
@@ -61,14 +95,29 @@ public class CommandProcessorUtil {
         return null;
     }
 
+    /**
+     *
+     * @param splitted
+     * @param startpos
+     * @param name
+     * @param def
+     * @return
+     */
     public static int getNamedIntArg(String splitted[], int startpos, String name, int def) {
         Integer ret = getNamedIntArg(splitted, startpos, name);
         if (ret == null) {
             return def;
         }
-        return ret.intValue();
+        return ret;
     }
 
+    /**
+     *
+     * @param splitted
+     * @param startpos
+     * @param name
+     * @return
+     */
     public static Double getNamedDoubleArg(String splitted[], int startpos, String name) {
         String arg = getNamedArg(splitted, startpos, name);
         if (arg != null) {

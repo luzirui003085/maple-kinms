@@ -20,10 +20,57 @@
  */
 package server.life;
 
+/**
+ *
+ * @author zjj
+ */
 public enum Element {
 
-    NEUTRAL, PHYSICAL, FIRE, ICE, LIGHTING, POISON, HOLY, DARKNESS;
+    /**
+     *
+     */
+    NEUTRAL, 
 
+    /**
+     *
+     */
+    PHYSICAL, 
+
+    /**
+     *
+     */
+    FIRE, 
+
+    /**
+     *
+     */
+    ICE, 
+
+    /**
+     *
+     */
+    LIGHTING, 
+
+    /**
+     *
+     */
+    POISON, 
+
+    /**
+     *
+     */
+    HOLY, 
+
+    /**
+     *
+     */
+    DARKNESS;
+
+    /**
+     *
+     * @param c
+     * @return
+     */
     public static Element getFromChar(char c) {
         switch (Character.toUpperCase(c)) {
             case 'F':

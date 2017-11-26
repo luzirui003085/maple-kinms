@@ -20,21 +20,20 @@
  */
 package client;
 
-import constants.GameConstants;
-import client.inventory.MapleInventoryType;
-import client.inventory.IItem;
 import client.inventory.Equip;
 import client.inventory.IEquip;
+import client.inventory.IItem;
+import client.inventory.MapleInventoryType;
 import client.inventory.MapleWeaponType;
-import java.lang.ref.WeakReference;
-import java.util.Map;
-import java.util.List;
-import java.util.ArrayList;
+import constants.GameConstants;
 import java.io.Serializable;
+import java.lang.ref.WeakReference;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
-
 import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.locks.ReentrantLock;
 import server.MapleInventoryManipulator;
@@ -46,83 +45,341 @@ import server.StructSetItem.SetItem;
 import tools.MaplePacketCreator;
 import tools.data.output.MaplePacketLittleEndianWriter;
 
+/**
+ *
+ * @author zjj
+ */
 public class PlayerStats implements Serializable {
 
     private static final long serialVersionUID = -679541993413738569L;
     private transient WeakReference<MapleCharacter> chr;
-    private Map<Integer, Integer> setHandling = new HashMap<Integer, Integer>();
-    private List<Equip> durabilityHandling = new ArrayList<Equip>(), equipLevelHandling = new ArrayList<Equip>();
+    private Map<Integer, Integer> setHandling = new HashMap<>();
+    private List<Equip> durabilityHandling = new ArrayList<>(), equipLevelHandling = new ArrayList<>();
     private transient float shouldHealHP, shouldHealMP;
-    public short str, dex, luk, int_, hp, maxhp, mp, maxmp;
+    public short str,
+
+    /**
+     *
+     */
+    dex, 
+
+    /**
+     *
+     */
+    luk, 
+
+    /**
+     *
+     */
+    int_, 
+
+    /**
+     *
+     */
+    hp, 
+
+    /**
+     *
+     */
+    maxhp, 
+
+    /**
+     *
+     */
+    mp, 
+
+    /**
+     *
+     */
+    maxmp;
     private transient short passive_sharpeye_percent, localmaxhp, localmaxmp;
     private transient byte passive_mastery, passive_sharpeye_rate;
     private transient int localstr, localdex, localluk, localint_;
     private transient int magic, watk, hands, accuracy;
-    public transient boolean equippedWelcomeBackRing, equippedFairy, hasMeso, hasItem, hasVac, hasClone, hasPartyBonus, Berserk = false, isRecalc = false;
-    public transient int equipmentBonusExp, expMod, dropMod, cashMod, levelBonus;
-    public transient double expBuff, dropBuff, mesoBuff, cashBuff;
+    public transient boolean equippedWelcomeBackRing, 
+
+    /**
+     *
+     */
+    equippedFairy, 
+
+    /**
+     *
+     */
+    hasMeso, 
+
+    /**
+     *
+     */
+    hasItem, 
+
+    /**
+     *
+     */
+    hasVac, 
+
+    /**
+     *
+     */
+    hasClone, 
+
+    /**
+     *
+     */
+    hasPartyBonus, 
+
+    /**
+     *
+     */
+    Berserk = false, 
+
+    /**
+     *
+     */
+    isRecalc = false;
+    public transient int equipmentBonusExp, 
+
+    /**
+     *
+     */
+    expMod, 
+
+    /**
+     *
+     */
+    dropMod, 
+
+    /**
+     *
+     */
+    cashMod, 
+
+    /**
+     *
+     */
+    levelBonus;
+    public transient double expBuff, 
+
+    /**
+     *
+     */
+    dropBuff, 
+
+    /**
+     *
+     */
+    mesoBuff, 
+
+    /**
+     *
+     */
+    cashBuff;
     //restore/recovery are separate variables because i dont know jack shit what it even does
     //same with incMesoProp/incRewardProp for now
-    public transient double dam_r, bossdam_r;
-    public transient int recoverHP, recoverMP, mpconReduce, incMesoProp, incRewardProp, DAMreflect, DAMreflect_rate, mpRestore,
-            hpRecover, hpRecoverProp, mpRecover, mpRecoverProp, RecoveryUP, incAllskill;
+    public transient double dam_r, 
+
+    /**
+     *
+     */
+    bossdam_r;
+    public transient int recoverHP, 
+
+    /**
+     *
+     */
+    recoverMP, 
+
+    /**
+     *
+     */
+    mpconReduce, 
+
+    /**
+     *
+     */
+    incMesoProp, 
+
+    /**
+     *
+     */
+    incRewardProp, 
+
+    /**
+     *
+     */
+    DAMreflect, 
+
+    /**
+     *
+     */
+    DAMreflect_rate, 
+
+    /**
+     *
+     */
+    mpRestore,
+
+    /**
+     *
+     */
+    hpRecover, 
+
+    /**
+     *
+     */
+    hpRecoverProp, 
+
+    /**
+     *
+     */
+    mpRecover, 
+
+    /**
+     *
+     */
+    mpRecoverProp, 
+
+    /**
+     *
+     */
+    RecoveryUP, 
+
+    /**
+     *
+     */
+    incAllskill;
     private transient float speedMod, jumpMod, localmaxbasedamage;
     // Elemental properties
-    public transient int def, element_ice, element_fire, element_light, element_psn;
+    public transient int def,
+
+    /**
+     *
+     */
+    element_ice, 
+
+    /**
+     *
+     */
+    element_fire, 
+
+    /**
+     *
+     */
+    element_light, 
+
+    /**
+     *
+     */
+    element_psn;
+
+    /**
+     *
+     */
     public ReentrantLock lock = new ReentrantLock(); //we're getting concurrentmodificationexceptions, but would this slow things down?
 
+    /**
+     *
+     * @param chr
+     */
     public PlayerStats(final MapleCharacter chr) {
         // TODO, move str/dex/int etc here -_-
-        this.chr = new WeakReference<MapleCharacter>(chr);
+        this.chr = new WeakReference<>(chr);
     }
 
     //POTENTIALS:
     //incMesoProp, incRewardProp
+
+    /**
+     *
+     */
     public final void init() {
         recalcLocalStats();
         relocHeal();
     }
 
+    /**
+     *
+     * @return
+     */
     public final short getStr() {
         return str;
     }
 
+    /**
+     *
+     * @return
+     */
     public final short getDex() {
         return dex;
     }
 
+    /**
+     *
+     * @return
+     */
     public final short getLuk() {
         return luk;
     }
 
+    /**
+     *
+     * @return
+     */
     public final short getInt() {
         return int_;
     }
 
+    /**
+     *
+     * @param str
+     */
     public final void setStr(final short str) {
         this.str = str;
         recalcLocalStats();
     }
 
+    /**
+     *
+     * @param dex
+     */
     public final void setDex(final short dex) {
         this.dex = dex;
         recalcLocalStats();
     }
 
+    /**
+     *
+     * @param luk
+     */
     public final void setLuk(final short luk) {
         this.luk = luk;
         recalcLocalStats();
     }
 
+    /**
+     *
+     * @param int_
+     */
     public final void setInt(final short int_) {
         this.int_ = int_;
         recalcLocalStats();
     }
 
+    /**
+     *
+     * @param newhp
+     * @return
+     */
     public final boolean setHp(final int newhp) {
         return setHp(newhp, false);
     }
 
+    /**
+     *
+     * @param newhp
+     * @param silent
+     * @return
+     */
     public final boolean setHp(int newhp, boolean silent) {
         final short oldHp = hp;
         int thp = newhp;
@@ -146,6 +403,11 @@ public class PlayerStats implements Serializable {
         return hp != oldHp;
     }
 
+    /**
+     *
+     * @param newmp
+     * @return
+     */
     public final boolean setMp(final int newmp) {
         final short oldMp = mp;
         int tmp = newmp;
@@ -159,84 +421,163 @@ public class PlayerStats implements Serializable {
         return mp != oldMp;
     }
 
+    /**
+     *
+     * @param hp
+     */
     public final void setMaxHp(final short hp) {
         this.maxhp = hp;
         recalcLocalStats();
     }
 
+    /**
+     *
+     * @param mp
+     */
     public final void setMaxMp(final short mp) {
         this.maxmp = mp;
         recalcLocalStats();
     }
 
+    /**
+     *
+     * @return
+     */
     public final short getHp() {
         return hp;
     }
 
+    /**
+     *
+     * @return
+     */
     public final short getMaxHp() {
         return maxhp;
     }
 
+    /**
+     *
+     * @return
+     */
     public final short getMp() {
         return mp;
     }
 
+    /**
+     *
+     * @return
+     */
     public final short getMaxMp() {
         return maxmp;
     }
 
+    /**
+     *
+     * @return
+     */
     public final int getTotalDex() {
         return localdex;
     }
 
+    /**
+     *
+     * @return
+     */
     public final int getTotalInt() {
         return localint_;
     }
 
+    /**
+     *
+     * @return
+     */
     public final int getTotalStr() {
         return localstr;
     }
 
+    /**
+     *
+     * @return
+     */
     public final int getTotalLuk() {
         return localluk;
     }
 
+    /**
+     *
+     * @return
+     */
     public final int getTotalMagic() {
         return magic;
     }
 
+    /**
+     *
+     * @return
+     */
     public final double getSpeedMod() {
         return speedMod;
     }
 
+    /**
+     *
+     * @return
+     */
     public final double getJumpMod() {
         return jumpMod;
     }
 
+    /**
+     *
+     * @return
+     */
     public final int getTotalWatk() {
         return watk;
     }
 
+    /**
+     *
+     * @return
+     */
     public final short getCurrentMaxHp() {
         return localmaxhp;
     }
 
+    /**
+     *
+     * @return
+     */
     public final short getCurrentMaxMp() {
         return localmaxmp;
     }
 
+    /**
+     *
+     * @return
+     */
     public final int getHands() {
         return hands;
     }
 
+    /**
+     *
+     * @return
+     */
     public final float getCurrentMaxBaseDamage() {
         return localmaxbasedamage;
     }
 
+    /**
+     *
+     */
     public void recalcLocalStats() {
         recalcLocalStats(false);
     }
 
+    /**
+     *
+     * @param first_login
+     */
     public void recalcLocalStats(boolean first_login) {
         final MapleCharacter chra = chr.get();
         if (chra == null) {
@@ -558,7 +899,7 @@ public class PlayerStats implements Serializable {
         }
         buff = chra.getBuffedValue(MapleBuffStat.ARAN_COMBO);
         if (buff != null) {
-            watk += buff.intValue() / 10;
+            watk += buff / 10;
         }
         buff = chra.getBuffedValue(MapleBuffStat.MAXHP);
         if (buff != null) {
@@ -578,11 +919,11 @@ public class PlayerStats implements Serializable {
         }
         buff = chra.getBuffedValue(MapleBuffStat.ENHANCED_MAXHP);
         if (buff != null) {
-            localmaxhp_ += buff.intValue();
+            localmaxhp_ += buff;
         }
         buff = chra.getBuffedValue(MapleBuffStat.ENHANCED_MAXMP);
         if (buff != null) {
-            localmaxmp_ += buff.intValue();
+            localmaxmp_ += buff;
         }
         switch (chra.getJob()) {
             case 322: { // Crossbowman
@@ -756,23 +1097,23 @@ public class PlayerStats implements Serializable {
         }
         buff = chra.getBuffedSkill_X(MapleBuffStat.THORNS);
         if (buff != null) {
-            added_sharpeye_rate += buff.intValue();
+            added_sharpeye_rate += buff;
         }
         buff = chra.getBuffedSkill_Y(MapleBuffStat.THORNS);
         if (buff != null) {
-            added_sharpeye_dmg += buff.intValue() - 100;
+            added_sharpeye_dmg += buff - 100;
         }
         buff = chra.getBuffedSkill_X(MapleBuffStat.SHARP_EYES);
         if (buff != null) {
-            added_sharpeye_rate += buff.intValue();
+            added_sharpeye_rate += buff;
         }
         buff = chra.getBuffedSkill_Y(MapleBuffStat.SHARP_EYES);
         if (buff != null) {
-            added_sharpeye_dmg += buff.intValue() - 100;
+            added_sharpeye_dmg += buff - 100;
         }
         buff = chra.getBuffedValue(MapleBuffStat.CRITICAL_RATE_BUFF);
         if (buff != null) {
-            added_sharpeye_rate += buff.intValue();
+            added_sharpeye_rate += buff;
         }
         if (speed > 140) {
             speed = 140;
@@ -825,6 +1166,12 @@ public class PlayerStats implements Serializable {
         }
     }
 
+    /**
+     *
+     * @param chr
+     * @param gain
+     * @return
+     */
     public boolean checkEquipLevels(final MapleCharacter chr, int gain) {
         boolean changed = false;
         final MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
@@ -832,7 +1179,7 @@ public class PlayerStats implements Serializable {
         for (Equip eq : all) {
             int lvlz = eq.getEquipLevels();
             eq.setItemEXP(eq.getItemEXP() + gain);
-            
+
             if (eq.getEquipLevels() > lvlz) { //lvlup
                 for (int i = eq.getEquipLevels() - lvlz; i > 0; i--) {
                     //now for the equipment increments...
@@ -867,6 +1214,12 @@ public class PlayerStats implements Serializable {
         return changed;
     }
 
+    /**
+     *
+     * @param chr
+     * @param gain
+     * @return
+     */
     public boolean checkEquipDurabilitys(final MapleCharacter chr, int gain) {
         for (Equip item : durabilityHandling) {
             item.setDurability(item.getDurability() + gain);
@@ -1059,18 +1412,35 @@ public class PlayerStats implements Serializable {
         this.passive_sharpeye_rate = (byte) added_sharpeye_rate;
     }
 
+    /**
+     *
+     * @return
+     */
     public final short passive_sharpeye_percent() {
         return passive_sharpeye_percent;
     }
 
+    /**
+     *
+     * @return
+     */
     public final byte passive_sharpeye_rate() {
         return passive_sharpeye_rate;
     }
 
+    /**
+     *
+     * @return
+     */
     public final byte passive_mastery() {
         return passive_mastery; //* 5 + 10 for mastery %
     }
 
+    /**
+     *
+     * @param watk
+     * @return
+     */
     public final float calculateMaxBaseDamage(final int watk) {
         final MapleCharacter chra = chr.get();
         if (chra == null) {
@@ -1134,14 +1504,25 @@ public class PlayerStats implements Serializable {
         return maxbasedamage;
     }
 
+    /**
+     *
+     * @return
+     */
     public final float getHealHP() {
         return shouldHealHP;
     }
 
+    /**
+     *
+     * @return
+     */
     public final float getHealMP() {
         return shouldHealMP;
     }
 
+    /**
+     *
+     */
     public final void relocHeal() {
         final MapleCharacter chra = chr.get();
         if (chra == null) {
@@ -1208,6 +1589,10 @@ public class PlayerStats implements Serializable {
         shouldHealMP *= 2; // 1.5
     }
 
+    /**
+     *
+     * @param mplew
+     */
     public final void connectData(final MaplePacketLittleEndianWriter mplew) {
         mplew.writeShort(str); // str
         mplew.writeShort(dex); // dex
@@ -1219,6 +1604,12 @@ public class PlayerStats implements Serializable {
         mplew.writeShort(maxmp); // maxmp
     }
 
+    /**
+     *
+     * @param skillID
+     * @param job
+     * @return
+     */
     public final int getSkillByJob(final int skillID, final int job) {
         if (GameConstants.isKOC(job)) {
             return skillID + 10000000;
@@ -1230,5 +1621,29 @@ public class PlayerStats implements Serializable {
             return skillID + 30000000;
         }
         return skillID;
+    }
+
+    /**
+     *
+     * @param chra
+     * @return
+     */
+    public int getLimitBreak(MapleCharacter chra) {
+        MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
+
+        int limitBreak = 999999;
+        Equip weapon = (Equip) chra.getInventory(MapleInventoryType.EQUIPPED).getItem((short) -11);
+        if (weapon != null) {
+            limitBreak = ii.getLimitBreak(weapon.getItemId());
+
+            Equip subweapon = (Equip) chra.getInventory(MapleInventoryType.EQUIPPED).getItem((short) -10);
+            if ((subweapon != null) && (GameConstants.is物理武器(subweapon.getItemId()))) {
+                int subWeaponLB = ii.getLimitBreak(subweapon.getItemId());
+                if (subWeaponLB > limitBreak) {
+                    limitBreak = subWeaponLB;
+                }
+            }
+        }
+        return limitBreak;
     }
 }

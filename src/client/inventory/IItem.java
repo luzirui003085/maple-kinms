@@ -20,51 +20,147 @@
  */
 package client.inventory;
 
+/**
+ *
+ * @author zjj
+ */
 public interface IItem extends Comparable<IItem> {
 
+    /**
+     *
+     * @return
+     */
     byte getType();
 
+    /**
+     *
+     * @return
+     */
     short getPosition();
 
+    /**
+     *
+     * @return
+     */
     byte getFlag();
 
+    /**
+     *
+     * @return
+     */
     short getQuantity();
 
+    /**
+     *
+     * @return
+     */
     String getOwner();
 
+    /**
+     *
+     * @return
+     */
     String getGMLog();
 
+    /**
+     *
+     * @return
+     */
     int getItemId();
 
+    /**
+     *
+     * @return
+     */
     MaplePet getPet();
 
+    /**
+     *
+     * @return
+     */
     int getUniqueId();
 
+    /**
+     *
+     * @return
+     */
     IItem copy();
 
+    /**
+     *
+     * @return
+     */
     long getExpiration();
 
+    /**
+     *
+     * @param flag
+     */
     void setFlag(byte flag);
 
+    /**
+     *
+     * @param id
+     */
     void setUniqueId(int id);
 
+    /**
+     *
+     * @param position
+     */
     void setPosition(short position);
 
+    /**
+     *
+     * @param expire
+     */
     void setExpiration(long expire);
 
+    /**
+     *
+     * @param owner
+     */
     void setOwner(String owner);
 
+    /**
+     *
+     * @param GameMaster_log
+     */
     void setGMLog(String GameMaster_log);
 
+    /**
+     *
+     * @param quantity
+     */
     void setQuantity(short quantity);
 
+    /**
+     *
+     * @param gf
+     */
     void setGiftFrom(String gf);
     
+    /**
+     *
+     * @param j
+     */
     void setEquipLevel(byte j);
 
+    /**
+     *
+     * @return
+     */
     byte getEquipLevel();
     
+    /**
+     *
+     * @return
+     */
     String getGiftFrom();
 
+    /**
+     *
+     * @return
+     */
     MapleRing getRing();
 }

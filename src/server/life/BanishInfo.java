@@ -20,25 +20,47 @@
  */
 package server.life;
 
+/**
+ *
+ * @author zjj
+ */
 public class BanishInfo {
 
     private int map;
     private String portal, msg;
 
+    /**
+     *
+     * @param msg
+     * @param map
+     * @param portal
+     */
     public BanishInfo(String msg, int map, String portal) {
         this.msg = msg;
         this.map = map;
         this.portal = portal;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getMap() {
         return map;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getPortal() {
         return portal;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getMsg() {
         return msg;
     }

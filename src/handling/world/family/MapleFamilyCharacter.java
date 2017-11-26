@@ -1,42 +1,37 @@
-/*
- This file is part of the ZeroFusion MapleStory Server
- Copyright (C) 2008 Patrick Huy <patrick.huy@frz.cc> 
- Matthias Butz <matze@odinms.de>
- Jan Christian Meyer <vimes@odinms.de>
- ZeroFusion organized by "RMZero213" <RMZero213@hotmail.com>
 
- This program is free software: you can redistribute it and/or modify
- it under the terms of the GNU Affero General Public License version 3
- as published by the Free Software Foundation. You may not use, modify
- or distribute this program under any other version of the
- GNU Affero General Public License.
-
- This program is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of 
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- GNU Affero General Public License for more details.
-
- You should have received a copy of the GNU Affero General Public License
- along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
 package handling.world.family;
 
 import client.MapleCharacter;
-import handling.world.World;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ *
+ * @author zjj
+ */
 public class MapleFamilyCharacter implements java.io.Serializable {
 
+    /**
+     *
+     */
     public static final long serialVersionUID = 2058609046116597760L;
     private int level, id, channel = -1, jobid, familyid, seniorid, currentrep, totalrep, junior1, junior2;
     private boolean online;
     private String name;
-    private List<Integer> pedigree = new ArrayList<Integer>(); //recalculate
+    private List<Integer> pedigree = new ArrayList<>(); //recalculate
     private int descendants = 0;
 
 	// either read from active character...
     // if it's online
+
+    /**
+     *
+     * @param c
+     * @param fid
+     * @param sid
+     * @param j1
+     * @param j2
+     */
     public MapleFamilyCharacter(MapleCharacter c, int fid, int sid, int j1, int j2) {
         name = c.getName();
         level = c.getLevel();
@@ -53,6 +48,22 @@ public class MapleFamilyCharacter implements java.io.Serializable {
     }
 
     // or we could just read from the database
+
+    /**
+     *
+     * @param _id
+     * @param _lv
+     * @param _name
+     * @param _channel
+     * @param _job
+     * @param _fid
+     * @param _sid
+     * @param _jr1
+     * @param _jr2
+     * @param _crep
+     * @param _trep
+     * @param _on
+     */
     public MapleFamilyCharacter(int _id, int _lv, String _name, int _channel, int _job, int _fid, int _sid, int _jr1, int _jr2, int _crep, int _trep, boolean _on) {
         level = _lv;
         id = _id;
@@ -70,86 +81,170 @@ public class MapleFamilyCharacter implements java.io.Serializable {
         junior2 = _jr2;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getLevel() {
         return level;
     }
 
+    /**
+     *
+     * @param l
+     */
     public void setLevel(int l) {
         level = l;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getId() {
         return id;
     }
 
+    /**
+     *
+     * @param ch
+     */
     public void setChannel(int ch) {
         channel = ch;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getChannel() {
         return channel;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getJobId() {
         return jobid;
     }
 
+    /**
+     *
+     * @param job
+     */
     public void setJobId(int job) {
         jobid = job;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getCurrentRep() {
         return currentrep;
     }
 
+    /**
+     *
+     * @param cr
+     */
     public void setCurrentRep(int cr) {
         this.currentrep = cr;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getTotalRep() {
         return totalrep;
     }
 
+    /**
+     *
+     * @param tr
+     */
     public void setTotalRep(int tr) {
         this.totalrep = tr;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getJunior1() {
         return junior1;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getJunior2() {
         return junior2;
     }
 
+    /**
+     *
+     * @param trs
+     */
     public void setJunior1(int trs) {
         junior1 = trs;
     }
 
+    /**
+     *
+     * @param trs
+     */
     public void setJunior2(int trs) {
         junior2 = trs;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getSeniorId() {
         return seniorid;
     }
 
+    /**
+     *
+     * @param si
+     */
     public void setSeniorId(int si) {
         this.seniorid = si;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getFamilyId() {
         return familyid;
     }
 
+    /**
+     *
+     * @param fi
+     */
     public void setFamilyId(int fi) {
         this.familyid = fi;
     }
 
+    /**
+     *
+     * @return
+     */
     public boolean isOnline() {
         return online;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getName() {
         return name;
     }
@@ -164,12 +259,21 @@ public class MapleFamilyCharacter implements java.io.Serializable {
         return (o.getId() == id && o.getName().equals(name));
     }
 
+    /**
+     *
+     * @param f
+     */
     public void setOnline(boolean f) {
         online = f;
     }
 
+    /**
+     *
+     * @param fam
+     * @return
+     */
     public List<MapleFamilyCharacter> getAllJuniors(MapleFamily fam) { //to be used scarcely
-        List<MapleFamilyCharacter> ret = new ArrayList<MapleFamilyCharacter>();
+        List<MapleFamilyCharacter> ret = new ArrayList<>();
         ret.add(this);
         if (junior1 > 0) {
             MapleFamilyCharacter chr = fam.getMFC(junior1);
@@ -190,8 +294,13 @@ public class MapleFamilyCharacter implements java.io.Serializable {
         return ret;
     }
 
+    /**
+     *
+     * @param fam
+     * @return
+     */
     public List<MapleFamilyCharacter> getOnlineJuniors(MapleFamily fam) { //to be used scarcely
-        List<MapleFamilyCharacter> ret = new ArrayList<MapleFamilyCharacter>();
+        List<MapleFamilyCharacter> ret = new ArrayList<>();
         ret.add(this);
         if (junior1 > 0) {
             MapleFamilyCharacter chr = fam.getMFC(junior1);
@@ -240,12 +349,20 @@ public class MapleFamilyCharacter implements java.io.Serializable {
         return ret;
     }
 
+    /**
+     *
+     * @return
+     */
     public List<Integer> getPedigree() {
         return pedigree;
     }
 
+    /**
+     *
+     * @param fam
+     */
     public void resetPedigree(MapleFamily fam) { //not in order
-        pedigree = new ArrayList<Integer>();
+        pedigree = new ArrayList<>();
         pedigree.add(id); //lol
         if (seniorid > 0) {
             MapleFamilyCharacter chr = fam.getMFC(seniorid);
@@ -294,10 +411,19 @@ public class MapleFamilyCharacter implements java.io.Serializable {
 
     }
 
+    /**
+     *
+     * @return
+     */
     public int getDescendants() {
         return descendants;
     }
 
+    /**
+     *
+     * @param fam
+     * @return
+     */
     public int resetDescendants(MapleFamily fam) { //advisable to only start this with leader. resets EVERYONE
         //recursion.
         descendants = 0;
@@ -316,6 +442,11 @@ public class MapleFamilyCharacter implements java.io.Serializable {
         return descendants;
     }
 
+    /**
+     *
+     * @param fam
+     * @return
+     */
     public int resetGenerations(MapleFamily fam) { //advisable to only start this with leader. resets EVERYONE
         //recursion. this field is NOT stored so please be advised
         int descendants1 = 0, descendants2 = 0;
@@ -335,6 +466,10 @@ public class MapleFamilyCharacter implements java.io.Serializable {
         return ret + (ret > 0 ? 1 : 0);
     }
 
+    /**
+     *
+     * @return
+     */
     public int getNoJuniors() {
         int ret = 0;
         if (junior1 > 0) {

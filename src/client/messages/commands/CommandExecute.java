@@ -29,12 +29,23 @@ public abstract class CommandExecute {
         LOG;
     }
 
+    /**
+     *
+     * @return
+     */
     public CommandType getType() {
         return CommandType.NORMAL;
     }
 
+    /**
+     *
+     */
     public static abstract class TradeExecute extends CommandExecute {
 
+        /**
+         *
+         * @return
+         */
         @Override
         public CommandType getType() {
             return CommandType.TRADE;

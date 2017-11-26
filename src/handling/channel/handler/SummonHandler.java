@@ -20,39 +20,47 @@
  */
 package handling.channel.handler;
 
-import java.awt.Point;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Iterator;
-
 import client.ISkill;
 import client.MapleBuffStat;
-import client.MapleClient;
 import client.MapleCharacter;
+import client.MapleClient;
 import client.SkillFactory;
 import client.SummonSkillEntry;
-import client.status.MonsterStatusEffect;
 import client.anticheat.CheatingOffense;
 import client.status.MonsterStatus;
+import client.status.MonsterStatusEffect;
+import java.awt.Point;
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
-import server.MapleStatEffect;
 import server.AutobanManager;
+import server.MapleStatEffect;
 import server.Timer.CloneTimer;
-import server.movement.LifeMovementFragment;
 import server.life.MapleMonster;
 import server.life.SummonAttackEntry;
 import server.maps.MapleMap;
-import server.maps.MapleSummon;
 import server.maps.MapleMapObject;
 import server.maps.MapleMapObjectType;
+import server.maps.MapleSummon;
 import server.maps.SummonMovementType;
+import server.movement.LifeMovementFragment;
 import tools.MaplePacketCreator;
-import tools.packet.MobPacket;
 import tools.data.input.SeekableLittleEndianAccessor;
+import tools.packet.MobPacket;
 
+/**
+ *
+ * @author zjj
+ */
 public class SummonHandler {
 
+    /**
+     *
+     * @param slea
+     * @param chr
+     */
     public static final void MoveDragon(final SeekableLittleEndianAccessor slea, final MapleCharacter chr) {
         slea.skip(8); //POS
         final List<LifeMovementFragment> res = MovementParse.parseMovement(slea, 5, chr);
@@ -68,9 +76,10 @@ public class SummonHandler {
                 if (clones[i].get() != null) {
                     final MapleMap map = chr.getMap();
                     final MapleCharacter clone = clones[i].get();
-                    final List<LifeMovementFragment> res3 = new ArrayList<LifeMovementFragment>(res);
+                    final List<LifeMovementFragment> res3 = new ArrayList<>(res);
                     CloneTimer.getInstance().schedule(new Runnable() {
 
+                        @Override
                         public void run() {
                             try {
                                 if (clone.getMap() == map && clone.getDragon() != null) {
@@ -92,6 +101,11 @@ public class SummonHandler {
         }
     }
 
+    /**
+     *
+     * @param slea
+     * @param chr
+     */
     public static final void MoveSummon(final SeekableLittleEndianAccessor slea, final MapleCharacter chr) {
         final int oid = slea.readInt();
         Point startPos = new Point(slea.readShort(), slea.readShort());
@@ -113,6 +127,11 @@ public class SummonHandler {
         }
     }
 
+    /**
+     *
+     * @param slea
+     * @param chr
+     */
     public static final void DamageSummon(final SeekableLittleEndianAccessor slea, final MapleCharacter chr) {
         // System.out.println("[DamageSummon]:" + slea.toString());
         final int unkByte = slea.readByte();
@@ -157,6 +176,12 @@ public class SummonHandler {
         //   }
     }
 
+    /**
+     *
+     * @param slea
+     * @param c
+     * @param chr
+     */
     public static void SummonAttack(final SeekableLittleEndianAccessor slea, final MapleClient c, final MapleCharacter chr) {
         if (chr == null || !chr.isAlive()) {
             return;
@@ -188,7 +213,7 @@ public class SummonHandler {
             return;
         }
         //slea.skip(8); //some pos stuff
-        final List<SummonAttackEntry> allDamage = new ArrayList<SummonAttackEntry>();
+        final List<SummonAttackEntry> allDamage = new ArrayList<>();
         chr.getCheatTracker().checkSummonAttack();
 
         for (int i = 0; i < numAttacked; i++) {

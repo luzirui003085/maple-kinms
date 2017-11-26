@@ -31,7 +31,6 @@ import java.io.Serializable;
 import tools.data.output.MaplePacketLittleEndianWriter;
 
 import database.DatabaseConnection;
-import java.util.Collections;
 import tools.Pair;
 
 public class MapleKeyLayout implements Serializable {

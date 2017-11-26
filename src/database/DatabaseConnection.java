@@ -38,6 +38,10 @@ import server.ServerProperties;
 public class DatabaseConnection {
 
     private static final ThreadLocal<Connection> con = new ThreadLocalConnection();
+
+    /**
+     *
+     */
     public static final int CLOSE_CURRENT_RESULT = 1;
     /**
      * The constant indicating that the current <code>ResultSet</code> object
@@ -83,10 +87,18 @@ public class DatabaseConnection {
      */
     public static final int NO_GENERATED_KEYS = 2;
 
+    /**
+     *
+     * @return
+     */
     public static final Connection getConnection() {
         return con.get();
     }
 
+    /**
+     *
+     * @throws SQLException
+     */
     public static final void closeAll() throws SQLException {
         for (final Connection con : ThreadLocalConnection.allConnections) {
             con.close();

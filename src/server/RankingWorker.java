@@ -20,24 +20,31 @@
  */
 package server;
 
+import database.DatabaseConnection;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-
-import database.DatabaseConnection;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ *
+ * @author zjj
+ */
 public class RankingWorker {
 
-    private final Map<Integer, List<RankingInformation>> rankings = new HashMap<Integer, List<RankingInformation>>();
-    private final Map<String, Integer> jobCommands = new HashMap<String, Integer>();
+    private final Map<Integer, List<RankingInformation>> rankings = new HashMap<>();
+    private final Map<String, Integer> jobCommands = new HashMap<>();
     private static RankingWorker instance;
     private Connection con;
 
+    /**
+     *
+     * @return
+     */
     public static final RankingWorker getInstance() {
         if (instance == null) {
             instance = new RankingWorker();
@@ -45,18 +52,35 @@ public class RankingWorker {
         return instance;
     }
 
+    /**
+     *
+     * @param job
+     * @return
+     */
     public final Integer getJobCommand(final String job) {
         return jobCommands.get(job);
     }
 
+    /**
+     *
+     * @return
+     */
     public final Map<String, Integer> getJobCommands() {
         return jobCommands;
     }
 
+    /**
+     *
+     * @param job
+     * @return
+     */
     public final List<RankingInformation> getRankingInfo(final int job) {
         return rankings.get(job);
     }
 
+    /**
+     *
+     */
     public final void run() {
         System.out.println("加载 排名服务器 :::");
         loadJobCommands();
@@ -79,7 +103,7 @@ public class RankingWorker {
         ResultSet rs = charSelect.executeQuery();
         PreparedStatement ps = con.prepareStatement("UPDATE characters SET jobRank = ?, jobRankMove = ?, rank = ?, rankMove = ? WHERE id = ?");
         int rank = 0; //for "all"
-        final Map<Integer, Integer> rankMap = new LinkedHashMap<Integer, Integer>();
+        final Map<Integer, Integer> rankMap = new LinkedHashMap<>();
         for (int i : jobCommands.values()) {
             rankMap.put(i, 0); //job to rank
             rankings.put(i, new ArrayList<RankingInformation>());
@@ -107,6 +131,9 @@ public class RankingWorker {
         ps.close();
     }
 
+    /**
+     *
+     */
     public final void loadJobCommands() {
         //messy, cleanup
         jobCommands.put("all", -1);
@@ -128,11 +155,42 @@ public class RankingWorker {
         //taking out resistance from here for now
     }
 
+    /**
+     *
+     */
     public static class RankingInformation {
 
-        public int job, level, exp, rank;
-        public String name, toString;
+        public int job,
 
+        /**
+         *
+         */
+        level, 
+
+        /**
+         *
+         */
+        exp, 
+
+        /**
+         *
+         */
+        rank;
+        public String name, 
+
+        /**
+         *
+         */
+        toString;
+
+        /**
+         *
+         * @param name
+         * @param job
+         * @param level
+         * @param exp
+         * @param rank
+         */
         public RankingInformation(String name, int job, int level, int exp, int rank) {
             this.name = name;
             this.job = job;
@@ -142,6 +200,9 @@ public class RankingWorker {
             loadToString();
         }
 
+        /**
+         *
+         */
         public void loadToString() {
             final StringBuilder builder = new StringBuilder("Rank ");
             builder.append(rank);

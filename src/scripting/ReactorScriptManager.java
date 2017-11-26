@@ -1,23 +1,4 @@
-/*
- This file is part of the OdinMS Maple Story Server
- Copyright (C) 2008 ~ 2010 Patrick Huy <patrick.huy@frz.cc> 
- Matthias Butz <matze@odinms.de>
- Jan Christian Meyer <vimes@odinms.de>
 
- This program is free software: you can redistribute it and/or modify
- it under the terms of the GNU Affero General Public License version 3
- as published by the Free Software Foundation. You may not use, modify
- or distribute this program under any other version of the
- GNU Affero General Public License.
-
- This program is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- GNU Affero General Public License for more details.
-
- You should have received a copy of the GNU Affero General Public License
- along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
 package scripting;
 
 import java.sql.Connection;
@@ -36,17 +17,29 @@ import client.MapleClient;
 import database.DatabaseConnection;
 import server.maps.ReactorDropEntry;
 import server.maps.MapleReactor;
-import tools.FileoutputUtil;
 
+/**
+ *
+ * @author zjj
+ */
 public class ReactorScriptManager extends AbstractScriptManager {
 
     private static final ReactorScriptManager instance = new ReactorScriptManager();
-    private final Map<Integer, List<ReactorDropEntry>> drops = new HashMap<Integer, List<ReactorDropEntry>>();
+    private final Map<Integer, List<ReactorDropEntry>> drops = new HashMap<>();
 
+    /**
+     *
+     * @return
+     */
     public static final ReactorScriptManager getInstance() {
         return instance;
     }
 
+    /**
+     *
+     * @param c
+     * @param reactor
+     */
     public final void act(final MapleClient c, final MapleReactor reactor) {
         try {
             if (c.getPlayer().isGM()) {
@@ -69,12 +62,17 @@ public class ReactorScriptManager extends AbstractScriptManager {
         }
     }
 
+    /**
+     *
+     * @param rid
+     * @return
+     */
     public final List<ReactorDropEntry> getDrops(final int rid) {
         List<ReactorDropEntry> ret = drops.get(rid);
         if (ret != null) {
             return ret;
         }
-        ret = new LinkedList<ReactorDropEntry>();
+        ret = new LinkedList<>();
 
         PreparedStatement ps = null;
         ResultSet rs = null;
@@ -109,6 +107,9 @@ public class ReactorScriptManager extends AbstractScriptManager {
         return ret;
     }
 
+    /**
+     *
+     */
     public final void clearDrops() {
         drops.clear();
     }

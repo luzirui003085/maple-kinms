@@ -22,15 +22,29 @@ package provider;
 
 import java.awt.Point;
 import java.awt.image.BufferedImage;
-
 import provider.WzXML.MapleDataType;
 
+/**
+ *
+ * @author zjj
+ */
 public class MapleDataTool {
 
+    /**
+     *
+     * @param data
+     * @return
+     */
     public static String getString(MapleData data) {
         return ((String) data.getData());
     }
 
+    /**
+     *
+     * @param data
+     * @param def
+     * @return
+     */
     public static String getString(MapleData data, String def) {
         if (data == null || data.getData() == null) {
             return def;
@@ -39,52 +53,101 @@ public class MapleDataTool {
         }
     }
 
+    /**
+     *
+     * @param path
+     * @param data
+     * @return
+     */
     public static String getString(String path, MapleData data) {
         return getString(data.getChildByPath(path));
     }
 
+    /**
+     *
+     * @param path
+     * @param data
+     * @param def
+     * @return
+     */
     public static String getString(String path, MapleData data, String def) {
         return getString(data.getChildByPath(path), def);
     }
 
+    /**
+     *
+     * @param data
+     * @return
+     */
     public static double getDouble(MapleData data) {
-        return ((Double) data.getData()).doubleValue();
+        return ((Double) data.getData());
     }
 
+    /**
+     *
+     * @param data
+     * @return
+     */
     public static float getFloat(MapleData data) {
-        return ((Float) data.getData()).floatValue();
+        return ((Float) data.getData());
     }
 
+    /**
+     *
+     * @param data
+     * @param def
+     * @return
+     */
     public static float getFloat(MapleData data, float def) {
         if (data == null || data.getData() == null) {
             return def;
         } else {
-            return ((Float) data.getData()).floatValue();
+            return ((Float) data.getData());
         }
     }
 
+    /**
+     *
+     * @param data
+     * @return
+     */
     public static int getInt(MapleData data) {
-        return ((Integer) data.getData()).intValue();
+        return ((Integer) data.getData());
     }
 
+    /**
+     *
+     * @param data
+     * @param def
+     * @return
+     */
     public static int getInt(MapleData data, int def) {
         if (data == null || data.getData() == null) {
             return def;
+        } else if (data.getType() == MapleDataType.STRING) {
+            return Integer.parseInt(getString(data));
+        } else if (data.getType() == MapleDataType.SHORT) {
+            return Integer.valueOf(((Short) data.getData()));
         } else {
-            if (data.getType() == MapleDataType.STRING) {
-                return Integer.parseInt(getString(data));
-            } else if (data.getType() == MapleDataType.SHORT) {
-                return Integer.valueOf(((Short) data.getData()).shortValue());
-            } else {
-                return ((Integer) data.getData()).intValue();
-            }
+            return ((Integer) data.getData());
         }
     }
 
+    /**
+     *
+     * @param path
+     * @param data
+     * @return
+     */
     public static int getInt(String path, MapleData data) {
         return getInt(data.getChildByPath(path));
     }
 
+    /**
+     *
+     * @param data
+     * @return
+     */
     public static int getIntConvert(MapleData data) {
         if (data.getType() == MapleDataType.STRING) {
             return Integer.parseInt(getString(data));
@@ -93,6 +156,12 @@ public class MapleDataTool {
         }
     }
 
+    /**
+     *
+     * @param path
+     * @param data
+     * @return
+     */
     public static int getIntConvert(String path, MapleData data) {
         MapleData d = data.getChildByPath(path);
         if (d.getType() == MapleDataType.STRING) {
@@ -101,10 +170,24 @@ public class MapleDataTool {
         return getInt(d);
     }
 
+    /**
+     *
+     * @param path
+     * @param data
+     * @param def
+     * @return
+     */
     public static int getInt(String path, MapleData data, int def) {
         return getInt(data.getChildByPath(path), def);
     }
 
+    /**
+     *
+     * @param path
+     * @param data
+     * @param def
+     * @return
+     */
     public static int getIntConvert(String path, MapleData data, int def) {
         if (data == null) {
             return def;
@@ -124,18 +207,41 @@ public class MapleDataTool {
         }
     }
 
+    /**
+     *
+     * @param data
+     * @return
+     */
     public static BufferedImage getImage(MapleData data) {
         return ((MapleCanvas) data.getData()).getImage();
     }
 
+    /**
+     *
+     * @param data
+     * @return
+     */
     public static Point getPoint(MapleData data) {
         return ((Point) data.getData());
     }
 
+    /**
+     *
+     * @param path
+     * @param data
+     * @return
+     */
     public static Point getPoint(String path, MapleData data) {
         return getPoint(data.getChildByPath(path));
     }
 
+    /**
+     *
+     * @param path
+     * @param data
+     * @param def
+     * @return
+     */
     public static Point getPoint(String path, MapleData data, Point def) {
         final MapleData pointData = data.getChildByPath(path);
         if (pointData == null) {
@@ -144,6 +250,11 @@ public class MapleDataTool {
         return getPoint(pointData);
     }
 
+    /**
+     *
+     * @param data
+     * @return
+     */
     public static String getFullDataPath(MapleData data) {
         String path = "";
         MapleDataEntity myData = data;

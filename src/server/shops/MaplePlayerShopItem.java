@@ -22,13 +22,39 @@ package server.shops;
 
 import client.inventory.IItem;
 
+/**
+ *
+ * @author zjj
+ */
 public class MaplePlayerShopItem {
 
+    /**
+     *
+     */
     public IItem item;
+
+    /**
+     *
+     */
     public short bundles;
+
+    /**
+     *
+     */
     public int price;
+
+    /**
+     *
+     */
     public byte flag;
 
+    /**
+     *
+     * @param item
+     * @param bundles
+     * @param price
+     * @param flag
+     */
     public MaplePlayerShopItem(IItem item, short bundles, int price, byte flag) {
         this.item = item;
         this.bundles = bundles;

@@ -20,11 +20,23 @@
  */
 package client;
 
+/**
+ *
+ * @author zjj
+ */
 public class CharacterNameAndId {
 
     private final int id, level, job;
     private final String name, group;
 
+    /**
+     *
+     * @param id
+     * @param name
+     * @param level
+     * @param job
+     * @param group
+     */
     public CharacterNameAndId(int id, String name, int level, int job, String group) {
         super();
         this.id = id;
@@ -34,22 +46,42 @@ public class CharacterNameAndId {
         this.group = group;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getId() {
         return id;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getGroup() {
         return group;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getLevel() {
         return level;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getJob() {
         return job;
     }

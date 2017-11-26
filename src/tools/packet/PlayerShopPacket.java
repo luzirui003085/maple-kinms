@@ -26,7 +26,6 @@ import client.MapleClient;
 import constants.ServerConstants;
 import handling.MaplePacket;
 import handling.SendPacketOpcode;
-import handling.channel.handler.PlayerInteractionHandler;
 import java.util.List;
 import server.MerchItemPackage;
 import server.shops.AbstractPlayerStore.BoughtItem;

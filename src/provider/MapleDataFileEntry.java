@@ -20,7 +20,15 @@
  */
 package provider;
 
+/**
+ *
+ * @author zjj
+ */
 public interface MapleDataFileEntry extends MapleDataEntry {
 
+    /**
+     *
+     * @param offset
+     */
     public void setOffset(int offset);
 }

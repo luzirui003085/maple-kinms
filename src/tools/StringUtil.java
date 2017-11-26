@@ -64,6 +64,13 @@ public class StringUtil {
         return bt.length;
     }
 
+    /**
+     *
+     * @param in
+     * @param padchar
+     * @param length
+     * @return
+     */
     public static final String getRightPaddedStr(final String in, final char padchar, final int length) {
         StringBuilder builder = new StringBuilder(in);
         for (int x = in.getBytes().length; x < length; x++) {
@@ -140,6 +147,12 @@ public class StringUtil {
         return ret;
     }
 
+    /**
+     *
+     * @param startMillis
+     * @param endMillis
+     * @return
+     */
     public static final String getReadableMillis(long startMillis, long endMillis) {
         StringBuilder sb = new StringBuilder();
         double elapsedSeconds = (endMillis - startMillis) / 1000.0;
@@ -152,63 +165,69 @@ public class StringUtil {
         if (elapsedDays > 0) {
             boolean mins = elapsedHours > 0;
             sb.append(elapsedDays);
-            sb.append(" day" + (elapsedDays > 1 ? "s" : "") + (mins ? ", " : "."));
+            sb.append(" day").append(elapsedDays > 1 ? "s" : "").append(mins ? ", " : ".");
             if (mins) {
                 boolean secs = elapsedMins > 0;
                 if (!secs) {
                     sb.append("and ");
                 }
                 sb.append(elapsedHours);
-                sb.append(" hour" + (elapsedHours > 1 ? "s" : "") + (secs ? ", " : "."));
+                sb.append(" hour").append(elapsedHours > 1 ? "s" : "").append(secs ? ", " : ".");
                 if (secs) {
                     boolean millis = elapsedSecs > 0;
                     if (!millis) {
                         sb.append("and ");
                     }
                     sb.append(elapsedMins);
-                    sb.append(" minute" + (elapsedMins > 1 ? "s" : "") + (millis ? ", " : "."));
+                    sb.append(" minute").append(elapsedMins > 1 ? "s" : "").append(millis ? ", " : ".");
                     if (millis) {
                         sb.append("and ");
                         sb.append(elapsedSecs);
-                        sb.append(" second" + (elapsedSecs > 1 ? "s" : "") + ".");
+                        sb.append(" second").append(elapsedSecs > 1 ? "s" : "").append(".");
                     }
                 }
             }
         } else if (elapsedHours > 0) {
             boolean mins = elapsedMins > 0;
             sb.append(elapsedHours);
-            sb.append(" hour" + (elapsedHours > 1 ? "s" : "") + (mins ? ", " : "."));
+            sb.append(" hour").append(elapsedHours > 1 ? "s" : "").append(mins ? ", " : ".");
             if (mins) {
                 boolean secs = elapsedSecs > 0;
                 if (!secs) {
                     sb.append("and ");
                 }
                 sb.append(elapsedMins);
-                sb.append(" minute" + (elapsedMins > 1 ? "s" : "") + (secs ? ", " : "."));
+                sb.append(" minute").append(elapsedMins > 1 ? "s" : "").append(secs ? ", " : ".");
                 if (secs) {
                     sb.append("and ");
                     sb.append(elapsedSecs);
-                    sb.append(" second" + (elapsedSecs > 1 ? "s" : "") + ".");
+                    sb.append(" second").append(elapsedSecs > 1 ? "s" : "").append(".");
                 }
             }
         } else if (elapsedMinutes > 0) {
             boolean secs = elapsedSecs > 0;
             sb.append(elapsedMinutes);
-            sb.append(" minute" + (elapsedMinutes > 1 ? "s" : "") + (secs ? " " : "."));
+            sb.append(" minute").append(elapsedMinutes > 1 ? "s" : "").append(secs ? " " : ".");
             if (secs) {
                 sb.append("and ");
                 sb.append(elapsedSecs);
-                sb.append(" second" + (elapsedSecs > 1 ? "s" : "") + ".");
+                sb.append(" second").append(elapsedSecs > 1 ? "s" : "").append(".");
             }
         } else if (elapsedSeconds > 0) {
             sb.append((int) elapsedSeconds);
-            sb.append(" second" + (elapsedSeconds > 1 ? "s" : "") + ".");
+            sb.append(" second").append(elapsedSeconds > 1 ? "s" : "").append(".");
         } else {
             sb.append("None.");
         }
         return sb.toString();
     }
 
+    /**
+     *
+     * @param startMillis
+     * @param endMillis
+     * @return
+     */
     public static final int getDaysAmount(long startMillis, long endMillis) {
         double elapsedSeconds = (endMillis - startMillis) / 1000.0;
         int elapsedMinutes = (int) (elapsedSeconds / 60.0);

@@ -1,23 +1,4 @@
-/*
- This file is part of the OdinMS Maple Story Server
- Copyright (C) 2008 ~ 2010 Patrick Huy <patrick.huy@frz.cc> 
- Matthias Butz <matze@odinms.de>
- Jan Christian Meyer <vimes@odinms.de>
 
- This program is free software: you can redistribute it and/or modify
- it under the terms of the GNU Affero General Public License version 3
- as published by the Free Software Foundation. You may not use, modify
- or distribute this program under any other version of the
- GNU Affero General Public License.
-
- This program is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- GNU Affero General Public License for more details.
-
- You should have received a copy of the GNU Affero General Public License
- along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
 package client;
 
 import java.io.File;
@@ -26,8 +7,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.locks.ReentrantLock;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import provider.MapleData;
 import provider.MapleDataProvider;
@@ -37,25 +16,49 @@ import provider.MapleDataDirectoryEntry;
 import provider.MapleDataTool;
 import tools.StringUtil;
 
+/**
+ *
+ * @author zjj
+ */
 public class SkillFactory {
 
-    private static final Map<Integer, ISkill> skills = new HashMap<Integer, ISkill>();
-    private static final Map<Integer, List<Integer>> skillsByJob = new HashMap<Integer, List<Integer>>();
-    private static final Map<Integer, SummonSkillEntry> SummonSkillInformation = new HashMap<Integer, SummonSkillEntry>();
+    private static final Map<Integer, ISkill> skills = new HashMap<>();
+    private static final Map<Integer, List<Integer>> skillsByJob = new HashMap<>();
+    private static final Map<Integer, SummonSkillEntry> SummonSkillInformation = new HashMap<>();
     private final static MapleData stringData = MapleDataProviderFactory.getDataProvider(new File(System.getProperty("net.sf.odinms.wzpath") + "/String.wz")).getData("Skill.img");
     private static MapleDataProvider datasource = MapleDataProviderFactory.getDataProvider(new File(System.getProperty("net.sf.odinms.wzpath") + "/Skill.wz"));
     private static MapleDataProvider Data = MapleDataProviderFactory.getDataProvider(new File(System.getProperty("net.sf.odinms.wzpath") + "/Skill.wz"));
 
+    /**
+     *
+     * @param jobid
+     * @param skill
+     * @param skilllevel
+     * @return
+     */
     public static int getSkilldamage(int jobid, int skill, int skilllevel) {
         return MapleDataTool.getInt(Data.getData("" + jobid + ".img").getChildByPath("skill").getChildByPath("" + skill + "").getChildByPath("level").getChildByPath("" + skilllevel + "").getChildByPath("damage"));
     }
+
+    /**
+     *
+     * @param jobid
+     * @param skill
+     * @param skilllevel
+     * @return
+     */
     public static int getSkillmad(int jobid, int skill, int skilllevel) {
         return MapleDataTool.getInt(Data.getData("" + jobid + ".img").getChildByPath("skill").getChildByPath("" + skill + "").getChildByPath("level").getChildByPath("" + skilllevel + "").getChildByPath("mad"));
     }
     
+    /**
+     *
+     * @param id
+     * @return
+     */
     public static final ISkill getSkill(final int id) {
-        if (skills.size() != 0) {
-            return skills.get(Integer.valueOf(id));
+        if (!skills.isEmpty()) {
+            return skills.get(id);
         }
         System.out.println("加载 技能完成 :::");
         final MapleDataProvider datasource = MapleDataProviderFactory.getDataProvider(new File(System.getProperty("net.sf.odinms.wzpath") + "/Skill.wz"));
@@ -76,7 +79,7 @@ public class SkillFactory {
                                 Skill skil = Skill.loadFromData(skillid, data2);
                                 List<Integer> job = skillsByJob.get(skillid / 10000);
                                 if (job == null) {
-                                    job = new ArrayList<Integer>();
+                                    job = new ArrayList<>();
                                     skillsByJob.put(skillid / 10000, job);
                                 }
                                 job.add(skillid);
@@ -100,13 +103,19 @@ public class SkillFactory {
         }
         return null;
     }
+
+    /**
+     *
+     * @param id
+     * @return
+     */
     public static ISkill getSkill1(int id) {
-        ISkill ret = (ISkill) skills.get(Integer.valueOf(id));
+        ISkill ret = (ISkill) skills.get(id);
         if (ret != null) {
             return ret;
         }
         synchronized (skills) {
-            ret = (ISkill) skills.get(Integer.valueOf(id));
+            ret = (ISkill) skills.get(id);
             if (ret == null) {
                 int job = id / 10000;
                 MapleData skillroot = datasource.getData(StringUtil.getLeftPaddedStr(String.valueOf(job), '0', 3) + ".img");
@@ -114,15 +123,26 @@ public class SkillFactory {
                 if (skillData != null) {
                     ret = Skill.loadFromData(id, skillData);
                 }
-                skills.put(Integer.valueOf(id), ret);
+                skills.put(id, ret);
             }
             return ret;
         }
     }
+
+    /**
+     *
+     * @param jobId
+     * @return
+     */
     public static final List<Integer> getSkillsByJob(final int jobId) {
         return skillsByJob.get(jobId);
     }
 
+    /**
+     *
+     * @param id
+     * @return
+     */
     public static final String getSkillName(final int id) {
         ISkill skil = getSkill(id);
         if (skil != null) {
@@ -131,6 +151,11 @@ public class SkillFactory {
         return null;
     }
 
+    /**
+     *
+     * @param id
+     * @return
+     */
     public static final String getName(final int id) {
         String strId = Integer.toString(id);
         strId = StringUtil.getLeftPaddedStr(strId, '0', 7);
@@ -141,10 +166,19 @@ public class SkillFactory {
         return null;
     }
 
+    /**
+     *
+     * @param skillid
+     * @return
+     */
     public static final SummonSkillEntry getSummonData(final int skillid) {
         return SummonSkillInformation.get(skillid);
     }
 
+    /**
+     *
+     * @return
+     */
     public static final Collection<ISkill> getAllSkills() {
         return skills.values();
     }

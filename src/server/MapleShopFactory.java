@@ -3,21 +3,37 @@ package server;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ *
+ * @author zjj
+ */
 public class MapleShopFactory {
 
-    private Map<Integer, MapleShop> shops = new HashMap<Integer, MapleShop>();
-    private Map<Integer, MapleShop> npcShops = new HashMap<Integer, MapleShop>();
+    private Map<Integer, MapleShop> shops = new HashMap<>();
+    private Map<Integer, MapleShop> npcShops = new HashMap<>();
     private static MapleShopFactory instance = new MapleShopFactory();
 
+    /**
+     *
+     * @return
+     */
     public static MapleShopFactory getInstance() {
         return instance;
     }
 
+    /**
+     *
+     */
     public void clear() {
         shops.clear();
         npcShops.clear();
     }
 
+    /**
+     *
+     * @param shopId
+     * @return
+     */
     public MapleShop getShop(int shopId) {
         if (shops.containsKey(shopId)) {
             return shops.get(shopId);
@@ -25,6 +41,11 @@ public class MapleShopFactory {
         return loadShop(shopId, true);
     }
 
+    /**
+     *
+     * @param npcId
+     * @return
+     */
     public MapleShop getShopForNPC(int npcId) {
         if (npcShops.containsKey(npcId)) {
             return npcShops.get(npcId);

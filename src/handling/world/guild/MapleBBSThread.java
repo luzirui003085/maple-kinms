@@ -24,14 +24,59 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ *
+ * @author zjj
+ */
 public class MapleBBSThread implements java.io.Serializable {
 
+    /**
+     *
+     */
     public static final long serialVersionUID = 3565477792085301248L;
-    public String name, text;
-    public long timestamp;
-    public int localthreadID, guildID, ownerID, icon;
-    public Map<Integer, MapleBBSReply> replies = new HashMap<Integer, MapleBBSReply>();
+    public String name,
 
+    /**
+     *
+     */
+    text;
+
+    /**
+     *
+     */
+    public long timestamp;
+    public int localthreadID,
+
+    /**
+     *
+     */
+    guildID, 
+
+    /**
+     *
+     */
+    ownerID, 
+
+    /**
+     *
+     */
+    icon;
+
+    /**
+     *
+     */
+    public Map<Integer, MapleBBSReply> replies = new HashMap<>();
+
+    /**
+     *
+     * @param localthreadID
+     * @param name
+     * @param text
+     * @param timestamp
+     * @param guildID
+     * @param ownerID
+     * @param icon
+     */
     public MapleBBSThread(final int localthreadID, final String name, final String text, final long timestamp,
             final int guildID, final int ownerID, final int icon) {
         this.localthreadID = localthreadID;
@@ -43,20 +88,51 @@ public class MapleBBSThread implements java.io.Serializable {
         this.icon = icon;
     }
 
+    /**
+     *
+     * @return
+     */
     public final int getReplyCount() {
         return replies.size();
     }
 
+    /**
+     *
+     * @return
+     */
     public final boolean isNotice() {
         return localthreadID == 0;
     }
 
+    /**
+     *
+     */
     public static class MapleBBSReply implements java.io.Serializable {
 
-        public int replyid, ownerID;
+        public int replyid,
+
+        /**
+         *
+         */
+        ownerID;
+
+        /**
+         *
+         */
         public long timestamp;
+
+        /**
+         *
+         */
         public String content;
 
+        /**
+         *
+         * @param replyid
+         * @param ownerID
+         * @param content
+         * @param timestamp
+         */
         public MapleBBSReply(final int replyid, final int ownerID, final String content, final long timestamp) {
             this.ownerID = ownerID;
             this.replyid = replyid;
@@ -65,6 +141,9 @@ public class MapleBBSThread implements java.io.Serializable {
         }
     }
 
+    /**
+     *
+     */
     public static class ThreadComparator implements Comparator<MapleBBSThread>, java.io.Serializable {
 
         @Override

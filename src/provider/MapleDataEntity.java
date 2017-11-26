@@ -20,9 +20,21 @@
  */
 package provider;
 
+/**
+ *
+ * @author zjj
+ */
 public interface MapleDataEntity {
 
+    /**
+     *
+     * @return
+     */
     public String getName();
 
+    /**
+     *
+     * @return
+     */
     public MapleDataEntity getParent();
 }

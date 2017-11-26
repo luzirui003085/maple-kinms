@@ -30,6 +30,10 @@ import java.util.List;
 import java.util.Map;
 import tools.Pair;
 
+/**
+ *
+ * @author zjj
+ */
 public class MapleNodes {
 
     private Map<Integer, MapleNodeInfo> nodes; //used for HOB pq.
@@ -42,30 +46,78 @@ public class MapleNodes {
     private int nodeStart = -1, nodeEnd = -1, mapid;
     private boolean firstHighest = true;
 
+    /**
+     *
+     * @param mapid
+     */
     public MapleNodes(final int mapid) {
-        nodes = new LinkedHashMap<Integer, MapleNodeInfo>();
-        areas = new ArrayList<Rectangle>();
-        platforms = new ArrayList<MaplePlatform>();
-        skillIds = new ArrayList<Integer>();
-        monsterPoints = new ArrayList<MonsterPoint>();
-        mobsToSpawn = new ArrayList<Pair<Integer, Integer>>();
-        guardiansToSpawn = new ArrayList<Pair<Point, Integer>>();
+        nodes = new LinkedHashMap<>();
+        areas = new ArrayList<>();
+        platforms = new ArrayList<>();
+        skillIds = new ArrayList<>();
+        monsterPoints = new ArrayList<>();
+        mobsToSpawn = new ArrayList<>();
+        guardiansToSpawn = new ArrayList<>();
         this.mapid = mapid;
     }
 
+    /**
+     *
+     * @param ns
+     */
     public void setNodeStart(final int ns) {
         this.nodeStart = ns;
     }
 
+    /**
+     *
+     * @param ns
+     */
     public void setNodeEnd(final int ns) {
         this.nodeEnd = ns;
     }
 
+    /**
+     *
+     */
     public static class MapleNodeInfo {
 
-        public int node, key, x, y, attr;
+        public int node,
+
+        /**
+         *
+         */
+        key, 
+
+        /**
+         *
+         */
+        x, 
+
+        /**
+         *
+         */
+        y, 
+
+        /**
+         *
+         */
+        attr;
+
+        /**
+         *
+         */
         public List<Integer> edge;
 
+        /**
+         *
+         * @param node
+         * @param key
+         * @param x
+         * @param y
+         * @param attr
+         * @param edge
+         */
         public MapleNodeInfo(int node, int key, int x, int y, int attr, List<Integer> edge) {
             this.node = node;
             this.key = key;
@@ -76,15 +128,28 @@ public class MapleNodes {
         }
     }
 
+    /**
+     *
+     * @param mni
+     */
     public void addNode(final MapleNodeInfo mni) {
         this.nodes.put(mni.key, mni);
     }
 
+    /**
+     *
+     * @return
+     */
     public Collection<MapleNodeInfo> getNodes() {
 
-        return new ArrayList<MapleNodeInfo>(nodes.values());
+        return new ArrayList<>(nodes.values());
     }
 
+    /**
+     *
+     * @param index
+     * @return
+     */
     public MapleNodeInfo getNode(final int index) {
         int i = 1;
         for (MapleNodeInfo x : getNodes()) {
@@ -130,11 +195,14 @@ public class MapleNodes {
         return ret;
     }
 
+    /**
+     *
+     */
     public void sortNodes() {
         if (nodes.size() <= 0 || nodeStart < 0) {
             return;
         }
-        Map<Integer, MapleNodeInfo> unsortedNodes = new HashMap<Integer, MapleNodeInfo>(nodes);
+        Map<Integer, MapleNodeInfo> unsortedNodes = new HashMap<>(nodes);
         final int nodeSize = unsortedNodes.size();
         nodes.clear();
         int nextNode = getNextNode(unsortedNodes.get(nodeStart));
@@ -143,24 +211,89 @@ public class MapleNodes {
         }
     }
 
+    /**
+     *
+     * @param rec
+     */
     public final void addMapleArea(final Rectangle rec) {
         areas.add(rec);
     }
 
+    /**
+     *
+     * @return
+     */
     public final List<Rectangle> getAreas() {
-        return new ArrayList<Rectangle>(areas);
+        return new ArrayList<>(areas);
     }
 
+    /**
+     *
+     * @param index
+     * @return
+     */
     public final Rectangle getArea(final int index) {
         return getAreas().get(index);
     }
 
+    /**
+     *
+     */
     public static class MaplePlatform {
 
+        /**
+         *
+         */
         public String name;
-        public int start, speed, x1, y1, x2, y2, r;
+        public int start,
+
+        /**
+         *
+         */
+        speed, 
+
+        /**
+         *
+         */
+        x1, 
+
+        /**
+         *
+         */
+        y1, 
+
+        /**
+         *
+         */
+        x2, 
+
+        /**
+         *
+         */
+        y2, 
+
+        /**
+         *
+         */
+        r;
+
+        /**
+         *
+         */
         public List<Integer> SN;
 
+        /**
+         *
+         * @param name
+         * @param start
+         * @param speed
+         * @param x1
+         * @param y1
+         * @param x2
+         * @param y2
+         * @param r
+         * @param SN
+         */
         public MaplePlatform(String name, int start, int speed, int x1, int y1, int x2, int y2, int r, List<Integer> SN) {
             this.name = name;
             this.start = start;
@@ -174,18 +307,57 @@ public class MapleNodes {
         }
     }
 
+    /**
+     *
+     * @param mp
+     */
     public final void addPlatform(final MaplePlatform mp) {
         this.platforms.add(mp);
     }
 
+    /**
+     *
+     * @return
+     */
     public final List<MaplePlatform> getPlatforms() {
-        return new ArrayList<MaplePlatform>(platforms);
+        return new ArrayList<>(platforms);
     }
 
+    /**
+     *
+     */
     public static class MonsterPoint {
 
-        public int x, y, fh, cy, team;
+        public int x,
 
+        /**
+         *
+         */
+        y, 
+
+        /**
+         *
+         */
+        fh, 
+
+        /**
+         *
+         */
+        cy, 
+
+        /**
+         *
+         */
+        team;
+
+        /**
+         *
+         * @param x
+         * @param y
+         * @param fh
+         * @param cy
+         * @param team
+         */
         public MonsterPoint(int x, int y, int fh, int cy, int team) {
             this.x = x;
             this.y = y;
@@ -195,34 +367,72 @@ public class MapleNodes {
         }
     }
 
+    /**
+     *
+     * @return
+     */
     public final List<MonsterPoint> getMonsterPoints() {
         return monsterPoints;
     }
 
+    /**
+     *
+     * @param x
+     * @param y
+     * @param fh
+     * @param cy
+     * @param team
+     */
     public final void addMonsterPoint(int x, int y, int fh, int cy, int team) {
         this.monsterPoints.add(new MonsterPoint(x, y, fh, cy, team));
     }
 
+    /**
+     *
+     * @param mobId
+     * @param spendCP
+     */
     public final void addMobSpawn(int mobId, int spendCP) {
-        this.mobsToSpawn.add(new Pair<Integer, Integer>(mobId, spendCP));
+        this.mobsToSpawn.add(new Pair<>(mobId, spendCP));
     }
 
+    /**
+     *
+     * @return
+     */
     public final List<Pair<Integer, Integer>> getMobsToSpawn() {
         return mobsToSpawn;
     }
 
+    /**
+     *
+     * @param guardian
+     * @param team
+     */
     public final void addGuardianSpawn(Point guardian, int team) {
-        this.guardiansToSpawn.add(new Pair<Point, Integer>(guardian, team));
+        this.guardiansToSpawn.add(new Pair<>(guardian, team));
     }
 
+    /**
+     *
+     * @return
+     */
     public final List<Pair<Point, Integer>> getGuardians() {
         return guardiansToSpawn;
     }
 
+    /**
+     *
+     * @return
+     */
     public final List<Integer> getSkillIds() {
         return skillIds;
     }
 
+    /**
+     *
+     * @param z
+     */
     public final void addSkillId(int z) {
         this.skillIds.add(z);
     }

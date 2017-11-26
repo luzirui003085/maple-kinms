@@ -12,6 +12,10 @@ import java.util.concurrent.locks.ReentrantLock;
 import tools.FileoutputUtil;
 import tools.MaplePacketCreator;
 
+/**
+ *
+ * @author zjj
+ */
 public class AutobanManager implements Runnable {
 
     private static class ExpirationEntry implements Comparable<ExpirationEntry> {
@@ -26,6 +30,7 @@ public class AutobanManager implements Runnable {
             this.points = points;
         }
 
+        @Override
         public int compareTo(AutobanManager.ExpirationEntry o) {
             return (int) (time - o.time);
         }
@@ -39,17 +44,26 @@ public class AutobanManager implements Runnable {
             return (time == ee.time && points == ee.points && acc == ee.acc);
         }
     }
-    private Map<Integer, Integer> points = new HashMap<Integer, Integer>();
-    private Map<Integer, List<String>> reasons = new HashMap<Integer, List<String>>();
-    private Set<ExpirationEntry> expirations = new TreeSet<ExpirationEntry>();
+    private Map<Integer, Integer> points = new HashMap<>();
+    private Map<Integer, List<String>> reasons = new HashMap<>();
+    private Set<ExpirationEntry> expirations = new TreeSet<>();
     private static final int AUTOBAN_POINTS = 5000;
     private static AutobanManager instance = new AutobanManager();
     private final ReentrantLock lock = new ReentrantLock(true);
 
+    /**
+     *
+     * @return
+     */
     public static final AutobanManager getInstance() {
         return instance;
     }
 
+    /**
+     *
+     * @param c
+     * @param reason
+     */
     public final void autoban(final MapleClient c, final String reason) {
         if (c.getPlayer().isGM() || c.getPlayer().isClone()) {
             c.getPlayer().dropMessage(5, "[WARNING] A/b triggled : " + reason);
@@ -58,6 +72,13 @@ public class AutobanManager implements Runnable {
         addPoints(c, AUTOBAN_POINTS, 0, reason);
     }
 
+    /**
+     *
+     * @param c
+     * @param points
+     * @param expiration
+     * @param reason
+     */
     public final void addPoints(final MapleClient c, final int points, final long expiration, final String reason) {
         lock.lock();
         try {
@@ -74,7 +95,7 @@ public class AutobanManager implements Runnable {
                 reasonList.add(reason);
             } else {
                 this.points.put(acc, points);
-                reasonList = new LinkedList<String>();
+                reasonList = new LinkedList<>();
                 reasonList.add(reason);
                 this.reasons.put(acc, reasonList);
             }
@@ -113,6 +134,7 @@ public class AutobanManager implements Runnable {
         }
     }
 
+    @Override
     public final void run() {
         final long now = System.currentTimeMillis();
         for (final ExpirationEntry e : expirations) {

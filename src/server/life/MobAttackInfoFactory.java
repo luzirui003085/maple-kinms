@@ -30,18 +30,32 @@ import provider.MapleDataTool;
 import tools.Pair;
 import tools.StringUtil;
 
+/**
+ *
+ * @author zjj
+ */
 public class MobAttackInfoFactory {
 
     private static final MobAttackInfoFactory instance = new MobAttackInfoFactory();
     private static final MapleDataProvider dataSource = MapleDataProviderFactory.getDataProvider(new File(System.getProperty("net.sf.odinms.wzpath") + "/Mob.wz"));
-    private static Map<Pair<Integer, Integer>, MobAttackInfo> mobAttacks = new HashMap<Pair<Integer, Integer>, MobAttackInfo>();
+    private static Map<Pair<Integer, Integer>, MobAttackInfo> mobAttacks = new HashMap<>();
 
+    /**
+     *
+     * @return
+     */
     public static MobAttackInfoFactory getInstance() {
         return instance;
     }
 
+    /**
+     *
+     * @param mob
+     * @param attack
+     * @return
+     */
     public MobAttackInfo getMobAttackInfo(MapleMonster mob, int attack) {
-        MobAttackInfo ret = mobAttacks.get(new Pair<Integer, Integer>(Integer.valueOf(mob.getId()), Integer.valueOf(attack)));
+        MobAttackInfo ret = mobAttacks.get(new Pair<>(Integer.valueOf(mob.getId()), Integer.valueOf(attack)));
         if (ret != null) {
             return ret;
         }
@@ -63,7 +77,7 @@ public class MobAttackInfoFactory {
                 ret.setMpCon(MapleDataTool.getInt("conMP", attackData, 0));
             }
         }
-        mobAttacks.put(new Pair<Integer, Integer>(Integer.valueOf(mob.getId()), Integer.valueOf(attack)), ret);
+        mobAttacks.put(new Pair<>(Integer.valueOf(mob.getId()), Integer.valueOf(attack)), ret);
 
         return ret;
     }

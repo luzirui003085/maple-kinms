@@ -1,17 +1,14 @@
 package tools.wztosql;
 
-import java.io.Console;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.PrintStream;
 import java.rmi.NotBoundException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import javax.management.InstanceAlreadyExistsException;
 import javax.management.MBeanRegistrationException;
 import javax.management.MalformedObjectNameException;
@@ -23,6 +20,10 @@ import provider.MapleDataTool;
 import tools.Pair;
 import tools.StringUtil;
 
+/**
+ *
+ * @author zjj
+ */
 public class MonsterDropCreator {
 
     private static final int COMMON_ETC_RATE = 600000;
@@ -31,13 +32,48 @@ public class MonsterDropCreator {
     private static final int ARROWS_RATE = 25000;
     private static int lastmonstercardid = 2388070;
     private static boolean addFlagData = false;
+
+    /**
+     *
+     */
     protected static String monsterQueryData = "drop_data";
+
+    /**
+     *
+     */
     protected static List<Pair<Integer, String>> itemNameCache = new ArrayList();
+
+    /**
+     *
+     */
     protected static List<Pair<Integer, MobInfo>> mobCache = new ArrayList();
+
+    /**
+     *
+     */
     protected static Map<Integer, Boolean> bossCache = new HashMap();
+
+    /**
+     *
+     */
     protected static final MapleDataProvider data = MapleDataProviderFactory.getDataProvider(new File(System.getProperty("net.sf.odinms.wzpath") + "/String.wz"));
+
+    /**
+     *
+     */
     protected static final MapleDataProvider mobData = MapleDataProviderFactory.getDataProvider(new File(System.getProperty("net.sf.odinms.wzpath") + "/Mob.wz"));
 
+    /**
+     *
+     * @param args
+     * @throws FileNotFoundException
+     * @throws IOException
+     * @throws NotBoundException
+     * @throws InstanceAlreadyExistsException
+     * @throws MBeanRegistrationException
+     * @throws NotCompliantMBeanException
+     * @throws MalformedObjectNameException
+     */
     public static void main(String[] args) throws FileNotFoundException, IOException, NotBoundException, InstanceAlreadyExistsException, MBeanRegistrationException, NotCompliantMBeanException, MalformedObjectNameException {
       //  MapleData data = MapleDataProviderFactory.getDataProvider(new File(new StringBuilder().append(System.getProperty("net.sf.odinms.wzpath")).append("String.wz").toString())).getData("MonsterBook.img");
         System.out.println("準備提取數據!");
@@ -60,9 +96,9 @@ public class MonsterDropCreator {
 
             sb.append("INSERT INTO ").append(monsterQueryData).append(" VALUES ");
             for (Integer monsterdrop : (List<Integer>) e.getValue()) {
-                int itemid = monsterdrop.intValue();
-                int monsterId = ((Integer) e.getKey()).intValue();
-                int rate = getChance(itemid, monsterId, bossCache.containsKey(Integer.valueOf(monsterId)));
+                int itemid = monsterdrop;
+                int monsterId = ((Integer) e.getKey());
+                int rate = getChance(itemid, monsterId, bossCache.containsKey(monsterId));
 
                 if (rate <= 100000) {
                     switch (monsterId) {
@@ -120,10 +156,10 @@ public class MonsterDropCreator {
                 sb.append("INSERT INTO ").append(monsterQueryData).append(" VALUES ");
                 for (MapleData drop : dataz.getChildByPath("reward")) {
                     int itemid = MapleDataTool.getInt(drop);
-                    int rate = getChance(itemid, idtoLog, bossCache.containsKey(Integer.valueOf(idtoLog)));
+                    int rate = getChance(itemid, idtoLog, bossCache.containsKey(idtoLog));
 
                     for (Pair Pair : mobCache) {
-                        if (((Integer) Pair.getLeft()).intValue() == monsterId) {
+                        if (((Integer) Pair.getLeft()) == monsterId) {
                             if ((((MobInfo) Pair.getRight()).getBoss() <= 0)
                                     || (rate > 100000)) {
                                 break;
@@ -208,7 +244,7 @@ public class MonsterDropCreator {
         StringBuilder SQL = new StringBuilder();
         StringBuilder bookName = new StringBuilder();
         for (Pair Pair : itemNameCache) {
-            if ((((Integer) Pair.getLeft()).intValue() >= 2380000) && (((Integer) Pair.getLeft()).intValue() <= lastmonstercardid)) {
+            if ((((Integer) Pair.getLeft()) >= 2380000) && (((Integer) Pair.getLeft()) <= lastmonstercardid)) {
                 bookName.append((String) Pair.getRight());
 
                 if (bookName.toString().contains(" Card")) {
@@ -243,13 +279,13 @@ public class MonsterDropCreator {
         int i = 1;
         int lastmonsterbookid = 0;
         for (Pair Pair : itemNameCache) {
-            if ((((Integer) Pair.getLeft()).intValue() >= 2380000) && (((Integer) Pair.getLeft()).intValue() <= lastmonstercardid)) {
+            if ((((Integer) Pair.getLeft()) >= 2380000) && (((Integer) Pair.getLeft()) <= lastmonstercardid)) {
                 bookName.append((String) Pair.getRight());
 
                 if (bookName.toString().contains(" Card")) {
                     bookName.delete(bookName.length() - 5, bookName.length());
                 }
-                if (((Integer) Pair.getLeft()).intValue() != lastmonsterbookid) {
+                if (((Integer) Pair.getLeft()) != lastmonsterbookid) {
                     for (Pair Pair_ : mobCache) {
                         if (((MobInfo) Pair_.getRight()).getName().equalsIgnoreCase(bookName.toString())) {
                             SQL.append("INSERT INTO ").append("monstercarddata").append(" VALUES (");
@@ -257,7 +293,7 @@ public class MonsterDropCreator {
                             SQL.append(Pair.getLeft());
                             SQL.append(", ");
                             SQL.append(Pair_.getLeft()).append(");\n");
-                            lastmonsterbookid = ((Integer) Pair.getLeft()).intValue();
+                            lastmonsterbookid = ((Integer) Pair.getLeft());
                             i++;
                             break;
                         }
@@ -276,7 +312,7 @@ public class MonsterDropCreator {
 
     private static void retriveNLogItemName(StringBuilder sb, int id) {
         for (Pair Pair : itemNameCache) {
-            if (((Integer) Pair.getLeft()).intValue() == id) {
+            if (((Integer) Pair.getLeft()) == id) {
                 sb.append((String) Pair.getRight());
                 return;
             }
@@ -650,138 +686,138 @@ public class MonsterDropCreator {
 
         List IndiviualMonsterDrop = new ArrayList();
 
-        IndiviualMonsterDrop.add(Integer.valueOf(4000139));
-        IndiviualMonsterDrop.add(Integer.valueOf(2002011));
-        IndiviualMonsterDrop.add(Integer.valueOf(2002011));
-        IndiviualMonsterDrop.add(Integer.valueOf(2002011));
-        IndiviualMonsterDrop.add(Integer.valueOf(2000004));
-        IndiviualMonsterDrop.add(Integer.valueOf(2000004));
+        IndiviualMonsterDrop.add(4000139);
+        IndiviualMonsterDrop.add(2002011);
+        IndiviualMonsterDrop.add(2002011);
+        IndiviualMonsterDrop.add(2002011);
+        IndiviualMonsterDrop.add(2000004);
+        IndiviualMonsterDrop.add(2000004);
 
-        drops.put(Integer.valueOf(9400112), IndiviualMonsterDrop);
-
-        IndiviualMonsterDrop = new ArrayList();
-
-        IndiviualMonsterDrop.add(Integer.valueOf(4000140));
-        IndiviualMonsterDrop.add(Integer.valueOf(2022027));
-        IndiviualMonsterDrop.add(Integer.valueOf(2022027));
-        IndiviualMonsterDrop.add(Integer.valueOf(2000004));
-        IndiviualMonsterDrop.add(Integer.valueOf(2000004));
-        IndiviualMonsterDrop.add(Integer.valueOf(2002008));
-        IndiviualMonsterDrop.add(Integer.valueOf(2002008));
-
-        drops.put(Integer.valueOf(9400113), IndiviualMonsterDrop);
+        drops.put(9400112, IndiviualMonsterDrop);
 
         IndiviualMonsterDrop = new ArrayList();
 
-        IndiviualMonsterDrop.add(Integer.valueOf(4000141));
-        IndiviualMonsterDrop.add(Integer.valueOf(2000004));
-        IndiviualMonsterDrop.add(Integer.valueOf(2040813));
-        IndiviualMonsterDrop.add(Integer.valueOf(2041030));
-        IndiviualMonsterDrop.add(Integer.valueOf(2041040));
-        IndiviualMonsterDrop.add(Integer.valueOf(1072238));
-        IndiviualMonsterDrop.add(Integer.valueOf(1032026));
-        IndiviualMonsterDrop.add(Integer.valueOf(1372011));
+        IndiviualMonsterDrop.add(4000140);
+        IndiviualMonsterDrop.add(2022027);
+        IndiviualMonsterDrop.add(2022027);
+        IndiviualMonsterDrop.add(2000004);
+        IndiviualMonsterDrop.add(2000004);
+        IndiviualMonsterDrop.add(2002008);
+        IndiviualMonsterDrop.add(2002008);
 
-        drops.put(Integer.valueOf(9400300), IndiviualMonsterDrop);
-
-        IndiviualMonsterDrop = new ArrayList();
-
-        IndiviualMonsterDrop.add(Integer.valueOf(4000225));
-        IndiviualMonsterDrop.add(Integer.valueOf(2000006));
-        IndiviualMonsterDrop.add(Integer.valueOf(2000004));
-        IndiviualMonsterDrop.add(Integer.valueOf(2070013));
-        IndiviualMonsterDrop.add(Integer.valueOf(2002005));
-        IndiviualMonsterDrop.add(Integer.valueOf(2022018));
-        IndiviualMonsterDrop.add(Integer.valueOf(2040306));
-        IndiviualMonsterDrop.add(Integer.valueOf(2043704));
-        IndiviualMonsterDrop.add(Integer.valueOf(2044605));
-        IndiviualMonsterDrop.add(Integer.valueOf(2041034));
-        IndiviualMonsterDrop.add(Integer.valueOf(1032019));
-        IndiviualMonsterDrop.add(Integer.valueOf(1102013));
-        IndiviualMonsterDrop.add(Integer.valueOf(1322026));
-        IndiviualMonsterDrop.add(Integer.valueOf(1092015));
-        IndiviualMonsterDrop.add(Integer.valueOf(1382016));
-        IndiviualMonsterDrop.add(Integer.valueOf(1002276));
-        IndiviualMonsterDrop.add(Integer.valueOf(1002403));
-        IndiviualMonsterDrop.add(Integer.valueOf(1472027));
-
-        drops.put(Integer.valueOf(9400013), IndiviualMonsterDrop);
+        drops.put(9400113, IndiviualMonsterDrop);
 
         IndiviualMonsterDrop = new ArrayList();
 
-        IndiviualMonsterDrop.add(Integer.valueOf(1372049));
+        IndiviualMonsterDrop.add(4000141);
+        IndiviualMonsterDrop.add(2000004);
+        IndiviualMonsterDrop.add(2040813);
+        IndiviualMonsterDrop.add(2041030);
+        IndiviualMonsterDrop.add(2041040);
+        IndiviualMonsterDrop.add(1072238);
+        IndiviualMonsterDrop.add(1032026);
+        IndiviualMonsterDrop.add(1372011);
 
-        drops.put(Integer.valueOf(8800002), IndiviualMonsterDrop);
-
-        IndiviualMonsterDrop = new ArrayList();
-
-        IndiviualMonsterDrop.add(Integer.valueOf(4001094));
-        IndiviualMonsterDrop.add(Integer.valueOf(2290125));
-
-        drops.put(Integer.valueOf(8810018), IndiviualMonsterDrop);
-
-        IndiviualMonsterDrop = new ArrayList();
-
-        IndiviualMonsterDrop.add(Integer.valueOf(4000138));
-        IndiviualMonsterDrop.add(Integer.valueOf(4010006));
-        IndiviualMonsterDrop.add(Integer.valueOf(2000006));
-        IndiviualMonsterDrop.add(Integer.valueOf(2000011));
-        IndiviualMonsterDrop.add(Integer.valueOf(2020016));
-        IndiviualMonsterDrop.add(Integer.valueOf(2022024));
-        IndiviualMonsterDrop.add(Integer.valueOf(2022026));
-        IndiviualMonsterDrop.add(Integer.valueOf(2043705));
-        IndiviualMonsterDrop.add(Integer.valueOf(2040716));
-        IndiviualMonsterDrop.add(Integer.valueOf(2040908));
-        IndiviualMonsterDrop.add(Integer.valueOf(2040510));
-        IndiviualMonsterDrop.add(Integer.valueOf(1072239));
-        IndiviualMonsterDrop.add(Integer.valueOf(1422013));
-        IndiviualMonsterDrop.add(Integer.valueOf(1402016));
-        IndiviualMonsterDrop.add(Integer.valueOf(1442020));
-        IndiviualMonsterDrop.add(Integer.valueOf(1432011));
-        IndiviualMonsterDrop.add(Integer.valueOf(1332022));
-        IndiviualMonsterDrop.add(Integer.valueOf(1312015));
-        IndiviualMonsterDrop.add(Integer.valueOf(1382010));
-        IndiviualMonsterDrop.add(Integer.valueOf(1372009));
-        IndiviualMonsterDrop.add(Integer.valueOf(1082085));
-        IndiviualMonsterDrop.add(Integer.valueOf(1332022));
-        IndiviualMonsterDrop.add(Integer.valueOf(1472033));
-
-        drops.put(Integer.valueOf(9400121), IndiviualMonsterDrop);
+        drops.put(9400300, IndiviualMonsterDrop);
 
         IndiviualMonsterDrop = new ArrayList();
 
-        IndiviualMonsterDrop.add(Integer.valueOf(4032024));
-        IndiviualMonsterDrop.add(Integer.valueOf(4032025));
-        IndiviualMonsterDrop.add(Integer.valueOf(4020006));
-        IndiviualMonsterDrop.add(Integer.valueOf(4020008));
-        IndiviualMonsterDrop.add(Integer.valueOf(4010001));
-        IndiviualMonsterDrop.add(Integer.valueOf(4004001));
-        IndiviualMonsterDrop.add(Integer.valueOf(2070006));
-        IndiviualMonsterDrop.add(Integer.valueOf(2044404));
-        IndiviualMonsterDrop.add(Integer.valueOf(2044702));
-        IndiviualMonsterDrop.add(Integer.valueOf(2044305));
-        IndiviualMonsterDrop.add(Integer.valueOf(1102029));
-        IndiviualMonsterDrop.add(Integer.valueOf(1032023));
-        IndiviualMonsterDrop.add(Integer.valueOf(1402004));
-        IndiviualMonsterDrop.add(Integer.valueOf(1072210));
-        IndiviualMonsterDrop.add(Integer.valueOf(1040104));
-        IndiviualMonsterDrop.add(Integer.valueOf(1060092));
-        IndiviualMonsterDrop.add(Integer.valueOf(1082129));
-        IndiviualMonsterDrop.add(Integer.valueOf(1442008));
-        IndiviualMonsterDrop.add(Integer.valueOf(1072178));
-        IndiviualMonsterDrop.add(Integer.valueOf(1050092));
-        IndiviualMonsterDrop.add(Integer.valueOf(1002271));
-        IndiviualMonsterDrop.add(Integer.valueOf(1051053));
-        IndiviualMonsterDrop.add(Integer.valueOf(1382008));
-        IndiviualMonsterDrop.add(Integer.valueOf(1002275));
-        IndiviualMonsterDrop.add(Integer.valueOf(1051082));
-        IndiviualMonsterDrop.add(Integer.valueOf(1050064));
-        IndiviualMonsterDrop.add(Integer.valueOf(1472028));
-        IndiviualMonsterDrop.add(Integer.valueOf(1072193));
-        IndiviualMonsterDrop.add(Integer.valueOf(1072172));
-        IndiviualMonsterDrop.add(Integer.valueOf(1002285));
+        IndiviualMonsterDrop.add(4000225);
+        IndiviualMonsterDrop.add(2000006);
+        IndiviualMonsterDrop.add(2000004);
+        IndiviualMonsterDrop.add(2070013);
+        IndiviualMonsterDrop.add(2002005);
+        IndiviualMonsterDrop.add(2022018);
+        IndiviualMonsterDrop.add(2040306);
+        IndiviualMonsterDrop.add(2043704);
+        IndiviualMonsterDrop.add(2044605);
+        IndiviualMonsterDrop.add(2041034);
+        IndiviualMonsterDrop.add(1032019);
+        IndiviualMonsterDrop.add(1102013);
+        IndiviualMonsterDrop.add(1322026);
+        IndiviualMonsterDrop.add(1092015);
+        IndiviualMonsterDrop.add(1382016);
+        IndiviualMonsterDrop.add(1002276);
+        IndiviualMonsterDrop.add(1002403);
+        IndiviualMonsterDrop.add(1472027);
 
-        drops.put(Integer.valueOf(9400545), IndiviualMonsterDrop);
+        drops.put(9400013, IndiviualMonsterDrop);
+
+        IndiviualMonsterDrop = new ArrayList();
+
+        IndiviualMonsterDrop.add(1372049);
+
+        drops.put(8800002, IndiviualMonsterDrop);
+
+        IndiviualMonsterDrop = new ArrayList();
+
+        IndiviualMonsterDrop.add(4001094);
+        IndiviualMonsterDrop.add(2290125);
+
+        drops.put(8810018, IndiviualMonsterDrop);
+
+        IndiviualMonsterDrop = new ArrayList();
+
+        IndiviualMonsterDrop.add(4000138);
+        IndiviualMonsterDrop.add(4010006);
+        IndiviualMonsterDrop.add(2000006);
+        IndiviualMonsterDrop.add(2000011);
+        IndiviualMonsterDrop.add(2020016);
+        IndiviualMonsterDrop.add(2022024);
+        IndiviualMonsterDrop.add(2022026);
+        IndiviualMonsterDrop.add(2043705);
+        IndiviualMonsterDrop.add(2040716);
+        IndiviualMonsterDrop.add(2040908);
+        IndiviualMonsterDrop.add(2040510);
+        IndiviualMonsterDrop.add(1072239);
+        IndiviualMonsterDrop.add(1422013);
+        IndiviualMonsterDrop.add(1402016);
+        IndiviualMonsterDrop.add(1442020);
+        IndiviualMonsterDrop.add(1432011);
+        IndiviualMonsterDrop.add(1332022);
+        IndiviualMonsterDrop.add(1312015);
+        IndiviualMonsterDrop.add(1382010);
+        IndiviualMonsterDrop.add(1372009);
+        IndiviualMonsterDrop.add(1082085);
+        IndiviualMonsterDrop.add(1332022);
+        IndiviualMonsterDrop.add(1472033);
+
+        drops.put(9400121, IndiviualMonsterDrop);
+
+        IndiviualMonsterDrop = new ArrayList();
+
+        IndiviualMonsterDrop.add(4032024);
+        IndiviualMonsterDrop.add(4032025);
+        IndiviualMonsterDrop.add(4020006);
+        IndiviualMonsterDrop.add(4020008);
+        IndiviualMonsterDrop.add(4010001);
+        IndiviualMonsterDrop.add(4004001);
+        IndiviualMonsterDrop.add(2070006);
+        IndiviualMonsterDrop.add(2044404);
+        IndiviualMonsterDrop.add(2044702);
+        IndiviualMonsterDrop.add(2044305);
+        IndiviualMonsterDrop.add(1102029);
+        IndiviualMonsterDrop.add(1032023);
+        IndiviualMonsterDrop.add(1402004);
+        IndiviualMonsterDrop.add(1072210);
+        IndiviualMonsterDrop.add(1040104);
+        IndiviualMonsterDrop.add(1060092);
+        IndiviualMonsterDrop.add(1082129);
+        IndiviualMonsterDrop.add(1442008);
+        IndiviualMonsterDrop.add(1072178);
+        IndiviualMonsterDrop.add(1050092);
+        IndiviualMonsterDrop.add(1002271);
+        IndiviualMonsterDrop.add(1051053);
+        IndiviualMonsterDrop.add(1382008);
+        IndiviualMonsterDrop.add(1002275);
+        IndiviualMonsterDrop.add(1051082);
+        IndiviualMonsterDrop.add(1050064);
+        IndiviualMonsterDrop.add(1472028);
+        IndiviualMonsterDrop.add(1072193);
+        IndiviualMonsterDrop.add(1072172);
+        IndiviualMonsterDrop.add(1002285);
+
+        drops.put(9400545, IndiviualMonsterDrop);
 
         IndiviualMonsterDrop = new ArrayList();
 
@@ -797,14 +833,14 @@ public class MonsterDropCreator {
         for (MapleData itemFolder : itemsData.getChildren()) {
             int itemId = Integer.parseInt(itemFolder.getName());
             String itemName = MapleDataTool.getString("name", itemFolder, "NO-NAME");
-            itemPairs.add(new Pair(Integer.valueOf(itemId), itemName));
+            itemPairs.add(new Pair(itemId, itemName));
         }
 
         itemsData = data.getData("Consume.img");
         for (MapleData itemFolder : itemsData.getChildren()) {
             int itemId = Integer.parseInt(itemFolder.getName());
             String itemName = MapleDataTool.getString("name", itemFolder, "NO-NAME");
-            itemPairs.add(new Pair(Integer.valueOf(itemId), itemName));
+            itemPairs.add(new Pair(itemId, itemName));
         }
 
         itemsData = data.getData("Eqp.img").getChildByPath("Eqp");
@@ -812,7 +848,7 @@ public class MonsterDropCreator {
             for (MapleData itemFolder : eqpType.getChildren()) {
                 int itemId = Integer.parseInt(itemFolder.getName());
                 String itemName = MapleDataTool.getString("name", itemFolder, "NO-NAME");
-                itemPairs.add(new Pair(Integer.valueOf(itemId), itemName));
+                itemPairs.add(new Pair(itemId, itemName));
             }
         }
 
@@ -820,25 +856,28 @@ public class MonsterDropCreator {
         for (MapleData itemFolder : itemsData.getChildren()) {
             int itemId = Integer.parseInt(itemFolder.getName());
             String itemName = MapleDataTool.getString("name", itemFolder, "NO-NAME");
-            itemPairs.add(new Pair(Integer.valueOf(itemId), itemName));
+            itemPairs.add(new Pair(itemId, itemName));
         }
 
         itemsData = data.getData("Ins.img");
         for (MapleData itemFolder : itemsData.getChildren()) {
             int itemId = Integer.parseInt(itemFolder.getName());
             String itemName = MapleDataTool.getString("name", itemFolder, "NO-NAME");
-            itemPairs.add(new Pair(Integer.valueOf(itemId), itemName));
+            itemPairs.add(new Pair(itemId, itemName));
         }
 
         itemsData = data.getData("Pet.img");
         for (MapleData itemFolder : itemsData.getChildren()) {
             int itemId = Integer.parseInt(itemFolder.getName());
             String itemName = MapleDataTool.getString("name", itemFolder, "NO-NAME");
-            itemPairs.add(new Pair(Integer.valueOf(itemId), itemName));
+            itemPairs.add(new Pair(itemId, itemName));
         }
         itemNameCache.addAll(itemPairs);
     }
 
+    /**
+     *
+     */
     public static void getAllMobs() {
         List itemPairs = new ArrayList();
        // MapleDataProvider data = MapleDataProviderFactory.getDataProvider(new File(new StringBuilder().append(System.getProperty("wzpath")).append("/String.wz").toString()));
@@ -852,38 +891,70 @@ public class MonsterDropCreator {
                 int boss = id == 8810018 ? 1 : MapleDataTool.getIntConvert("boss", monsterData.getChildByPath("info"), 0);
 
                 if (boss > 0) {
-                    bossCache.put(Integer.valueOf(id), Boolean.valueOf(true));
+                    bossCache.put(id, true);
                 }
 
                 MobInfo mobInfo = new MobInfo(boss, MapleDataTool.getIntConvert("rareItemDropLevel", monsterData.getChildByPath("info"), 0), MapleDataTool.getString("name", itemFolder, "NO-NAME"));
 
-                itemPairs.add(new Pair(Integer.valueOf(id), mobInfo));
+                itemPairs.add(new Pair(id, mobInfo));
             } catch (Exception fe) {
             }
         }
         mobCache.addAll(itemPairs);
     }
 
+    /**
+     *
+     */
     public static class MobInfo {
 
+        /**
+         *
+         */
         public int boss;
+
+        /**
+         *
+         */
         public int rareItemDropLevel;
+
+        /**
+         *
+         */
         public String name;
 
+        /**
+         *
+         * @param boss
+         * @param rareItemDropLevel
+         * @param name
+         */
         public MobInfo(int boss, int rareItemDropLevel, String name) {
             this.boss = boss;
             this.rareItemDropLevel = rareItemDropLevel;
             this.name = name;
         }
 
+        /**
+         *
+         * @return
+         */
         public int getBoss() {
             return this.boss;
         }
 
+        /**
+         *
+         * @return
+         */
         public int rateItemDropLevel() {
             return this.rareItemDropLevel;
         }
 
+        /**
+         *
+         * @return
+         */
         public String getName() {
             return this.name;
         }

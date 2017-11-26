@@ -20,9 +20,21 @@
  */
 package handling;
 
+/**
+ *
+ * @author zjj
+ */
 public interface WritableIntValueHolder {
 
+    /**
+     *
+     * @return
+     */
     public short getValue();
 
+    /**
+     *
+     * @param newval
+     */
     public void setValue(short newval);
 }

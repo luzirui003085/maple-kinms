@@ -21,7 +21,6 @@
 package scripting;
 
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -37,7 +36,6 @@ import client.MapleClient;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import server.MaplePortal;
-import tools.FileoutputUtil;
 
 public class PortalScriptManager {
 

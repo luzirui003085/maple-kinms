@@ -21,10 +21,13 @@ import database.DatabaseConnection;
 import database.DatabaseException;
 import java.util.EnumMap;
 import scripting.NPCScriptManager;
-import static server.Start.自动检测;
 import tools.MaplePacketCreator;
 import tools.Pair;
 
+/**
+ *
+ * @author zjj
+ */
 public class MapleStorage implements Serializable {
 
     private static final long serialVersionUID = 9179541993413738569L;
@@ -34,16 +37,22 @@ public class MapleStorage implements Serializable {
     private int meso;
     private byte slots;
     private boolean changed = false;
-    private Map<MapleInventoryType, List<IItem>> typeItems = new EnumMap<MapleInventoryType, List<IItem>>(MapleInventoryType.class);
+    private Map<MapleInventoryType, List<IItem>> typeItems = new EnumMap<>(MapleInventoryType.class);
 
     private MapleStorage(int id, byte slots, int meso, int accountId) {
         this.id = id;
         this.slots = slots;
-        this.items = new LinkedList<IItem>();
+        this.items = new LinkedList<>();
         this.meso = meso;
         this.accountId = accountId;
     }
 
+    /**
+     *
+     * @param id
+     * @return
+     * @throws SQLException
+     */
     public static int create(int id) throws SQLException {
         Connection con = DatabaseConnection.getConnection();
         PreparedStatement ps = con.prepareStatement("INSERT INTO storages (accountid, slots, meso) VALUES (?, ?, ?)", DatabaseConnection.RETURN_GENERATED_KEYS);
@@ -65,6 +74,11 @@ public class MapleStorage implements Serializable {
         throw new DatabaseException("Inserting char failed.");
     }
 
+    /**
+     *
+     * @param id
+     * @return
+     */
     public static MapleStorage loadStorage(int id) {
         MapleStorage ret = null;
         int storeId;
@@ -95,6 +109,9 @@ public class MapleStorage implements Serializable {
         return ret;
     }
 
+    /**
+     *
+     */
     public void saveToDB() {
         if (!changed) {
             return;
@@ -109,9 +126,9 @@ public class MapleStorage implements Serializable {
             ps.executeUpdate();
             ps.close();
 
-            List<Pair<IItem, MapleInventoryType>> listing = new ArrayList<Pair<IItem, MapleInventoryType>>();
+            List<Pair<IItem, MapleInventoryType>> listing = new ArrayList<>();
             for (final IItem item : items) {
-                listing.add(new Pair<IItem, MapleInventoryType>(item, GameConstants.getInventoryType(item.getItemId())));
+                listing.add(new Pair<>(item, GameConstants.getInventoryType(item.getItemId())));
             }
             ItemLoader.STORAGE.saveItems(listing, accountId);
         } catch (SQLException ex) {
@@ -119,6 +136,11 @@ public class MapleStorage implements Serializable {
         }
     }
 
+    /**
+     *
+     * @param slot
+     * @return
+     */
     public IItem takeOut(byte slot) {
         if (slot >= items.size() || slot < 0) {
             return null;
@@ -126,23 +148,31 @@ public class MapleStorage implements Serializable {
         changed = true;
         IItem ret = items.remove(slot);
         MapleInventoryType type = GameConstants.getInventoryType(ret.getItemId());
-        typeItems.put(type, new ArrayList<IItem>(filterItems(type)));
+        typeItems.put(type, new ArrayList<>(filterItems(type)));
         return ret;
     }
 
+    /**
+     *
+     * @param item
+     */
     public void store(IItem item) {
         changed = true;
         items.add(item);
         MapleInventoryType type = GameConstants.getInventoryType(item.getItemId());
-        typeItems.put(type, new ArrayList<IItem>(filterItems(type)));
+        typeItems.put(type, new ArrayList<>(filterItems(type)));
     }
 
+    /**
+     *
+     * @return
+     */
     public List<IItem> getItems() {
         return Collections.unmodifiableList(items);
     }
 
     private List<IItem> filterItems(MapleInventoryType type) {
-        List<IItem> ret = new LinkedList<IItem>();
+        List<IItem> ret = new LinkedList<>();
 
         for (IItem item : items) {
             if (GameConstants.getInventoryType(item.getItemId()) == type) {
@@ -152,6 +182,12 @@ public class MapleStorage implements Serializable {
         return ret;
     }
 
+    /**
+     *
+     * @param type
+     * @param slot
+     * @return
+     */
     public byte getSlot(MapleInventoryType type, byte slot) {
         // MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
         byte ret = 0;
@@ -168,6 +204,11 @@ public class MapleStorage implements Serializable {
         return -1;
     }
 
+    /**
+     *
+     * @param c
+     * @param npcId
+     */
     public void sendStorage(MapleClient c, int npcId) {
         if (!Boolean.parseBoolean(ServerProperties.getProperty("KinMS.仓库", "false"))) {
             c.getSession().write(MaplePacketCreator.getNPCTalk(1052017, (byte) 0, "仓库暂时无法使用", "00 00", (byte) 0));
@@ -178,6 +219,7 @@ public class MapleStorage implements Serializable {
         // sort by inventorytype to avoid confusion
         Collections.sort(items, new Comparator<IItem>() {
 
+            @Override
             public int compare(IItem o1, IItem o2) {
                 if (GameConstants.getInventoryType(o1.getItemId()).getType() < GameConstants.getInventoryType(o2.getItemId()).getType()) {
                     return -1;
@@ -189,23 +231,42 @@ public class MapleStorage implements Serializable {
             }
         });
         for (MapleInventoryType type : MapleInventoryType.values()) {
-            typeItems.put(type, new ArrayList<IItem>(items));
+            typeItems.put(type, new ArrayList<>(items));
         }
         c.getSession().write(MaplePacketCreator.getStorage(npcId, slots, items, meso));
     }
 
+    /**
+     *
+     * @param c
+     * @param type
+     */
     public void sendStored(MapleClient c, MapleInventoryType type) {
         c.getSession().write(MaplePacketCreator.storeStorage(slots, type, typeItems.get(type)));
     }
 
+    /**
+     *
+     * @param c
+     * @param type
+     */
     public void sendTakenOut(MapleClient c, MapleInventoryType type) {
         c.getSession().write(MaplePacketCreator.takeOutStorage(slots, type, typeItems.get(type)));
     }
 
+    /**
+     *
+     * @return
+     */
     public int getMeso() {
         return meso;
     }
 
+    /**
+     *
+     * @param itemId
+     * @return
+     */
     public IItem findById(int itemId) {
         for (IItem item : items) {
             if (item.getItemId() == itemId) {
@@ -215,6 +276,10 @@ public class MapleStorage implements Serializable {
         return null;
     }
 
+    /**
+     *
+     * @param meso
+     */
     public void setMeso(int meso) {
         if (meso < 0) {
             return;
@@ -223,28 +288,51 @@ public class MapleStorage implements Serializable {
         this.meso = meso;
     }
 
+    /**
+     *
+     * @param c
+     */
     public void sendMeso(MapleClient c) {
         c.getSession().write(MaplePacketCreator.mesoStorage(slots, meso));
     }
 
+    /**
+     *
+     * @return
+     */
     public boolean isFull() {
         return items.size() >= slots;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getSlots() {
         return slots;
     }
 
+    /**
+     *
+     * @param gain
+     */
     public void increaseSlots(byte gain) {
         changed = true;
         this.slots += gain;
     }
 
+    /**
+     *
+     * @param set
+     */
     public void setSlots(byte set) {
         changed = true;
         this.slots = set;
     }
 
+    /**
+     *
+     */
     public void close() {
         typeItems.clear();
     }

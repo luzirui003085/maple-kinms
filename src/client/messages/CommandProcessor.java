@@ -20,13 +20,9 @@
  */
 package client.messages;
 
-import java.util.ArrayList;
 import client.MapleCharacter;
 import client.MapleClient;
 import client.messages.commands.*;
-import client.messages.commands.PlayerCommand;
-import client.messages.commands.GMCommand;
-import client.messages.commands.InternCommand;
 import constants.ServerConstants;
 import constants.ServerConstants.CommandType;
 import constants.ServerConstants.PlayerGMRank;
@@ -34,14 +30,19 @@ import database.DatabaseConnection;
 import java.lang.reflect.Modifier;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import tools.FileoutputUtil;
 
+/**
+ *
+ * @author zjj
+ */
 public class CommandProcessor {
 
-    private final static HashMap<String, CommandObject> commands = new HashMap<String, CommandObject>();
-    private final static HashMap<Integer, ArrayList<String>> commandList = new HashMap<Integer, ArrayList<String>>();
+    private final static HashMap<String, CommandObject> commands = new HashMap<>();
+    private final static HashMap<Integer, ArrayList<String>> commandList = new HashMap<>();
 
     private static void sendDisplayMessage(MapleClient c, String msg, CommandType type) {
         if (c.getPlayer() == null) {
@@ -58,6 +59,13 @@ public class CommandProcessor {
 
     }
 
+    /**
+     *
+     * @param c
+     * @param line
+     * @param type
+     * @return
+     */
     public static boolean processCommand(MapleClient c, String line, CommandType type) {
         if (line.charAt(0) == ServerConstants.PlayerGMRank.NORMAL.getCommandPrefix()) {
             String[] splitted = line.split(" ");
@@ -137,7 +145,7 @@ public class CommandProcessor {
             try {
                 PlayerGMRank rankNeeded = (PlayerGMRank) clasz.getMethod("getPlayerLevelRequired", new Class[]{}).invoke(null, (Object[]) null);
                 Class[] a = clasz.getDeclaredClasses();
-                ArrayList<String> cL = new ArrayList<String>();
+                ArrayList<String> cL = new ArrayList<>();
                 for (Class c : a) {
                     try {
                         if (!Modifier.isAbstract(c.getModifiers()) && !c.isSynthetic()) {

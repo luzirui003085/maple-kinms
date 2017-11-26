@@ -30,9 +30,12 @@ import java.awt.image.SampleModel;
 import java.awt.image.WritableRaster;
 import java.util.zip.DataFormatException;
 import java.util.zip.Inflater;
-
 import provider.MapleCanvas;
 
+/**
+ *
+ * @author zjj
+ */
 public class PNGMapleCanvas implements MapleCanvas {
 
     private static final int[] ZAHLEN = new int[]{2, 1, 0, 3};
@@ -42,6 +45,14 @@ public class PNGMapleCanvas implements MapleCanvas {
     private int format;
     private byte[] data;
 
+    /**
+     *
+     * @param width
+     * @param height
+     * @param dataLength
+     * @param format
+     * @param data
+     */
     public PNGMapleCanvas(int width, int height, int dataLength, int format, byte[] data) {
         super();
         this.height = height;
@@ -51,22 +62,44 @@ public class PNGMapleCanvas implements MapleCanvas {
         this.data = data;
     }
 
+    /**
+     *
+     * @return
+     */
+    @Override
     public int getHeight() {
         return height;
     }
 
+    /**
+     *
+     * @return
+     */
+    @Override
     public int getWidth() {
         return width;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getFormat() {
         return format;
     }
 
+    /**
+     *
+     * @return
+     */
     public byte[] getData() {
         return data;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public BufferedImage getImage() {
         int sizeUncompressed = 0;
@@ -114,43 +147,46 @@ public class PNGMapleCanvas implements MapleCanvas {
 
         dec.end();
         // fuck the format
-        if (getFormat() == 1) {
-            for (int i = 0; i < sizeUncompressed; i++) {
-                byte low = (byte) (uc[i] & 0x0F);
-                byte high = (byte) (uc[i] & 0xF0);
-
-                writeBuf[(i << 1)] = (byte) (((low << 4) | low) & 0xFF);
-                writeBuf[(i << 1) + 1] = (byte) (high | ((high >>> 4) & 0xF));
-            }
-        } else if (getFormat() == 2) {
-            writeBuf = uc;
-        } else if (getFormat() == 513) {
-            for (int i = 0; i < declen; i += 2) {
-                byte bBits = (byte) ((uc[i] & 0x1F) << 3);
-                byte gBits = (byte) (((uc[i + 1] & 0x07) << 5) | ((uc[i] & 0xE0) >> 3));
-                byte rBits = (byte) (uc[i + 1] & 0xF8);
-
-                writeBuf[(i << 1)] = (byte) (bBits | (bBits >> 5));
-                writeBuf[(i << 1) + 1] = (byte) (gBits | (gBits >> 6));
-                writeBuf[(i << 1) + 2] = (byte) (rBits | (rBits >> 5));
-                writeBuf[(i << 1) + 3] = (byte) 0xFF;
-            }
-        } else if (getFormat() == 517) {
-            byte b = 0x00;
-            int pixelIndex = 0;
-
-            for (int i = 0; i < declen; i++) {
-                for (int j = 0; j < 8; j++) {
-                    b = (byte) (((uc[i] & (0x01 << (7 - j))) >> (7 - j)) * 255);
-                    for (int k = 0; k < 16; k++) {
-                        pixelIndex = (i << 9) + (j << 6) + k * 2;
-                        writeBuf[pixelIndex] = b;
-                        writeBuf[pixelIndex + 1] = b;
-                        writeBuf[pixelIndex + 2] = b;
-                        writeBuf[pixelIndex + 3] = (byte) 0xFF;
+        switch (getFormat()) {
+            case 1:
+                for (int i = 0; i < sizeUncompressed; i++) {
+                    byte low = (byte) (uc[i] & 0x0F);
+                    byte high = (byte) (uc[i] & 0xF0);
+                    
+                    writeBuf[(i << 1)] = (byte) (((low << 4) | low) & 0xFF);
+                    writeBuf[(i << 1) + 1] = (byte) (high | ((high >>> 4) & 0xF));
+                }   break;
+            case 2:
+                writeBuf = uc;
+                break;
+            case 513:
+                for (int i = 0; i < declen; i += 2) {
+                    byte bBits = (byte) ((uc[i] & 0x1F) << 3);
+                    byte gBits = (byte) (((uc[i + 1] & 0x07) << 5) | ((uc[i] & 0xE0) >> 3));
+                    byte rBits = (byte) (uc[i + 1] & 0xF8);
+                    
+                    writeBuf[(i << 1)] = (byte) (bBits | (bBits >> 5));
+                    writeBuf[(i << 1) + 1] = (byte) (gBits | (gBits >> 6));
+                    writeBuf[(i << 1) + 2] = (byte) (rBits | (rBits >> 5));
+                    writeBuf[(i << 1) + 3] = (byte) 0xFF;
+                }   break;
+            case 517:
+                byte b = 0x00;
+                int pixelIndex = 0;
+                for (int i = 0; i < declen; i++) {
+                    for (int j = 0; j < 8; j++) {
+                        b = (byte) (((uc[i] & (0x01 << (7 - j))) >> (7 - j)) * 255);
+                        for (int k = 0; k < 16; k++) {
+                            pixelIndex = (i << 9) + (j << 6) + k * 2;
+                            writeBuf[pixelIndex] = b;
+                            writeBuf[pixelIndex + 1] = b;
+                            writeBuf[pixelIndex + 2] = b;
+                            writeBuf[pixelIndex + 3] = (byte) 0xFF;
+                        }
                     }
-                }
-            }
+                }   break;
+            default:
+                break;
         }
 
         DataBufferByte imgData = new DataBufferByte(writeBuf, sizeUncompressed);

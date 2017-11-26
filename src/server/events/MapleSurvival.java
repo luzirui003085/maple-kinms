@@ -5,22 +5,50 @@ import java.util.concurrent.ScheduledFuture;
 import server.Timer.EventTimer;
 import tools.MaplePacketCreator;
 
+/**
+ *
+ * @author zjj
+ */
 public class MapleSurvival extends MapleEvent {
 
+    /**
+     *
+     */
     protected long time = 360000L;
+
+    /**
+     *
+     */
     protected long timeStarted = 0L;
+
+    /**
+     *
+     */
     protected ScheduledFuture<?> olaSchedule;
 
+    /**
+     *
+     * @param channel
+     * @param mapid
+     */
     public MapleSurvival(int channel, final int[] mapid) {
         super(channel, mapid);
     }
 
+    /**
+     *
+     * @param chr
+     */
     @Override
     public void finished(MapleCharacter chr) {
         givePrize(chr);
        // chr.finishAchievement(25);
     }
 
+    /**
+     *
+     * @param chr
+     */
     @Override
     public void onMapLoad(MapleCharacter chr) {
         super.onMapLoad(chr);
@@ -29,6 +57,9 @@ public class MapleSurvival extends MapleEvent {
         }
     }
 
+    /**
+     *
+     */
     @Override
     public void startEvent() {
         unreset();
@@ -53,14 +84,25 @@ public class MapleSurvival extends MapleEvent {
         broadcast(MaplePacketCreator.serverNotice(0, "Fall down once, and never get back up again! Get to the top without falling down!"));
     }
 
+    /**
+     *
+     * @return
+     */
     public boolean isTimerStarted() {
         return this.timeStarted > 0L;
     }
 
+    /**
+     *
+     * @return
+     */
     public long getTime() {
         return this.time;
     }
 
+    /**
+     *
+     */
     public void resetSchedule() {
         this.timeStarted = 0L;
         if (this.olaSchedule != null) {
@@ -69,6 +111,9 @@ public class MapleSurvival extends MapleEvent {
         this.olaSchedule = null;
     }
 
+    /**
+     *
+     */
     @Override
     public void reset() {
         super.reset();
@@ -76,6 +121,9 @@ public class MapleSurvival extends MapleEvent {
         getMap(0).getPortal("join00").setPortalState(false);
     }
 
+    /**
+     *
+     */
     @Override
     public void unreset() {
         super.unreset();
@@ -83,6 +131,10 @@ public class MapleSurvival extends MapleEvent {
         getMap(0).getPortal("join00").setPortalState(true);
     }
 
+    /**
+     *
+     * @return
+     */
     public long getTimeLeft() {
         return this.time - (System.currentTimeMillis() - this.timeStarted);
     }

@@ -20,15 +20,14 @@
  */
 package handling.channel.handler;
 
-import java.util.List;
-import java.awt.Point;
-
 import client.ISkill;
-import constants.GameConstants;
 import client.MapleCharacter;
 import client.SkillFactory;
-import server.MapleStatEffect;
+import constants.GameConstants;
+import java.awt.Point;
+import java.util.List;
 import server.AutobanManager;
+import server.MapleStatEffect;
 import tools.AttackPair;
 
 public class AttackInfo {

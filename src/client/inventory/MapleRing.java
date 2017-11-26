@@ -22,13 +22,12 @@ package client.inventory;
 
 import client.MapleCharacter;
 import com.mysql.jdbc.exceptions.MySQLIntegrityConstraintViolationException;
+import database.DatabaseConnection;
+import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.io.Serializable;
-
-import database.DatabaseConnection;
 import java.util.Comparator;
 import server.MapleInventoryManipulator;
 

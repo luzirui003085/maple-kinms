@@ -6,13 +6,11 @@ import database.DatabaseConnection;
 import handling.cashshop.CashShopServer;
 import handling.channel.ChannelServer;
 import handling.login.LoginServer;
-import handling.world.World;
 import handling.world.World.Alliance;
 import handling.world.World.Broadcast;
 import handling.world.World.Family;
 import handling.world.World.Guild;
 import org.apache.log4j.Logger;
-import server.Timer.*;
 import tools.MaplePacketCreator;
 
 public class ShutdownServer implements Runnable {

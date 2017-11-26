@@ -27,8 +27,19 @@ import handling.SendPacketOpcode;
 import server.MapleCarnivalParty;
 import tools.data.output.MaplePacketLittleEndianWriter;
 
+/**
+ *
+ * @author zjj
+ */
 public class MonsterCarnivalPacket {
 
+    /**
+     *
+     * @param chr
+     * @param enemyavailable
+     * @param enemytotal
+     * @return
+     */
     public static MaplePacket startMonsterCarnival(final MapleCharacter chr, final int enemyavailable, final int enemytotal) {
         MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter();
 
@@ -54,6 +65,13 @@ public class MonsterCarnivalPacket {
         return mplew.getPacket();
     }
 
+    /**
+     *
+     * @param name
+     * @param lostCP
+     * @param team
+     * @return
+     */
     public static MaplePacket playerDiedMessage(String name, int lostCP, int team) { //CPQ
         MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter();
 
@@ -72,6 +90,14 @@ public class MonsterCarnivalPacket {
         return mplew.getPacket();
     }
 
+    /**
+     *
+     * @param party
+     * @param curCP
+     * @param totalCP
+     * @param team
+     * @return
+     */
     public static MaplePacket CPUpdate(boolean party, int curCP, int totalCP, int team) {
         MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter();
         if (ServerConstants.调试输出封包) {
@@ -93,6 +119,13 @@ public class MonsterCarnivalPacket {
         return mplew.getPacket();
     }
 
+    /**
+     *
+     * @param name
+     * @param tab
+     * @param number
+     * @return
+     */
     public static MaplePacket playerSummoned(String name, int tab, int number) {
         MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter();
 
@@ -111,6 +144,13 @@ public class MonsterCarnivalPacket {
         return mplew.getPacket();
     }
 
+    /**
+     *
+     * @param name
+     * @param tab
+     * @param number
+     * @return
+     */
     public static MaplePacket playerSummoned1(String name, int tab, int number) {
         MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter();
 

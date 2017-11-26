@@ -23,12 +23,27 @@ package server.movement;
 import java.awt.Point;
 import tools.data.output.LittleEndianWriter;
 
+/**
+ *
+ * @author zjj
+ */
 public class AranMovement extends AbstractLifeMovement {
 
+    /**
+     *
+     * @param type
+     * @param position
+     * @param duration
+     * @param newstate
+     */
     public AranMovement(int type, Point position, int duration, int newstate) {
         super(type, position, duration, newstate);
     }
 
+    /**
+     *
+     * @param lew
+     */
     @Override
     public void serialize(LittleEndianWriter lew) {
         lew.write(getType());

@@ -2,17 +2,57 @@ package server.life;
 
 import constants.GameConstants;
 
+/**
+ *
+ * @author zjj
+ */
 public class ChangeableStats extends OverrideMonsterStats {
 
+    /**
+     *
+     */
     public int watk;
+
+    /**
+     *
+     */
     public int matk;
+
+    /**
+     *
+     */
     public int acc;
+
+    /**
+     *
+     */
     public int eva;
+
+    /**
+     *
+     */
     public int PDRate;
+
+    /**
+     *
+     */
     public int MDRate;
+
+    /**
+     *
+     */
     public int pushed;
+
+    /**
+     *
+     */
     public int level;
 
+    /**
+     *
+     * @param stats
+     * @param ostats
+     */
     public ChangeableStats(MapleMonsterStats stats, OverrideMonsterStats ostats) {
         this.hp = ostats.getHp();
         this.exp = ostats.getExp();
@@ -27,6 +67,12 @@ public class ChangeableStats extends OverrideMonsterStats {
         this.level = stats.getLevel();
     }
 
+    /**
+     *
+     * @param stats
+     * @param newLevel
+     * @param pqMob
+     */
     public ChangeableStats(MapleMonsterStats stats, int newLevel, boolean pqMob) {
         double mod = newLevel / stats.getLevel();
         double hpRatio = stats.getHp() / stats.getExp();

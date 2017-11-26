@@ -4,31 +4,42 @@ import client.MapleDisease;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
-import server.life.MobSkillFactory;
+import provider.MapleData;
 import provider.MapleDataProvider;
 import provider.MapleDataProviderFactory;
-import provider.MapleData;
 import provider.MapleDataTool;
 import server.life.MobSkill;
+import server.life.MobSkillFactory;
 
+/**
+ *
+ * @author zjj
+ */
 public class MapleCarnivalFactory {
 
     private final static MapleCarnivalFactory instance = new MapleCarnivalFactory();
-    private final Map<Integer, MCSkill> skills = new HashMap<Integer, MCSkill>();
-    private final Map<Integer, MCSkill> guardians = new HashMap<Integer, MCSkill>();
+    private final Map<Integer, MCSkill> skills = new HashMap<>();
+    private final Map<Integer, MCSkill> guardians = new HashMap<>();
     private final MapleDataProvider dataRoot = MapleDataProviderFactory.getDataProvider(new File(System.getProperty("net.sf.odinms.wzpath") + "/Skill.wz"));
 
+    /**
+     *
+     */
     public MapleCarnivalFactory() {
         //whoosh
         initialize();
     }
 
+    /**
+     *
+     * @return
+     */
     public static final MapleCarnivalFactory getInstance() {
         return instance;
     }
 
     private void initialize() {
-        if (skills.size() != 0) {
+        if (!skills.isEmpty()) {
             return;
         }
         for (MapleData z : dataRoot.getData("MCSkill.img")) {
@@ -39,19 +50,53 @@ public class MapleCarnivalFactory {
         }
     }
 
+    /**
+     *
+     * @param id
+     * @return
+     */
     public MCSkill getSkill(final int id) {
         return skills.get(id);
     }
 
+    /**
+     *
+     * @param id
+     * @return
+     */
     public MCSkill getGuardian(final int id) {
         return guardians.get(id);
     }
 
+    /**
+     *
+     */
     public static class MCSkill {
 
-        public int cpLoss, skillid, level;
+        public int cpLoss,
+
+        /**
+         *
+         */
+        skillid, 
+
+        /**
+         *
+         */
+        level;
+
+        /**
+         *
+         */
         public boolean targetsAll;
 
+        /**
+         *
+         * @param _cpLoss
+         * @param _skillid
+         * @param _level
+         * @param _targetsAll
+         */
         public MCSkill(int _cpLoss, int _skillid, int _level, boolean _targetsAll) {
             cpLoss = _cpLoss;
             skillid = _skillid;
@@ -59,10 +104,18 @@ public class MapleCarnivalFactory {
             targetsAll = _targetsAll;
         }
 
+        /**
+         *
+         * @return
+         */
         public MobSkill getSkill() {
             return MobSkillFactory.getMobSkill(skillid, 1); //level?
         }
 
+        /**
+         *
+         * @return
+         */
         public MapleDisease getDisease() {
             if (skillid <= 0) {
                 return MapleDisease.getRandom();

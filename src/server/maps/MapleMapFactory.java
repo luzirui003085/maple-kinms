@@ -1,23 +1,4 @@
-/*
- This file is part of the OdinMS Maple Story Server
- Copyright (C) 2008 ~ 2010 Patrick Huy <patrick.huy@frz.cc> 
- Matthias Butz <matze@odinms.de>
- Jan Christian Meyer <vimes@odinms.de>
 
- This program is free software: you can redistribute it and/or modify
- it under the terms of the GNU Affero General Public License version 3
- as published by the Free Software Foundation. You may not use, modify
- or distribute this program under any other version of the
- GNU Affero General Public License.
-
- This program is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- GNU Affero General Public License for more details.
-
- You should have received a copy of the GNU Affero General Public License
- along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
 package server.maps;
 
 import com.mysql.jdbc.Connection;
@@ -29,7 +10,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.io.File;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -49,32 +29,61 @@ import server.maps.MapleNodes.MapleNodeInfo;
 import server.maps.MapleNodes.MaplePlatform;
 import tools.StringUtil;
 
+/**
+ *
+ * @author zjj
+ */
 public class MapleMapFactory {
 
     private static final MapleDataProvider source = MapleDataProviderFactory.getDataProvider(new File(System.getProperty("net.sf.odinms.wzpath") + "/Map.wz"));
     private static final MapleData nameData = MapleDataProviderFactory.getDataProvider(new File(System.getProperty("net.sf.odinms.wzpath") + "/String.wz")).getData("Map.img");
-    private final Map<Integer, MapleMap> maps = new HashMap<Integer, MapleMap>();
-    private final Map<Integer, MapleMap> instanceMap = new HashMap<Integer, MapleMap>();
-    private static final Map<Integer, MapleNodes> mapInfos = new HashMap<Integer, MapleNodes>();
+    private final Map<Integer, MapleMap> maps = new HashMap<>();
+    private final Map<Integer, MapleMap> instanceMap = new HashMap<>();
+    private static final Map<Integer, MapleNodes> mapInfos = new HashMap<>();
     private final ReentrantLock lock = new ReentrantLock(true);
     private static final Map<Integer, List<AbstractLoadedMapleLife>> customLife = new HashMap<>();  
     private int channel;
 
+    /**
+     *
+     * @param channel
+     */
     public MapleMapFactory(int channel) {
         this.channel = channel;
     }
 
+    /**
+     *
+     * @param mapid
+     * @return
+     */
     public final MapleMap getMap(final int mapid) {
         return getMap(mapid, true, true, true);
     }
 
     //backwards-compatible
+
+    /**
+     *
+     * @param mapid
+     * @param respawns
+     * @param npcs
+     * @return
+     */
     public final MapleMap getMap(final int mapid, final boolean respawns, final boolean npcs) {
         return getMap(mapid, respawns, npcs, true);
     }
 
+    /**
+     *
+     * @param mapid
+     * @param respawns
+     * @param npcs
+     * @param reactors
+     * @return
+     */
     public final MapleMap getMap(final int mapid, final boolean respawns, final boolean npcs, final boolean reactors) {
-        Integer omapid = Integer.valueOf(mapid);
+        Integer omapid = mapid;
         MapleMap map = maps.get(omapid);
         if (map == null) {
             lock.lock();
@@ -94,7 +103,7 @@ public class MapleMapFactory {
                 if (respawns) {
                     MapleData mobRate = mapData.getChildByPath("info/mobRate");
                     if (mobRate != null) {
-                        monsterRate = ((Float) mobRate.getData()).floatValue();
+                        monsterRate = ((Float) mobRate.getData());
                     }
                 }
                 map = new MapleMap(mapid, channel, MapleDataTool.getInt("info/returnMap", mapData), monsterRate);
@@ -103,7 +112,7 @@ public class MapleMapFactory {
                 for (MapleData portal : mapData.getChildByPath("portal")) {
                     map.addPortal(portalFactory.makePortal(MapleDataTool.getInt(portal.getChildByPath("pt")), portal));
                 }
-                List<MapleFoothold> allFootholds = new LinkedList<MapleFoothold>();
+                List<MapleFoothold> allFootholds = new LinkedList<>();
                 Point lBound = new Point();
                 Point uBound = new Point();
                 MapleFoothold fh;
@@ -236,6 +245,10 @@ public class MapleMapFactory {
         return map;
     }
     
+    /**
+     *
+     * @return
+     */
     public static int loadCustomLife() {
         customLife.clear(); // init
         try {
@@ -268,19 +281,34 @@ public class MapleMapFactory {
         }
         return -1;
     }  
+
+    /**
+     *
+     * @param mapid
+     * @return
+     */
     public boolean destroyMap(int mapid) {
         synchronized (this.maps) {
-            if (this.maps.containsKey(Integer.valueOf(mapid))) {
-                return this.maps.remove(Integer.valueOf(mapid)) != null;
+            if (this.maps.containsKey(mapid)) {
+                return this.maps.remove(mapid) != null;
             }
         }
         return false;
     }
 
+    /**
+     *
+     * @param instanceid
+     * @return
+     */
     public MapleMap getInstanceMap(final int instanceid) {
         return instanceMap.get(instanceid);
     }
 
+    /**
+     *
+     * @param instanceid
+     */
     public void removeInstanceMap(final int instanceid) {
         if (isInstanceMapLoaded(instanceid)) {
             getInstanceMap(instanceid).checkStates("");
@@ -288,6 +316,10 @@ public class MapleMapFactory {
         }
     }
 
+    /**
+     *
+     * @param instanceid
+     */
     public void removeMap(final int instanceid) {
         if (isMapLoaded(instanceid)) {
             getMap(instanceid).checkStates("");
@@ -313,6 +345,15 @@ public class MapleMapFactory {
         return myLife;
     }  
     
+    /**
+     *
+     * @param mapid
+     * @param respawns
+     * @param npcs
+     * @param reactors
+     * @param instanceid
+     * @return
+     */
     public MapleMap CreateInstanceMap(int mapid, boolean respawns, boolean npcs, boolean reactors, int instanceid) {
         if (isInstanceMapLoaded(instanceid)) {
             return getInstanceMap(instanceid);
@@ -327,7 +368,7 @@ public class MapleMapFactory {
         if (respawns) {
             MapleData mobRate = mapData.getChildByPath("info/mobRate");
             if (mobRate != null) {
-                monsterRate = ((Float) mobRate.getData()).floatValue();
+                monsterRate = ((Float) mobRate.getData());
             }
         }
         MapleMap map = new MapleMap(mapid, channel, MapleDataTool.getInt("info/returnMap", mapData), monsterRate);
@@ -336,7 +377,7 @@ public class MapleMapFactory {
         for (MapleData portal : mapData.getChildByPath("portal")) {
             map.addPortal(portalFactory.makePortal(MapleDataTool.getInt(portal.getChildByPath("pt")), portal));
         }
-        List<MapleFoothold> allFootholds = new LinkedList<MapleFoothold>();
+        List<MapleFoothold> allFootholds = new LinkedList<>();
         Point lBound = new Point();
         Point uBound = new Point();
         for (MapleData footRoot : mapData.getChildByPath("foothold")) {
@@ -448,26 +489,51 @@ public class MapleMapFactory {
         return map;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getLoadedMaps() {
         return maps.size();
     }
 
+    /**
+     *
+     * @param mapId
+     * @return
+     */
     public boolean isMapLoaded(int mapId) {
         return maps.containsKey(mapId);
     }
 
+    /**
+     *
+     * @param instanceid
+     * @return
+     */
     public boolean isInstanceMapLoaded(int instanceid) {
         return instanceMap.containsKey(instanceid);
     }
 
+    /**
+     *
+     */
     public void clearLoadedMap() {
         maps.clear();
     }
 
+    /**
+     *
+     * @return
+     */
     public Collection<MapleMap> getAllMaps() {
         return maps.values();
     }
 
+    /**
+     *
+     * @return
+     */
     public Collection<MapleMap> getAllInstanceMaps() {
         return instanceMap.values();
     }
@@ -563,6 +629,10 @@ public class MapleMapFactory {
         return builder.toString();
     }
 
+    /**
+     *
+     * @param channel
+     */
     public void setChannel(int channel) {
         this.channel = channel;
     }
@@ -760,7 +830,7 @@ public class MapleMapFactory {
                             nodeInfo.setNodeEnd(MapleDataTool.getInt(node, 0));
                             continue;
                         }
-                        List<Integer> edges = new ArrayList<Integer>();
+                        List<Integer> edges = new ArrayList<>();
                         if (node.getChildByPath("edge") != null) {
                             for (MapleData edge : node.getChildByPath("edge")) {
                                 edges.add(MapleDataTool.getInt(edge, -1));
@@ -784,10 +854,10 @@ public class MapleMapFactory {
                         int sn_count = MapleDataTool.getIntConvert("SN_count", node, 0);
                         String name = MapleDataTool.getString("name", node, "");
                         int speed = MapleDataTool.getIntConvert("speed", node, 0);
-                        if (sn_count <= 0 || speed <= 0 || name.equals("")) {
+                        if (sn_count <= 0 || speed <= 0 || name.isEmpty()) {
                             continue;
                         }
-                        final List<Integer> SN = new ArrayList<Integer>();
+                        final List<Integer> SN = new ArrayList<>();
                         for (int x = 0; x < sn_count; x++) {
                             SN.add(MapleDataTool.getIntConvert("SN" + x, node, 0));
                         }

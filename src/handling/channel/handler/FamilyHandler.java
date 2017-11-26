@@ -20,8 +20,8 @@
  */
 package handling.channel.handler;
 
-import client.MapleCharacterUtil;
 import client.MapleCharacter;
+import client.MapleCharacterUtil;
 import client.MapleClient;
 import handling.world.MaplePartyCharacter;
 import handling.world.World;

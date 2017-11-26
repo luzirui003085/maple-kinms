@@ -23,12 +23,29 @@ package handling.world;
 import java.io.Serializable;
 import server.MapleStatEffect;
 
+/**
+ *
+ * @author zjj
+ */
 public class PlayerBuffValueHolder implements Serializable {
 
     private static final long serialVersionUID = 9179541993413738569L;
+
+    /**
+     *
+     */
     public long startTime;
+
+    /**
+     *
+     */
     public MapleStatEffect effect;
 
+    /**
+     *
+     * @param startTime
+     * @param effect
+     */
     public PlayerBuffValueHolder(final long startTime, final MapleStatEffect effect) {
         this.startTime = startTime;
         this.effect = effect;

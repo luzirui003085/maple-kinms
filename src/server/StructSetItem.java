@@ -5,18 +5,97 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ *
+ * @author zjj
+ */
 public class StructSetItem {
 
-    public byte completeCount, setItemID;
-    public Map<Integer, SetItem> items = new LinkedHashMap<Integer, SetItem>();
-    public List<Integer> itemIDs = new ArrayList<Integer>();
+    public byte completeCount,
 
+    /**
+     *
+     */
+    setItemID;
+
+    /**
+     *
+     */
+    public Map<Integer, SetItem> items = new LinkedHashMap<>();
+
+    /**
+     *
+     */
+    public List<Integer> itemIDs = new ArrayList<>();
+
+    /**
+     *
+     */
     public static class SetItem {
 
-        public int incPDD, incMDD, incSTR, incDEX, incINT, incLUK, incACC, incPAD, incMAD, incSpeed, incMHP, incMMP;
+        public int incPDD,
+
+        /**
+         *
+         */
+        incMDD, 
+
+        /**
+         *
+         */
+        incSTR, 
+
+        /**
+         *
+         */
+        incDEX, 
+
+        /**
+         *
+         */
+        incINT, 
+
+        /**
+         *
+         */
+        incLUK, 
+
+        /**
+         *
+         */
+        incACC, 
+
+        /**
+         *
+         */
+        incPAD, 
+
+        /**
+         *
+         */
+        incMAD, 
+
+        /**
+         *
+         */
+        incSpeed, 
+
+        /**
+         *
+         */
+        incMHP, 
+
+        /**
+         *
+         */
+        incMMP;
     }
 
+    /**
+     *
+     * @return
+     */
     public Map<Integer, SetItem> getItems() {
-        return new LinkedHashMap<Integer, SetItem>(items);
+        return new LinkedHashMap<>(items);
     }
 }

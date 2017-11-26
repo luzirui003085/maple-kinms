@@ -1,16 +1,25 @@
 package server;
 
 import java.awt.Point;
-
 import provider.MapleData;
 import provider.MapleDataTool;
 import server.maps.MapleGenericPortal;
 import server.maps.MapleMapPortal;
 
+/**
+ *
+ * @author zjj
+ */
 public class PortalFactory {
 
     private int nextDoorPortal = 0x80;
 
+    /**
+     *
+     * @param type
+     * @param portal
+     * @return
+     */
     public MaplePortal makePortal(int type, MapleData portal) {
         MapleGenericPortal ret = null;
         if (type == MaplePortal.MAP_PORTAL) {
@@ -28,7 +37,7 @@ public class PortalFactory {
         myPortal.setTargetMapId(MapleDataTool.getInt(portal.getChildByPath("tm")));
         myPortal.setPosition(new Point(MapleDataTool.getInt(portal.getChildByPath("x")), MapleDataTool.getInt(portal.getChildByPath("y"))));
         String script = MapleDataTool.getString("script", portal, null);
-        if (script != null && script.equals("")) {
+        if (script != null && script.isEmpty()) {
             script = null;
         }
         myPortal.setScriptName(script);

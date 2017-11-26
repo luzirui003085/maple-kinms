@@ -26,13 +26,20 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Properties;
-
 import tools.HexTool;
 
+/**
+ *
+ * @author zjj
+ */
 public class ExternalCodeTableGetter {
 
     final Properties props;
 
+    /**
+     *
+     * @param properties
+     */
     public ExternalCodeTableGetter(Properties properties) {
         props = properties;
     }
@@ -71,9 +78,15 @@ public class ExternalCodeTableGetter {
         return def;
     }
 
+    /**
+     *
+     * @param <T>
+     * @param enumeration
+     * @return
+     */
     public final static <T extends Enum<? extends WritableIntValueHolder> & WritableIntValueHolder> String getOpcodeTable(T[] enumeration) {
         StringBuilder enumVals = new StringBuilder();
-        List<T> all = new ArrayList<T>(); // need a mutable list plawks
+        List<T> all = new ArrayList<>(); // need a mutable list plawks
         all.addAll(Arrays.asList(enumeration));
         Collections.sort(all, new Comparator<WritableIntValueHolder>() {
 
@@ -94,6 +107,12 @@ public class ExternalCodeTableGetter {
         return enumVals.toString();
     }
 
+    /**
+     *
+     * @param <T>
+     * @param properties
+     * @param values
+     */
     public final static <T extends Enum<? extends WritableIntValueHolder> & WritableIntValueHolder> void populateValues(Properties properties, T[] values) {
         ExternalCodeTableGetter exc = new ExternalCodeTableGetter(properties);
         for (T code : values) {

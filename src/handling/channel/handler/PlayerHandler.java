@@ -1,23 +1,4 @@
-/*
- This file is part of the OdinMS Maple Story Server
- Copyright (C) 2008 ~ 2010 Patrick Huy <patrick.huy@frz.cc> 
- Matthias Butz <matze@odinms.de>
- Jan Christian Meyer <vimes@odinms.de>
 
- This program is free software: you can redistribute it and/or modify
- it under the terms of the GNU Affero General Public License version 3
- as published by the Free Software Foundation. You may not use, modify
- or distribute this program under any other version of the
- GNU Affero General Public License.
-
- This program is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- GNU Affero General Public License for more details.
-
- You should have received a copy of the GNU Affero General Public License
- along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
 package handling.channel.handler;
 
 import client.*;
@@ -27,14 +8,11 @@ import client.inventory.ItemFlag;
 import client.inventory.MapleInventoryType;
 import constants.GameConstants;
 import constants.MapConstants;
-import constants.ServerConstants;
 import handling.channel.ChannelServer;
 import java.awt.Point;
 import java.lang.ref.WeakReference;
-import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.List;
-import scripting.AbstractPlayerInteraction;
 import server.AutobanManager;
 import server.MapleInventoryManipulator;
 import server.MapleItemInformationProvider;
@@ -57,8 +35,11 @@ import tools.MaplePacketCreator;
 import tools.data.input.SeekableLittleEndianAccessor;
 import tools.packet.MTSCSPacket;
 import tools.packet.MobPacket;
-import tools.packet.UIPacket;
 
+/**
+ *
+ * @author zjj
+ */
 public class PlayerHandler {
 
     private static boolean isFinisher(final int skillid) {
@@ -74,6 +55,12 @@ public class PlayerHandler {
         return false;
     }
 
+    /**
+     *
+     * @param bookid
+     * @param c
+     * @param chr
+     */
     public static void ChangeMonsterBookCover(final int bookid, final MapleClient c, final MapleCharacter chr) {
         if (bookid == 0 || GameConstants.isMonsterCard(bookid)) {
             chr.setMonsterBookCover(bookid);
@@ -81,6 +68,11 @@ public class PlayerHandler {
         }
     }
 
+    /**
+     *
+     * @param slea
+     * @param chr
+     */
     public static void ChangeSkillMacro(final SeekableLittleEndianAccessor slea, final MapleCharacter chr) {
         final int num = slea.readByte();
         String name;
@@ -99,6 +91,11 @@ public class PlayerHandler {
         }
     }
 
+    /**
+     *
+     * @param slea
+     * @param chr
+     */
     public static final void ChangeKeymap(final SeekableLittleEndianAccessor slea, final MapleCharacter chr) {
         if (slea.available() > 8 && chr != null) { // else = pet auto pot
             chr.updateTick(slea.readInt());
@@ -135,6 +132,12 @@ public class PlayerHandler {
         }
     }
 
+    /**
+     *
+     * @param itemId
+     * @param c
+     * @param chr
+     */
     public static final void UseChair(final int itemId, final MapleClient c, final MapleCharacter chr) {
         if (chr == null) {
             return;
@@ -172,6 +175,12 @@ public class PlayerHandler {
         c.getSession().write(MaplePacketCreator.enableActions());
     }
 
+    /**
+     *
+     * @param id
+     * @param c
+     * @param chr
+     */
     public static final void CancelChair(final short id, final MapleClient c, final MapleCharacter chr) {
         if (id == -1) { // Cancel Chair
             if (chr.getChair() == 3011000) {
@@ -198,6 +207,12 @@ public class PlayerHandler {
         }
     }
 
+    /**
+     *
+     * @param slea
+     * @param c
+     * @param chr
+     */
     public static final void TrockAddMap(final SeekableLittleEndianAccessor slea, final MapleClient c, final MapleCharacter chr) {
         final byte addrem = slea.readByte();
         final byte vip = slea.readByte();
@@ -224,6 +239,12 @@ public class PlayerHandler {
         c.getSession().write(MTSCSPacket.getTrockRefresh(chr, vip == 1, addrem == 3));
     }
 
+    /**
+     *
+     * @param objectid
+     * @param c
+     * @param chr
+     */
     public static final void CharInfoRequest(final int objectid, final MapleClient c, final MapleCharacter chr) {
         if (c.getPlayer() == null || c.getPlayer().getMap() == null) {
             return;
@@ -237,6 +258,12 @@ public class PlayerHandler {
         }
     }
 
+    /**
+     *
+     * @param slea
+     * @param c
+     * @param chr
+     */
     public static final void TakeDamage(final SeekableLittleEndianAccessor slea, final MapleClient c, final MapleCharacter chr) {
         //System.out.println(slea.toString());
         chr.updateTick(slea.readInt());
@@ -432,6 +459,11 @@ public class PlayerHandler {
         }
     }
 
+    /**
+     *
+     * @param c
+     * @param chr
+     */
     public static final void AranCombo(final MapleClient c, final MapleCharacter chr) {
         if (chr != null && chr.getJob() >= 2000 && chr.getJob() <= 2112) {
             short combo = chr.getCombo();
@@ -470,6 +502,12 @@ public class PlayerHandler {
         }
     }
 
+    /**
+     *
+     * @param itemId
+     * @param c
+     * @param chr
+     */
     public static final void UseItemEffect(final int itemId, final MapleClient c, final MapleCharacter chr) {
         final IItem toUse = chr.getInventory(MapleInventoryType.CASH).findById(itemId);
         if (toUse == null || toUse.getItemId() != itemId || toUse.getQuantity() < 1) {
@@ -496,6 +534,11 @@ public class PlayerHandler {
         }
     }
 
+    /**
+     *
+     * @param id
+     * @param chr
+     */
     public static final void CancelItemEffect(final int id, final MapleCharacter chr) {
         chr.cancelEffect(MapleItemInformationProvider.getInstance().getItemEffect(-id), false, -1);
         if (chr.hasFakeChar()) {
@@ -505,6 +548,11 @@ public class PlayerHandler {
         }
     }
 
+    /**
+     *
+     * @param sourceid
+     * @param chr
+     */
     public static final void CancelBuffHandler(final int sourceid, final MapleCharacter chr) {
         if (chr == null) {
             return;
@@ -518,6 +566,11 @@ public class PlayerHandler {
         }
     }
 
+    /**
+     *
+     * @param slea
+     * @param chr
+     */
     public static final void SkillEffect(final SeekableLittleEndianAccessor slea, final MapleCharacter chr) {
         final int skillId = slea.readInt();
         final byte level = slea.readByte();
@@ -537,6 +590,12 @@ public class PlayerHandler {
         }
     }
 
+    /**
+     *
+     * @param slea
+     * @param c
+     * @param chr
+     */
     public static final void SpecialMove(final SeekableLittleEndianAccessor slea, final MapleClient c, final MapleCharacter chr) {
         if (chr == null || !chr.isAlive() || chr.getMap() == null) {
             c.getSession().write(MaplePacketCreator.enableActions());
@@ -619,6 +678,13 @@ public class PlayerHandler {
         }
     }
 
+    /**
+     *
+     * @param slea
+     * @param c
+     * @param chr
+     * @param energy
+     */
     public static final void closeRangeAttack(final SeekableLittleEndianAccessor slea, final MapleClient c, final MapleCharacter chr, final boolean energy) {
         if (chr == null || (energy && chr.getBuffedValue(MapleBuffStat.ENERGY_CHARGE) == null && chr.getBuffedValue(MapleBuffStat.BODY_PRESSURE) == null && !GameConstants.isKOC(chr.getJob()))) {
             return;
@@ -666,7 +732,7 @@ public class PlayerHandler {
 
             if (isFinisher(attack.skill)) { // finisher
                 if (comboBuff != null) {
-                    numFinisherOrbs = comboBuff.intValue() - 1;
+                    numFinisherOrbs = comboBuff - 1;
                 }
                 chr.handleOrbconsume();
 
@@ -719,7 +785,7 @@ public class PlayerHandler {
                     combo = SkillFactory.getSkill(1111002);
                 }
                 if (c.getPlayer().getSkillLevel(combo) > 0) {
-                    maxdamage *= 1.0 + (combo.getEffect(c.getPlayer().getSkillLevel(combo)).getDamage() / 100.0 - 1.0) * (comboBuff.intValue() - 1);
+                    maxdamage *= 1.0 + (combo.getEffect(c.getPlayer().getSkillLevel(combo)).getDamage() / 100.0 - 1.0) * (comboBuff - 1);
                 }
             }
 
@@ -745,6 +811,7 @@ public class PlayerHandler {
                 final AttackInfo attack2 = DamageParse.DivideAttack(attack, chr.isGM() ? 1 : 4);
                 CloneTimer.getInstance().schedule(new Runnable() {
 
+                    @Override
                     public void run() {
                         clone.getMap().broadcastMessage(MaplePacketCreator.closeRangeAttack(clone.getId(), attack2.tbyte, attack2.skill, skillLevel2, attack2.display, attack2.animation, attack2.speed, attack2.allDamage, energy, clone.getLevel(), clone.getStat().passive_mastery(), attack2.unk, attack2.charge));
                         DamageParse.applyAttack(attack2, skil2, chr, attackCount2, maxdamage2, eff2, mirror ? AttackType.NON_RANGED_WITH_MIRROR : AttackType.NON_RANGED);
@@ -754,6 +821,12 @@ public class PlayerHandler {
         }
     }
 
+    /**
+     *
+     * @param slea
+     * @param c
+     * @param chr
+     */
     public static final void rangedAttack(final SeekableLittleEndianAccessor slea, final MapleClient c, final MapleCharacter chr) {
         if (chr == null) {
             return;
@@ -884,6 +957,7 @@ public class PlayerHandler {
                 final AttackInfo attack2 = DamageParse.DivideAttack(attack, chr.isGM() ? 1 : 4);
                 CloneTimer.getInstance().schedule(new Runnable() {
 
+                    @Override
                     public void run() {
                         clone.getMap().broadcastMessage(MaplePacketCreator.rangedAttack(clone.getId(), attack2.tbyte, attack2.skill, skillLevel2, attack2.display, attack2.animation, attack2.speed, visProjectile2, attack2.allDamage, attack2.position, clone.getLevel(), clone.getStat().passive_mastery(), attack2.unk));
                         DamageParse.applyAttack(attack2, skil2, chr, bulletCount2, basedamage2, eff2, AttackType.RANGED);
@@ -893,6 +967,12 @@ public class PlayerHandler {
         }
     }
 
+    /**
+     *
+     * @param slea
+     * @param c
+     * @param chr
+     */
     public static final void MagicDamage(final SeekableLittleEndianAccessor slea, final MapleClient c, final MapleCharacter chr) {
         if (chr == null) {
             return;
@@ -941,6 +1021,7 @@ public class PlayerHandler {
                 final AttackInfo attack2 = DamageParse.DivideAttack(attack, chr.isGM() ? 1 : 4);
                 CloneTimer.getInstance().schedule(new Runnable() {
 
+                    @Override
                     public void run() {
                         //if (attack.skill != 22121000 && attack.skill != 22151001) {
                         clone.getMap().broadcastMessage(MaplePacketCreator.magicAttack(clone.getId(), attack2.tbyte, attack2.skill, skillLevel2, attack2.display, attack2.animation, attack2.speed, attack2.allDamage, attack2.charge, clone.getLevel(), attack2.unk));
@@ -952,6 +1033,11 @@ public class PlayerHandler {
         }
     }
 
+    /**
+     *
+     * @param meso
+     * @param chr
+     */
     public static final void DropMeso(final int meso, final MapleCharacter chr) {
         if (!chr.isAlive() || (meso < 10 || meso > 50000) || (meso > chr.getMeso())) {
             chr.getClient().getSession().write(MaplePacketCreator.enableActions());
@@ -962,6 +1048,11 @@ public class PlayerHandler {
         chr.getCheatTracker().checkDrop(true);
     }
 
+    /**
+     *
+     * @param emote
+     * @param chr
+     */
     public static final void ChangeEmotion(final int emote, final MapleCharacter chr) {
         if (emote > 7) {
             final int emoteid = 5159992 + emote;
@@ -979,6 +1070,7 @@ public class PlayerHandler {
                     final MapleCharacter clone = clones[i].get();
                     CloneTimer.getInstance().schedule(new Runnable() {
 
+                        @Override
                         public void run() {
                             clone.getMap().broadcastMessage(MaplePacketCreator.facialExpression(clone, emote));
                         }
@@ -988,6 +1080,11 @@ public class PlayerHandler {
         }
     }
 
+    /**
+     *
+     * @param slea
+     * @param chr
+     */
     public static final void Heal(final SeekableLittleEndianAccessor slea, final MapleCharacter chr) {
         if (chr == null) {
             return;
@@ -1019,6 +1116,12 @@ public class PlayerHandler {
         }
     }
 
+    /**
+     *
+     * @param slea
+     * @param c
+     * @param chr
+     */
     public static final void MovePlayer(final SeekableLittleEndianAccessor slea, final MapleClient c, final MapleCharacter chr) {
 //	slea.skip(5); // unknown
         if (chr == null) {
@@ -1056,7 +1159,7 @@ public class PlayerHandler {
                 System.out.println("slea.available != 13-26 (movement parsing error)\n" + slea.toString(true));
                 return;
             }
-            final List<LifeMovementFragment> res2 = new ArrayList<LifeMovementFragment>(res);
+            final List<LifeMovementFragment> res2 = new ArrayList<>(res);
             final MapleMap map = c.getPlayer().getMap();
 
             if (chr.isHidden()) {
@@ -1089,7 +1192,7 @@ public class PlayerHandler {
                 int i = 1;
                 for (final FakeCharacter ch : c.getPlayer().getFakeChars()) {
                     if (ch.follow() && ch.getFakeChar().getMap() == chr.getMap()) {
-                        final List<LifeMovementFragment> res4 = new ArrayList<LifeMovementFragment>(res2);
+                        final List<LifeMovementFragment> res4 = new ArrayList<>(res2);
                         CloneTimer.getInstance().schedule(new Runnable() {
                             @Override
                             public void run() {
@@ -1109,9 +1212,10 @@ public class PlayerHandler {
             for (int i = 0; i < clones.length; i++) {
                 if (clones[i].get() != null) {
                     final MapleCharacter clone = clones[i].get();
-                    final List<LifeMovementFragment> res3 = new ArrayList<LifeMovementFragment>(res2);
+                    final List<LifeMovementFragment> res3 = new ArrayList<>(res2);
                     CloneTimer.getInstance().schedule(new Runnable() {
 
+                        @Override
                         public void run() {
                             try {
                                 if (clone.getMap() == map) {
@@ -1148,10 +1252,23 @@ public class PlayerHandler {
         }
     }
 
+    /**
+     *
+     * @param slea
+     * @param c
+     * @param chr
+     */
     public static final void UpdateHandler(final SeekableLittleEndianAccessor slea, final MapleClient c, final MapleCharacter chr) {
         c.getPlayer().saveToDB(true, true);
     }
 
+    /**
+     *
+     * @param slea
+     * @param portal_name
+     * @param c
+     * @param chr
+     */
     public static final void ChangeMapSpecial(final SeekableLittleEndianAccessor slea, final String portal_name, final MapleClient c, final MapleCharacter chr) {
         slea.readShort();
         final MaplePortal portal = chr.getMap().getPortal(portal_name);
@@ -1164,6 +1281,12 @@ public class PlayerHandler {
         }
     }
 
+    /**
+     *
+     * @param slea
+     * @param c
+     * @param chr
+     */
     public static final void ChangeMap(final SeekableLittleEndianAccessor slea, final MapleClient c, final MapleCharacter chr) {
         if (chr == null) {
             chr.dropMessage(5, "你現在不能攻擊或不能跟npc對話,請在對話框打 @解卡/@ea 來解除異常狀態");
@@ -1303,6 +1426,12 @@ public class PlayerHandler {
         }
     }
 
+    /**
+     *
+     * @param slea
+     * @param c
+     * @param chr
+     */
     public static final void InnerPortal(final SeekableLittleEndianAccessor slea, final MapleClient c, final MapleCharacter chr) {
         if (chr == null) {
             return;
@@ -1323,6 +1452,11 @@ public class PlayerHandler {
         chr.checkFollow();
     }
 
+    /**
+     *
+     * @param slea
+     * @param c
+     */
     public static final void snowBall(SeekableLittleEndianAccessor slea, MapleClient c) {
         //B2 00
         //01 [team]
@@ -1333,6 +1467,11 @@ public class PlayerHandler {
         //empty, we do this in closerange
     }
 
+    /**
+     *
+     * @param slea
+     * @param c
+     */
     public static final void leftKnockBack(SeekableLittleEndianAccessor slea, final MapleClient c) {
         // D1 00 86 01 47 01
         if (c.getPlayer().getMapId() / 10000 == 10906) { //must be in snowball map or else its like infinite FJ

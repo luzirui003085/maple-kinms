@@ -20,9 +20,8 @@
  */
 package server.maps;
 
-import java.awt.Point;
-
 import client.MapleClient;
+import java.awt.Point;
 
 public interface MapleMapObject {
 

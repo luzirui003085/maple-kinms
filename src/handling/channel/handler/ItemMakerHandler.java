@@ -20,28 +20,36 @@
  */
 package handling.channel.handler;
 
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Map;
-
-import client.inventory.IItem;
-import client.inventory.Equip;
-import client.SkillFactory;
 import client.MapleClient;
+import client.SkillFactory;
+import client.inventory.Equip;
+import client.inventory.IItem;
 import client.inventory.MapleInventoryType;
 import constants.GameConstants;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import server.ItemMakerFactory;
 import server.ItemMakerFactory.GemCreateEntry;
 import server.ItemMakerFactory.ItemMakerCreateEntry;
-import server.Randomizer;
-import server.MapleItemInformationProvider;
 import server.MapleInventoryManipulator;
-import tools.Pair;
+import server.MapleItemInformationProvider;
+import server.Randomizer;
 import tools.MaplePacketCreator;
+import tools.Pair;
 import tools.data.input.SeekableLittleEndianAccessor;
 
+/**
+ *
+ * @author zjj
+ */
 public class ItemMakerHandler {
 
+    /**
+     *
+     * @param slea
+     * @param c
+     */
     public static final void ItemMaker(final SeekableLittleEndianAccessor slea, final MapleClient c) {
         //System.out.println(slea.toString()); //change?
         final int makerType = slea.readInt();
@@ -329,7 +337,7 @@ public class ItemMakerHandler {
 
     private static final int getRandomGem(final List<Pair<Integer, Integer>> rewards) {
         int itemid;
-        final List<Integer> items = new ArrayList<Integer>();
+        final List<Integer> items = new ArrayList<>();
 
         for (final Pair p : rewards) {
             itemid = (Integer) p.getLeft();

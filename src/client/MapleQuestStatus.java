@@ -1,35 +1,19 @@
-/*
- This file is part of the OdinMS Maple Story Server
- Copyright (C) 2008 ~ 2010 Patrick Huy <patrick.huy@frz.cc> 
- Matthias Butz <matze@odinms.de>
- Jan Christian Meyer <vimes@odinms.de>
 
- This program is free software: you can redistribute it and/or modify
- it under the terms of the GNU Affero General Public License version 3
- as published by the Free Software Foundation. You may not use, modify
- or distribute this program under any other version of the
- GNU Affero General Public License.
-
- This program is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- GNU Affero General Public License for more details.
-
- You should have received a copy of the GNU Affero General Public License
- along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
 package client;
 
 import constants.GameConstants;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.io.Serializable;
-import java.util.Map.Entry;
 
 import java.util.Map.Entry;
 import server.life.MapleLifeFactory;
 import server.quest.MapleQuest;
 
+/**
+ *
+ * @author zjj
+ */
 public class MapleQuestStatus implements Serializable {
 
     private static final long serialVersionUID = 91795419934134L;
@@ -55,6 +39,12 @@ public class MapleQuestStatus implements Serializable {
         }
     }
 
+    /**
+     *
+     * @param quest
+     * @param status
+     * @param npc
+     */
     public MapleQuestStatus(final MapleQuest quest, final byte status, final int npc) {
         this.quest = quest;
         this.setStatus(status);
@@ -67,32 +57,56 @@ public class MapleQuestStatus implements Serializable {
         }
     }
 
+    /**
+     *
+     * @return
+     */
     public final MapleQuest getQuest() {
         return quest;
     }
 
+    /**
+     *
+     * @return
+     */
     public final byte getStatus() {
         return status;
     }
 
+    /**
+     *
+     * @param status
+     */
     public final void setStatus(final byte status) {
         this.status = status;
     }
 
+    /**
+     *
+     * @return
+     */
     public final int getNpc() {
         return npc;
     }
 
+    /**
+     *
+     * @param npc
+     */
     public final void setNpc(final int npc) {
         this.npc = npc;
     }
 
+    /**
+     *
+     * @return
+     */
     public boolean isCustom() {
         return GameConstants.isCustomQuest(quest.getId());
     }
 
     private final void registerMobs() {
-        killedMobs = new LinkedHashMap<Integer, Integer>();
+        killedMobs = new LinkedHashMap<>();
         for (final int i : quest.getRelevantMobs().keySet()) {
             killedMobs.put(i, 0);
         }
@@ -107,6 +121,12 @@ public class MapleQuestStatus implements Serializable {
         return 0;
     }
 
+    /**
+     *
+     * @param id
+     * @param skillID
+     * @return
+     */
     public final boolean mobKilled(final int id, final int skillID) {
         if (quest != null && quest.getSkillID() > 0) {
             if (quest.getSkillID() != skillID) {
@@ -146,6 +166,11 @@ public class MapleQuestStatus implements Serializable {
         return false;
     }
 
+    /**
+     *
+     * @param id
+     * @param count
+     */
     public final void setMobKills(final int id, final int count) {
         if (killedMobs == null) {
             registerMobs(); //lol
@@ -153,6 +178,10 @@ public class MapleQuestStatus implements Serializable {
         killedMobs.put(id, count);
     }
 
+    /**
+     *
+     * @return
+     */
     public final boolean hasMobKills() {
         if (killedMobs == null) {
             return false;
@@ -160,6 +189,11 @@ public class MapleQuestStatus implements Serializable {
         return killedMobs.size() > 0;
     }
 
+    /**
+     *
+     * @param id
+     * @return
+     */
     public final int getMobKills(final int id) {
         final Integer mob = killedMobs.get(id);
         if (mob == null) {
@@ -168,22 +202,42 @@ public class MapleQuestStatus implements Serializable {
         return mob;
     }
 
+    /**
+     *
+     * @return
+     */
     public final Map<Integer, Integer> getMobKills() {
         return killedMobs;
     }
 
+    /**
+     *
+     * @return
+     */
     public final long getCompletionTime() {
         return completionTime;
     }
 
+    /**
+     *
+     * @param completionTime
+     */
     public final void setCompletionTime(final long completionTime) {
         this.completionTime = completionTime;
     }
 
+    /**
+     *
+     * @return
+     */
     public final int getForfeited() {
         return forfeited;
     }
 
+    /**
+     *
+     * @param forfeited
+     */
     public final void setForfeited(final int forfeited) {
         if (forfeited >= this.forfeited) {
             this.forfeited = forfeited;
@@ -192,10 +246,18 @@ public class MapleQuestStatus implements Serializable {
         }
     }
 
+    /**
+     *
+     * @param customData
+     */
     public final void setCustomData(final String customData) {
         this.customData = customData;
     }
 
+    /**
+     *
+     * @return
+     */
     public final String getCustomData() {
         return customData;
     }

@@ -20,8 +20,20 @@
  */
 package server.life;
 
+/**
+ *
+ * @author zjj
+ */
 public class MonsterDropEntry {
 
+    /**
+     *
+     * @param itemId
+     * @param chance
+     * @param Minimum
+     * @param Maximum
+     * @param questid
+     */
     public MonsterDropEntry(int itemId, int chance, int Minimum, int Maximum, short questid) {
         this.itemId = itemId;
         this.chance = chance;
@@ -29,6 +41,25 @@ public class MonsterDropEntry {
         this.Minimum = Minimum;
         this.Maximum = Maximum;
     }
+
+    /**
+     *
+     */
     public short questid;
-    public int itemId, chance, Minimum, Maximum;
+    public int itemId,
+
+    /**
+     *
+     */
+    chance, 
+
+    /**
+     *
+     */
+    Minimum, 
+
+    /**
+     *
+     */
+    Maximum;
 }

@@ -20,24 +20,35 @@
  */
 package handling.channel;
 
-import java.util.List;
-import java.util.LinkedList;
+import database.DatabaseConnection;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.LinkedList;
+import java.util.List;
 
-import database.DatabaseConnection;
-
+/**
+ *
+ * @author zjj
+ */
 public class MapleGuildRanking {
 
     private static MapleGuildRanking instance = new MapleGuildRanking();
-    private List<GuildRankingInfo> ranks = new LinkedList<GuildRankingInfo>();
+    private List<GuildRankingInfo> ranks = new LinkedList<>();
 
+    /**
+     *
+     * @return
+     */
     public static MapleGuildRanking getInstance() {
         return instance;
     }
 
+    /**
+     *
+     * @return
+     */
     public List<GuildRankingInfo> getRank() {
         if (ranks.isEmpty()) {
             reload();
@@ -71,11 +82,23 @@ public class MapleGuildRanking {
         }
     }
 
+    /**
+     *
+     */
     public static class GuildRankingInfo {
 
         private String name;
         private int gp, logo, logocolor, logobg, logobgcolor;
 
+        /**
+         *
+         * @param name
+         * @param gp
+         * @param logo
+         * @param logocolor
+         * @param logobg
+         * @param logobgcolor
+         */
         public GuildRankingInfo(String name, int gp, int logo, int logocolor, int logobg, int logobgcolor) {
             this.name = name;
             this.gp = gp;
@@ -85,26 +108,50 @@ public class MapleGuildRanking {
             this.logobgcolor = logobgcolor;
         }
 
+        /**
+         *
+         * @return
+         */
         public String getName() {
             return name;
         }
 
+        /**
+         *
+         * @return
+         */
         public int getGP() {
             return gp;
         }
 
+        /**
+         *
+         * @return
+         */
         public int getLogo() {
             return logo;
         }
 
+        /**
+         *
+         * @return
+         */
         public int getLogoColor() {
             return logocolor;
         }
 
+        /**
+         *
+         * @return
+         */
         public int getLogoBg() {
             return logobg;
         }
 
+        /**
+         *
+         * @return
+         */
         public int getLogoBgColor() {
             return logobgcolor;
         }

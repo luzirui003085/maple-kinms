@@ -25,6 +25,10 @@ import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 
+/**
+ *
+ * @author zjj
+ */
 public class CharacterIdChannelPair implements Externalizable, Comparable<CharacterIdChannelPair> {
 
     private int charid = 0;
@@ -36,16 +40,29 @@ public class CharacterIdChannelPair implements Externalizable, Comparable<Charac
     public CharacterIdChannelPair() {
     }
 
+    /**
+     *
+     * @param charid
+     * @param channel
+     */
     public CharacterIdChannelPair(int charid, int channel) {
         super();
         this.charid = charid;
         this.channel = channel;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getCharacterId() {
         return charid;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getChannel() {
         return channel;
     }

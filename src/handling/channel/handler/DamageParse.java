@@ -1,23 +1,4 @@
-/*
- This file is part of the OdinMS Maple Story Server
- Copyright (C) 2008 ~ 2010 Patrick Huy <patrick.huy@frz.cc> 
- Matthias Butz <matze@odinms.de>
- Jan Christian Meyer <vimes@odinms.de>
 
- This program is free software: you can redistribute it and/or modify
- it under the terms of the GNU Affero General Public License version 3
- as published by the Free Software Foundation. You may not use, modify
- or distribute this program under any other version of the
- GNU Affero General Public License.
-
- This program is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- GNU Affero General Public License for more details.
-
- You should have received a copy of the GNU Affero General Public License
- along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
 package handling.channel.handler;
 
 import client.ISkill;
@@ -27,7 +8,6 @@ import client.PlayerStats;
 import client.SkillFactory;
 import client.anticheat.CheatTracker;
 import client.anticheat.CheatingOffense;
-import client.inventory.IEquip;
 import client.inventory.IItem;
 import client.inventory.MapleInventoryType;
 import client.status.MonsterStatus;
@@ -37,6 +17,7 @@ import java.awt.Point;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import pvp.MaplePvp;
 import server.MapleStatEffect;
 import server.Randomizer;
 import server.Timer.MapTimer;
@@ -54,6 +35,10 @@ import tools.MaplePacketCreator;
 import tools.Pair;
 import tools.data.input.LittleEndianAccessor;
 
+/**
+ *
+ * @author zjj
+ */
 public class DamageParse {
 
     private final static int[] charges = {1211005, 1211006};
@@ -63,6 +48,16 @@ public class DamageParse {
      */
     public static MapleMonster pvpMob;
 
+    /**
+     *
+     * @param attack
+     * @param theSkill
+     * @param player
+     * @param attackCount
+     * @param maxDamagePerMonster
+     * @param effect
+     * @param attack_type
+     */
     public static void applyAttack(final AttackInfo attack, final ISkill theSkill, final MapleCharacter player, int attackCount, final double maxDamagePerMonster, final MapleStatEffect effect, final AttackType attack_type) {
         if (!player.isAlive()) {
             player.getCheatTracker().registerOffense(CheatingOffense.ATTACKING_WHILE_DEAD);
@@ -109,6 +104,7 @@ public class DamageParse {
         int totDamage = 0;
         final MapleMap map = player.getMap();
 
+        // MaplePvp.doPvP(player, map, attack, effect);
         if (attack.skill == 4211006) { // meso explosion
             for (AttackPair oned : attack.allDamage) {
                 if (oned.attack != null) {
@@ -481,6 +477,13 @@ public class DamageParse {
         }
     }
 
+    /**
+     *
+     * @param attack
+     * @param theSkill
+     * @param player
+     * @param effect
+     */
     public static final void applyAttackMagic(final AttackInfo attack, final ISkill theSkill, final MapleCharacter player, final MapleStatEffect effect) {
         if (!player.isAlive()) {
             player.getCheatTracker().registerOffense(CheatingOffense.ATTACKING_WHILE_DEAD);
@@ -489,12 +492,7 @@ public class DamageParse {
         }
         if (attack.real) {
             player.getCheatTracker().checkAttack(attack.skill, attack.lastAttackTickCount);
-            //     System.out.println("正在进行攻击加速检测");
-            //   System.out.println("正在进行攻击加速检测 " + attack.skill+"最好传送到该玩家地图"+player.getMapId()+"/玩家名字:"+player.getName());
         }
-//	if (attack.skill != 2301002) { // heal is both an attack and a special move (healing) so we'll let the whole applying magic live in the special move part
-//	    effect.applyTo(player);
-//	}
         if (attack.hits > effect.getAttackCount() || attack.targets > effect.getMobCount()) {
             player.getCheatTracker().registerOffense(CheatingOffense.MISMATCHING_BULLETCOUNT);
             return;
@@ -507,7 +505,6 @@ public class DamageParse {
         }
         if (GameConstants.isMulungSkill(attack.skill)) {
             if (player.getMapId() / 10000 != 92502) {
-                //AutobanManager.getInstance().autoban(player.getClient(), "Using Mu Lung dojo skill out of dojo maps.");
                 return;
             } else {
                 player.mulung_EnergyModify(false);
@@ -515,14 +512,12 @@ public class DamageParse {
         }
         if (GameConstants.isPyramidSkill(attack.skill)) {
             if (player.getMapId() / 1000000 != 926) {
-                //AutobanManager.getInstance().autoban(player.getClient(), "Using Pyramid skill outside of pyramid maps.");
                 return;
             } else if (player.getPyramidSubway() == null || !player.getPyramidSubway().onSkillUse(player)) {
                 return;
             }
         }
         final PlayerStats stats = player.getStat();
-//	double minDamagePerHit;
         double maxDamagePerHit;
         if (attack.skill == 2301002) {
             maxDamagePerHit = 30000;
@@ -532,7 +527,6 @@ public class DamageParse {
             maxDamagePerHit = 1;
         } else {
             final double v75 = (effect.getMatk() * 0.058);
-//	    minDamagePerHit = stats.getTotalMagic() * (stats.getInt() * 0.5 + (v75 * v75) + (effect.getMastery() * 0.9 * effect.getMatk()) * 3.3) / 100;
             maxDamagePerHit = stats.getTotalMagic() * (stats.getInt() * 0.5 + (v75 * v75) + effect.getMatk() * 3.3) / 100;
         }
         maxDamagePerHit *= 1.04; // Avoid any errors for now
@@ -550,6 +544,8 @@ public class DamageParse {
 
         final MapleMap map = player.getMap();
 
+        // MaplePvp.doPvP(player, map, attack, effect);
+        
         for (final AttackPair oned : attack.allDamage) {
             final MapleMonster monster = map.getMonsterByOid(oned.objectid);
 
@@ -575,10 +571,7 @@ public class DamageParse {
                     } else if (monsterstats.getOnlyNoramlAttack()) {
                         eachd = 0; // Magic is always not a normal attack
                     } else if (!player.isGM()) {
-//			    System.out.println("Client damage : " + eachd + " Server : " + MaxDamagePerHit);
-
                         if (Tempest) { // Buffed with Tempest
-                            // In special case such as Chain lightning, the damage will be reduced from the maxMP.
                             if (eachd > monster.getMobMaxHp()) {
                                 eachd = (int) Math.min(monster.getMobMaxHp(), Integer.MAX_VALUE);
                                 player.getCheatTracker().registerOffense(CheatingOffense.HIGH_DAMAGE_MAGIC);
@@ -587,7 +580,6 @@ public class DamageParse {
                             if (eachd > maxDamagePerHit) {
                                 player.getCheatTracker().registerOffense(CheatingOffense.HIGH_DAMAGE_MAGIC);
                                 if (eachd > MaxDamagePerHit * 2) {
-//				    System.out.println("EXCEED!!! Client damage : " + eachd + " Server : " + MaxDamagePerHit);
                                     eachd = (int) (MaxDamagePerHit * 2); // Convert to server calculated damage
                                     player.getCheatTracker().registerOffense(CheatingOffense.HIGH_DAMAGE_MAGIC_2);
                                 }
@@ -654,7 +646,6 @@ public class DamageParse {
         final int dLevel = Math.max(mobstats.getLevel() - chr.getLevel(), 0);
         final int Accuracy = (int) (Math.floor((stats.getTotalInt() / 10.0)) + Math.floor((stats.getTotalLuk() / 10.0)));
         final int MinAccuracy = mobstats.getEva() * (dLevel * 2 + 51) / 120;
-        // FullAccuracy = Avoid * (dLevel * 2 + 51) / 50
 
         if (MinAccuracy > Accuracy && skill.getId() != 1000 && skill.getId() != 10001000 && skill.getId() != 20001000 && skill.getId() != 20011000 && skill.getId() != 30001000 && !GameConstants.isPyramidSkill(skill.getId())) { // miss :P or HACK :O
             return 0;
@@ -677,18 +668,8 @@ public class DamageParse {
             default:
                 throw new RuntimeException("Unknown enum constant");
         }
-        // Calculate monster magic def
-        // Min damage = (MIN before defense) - MDEF*.6
-        // Max damage = (MAX before defense) - MDEF*.5
         elemMaxDamagePerMob -= mobstats.getMagicDefense() * 0.5;
-        // Calculate Sharp eye bonus
         elemMaxDamagePerMob += (elemMaxDamagePerMob / 100) * sharpEye;
-//	if (skill.isChargeSkill()) {
-//	    elemMaxDamagePerMob = (float) ((90 * ((System.currentTimeMillis() - chr.getKeyDownSkill_Time()) / 1000) + 10) * elemMaxDamagePerMob * 0.01);
-//	}
-//      if (skill.isChargeSkill() && chr.getKeyDownSkill_Time() == 0) {
-//          return 1;
-//      }
         elemMaxDamagePerMob += (elemMaxDamagePerMob * (mobstats.isBoss() ? stats.bossdam_r : stats.dam_r)) / 100;
         switch (skill.getId()) {
             case 1000:
@@ -753,7 +734,7 @@ public class DamageParse {
         if (player.getMapId() / 1000000 == 914) { //aran
             return 199999;
         }
-        List<Element> elements = new ArrayList<Element>();
+        List<Element> elements = new ArrayList<>();
         boolean defined = false; // 是否能超过 199999
         if (theSkill != null) {
             elements.add(theSkill.getElement());
@@ -890,6 +871,12 @@ public class DamageParse {
         return elementalMaxDamagePerMonster;
     }
 
+    /**
+     *
+     * @param attack
+     * @param rate
+     * @return
+     */
     public static final AttackInfo DivideAttack(final AttackInfo attack, final int rate) {
         attack.real = false;
         if (rate <= 1) {
@@ -905,6 +892,13 @@ public class DamageParse {
         return attack;
     }
 
+    /**
+     *
+     * @param attack
+     * @param chr
+     * @param type
+     * @return
+     */
     public static final AttackInfo Modify_AttackCrit(final AttackInfo attack, final MapleCharacter chr, final int type) {
         final int CriticalRate = chr.getStat().passive_sharpeye_rate();
         final boolean shadow = (type == 2 && chr.getBuffedValue(MapleBuffStat.SHADOWPARTNER) != null) || (type == 1 && chr.getBuffedValue(MapleBuffStat.MIRROR_IMAGE) != null);
@@ -913,7 +907,7 @@ public class DamageParse {
                 if (p.attack != null) {
                     int hit = 0;
                     final int mid_att = p.attack.size() / 2;
-                    final List<Pair<Integer, Boolean>> eachd_copy = new ArrayList<Pair<Integer, Boolean>>(p.attack);
+                    final List<Pair<Integer, Boolean>> eachd_copy = new ArrayList<>(p.attack);
                     for (Pair<Integer, Boolean> eachd : p.attack) {
                         hit++;
                         if (!eachd.right) {
@@ -935,6 +929,12 @@ public class DamageParse {
         return attack;
     }
 
+    /**
+     *
+     * @param lea
+     * @param chr
+     * @return
+     */
     public static final AttackInfo parseDmgMa(final LittleEndianAccessor lea, final MapleCharacter chr) {
         final AttackInfo ret = new AttackInfo();
 
@@ -966,13 +966,13 @@ public class DamageParse {
 
         int oid, damage;
         List<Pair<Integer, Boolean>> allDamageNumbers;
-        ret.allDamage = new ArrayList<AttackPair>();
+        ret.allDamage = new ArrayList<>();
 
         for (int i = 0; i < ret.targets; i++) {
             oid = lea.readInt();
             lea.skip(14); // [1] Always 6?, [3] unk, [4] Pos1, [4] Pos2, [2] seems to change randomly for some attack
 
-            allDamageNumbers = new ArrayList<Pair<Integer, Boolean>>();
+            allDamageNumbers = new ArrayList<>();
 
             MapleMonster monster = chr.getMap().getMonsterByOid(oid);
             for (int j = 0; j < ret.hits; j++) {
@@ -983,7 +983,7 @@ public class DamageParse {
                     damage = Damage_NoSkillPD(chr, damage);
                 }
                 damage = Damage_PG(chr, damage, ret);
-                allDamageNumbers.add(new Pair<Integer, Boolean>(damage, false));
+                allDamageNumbers.add(new Pair<>(damage, false));
             }
             lea.skip(4); // CRC of monster [Wz Editing]
             ret.allDamage.add(new AttackPair(oid, allDamageNumbers));
@@ -993,6 +993,12 @@ public class DamageParse {
         return ret;
     }
 
+    /**
+     *
+     * @param lea
+     * @param chr
+     * @return
+     */
     public static final AttackInfo parseDmgM(final LittleEndianAccessor lea, final MapleCharacter chr) {
         final AttackInfo ret = new AttackInfo();
 
@@ -1023,7 +1029,7 @@ public class DamageParse {
         ret.speed = lea.readByte(); // Confirmed
         ret.lastAttackTickCount = lea.readInt(); // Ticks
 
-        ret.allDamage = new ArrayList<AttackPair>();
+        ret.allDamage = new ArrayList<>();
 
         if (ret.skill == 4211006) { // Meso Explosion
             return parseMesoExplosion(lea, ret, chr);
@@ -1035,7 +1041,7 @@ public class DamageParse {
             oid = lea.readInt();
             lea.skip(14); // [1] Always 6?, [3] unk, [4] Pos1, [4] Pos2, [2] seems to change randomly for some attack
 
-            allDamageNumbers = new ArrayList<Pair<Integer, Boolean>>();
+            allDamageNumbers = new ArrayList<>();
 
             MapleMonster monster = chr.getMap().getMonsterByOid(oid);
             for (int j = 0; j < ret.hits; j++) {
@@ -1046,7 +1052,7 @@ public class DamageParse {
                     damage = Damage_NoSkillPD(chr, damage);
                 }
                 damage = Damage_PG(chr, damage, ret);
-                allDamageNumbers.add(new Pair<Integer, Boolean>(damage, false));
+                allDamageNumbers.add(new Pair<>(damage, false));
             }
             lea.skip(4); // CRC of monster [Wz Editing]
             ret.allDamage.add(new AttackPair(oid, allDamageNumbers));
@@ -1055,6 +1061,12 @@ public class DamageParse {
         return ret;
     }
 
+    /**
+     *
+     * @param lea
+     * @param chr
+     * @return
+     */
     public static final AttackInfo parseDmgR(final LittleEndianAccessor lea, final MapleCharacter chr) {
         final AttackInfo ret = new AttackInfo();
 
@@ -1090,14 +1102,14 @@ public class DamageParse {
 
         int damage, oid;
         List<Pair<Integer, Boolean>> allDamageNumbers;
-        ret.allDamage = new ArrayList<AttackPair>();
+        ret.allDamage = new ArrayList<>();
 
         for (int i = 0; i < ret.targets; i++) {
             oid = lea.readInt();
             lea.skip(14); // [1] Always 6?, [3] unk, [4] Pos1, [4] Pos2, [2] seems to change randomly for some attack
 
             MapleMonster monster = chr.getMap().getMonsterByOid(oid);
-            allDamageNumbers = new ArrayList<Pair<Integer, Boolean>>();
+            allDamageNumbers = new ArrayList<>();
             for (int j = 0; j < ret.hits; j++) {
                 damage = lea.readInt();
                 if (ret.skill > 0) {
@@ -1106,7 +1118,7 @@ public class DamageParse {
                     damage = Damage_NoSkillPD(chr, damage);
                 }
                 damage = Damage_PG(chr, damage, ret);
-                allDamageNumbers.add(new Pair<Integer, Boolean>(damage, false));
+                allDamageNumbers.add(new Pair<>(damage, false));
             }
             lea.skip(4); // CRC of monster [Wz Editing]
 
@@ -1118,6 +1130,13 @@ public class DamageParse {
         return ret;
     }
 
+    /**
+     *
+     * @param lea
+     * @param ret
+     * @param chr
+     * @return
+     */
     public static AttackInfo parseMesoExplosion(final LittleEndianAccessor lea, final AttackInfo ret, final MapleCharacter chr) {
         byte bullets;
         if (ret.hits == 0) {
@@ -1138,12 +1157,12 @@ public class DamageParse {
             oid = lea.readInt();
             lea.skip(12);
             bullets = lea.readByte();
-            allDamageNumbers = new ArrayList<Pair<Integer, Boolean>>();
+            allDamageNumbers = new ArrayList<>();
             for (int j = 0; j < bullets; j++) {
                 int damage = lea.readInt();
                 damage = Damage_SkillPD(chr, damage, ret);
                 damage = Damage_PG(chr, damage, ret);
-                allDamageNumbers.add(new Pair<Integer, Boolean>(damage, false)); //m.e. never crits
+                allDamageNumbers.add(new Pair<>(damage, false)); //m.e. never crits
             }
             ret.allDamage.add(new AttackPair(oid, allDamageNumbers));
             lea.skip(4); // C3 8F 41 94, 51 04 5B 01
@@ -1160,6 +1179,12 @@ public class DamageParse {
         return ret;
     }
 
+    /**
+     *
+     * @param c
+     * @param monster
+     * @param ret
+     */
     public static void Damage_Mob_Level(MapleCharacter c, MapleMonster monster, AttackInfo ret) {
         try {
             //80 - 90 - 20 = 80 - 70 
@@ -1183,6 +1208,12 @@ public class DamageParse {
         }
     }
 
+    /**
+     *
+     * @param c
+     * @param monster
+     * @param ret
+     */
     public static void Damage_Position(MapleCharacter c, MapleMonster monster, AttackInfo ret) {
         try {
             if (!GameConstants.不检测技能(ret.skill)) {
@@ -1323,6 +1354,13 @@ public class DamageParse {
         }
     }
 
+    /**
+     *
+     * @param c
+     * @param damage
+     * @param ret
+     * @return
+     */
     public static final int Damage_PG(MapleCharacter c, int damage, AttackInfo ret) {
 
         if (ret.skill != 14101006) { // 吸血
@@ -1343,6 +1381,12 @@ public class DamageParse {
         return damage;
     }
 
+    /**
+     *
+     * @param c
+     * @param damage
+     * @return
+     */
     public static final int Damage_NoSkillPD(MapleCharacter c, int damage) {
         if (c.getJob() == 1000 || c.getJob() == 0 || c.getJob() == 2000) {
             if (damage >= 150) {
@@ -1416,6 +1460,13 @@ public class DamageParse {
         return damage;
     }
 
+    /**
+     *
+     * @param c
+     * @param damage
+     * @param ret
+     * @return
+     */
     public static final int Damage_SkillPD(MapleCharacter c, int damage, final AttackInfo ret) {
         if (GameConstants.Novice_Skill(ret.skill)) {//新手蜗牛壳技能
             if (damage > 40) {

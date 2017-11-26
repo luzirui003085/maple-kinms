@@ -1,11 +1,9 @@
 package client.messages.commands;
 
 import client.*;
-import client.anticheat.CheatingOffense;
 import client.inventory.Equip;
 import client.inventory.IItem;
 import client.inventory.ItemFlag;
-import client.inventory.MapleInventory;
 import client.inventory.MapleInventoryIdentifier;
 import client.inventory.MapleInventoryType;
 import client.inventory.MapleRing;
@@ -14,35 +12,19 @@ import com.mysql.jdbc.Connection;
 import constants.GameConstants;
 import constants.ServerConstants.PlayerGMRank;
 import database.DatabaseConnection;
-import handling.MaplePacket;
-import handling.MapleServerHandler;
 import handling.RecvPacketOpcode;
 import handling.SendPacketOpcode;
 import handling.channel.ChannelServer;
 import handling.world.CheaterData;
 import handling.world.World;
-import java.awt.Point;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.text.DateFormat;
 import java.util.*;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.concurrent.ScheduledFuture;
-import provider.MapleData;
-import provider.MapleDataProvider;
-import provider.MapleDataProviderFactory;
-import provider.MapleDataTool;
-import scripting.EventInstanceManager;
 import scripting.EventManager;
 import scripting.PortalScriptManager;
 import scripting.ReactorScriptManager;
@@ -51,44 +33,24 @@ import server.MapleInventoryManipulator;
 import server.MapleItemInformationProvider;
 import server.MaplePortal;
 import server.MapleShopFactory;
-import server.MapleSquad;
 import server.ShutdownServer;
 import server.Timer;
-import server.Timer.BuffTimer;
-import server.Timer.CloneTimer;
-import server.Timer.EtcTimer;
-import server.Timer.EventTimer;
-import server.Timer.MapTimer;
-import server.Timer.MobTimer;
-import server.Timer.WorldTimer;
-import server.events.MapleEvent;
-import server.events.MapleEventType;
 import server.life.MapleLifeFactory;
 import server.life.MapleMonster;
 import server.life.MapleMonsterInformationProvider;
 import server.life.MapleNPC;
-import server.life.MobSkillFactory;
 import server.life.OverrideMonsterStats;
-import server.life.PlayerNPC;
 import server.maps.FakeCharacter;
 import server.maps.MapleMap;
 import server.maps.MapleMapObject;
 import server.maps.MapleMapObjectType;
-import server.maps.MapleReactor;
-import server.maps.MapleReactorFactory;
-import server.maps.MapleReactorStats;
 import server.quest.MapleQuest;
 import tools.ArrayMap;
-import tools.CPUSampler;
 import tools.HexTool;
 import tools.MaplePacketCreator;
-import tools.MockIOSession;
 import tools.Pair;
 import tools.StringUtil;
 import tools.data.output.MaplePacketLittleEndianWriter;
-import tools.packet.MobPacket;
-import tools.packet.PlayerShopPacket;
-import tools.packet.UIPacket;
 
 /**
  *
@@ -96,12 +58,22 @@ import tools.packet.UIPacket;
  */
 public class GMCommand {
 
+    /**
+     *
+     * @return
+     */
     public static PlayerGMRank getPlayerLevelRequired() {
         return PlayerGMRank.GM;
     }
 
+    /**
+     *
+     */
     public static class Ban extends CommandExecute {
 
+        /**
+         *
+         */
         protected boolean hellban = false;
 
         private String getCommand() {
@@ -146,8 +118,14 @@ public class GMCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class UnBan extends CommandExecute {
 
+        /**
+         *
+         */
         protected boolean hellban = false;
 
         private String getCommand() {
@@ -195,6 +173,9 @@ public class GMCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class 双倍经验 extends CommandExecute {
 
         private int change = 0;
@@ -231,7 +212,9 @@ public class GMCommand {
         }
     }
 
-    
+    /**
+     *
+     */
     public static class 双倍经验time extends CommandExecute {
 
         private int time = 0;
@@ -253,6 +236,7 @@ public class GMCommand {
             }
             Timer.WorldTimer.getInstance().register(new Runnable() {
 
+                @Override
                 public void run() {
                     for (ChannelServer cserv : ChannelServer.getAllInstances()) {
                          cserv.setDoubleExp(0);
@@ -269,6 +253,9 @@ public class GMCommand {
         }
     }
     
+    /**
+     *
+     */
     public static class 双倍爆率 extends CommandExecute {
 
         private int change = 0;
@@ -305,6 +292,9 @@ public class GMCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class 双倍金币 extends CommandExecute {
 
         private int change = 0;
@@ -344,6 +334,9 @@ public class GMCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class 给所有人点卷 extends CommandExecute {
 
         @Override
@@ -391,6 +384,9 @@ public class GMCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class 给所有人经验 extends CommandExecute {
 
         @Override
@@ -414,6 +410,9 @@ public class GMCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class 给所有人冒险币 extends CommandExecute {
 
         @Override
@@ -437,6 +436,9 @@ public class GMCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class 给所有人物品 extends CommandExecute {
 
         @Override
@@ -471,6 +473,10 @@ public class GMCommand {
             return 1;
         }
     }
+
+    /**
+     *
+     */
     public static class 给当前地图点卷 extends CommandExecute {
 
         @Override
@@ -522,6 +528,9 @@ public class GMCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class 给当前地图经验 extends CommandExecute {
 
         @Override
@@ -548,6 +557,9 @@ public class GMCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class 给当前地图冒险币 extends CommandExecute {
 
         @Override
@@ -575,6 +587,9 @@ public class GMCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class 给当前地图物品 extends CommandExecute {
 
         @Override
@@ -616,6 +631,9 @@ public class GMCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class 给玩家物品 extends CommandExecute {
 
         @Override
@@ -653,6 +671,9 @@ public class GMCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class DCAll extends CommandExecute {
 
         @Override
@@ -661,32 +682,46 @@ public class GMCommand {
                 return 0;
             }
             int range = -1;
-            if (splitted[1].equals("m")) {
-                range = 0;
-            } else if (splitted[1].equals("c")) {
-                range = 1;
-            } else if (splitted[1].equals("w")) {
-                range = 2;
+            switch (splitted[1]) {
+                case "m":
+                    range = 0;
+                    break;
+                case "c":
+                    range = 1;
+                    break;
+                case "w":
+                    range = 2;
+                    break;
+                default:
+                    break;
             }
             if (range == -1) {
                 range = 1;
             }
-            if (range == 0) {
-                c.getPlayer().getMap().disconnectAll();
-                c.getPlayer().dropMessage(5, "已成功断开当前地图所有玩家的连接.");
-            } else if (range == 1) {
-                c.getChannelServer().getPlayerStorage().disconnectAll(true);
-                c.getPlayer().dropMessage(5, "已成功断开当前频道所有玩家的连接.");
-            } else if (range == 2) {
-                for (ChannelServer cserv : ChannelServer.getAllInstances()) {
-                    cserv.getPlayerStorage().disconnectAll(true);
-                }
-                c.getPlayer().dropMessage(5, "已成功断开当前游戏所有玩家的连接.");
+            switch (range) {
+                case 0:
+                    c.getPlayer().getMap().disconnectAll();
+                    c.getPlayer().dropMessage(5, "已成功断开当前地图所有玩家的连接.");
+                    break;
+                case 1:
+                    c.getChannelServer().getPlayerStorage().disconnectAll(true);
+                    c.getPlayer().dropMessage(5, "已成功断开当前频道所有玩家的连接.");
+                    break;
+                case 2:
+                    for (ChannelServer cserv : ChannelServer.getAllInstances()) {
+                        cserv.getPlayerStorage().disconnectAll(true);
+                    }   c.getPlayer().dropMessage(5, "已成功断开当前游戏所有玩家的连接.");
+                    break;
+                default:
+                    break;
             }
             return 1;
         }
     }
 
+    /**
+     *
+     */
     public static class DC extends CommandExecute {
 
         @Override
@@ -715,6 +750,9 @@ public class GMCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class 删除道具 extends CommandExecute {
 
         @Override
@@ -737,6 +775,9 @@ public class GMCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class 人气 extends CommandExecute {
 
         @Override
@@ -766,6 +807,9 @@ public class GMCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class 查看当前地图信息 extends CommandExecute {
 
         @Override
@@ -778,8 +822,12 @@ public class GMCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class KillAll extends CommandExecute {
 
+        @Override
         public int execute(MapleClient c, String[] splitted) {
             if (!c.getPlayer().isAdmin()) {
                 return 0;
@@ -809,8 +857,12 @@ public class GMCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class WarpMap extends CommandExecute {
 
+        @Override
         public int execute(MapleClient c, String[] splitted) {
             if (!c.getPlayer().isAdmin()) {
                 return 0;
@@ -835,8 +887,12 @@ public class GMCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class 杀死玩家 extends CommandExecute {
 
+        @Override
         public int execute(MapleClient c, String[] splitted) {
             if (!c.getPlayer().isAdmin()) {
                 return 0;
@@ -864,8 +920,12 @@ public class GMCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class 断开玩家连接 extends CommandExecute {
 
+        @Override
         public int execute(MapleClient c, String[] splitted) {
             if (!c.getPlayer().isAdmin()) {
                 return 0;
@@ -882,8 +942,12 @@ public class GMCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class 频道在线 extends CommandExecute {
 
+        @Override
         public int execute(MapleClient c, String[] splitted) {
             if (!c.getPlayer().isAdmin()) {
                 return 0;
@@ -894,8 +958,12 @@ public class GMCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class 在线 extends CommandExecute {
 
+        @Override
         public int execute(MapleClient c, String[] splitted) {
             if (!c.getPlayer().isAdmin()) {
                 return 0;
@@ -906,8 +974,12 @@ public class GMCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class 隐身模式 extends CommandExecute {
 
+        @Override
         public int execute(MapleClient c, String[] splitted) {
             if (!c.getPlayer().isAdmin()) {
                 return 0;
@@ -918,6 +990,9 @@ public class GMCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class 解除隐身 extends CommandExecute {
 
         @Override
@@ -930,6 +1005,9 @@ public class GMCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class 拉玩家 extends CommandExecute {
 
         @Override
@@ -944,6 +1022,9 @@ public class GMCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class 拉玩家id extends CommandExecute {
 
         @Override
@@ -959,6 +1040,9 @@ public class GMCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class 拉所有玩家 extends CommandExecute {
 
         @Override
@@ -976,6 +1060,9 @@ public class GMCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class 刷新地图 extends CommandExecute {
 
         @Override
@@ -990,7 +1077,7 @@ public class GMCommand {
             if (player.getClient().getChannelServer().getMapFactory().destroyMap(mapid)) {
                 MapleMap newMap = player.getClient().getChannelServer().getMapFactory().getMap(mapid);
                 MaplePortal newPor = newMap.getPortal(0);
-                LinkedHashSet<MapleCharacter> mcs = new LinkedHashSet<MapleCharacter>(map.getCharacters()); // do NOT remove, fixing ConcurrentModificationEx.
+                LinkedHashSet<MapleCharacter> mcs = new LinkedHashSet<>(map.getCharacters()); // do NOT remove, fixing ConcurrentModificationEx.
                 outerLoop:
                 for (MapleCharacter m : mcs) {
                     for (int x = 0; x < 5; x++) {
@@ -1010,13 +1097,17 @@ public class GMCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class 检查玩家物品信息 extends CommandExecute {
 
+        @Override
         public int execute(MapleClient c, String[] splitted) {
             if (!c.getPlayer().isAdmin()) {
                 return 0;
             }
-            if ((splitted.length < 3) || (splitted[1] == null) || (splitted[1].equals("")) || (splitted[2] == null) || (splitted[2].equals(""))) {
+            if ((splitted.length < 3) || (splitted[1] == null) || (splitted[1].isEmpty()) || (splitted[2] == null) || (splitted[2].isEmpty())) {
                 c.getPlayer().dropMessage(6, "用法: !检查玩家物品信息 <玩家名字> <道具ID>");
                 return 0;
             }
@@ -1033,8 +1124,12 @@ public class GMCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class 检测作弊 extends CommandExecute {
 
+        @Override
         public int execute(MapleClient c, String[] splitted) {
             if (!c.getPlayer().isAdmin()) {
                 return 0;
@@ -1048,6 +1143,9 @@ public class GMCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class 找玩家位置 extends CommandExecute {
 
         @Override
@@ -1066,6 +1164,9 @@ public class GMCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class 谁在这个地图 extends CommandExecute {
 
         @Override
@@ -1089,6 +1190,9 @@ public class GMCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class 全部存档 extends CommandExecute {
 
         @Override
@@ -1108,6 +1212,9 @@ public class GMCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class 雇佣存档 extends CommandExecute {
 
         @Override
@@ -1143,6 +1250,9 @@ public class GMCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class 重置怪物 extends CommandExecute {
 
         @Override
@@ -1155,6 +1265,9 @@ public class GMCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class 满技能 extends CommandExecute {
 
         @Override
@@ -1167,6 +1280,9 @@ public class GMCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class Job extends CommandExecute {
 
         @Override
@@ -1179,6 +1295,9 @@ public class GMCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class GainMeso extends CommandExecute {
 
         @Override
@@ -1191,6 +1310,9 @@ public class GMCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class Item extends CommandExecute {
 
         @Override
@@ -1242,6 +1364,9 @@ public class GMCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class Drop extends CommandExecute {
 
         @Override
@@ -1294,6 +1419,9 @@ public class GMCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class Level extends CommandExecute {
 
         @Override
@@ -1310,6 +1438,9 @@ public class GMCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class spy extends CommandExecute {
 
         @Override
@@ -1328,7 +1459,7 @@ public class GMCommand {
                 if (victim != null) {
                     c.getPlayer().dropMessage(5, "此玩家狀態:");
                     c.getPlayer().dropMessage(5, "等級: " + victim.getLevel() + "职业: " + victim.getJob() + "人气: " + victim.getFame());
-                    c.getPlayer().dropMessage(5, "地圖: " + victim.getMapId() + " - " + victim.getMap().getMapName().toString());
+                    c.getPlayer().dropMessage(5, "地圖: " + victim.getMapId() + " - " + victim.getMap().getMapName());
                     c.getPlayer().dropMessage(5, "力量: " + victim.getStat().getStr() + "  ||  敏捷: " + victim.getStat().getDex() + "  ||  智力: " + victim.getStat().getInt() + "  ||  运气: " + victim.getStat().getLuk());
                     c.getPlayer().dropMessage(5, "拥有 " + victim.getMeso() + " 冒险币.");
                     // victim.dropMessage(5, c.getPlayer().getName() + " GM在觀察您..");
@@ -1340,6 +1471,9 @@ public class GMCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class online1 extends CommandExecute {
 
         @Override
@@ -1353,6 +1487,9 @@ public class GMCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class Spawn extends CommandExecute {
 
         @Override
@@ -1377,16 +1514,16 @@ public class GMCommand {
             long newhp = 0L;
             int newexp = 0;
             if (hp != null) {
-                newhp = hp.longValue();
+                newhp = hp;
             } else if (php != null) {
-                newhp = (long) (onemob.getMobMaxHp() * (php.doubleValue() / 100.0D));
+                newhp = (long) (onemob.getMobMaxHp() * (php / 100.0D));
             } else {
                 newhp = onemob.getMobMaxHp();
             }
             if (exp != null) {
-                newexp = exp.intValue();
+                newexp = exp;
             } else if (pexp != null) {
-                newexp = (int) (onemob.getMobExp() * (pexp.doubleValue() / 100.0D));
+                newexp = (int) (onemob.getMobExp() * (pexp / 100.0D));
             } else {
                 newexp = onemob.getMobExp();
             }
@@ -1405,6 +1542,9 @@ public class GMCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class 总在线人数 extends CommandExecute {
 
         @Override
@@ -1416,7 +1556,7 @@ public class GMCommand {
             StringBuilder conStr = new StringBuilder("连接数量: ");
             boolean first = true;
             for (Iterator i$ = connected.keySet().iterator(); i$.hasNext();) {
-                int i = ((Integer) i$.next()).intValue();
+                int i = ((Integer) i$.next());
                 if (!first) {
                     conStr.append(", ");
                 } else {
@@ -1424,12 +1564,12 @@ public class GMCommand {
                 }
                 if (i == 0) {
                     conStr.append("总计: ");
-                    conStr.append(connected.get(Integer.valueOf(i)));
+                    conStr.append(connected.get(i));
                 } else {
                     conStr.append("频道 ");
                     conStr.append(i);
                     conStr.append(": ");
-                    conStr.append(connected.get(Integer.valueOf(i)));
+                    conStr.append(connected.get(i));
                 }
             }
             c.getPlayer().dropMessage(conStr.toString());
@@ -1437,6 +1577,9 @@ public class GMCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class onlines extends CommandExecute {
 
         @Override
@@ -1461,7 +1604,7 @@ public class GMCommand {
                         ret.append(chr.getJob());
                         if (chr.getMap() != null) {
                             ret.append(" 地图: ");
-                            ret.append(chr.getMapId() + " - " + chr.getMap().getMapName().toString());
+                            ret.append(chr.getMapId()).append(" - ").append(chr.getMap().getMapName());
                             c.getPlayer().dropMessage(6, ret.toString());
                         }
                         p++;
@@ -1474,6 +1617,9 @@ public class GMCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class Warp extends CommandExecute {
 
         @Override
@@ -1514,6 +1660,9 @@ public class GMCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class Warpid extends CommandExecute {
 
         @Override
@@ -1554,6 +1703,9 @@ public class GMCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class CnGM extends CommandExecute {
 
         @Override
@@ -1568,6 +1720,9 @@ public class GMCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class 刷抵用卷 extends CommandExecute {
 
         @Override
@@ -1584,6 +1739,9 @@ public class GMCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class 刷点卷 extends CommandExecute {
 
         @Override
@@ -1600,6 +1758,9 @@ public class GMCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class 重载任务 extends CommandExecute {
 
         @Override
@@ -1613,6 +1774,9 @@ public class GMCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class 重载商城 extends CommandExecute {
 
         @Override
@@ -1626,6 +1790,9 @@ public class GMCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class 重载包头 extends CommandExecute {
 
         @Override
@@ -1640,6 +1807,9 @@ public class GMCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class 重载副本 extends CommandExecute {
 
         @Override
@@ -1655,6 +1825,9 @@ public class GMCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class 重载商店 extends CommandExecute {
 
         @Override
@@ -1668,6 +1841,9 @@ public class GMCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class 重载传送 extends CommandExecute {
 
         @Override
@@ -1678,6 +1854,9 @@ public class GMCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class 重载爆率 extends CommandExecute {
 
         @Override
@@ -1692,9 +1871,15 @@ public class GMCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class 重启服务端 extends ShutdownTime {
     }
 
+    /**
+     *
+     */
     public static class ShutdownTime extends GMCommand.Shutdown {
 
         private static ScheduledFuture<?> ts = null;
@@ -1754,8 +1939,14 @@ public class GMCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class Shutdown extends CommandExecute {
 
+        /**
+         *
+         */
         protected static Thread t = null;
 
         @Override
@@ -1775,6 +1966,9 @@ public class GMCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class GetSkill extends CommandExecute {
 
         @Override
@@ -1797,6 +1991,9 @@ public class GMCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class 封包调试 extends CommandExecute {
 
         @Override
@@ -1806,6 +2003,9 @@ public class GMCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class 删除克隆 extends CommandExecute {
 
         @Override
@@ -1822,6 +2022,9 @@ public class GMCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class 克隆测试 extends CommandExecute {
 
         @Override
@@ -1851,6 +2054,9 @@ public class GMCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class 时间调试 extends CommandExecute {
 
         @Override
@@ -1867,11 +2073,14 @@ public class GMCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class ItemCheck extends CommandExecute {
 
         @Override
         public int execute(MapleClient c, String[] splitted) {
-            if (splitted.length < 3 || splitted[1] == null || splitted[1].equals("") || splitted[2] == null || splitted[2].equals("")) {
+            if (splitted.length < 3 || splitted[1] == null || splitted[1].isEmpty() || splitted[2] == null || splitted[2].isEmpty()) {
                 c.getPlayer().dropMessage(6, "!itemcheck <playername> <itemid>");
                 return 0;
             } else {
@@ -1888,6 +2097,9 @@ public class GMCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class Marry extends CommandExecute {
 
         @Override
@@ -1927,6 +2139,9 @@ public class GMCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class CloneMe extends CommandExecute {
 
         @Override
@@ -1936,6 +2151,9 @@ public class GMCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class DisposeClones extends CommandExecute {
 
         @Override
@@ -1946,6 +2164,9 @@ public class GMCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class 重载跑商 extends CommandExecute {
 
         @Override
@@ -1955,6 +2176,9 @@ public class GMCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class 包头 extends CommandExecute {
 
         @Override
@@ -1975,6 +2199,9 @@ public class GMCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class 包 extends CommandExecute {
 
         @Override
@@ -1997,6 +2224,9 @@ public class GMCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class 开启活动副本 extends CommandExecute {
 
         @Override
@@ -2016,7 +2246,9 @@ public class GMCommand {
         }
     }
 
-
+    /**
+     *
+     */
     public static class 公告 extends CommandExecute {
 
         @Override
@@ -2039,8 +2271,9 @@ public class GMCommand {
         }
     }
 
-
-   
+    /**
+     *
+     */
     public static class 临时NPC extends CommandExecute {
 
         @Override
@@ -2064,6 +2297,9 @@ public class GMCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class 永久NPC extends CommandExecute {
 
         @Override
@@ -2114,7 +2350,9 @@ public class GMCommand {
         }
     }
 
-    
+    /**
+     *
+     */
     public static class ClearInv extends CommandExecute {
 
         @Override
@@ -2122,39 +2360,48 @@ public class GMCommand {
             if (!c.getPlayer().isAdmin()) {
                 return 0;
             }
-            java.util.Map<Pair<Short, Short>, MapleInventoryType> eqs = new ArrayMap<Pair<Short, Short>, MapleInventoryType>();
-            if (splitted[1].equals("全部")) {
-                for (MapleInventoryType type : MapleInventoryType.values()) {
-                    for (IItem item : c.getPlayer().getInventory(type)) {
-                        eqs.put(new Pair<Short, Short>(item.getPosition(), item.getQuantity()), type);
+            java.util.Map<Pair<Short, Short>, MapleInventoryType> eqs = new ArrayMap<>();
+            switch (splitted[1]) {
+                case "全部":
+                    for (MapleInventoryType type : MapleInventoryType.values()) {
+                        for (IItem item : c.getPlayer().getInventory(type)) {
+                            eqs.put(new Pair<>(item.getPosition(), item.getQuantity()), type);
+                        }
                     }
-                }
-            } else if (splitted[1].equals("已裝備道具")) {
-                for (IItem item : c.getPlayer().getInventory(MapleInventoryType.EQUIPPED)) {
-                    eqs.put(new Pair<Short, Short>(item.getPosition(), item.getQuantity()), MapleInventoryType.EQUIPPED);
-                }
-            } else if (splitted[1].equals("武器")) {
-                for (IItem item : c.getPlayer().getInventory(MapleInventoryType.EQUIP)) {
-                    eqs.put(new Pair<Short, Short>(item.getPosition(), item.getQuantity()), MapleInventoryType.EQUIP);
-                }
-            } else if (splitted[1].equals("消耗")) {
-                for (IItem item : c.getPlayer().getInventory(MapleInventoryType.USE)) {
-                    eqs.put(new Pair<Short, Short>(item.getPosition(), item.getQuantity()), MapleInventoryType.USE);
-                }
-            } else if (splitted[1].equals("裝飾")) {
-                for (IItem item : c.getPlayer().getInventory(MapleInventoryType.SETUP)) {
-                    eqs.put(new Pair<Short, Short>(item.getPosition(), item.getQuantity()), MapleInventoryType.SETUP);
-                }
-            } else if (splitted[1].equals("其他")) {
-                for (IItem item : c.getPlayer().getInventory(MapleInventoryType.ETC)) {
-                    eqs.put(new Pair<Short, Short>(item.getPosition(), item.getQuantity()), MapleInventoryType.ETC);
-                }
-            } else if (splitted[1].equals("特殊")) {
-                for (IItem item : c.getPlayer().getInventory(MapleInventoryType.CASH)) {
-                    eqs.put(new Pair<Short, Short>(item.getPosition(), item.getQuantity()), MapleInventoryType.CASH);
-                }
-            } else {
-                c.getPlayer().dropMessage(6, "[全部/已裝備道具/武器/消耗/裝飾/其他/特殊]");
+                    break;
+                case "已裝備道具":
+                    for (IItem item : c.getPlayer().getInventory(MapleInventoryType.EQUIPPED)) {
+                        eqs.put(new Pair<>(item.getPosition(), item.getQuantity()), MapleInventoryType.EQUIPPED);
+                    }
+                    break;
+                case "武器":
+                    for (IItem item : c.getPlayer().getInventory(MapleInventoryType.EQUIP)) {
+                        eqs.put(new Pair<>(item.getPosition(), item.getQuantity()), MapleInventoryType.EQUIP);
+                    }
+                    break;
+                case "消耗":
+                    for (IItem item : c.getPlayer().getInventory(MapleInventoryType.USE)) {
+                        eqs.put(new Pair<>(item.getPosition(), item.getQuantity()), MapleInventoryType.USE);
+                    }
+                    break;
+                case "裝飾":
+                    for (IItem item : c.getPlayer().getInventory(MapleInventoryType.SETUP)) {
+                        eqs.put(new Pair<>(item.getPosition(), item.getQuantity()), MapleInventoryType.SETUP);
+                    }
+                    break;
+                case "其他":
+                    for (IItem item : c.getPlayer().getInventory(MapleInventoryType.ETC)) {
+                        eqs.put(new Pair<>(item.getPosition(), item.getQuantity()), MapleInventoryType.ETC);
+                    }
+                    break;
+                case "特殊":
+                    for (IItem item : c.getPlayer().getInventory(MapleInventoryType.CASH)) {
+                        eqs.put(new Pair<>(item.getPosition(), item.getQuantity()), MapleInventoryType.CASH);
+                    }
+                    break;
+                default:
+                    c.getPlayer().dropMessage(6, "[全部/已裝備道具/武器/消耗/裝飾/其他/特殊]");
+                    break;
             }
             for (Entry<Pair<Short, Short>, MapleInventoryType> eq : eqs.entrySet()) {
                 MapleInventoryManipulator.removeFromSlot(c, eq.getValue(), eq.getKey().left, eq.getKey().right, false, false);

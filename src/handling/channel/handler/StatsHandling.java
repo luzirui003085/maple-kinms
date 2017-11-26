@@ -1,23 +1,4 @@
-/*
- This file is part of the OdinMS Maple Story Server
- Copyright (C) 2008 ~ 2010 Patrick Huy <patrick.huy@frz.cc> 
- Matthias Butz <matze@odinms.de>
- Jan Christian Meyer <vimes@odinms.de>
 
- This program is free software: you can redistribute it and/or modify
- it under the terms of the GNU Affero General Public License version 3
- as published by the Free Software Foundation. You may not use, modify
- or distribute this program under any other version of the
- GNU Affero General Public License.
-
- This program is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- GNU Affero General Public License for more details.
-
- You should have received a copy of the GNU Affero General Public License
- along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
 package handling.channel.handler;
 
 import constants.GameConstants;
@@ -32,19 +13,27 @@ import client.PlayerStats;
 import client.SkillFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import server.AutobanManager;
 import server.Randomizer;
-import tools.FileoutputUtil;
 import tools.MaplePacketCreator;
 import tools.Pair;
 import tools.data.input.SeekableLittleEndianAccessor;
 
+/**
+ *
+ * @author zjj
+ */
 public class StatsHandling {
 
     private static Logger log = LoggerFactory.getLogger(StatsHandling.class);
     
+    /**
+     *
+     * @param slea
+     * @param c
+     * @param chr
+     */
     public static final void DistributeAP(final SeekableLittleEndianAccessor slea, final MapleClient c, final MapleCharacter chr) {
-        final List<Pair<MapleStat, Integer>> statupdate = new ArrayList<Pair<MapleStat, Integer>>(2);
+        final List<Pair<MapleStat, Integer>> statupdate = new ArrayList<>(2);
         c.getSession().write(MaplePacketCreator.updatePlayerStats(statupdate, true, chr.getJob()));
         chr.updateTick(slea.readInt());
 
@@ -57,28 +46,28 @@ public class StatsHandling {
                         return;
                     }
                     stat.setStr((short) (stat.getStr() + 1));
-                    statupdate.add(new Pair<MapleStat, Integer>(MapleStat.STR, (int) stat.getStr()));
+                    statupdate.add(new Pair<>(MapleStat.STR, (int) stat.getStr()));
                     break;
                 case 512: // Dex
                     if (stat.getDex() >= 999) {
                         return;
                     }
                     stat.setDex((short) (stat.getDex() + 1));
-                    statupdate.add(new Pair<MapleStat, Integer>(MapleStat.DEX, (int) stat.getDex()));
+                    statupdate.add(new Pair<>(MapleStat.DEX, (int) stat.getDex()));
                     break;
                 case 1024: // Int
                     if (stat.getInt() >= 999) {
                         return;
                     }
                     stat.setInt((short) (stat.getInt() + 1));
-                    statupdate.add(new Pair<MapleStat, Integer>(MapleStat.INT, (int) stat.getInt()));
+                    statupdate.add(new Pair<>(MapleStat.INT, (int) stat.getInt()));
                     break;
                 case 2048: // Luk
                     if (stat.getLuk() >= 999) {
                         return;
                     }
                     stat.setLuk((short) (stat.getLuk() + 1));
-                    statupdate.add(new Pair<MapleStat, Integer>(MapleStat.LUK, (int) stat.getLuk()));
+                    statupdate.add(new Pair<>(MapleStat.LUK, (int) stat.getLuk()));
                     break;
                 case 8192: // HP
                     short maxhp = stat.getMaxHp();
@@ -129,7 +118,7 @@ public class StatsHandling {
                     maxhp = (short) Math.min(30000, Math.abs(maxhp));
                     chr.setHpApUsed((short) (chr.getHpApUsed() + 1));
                     stat.setMaxHp(maxhp);
-                    statupdate.add(new Pair<MapleStat, Integer>(MapleStat.MAXHP, (int) maxhp));
+                    statupdate.add(new Pair<>(MapleStat.MAXHP, (int) maxhp));
                     break;
                 case 32768: // MP
                     short maxmp = stat.getMaxMp();
@@ -171,18 +160,24 @@ public class StatsHandling {
                     maxmp = (short) Math.min(30000, Math.abs(maxmp));
                     chr.setHpApUsed((short) (chr.getHpApUsed() + 1));
                     stat.setMaxMp(maxmp);
-                    statupdate.add(new Pair<MapleStat, Integer>(MapleStat.MAXMP, (int) maxmp));
+                    statupdate.add(new Pair<>(MapleStat.MAXMP, (int) maxmp));
                     break;
                 default:
                     c.getSession().write(MaplePacketCreator.updatePlayerStats(MaplePacketCreator.EMPTY_STATUPDATE, true, chr.getJob()));
                     return;
             }
             chr.setRemainingAp((short) (chr.getRemainingAp() - 1));
-            statupdate.add(new Pair<MapleStat, Integer>(MapleStat.AVAILABLEAP, (int) chr.getRemainingAp()));
+            statupdate.add(new Pair<>(MapleStat.AVAILABLEAP, (int) chr.getRemainingAp()));
             c.getSession().write(MaplePacketCreator.updatePlayerStats(statupdate, true, chr.getJob()));
         }
     }
 
+    /**
+     *
+     * @param skillid
+     * @param c
+     * @param chr
+     */
     public static final void DistributeSP(final int skillid, final MapleClient c, final MapleCharacter chr) {
         boolean isBeginnerSkill = false;
         final int remainingSp;
@@ -278,10 +273,16 @@ public class StatsHandling {
             chr.changeSkillLevel(skill, (byte) (curLevel + 1), chr.getMasterLevel(skill));
         } else if (!skill.canBeLearnedBy(chr.getJob())) {
 //            AutobanManager.getInstance().addPoints(c, 1000, 0, "Trying to learn a skill for a different job (" + skillid + ")");
-            return;
+
         }
     }
 
+    /**
+     *
+     * @param slea
+     * @param c
+     * @param chr
+     */
     public static final void AutoAssignAP(final SeekableLittleEndianAccessor slea, final MapleClient c, final MapleCharacter chr) {
          List statupdate = new ArrayList(2);
      //   c.getSession().write(MaplePacketCreator.updatePlayerStats(statupdate, 0));
@@ -329,11 +330,11 @@ public class StatsHandling {
                 }
                 chr.setRemainingAp((short) (chr.getRemainingAp() - updatenumber));
             } else {
-                log.info("[h4x] Player {} is distributing AP to {} without having any", chr.getName(), Integer.valueOf(update));
+                log.info("[h4x] Player {} is distributing AP to {} without having any", chr.getName(), update);
             }
         }
        // statupdate.add(new Pair(MapleStat.AVAILABLEAP, Integer.valueOf(chr.getRemainingAp())));
-        statupdate.add(new Pair<MapleStat, Integer>(MapleStat.AVAILABLEAP, (int) chr.getRemainingAp()));
+        statupdate.add(new Pair<>(MapleStat.AVAILABLEAP, (int) chr.getRemainingAp()));
         c.getSession().write(MaplePacketCreator.updatePlayerStats(statupdate, true, chr.getJob()));
      //   c.getSession().write(MaplePacketCreator.updatePlayerStats(statupdate, 0));
         

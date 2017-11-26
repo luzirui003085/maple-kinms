@@ -22,6 +22,10 @@ package client;
 
 import java.io.Serializable;
 
+/**
+ *
+ * @author zjj
+ */
 public class SkillMacro implements Serializable {
 
     private static final long serialVersionUID = -63413738569L;
@@ -33,6 +37,15 @@ public class SkillMacro implements Serializable {
     private int shout;
     private int position;
 
+    /**
+     *
+     * @param skill1
+     * @param skill2
+     * @param skill3
+     * @param name
+     * @param shout
+     * @param position
+     */
     public SkillMacro(int skill1, int skill2, int skill3, String name, int shout, int position) {
         this.skill1 = skill1;
         this.skill2 = skill2;
@@ -42,58 +55,114 @@ public class SkillMacro implements Serializable {
         this.position = position;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getMacroId() {
         return macroId;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getSkill1() {
         return skill1;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getSkill2() {
         return skill2;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getSkill3() {
         return skill3;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getShout() {
         return shout;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getPosition() {
         return position;
     }
 
+    /**
+     *
+     * @param macroId
+     */
     public void setMacroId(int macroId) {
         this.macroId = macroId;
     }
 
+    /**
+     *
+     * @param skill1
+     */
     public void setSkill1(int skill1) {
         this.skill1 = skill1;
     }
 
+    /**
+     *
+     * @param skill2
+     */
     public void setSkill2(int skill2) {
         this.skill2 = skill2;
     }
 
+    /**
+     *
+     * @param skill3
+     */
     public void setSkill3(int skill3) {
         this.skill3 = skill3;
     }
 
+    /**
+     *
+     * @param name
+     */
     public void setName(String name) {
         this.name = name;
     }
 
+    /**
+     *
+     * @param shout
+     */
     public void setShout(int shout) {
         this.shout = shout;
     }
 
+    /**
+     *
+     * @param position
+     */
     public void setPosition(int position) {
         this.position = position;
     }

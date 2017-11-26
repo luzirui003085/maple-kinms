@@ -1,23 +1,4 @@
-/*
- This file is part of the OdinMS Maple Story Server
- Copyright (C) 2008 ~ 2010 Patrick Huy <patrick.huy@frz.cc> 
- Matthias Butz <matze@odinms.de>
- Jan Christian Meyer <vimes@odinms.de>
 
- This program is free software: you can redistribute it and/or modify
- it under the terms of the GNU Affero General Public License version 3
- as published by the Free Software Foundation. You may not use, modify
- or distribute this program under any other version of the
- GNU Affero General Public License.
-
- This program is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- GNU Affero General Public License for more details.
-
- You should have received a copy of the GNU Affero General Public License
- along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
 package scripting;
 
 import java.util.Map;
@@ -28,21 +9,39 @@ import client.MapleClient;
 import java.util.WeakHashMap;
 import java.util.concurrent.locks.Lock;
 import server.quest.MapleQuest;
-import tools.FileoutputUtil;
 
+/**
+ *
+ * @author zjj
+ */
 public class NPCScriptManager extends AbstractScriptManager {
 
-    private final Map<MapleClient, NPCConversationManager> cms = new WeakHashMap<MapleClient, NPCConversationManager>();
+    private final Map<MapleClient, NPCConversationManager> cms = new WeakHashMap<>();
     private static final NPCScriptManager instance = new NPCScriptManager();
 
+    /**
+     *
+     * @return
+     */
     public static final NPCScriptManager getInstance() {
         return instance;
     }
 
+    /**
+     *
+     * @param c
+     * @param npc
+     */
     public void start(MapleClient c, int npc) {
         start(c, npc, 0);
     }
 
+    /**
+     *
+     * @param c
+     * @param npc
+     * @param wh
+     */
     public final void start(final MapleClient c, final int npc, int wh) {
         final Lock lock = c.getNPCLock();
         lock.lock();
@@ -116,10 +115,25 @@ public class NPCScriptManager extends AbstractScriptManager {
         }
     }
 
+    /**
+     *
+     * @param c
+     * @param mode
+     * @param type
+     * @param selection
+     */
     public void action(final MapleClient c, final byte mode, final byte type, final int selection) {
         action(c, (byte) mode, (byte) type, selection, 0);
     }
 
+    /**
+     *
+     * @param c
+     * @param mode
+     * @param type
+     * @param selection
+     * @param wh
+     */
     public final void action(final MapleClient c, final byte mode, final byte type, final int selection, int wh) {
         if (mode != -1) {
             final NPCConversationManager cm = cms.get(c);
@@ -150,6 +164,12 @@ public class NPCScriptManager extends AbstractScriptManager {
         }
     }
 
+    /**
+     *
+     * @param c
+     * @param npc
+     * @param quest
+     */
     public final void startQuest(final MapleClient c, final int npc, final int quest) {
         if (!MapleQuest.getInstance(quest).canStart(c.getPlayer(), null)) {
             return;
@@ -187,6 +207,13 @@ public class NPCScriptManager extends AbstractScriptManager {
         }
     }
 
+    /**
+     *
+     * @param c
+     * @param mode
+     * @param type
+     * @param selection
+     */
     public final void startQuest(final MapleClient c, final byte mode, final byte type, final int selection) {
         final Lock lock = c.getNPCLock();
         final NPCConversationManager cm = cms.get(c);
@@ -212,6 +239,13 @@ public class NPCScriptManager extends AbstractScriptManager {
         }
     }
 
+    /**
+     *
+     * @param c
+     * @param npc
+     * @param quest
+     * @param customEnd
+     */
     public final void endQuest(final MapleClient c, final int npc, final int quest, final boolean customEnd) {
         if (!customEnd && !MapleQuest.getInstance(quest).canComplete(c.getPlayer(), null)) {
             return;
@@ -249,6 +283,13 @@ public class NPCScriptManager extends AbstractScriptManager {
         }
     }
 
+    /**
+     *
+     * @param c
+     * @param mode
+     * @param type
+     * @param selection
+     */
     public final void endQuest(final MapleClient c, final byte mode, final byte type, final int selection) {
         final Lock lock = c.getNPCLock();
         final NPCConversationManager cm = cms.get(c);
@@ -274,6 +315,10 @@ public class NPCScriptManager extends AbstractScriptManager {
         }
     }
 
+    /**
+     *
+     * @param c
+     */
     public final void dispose(final MapleClient c) {
         final NPCConversationManager npccm = cms.get(c);
         if (npccm != null) {
@@ -295,6 +340,11 @@ public class NPCScriptManager extends AbstractScriptManager {
         }
     }
 
+    /**
+     *
+     * @param c
+     * @return
+     */
     public final NPCConversationManager getCM(final MapleClient c) {
         return cms.get(c);
     }

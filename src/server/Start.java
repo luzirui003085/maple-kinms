@@ -2,7 +2,6 @@ package server;
 
 import client.MapleCharacter;
 import client.SkillFactory;
-import com.mysql.jdbc.JDBC4PreparedStatement;
 import database.DatabaseConnection;
 import handling.cashshop.CashShopServer;
 import handling.channel.ChannelServer;
@@ -12,17 +11,13 @@ import handling.login.LoginServer;
 import handling.world.World;
 import handling.world.family.MapleFamilyBuff;
 import java.net.ServerSocket;
-import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.Map;
 import server.Timer.BuffTimer;
 import server.Timer.CheatTimer;
@@ -40,8 +35,15 @@ import server.quest.MapleQuest;
 import tools.FileoutputUtil;
 import tools.StringUtil;
 
+/**
+ *
+ * @author zjj
+ */
 public class Start {
 
+    /**
+     *
+     */
     public static final Start instance = new Start();
     private static int maxUsers = 0;
     private static ServerSocket srvSocket = null; //服务线程，用以控制服务器只启动一个实例
@@ -49,8 +51,15 @@ public class Start {
     private static int srvPort = 6350;     //控制启动唯一实例的端口号，这个端口如果保存在配置文件中会更灵活
     private static int srvPorta = 6351;     //控制启动唯一实例的端口号，这个端口如果保存在配置文件中会更灵活
 
+    /**
+     *
+     */
     public static ArrayList<Integer> unCheckList = new ArrayList<>();
 
+    /**
+     *
+     * @param args
+     */
     public static void main(final String args[]) {
         if (Boolean.parseBoolean(ServerProperties.getProperty("KinMS.Admin"))) {
             System.out.println("[!!! Admin Only Mode Active !!!]");
@@ -126,6 +135,10 @@ public class Start {
         // BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     }
 
+    /**
+     *
+     * @throws InterruptedException
+     */
     public void startServer() throws InterruptedException {
         if (Boolean.parseBoolean(ServerProperties.getProperty("KinMS.Admin"))) {
             System.out.println("[!!! Admin Only Mode Active !!!]");
@@ -199,9 +212,15 @@ public class Start {
     }
 
     // 自动检测物品和金币
+
+    /**
+     *
+     * @param interval
+     */
     public static void 自动检测(int interval) {
         System.out.println("开启自动检测");
         Timer.WorldTimer.getInstance().register(new Runnable() {
+            @Override
             public void run() {
                 System.out.println("检测白名单是:" + unCheckList.toString());
                 for (ChannelServer cserv : ChannelServer.getAllInstances()) {
@@ -249,9 +268,14 @@ public class Start {
         }, 60000 * interval);
     }
 
+    /**
+     *
+     * @param time
+     */
     public static void 自动存档(int time) {
         Timer.WorldTimer.getInstance().register(new Runnable() {
 
+            @Override
             public void run() {
 
                 int ppl = 0;
@@ -270,9 +294,14 @@ public class Start {
         }, 60000 * time);
     }
 
+    /**
+     *
+     * @param time
+     */
     public static void 开启双倍(int time) {
         Timer.WorldTimer.getInstance().register(new Runnable() {
 
+            @Override
             public void run() {
 
                 int year = Calendar.getInstance().get(Calendar.YEAR);//年
@@ -304,8 +333,13 @@ public class Start {
         }, 60000 * time);
     }
 
+    /**
+     *
+     * @param time
+     */
     public static void 刷新地图(int time) {
         Timer.WorldTimer.getInstance().register(new Runnable() {
+            @Override
             public void run() {
                 for (ChannelServer cserv : ChannelServer.getAllInstances()) {
                     for (MapleCharacter chr : cserv.getPlayerStorage().getAllCharacters()) {
@@ -320,7 +354,7 @@ public class Start {
                             if (player.getClient().getChannelServer().getMapFactory().destroyMap(mapid)) {
                                 MapleMap newMap = player.getClient().getChannelServer().getMapFactory().getMap(mapid);
                                 MaplePortal newPor = newMap.getPortal(0);
-                                LinkedHashSet<MapleCharacter> mcs = new LinkedHashSet<MapleCharacter>(map.getCharacters()); // do NOT remove, fixing ConcurrentModificationEx.
+                                LinkedHashSet<MapleCharacter> mcs = new LinkedHashSet<>(map.getCharacters()); // do NOT remove, fixing ConcurrentModificationEx.
                                 outerLoop:
                                 for (MapleCharacter m : mcs) {
                                     for (int x = 0; x < 5; x++) {
@@ -339,6 +373,10 @@ public class Start {
         }, 60000 * time);
     }
 
+    /**
+     *
+     * @param time
+     */
     public static void 防万能(int time) {
         Timer.WorldTimer.getInstance().register(new Runnable() {
 
@@ -355,17 +393,22 @@ public class Start {
         }, 60000 * time);
     }
 
+    /**
+     *
+     * @param time
+     */
     public static void 在线统计(int time) {
         System.out.println("服务端启用在线统计." + time + "分钟统计一次在线的人数信息.");
         Timer.WorldTimer.getInstance().register(new Runnable() {
 
+            @Override
             public void run() {
                 Map connected = World.getConnected();
                 StringBuilder conStr = new StringBuilder(new StringBuilder().append(FileoutputUtil.CurrentReadable_Time()).append(" 在线人数: ").toString());
                 for (Iterator i$ = connected.keySet().iterator(); i$.hasNext();) {
-                    int i = ((Integer) i$.next()).intValue();
+                    int i = ((Integer) i$.next());
                     if (i == 0) {
-                        int users = ((Integer) connected.get(Integer.valueOf(i))).intValue();
+                        int users = ((Integer) connected.get(i));
                         conStr.append(StringUtil.getRightPaddedStr(String.valueOf(users), ' ', 3));
                         if (users > Start.maxUsers) {
                             Start.maxUsers = users;
@@ -383,6 +426,10 @@ public class Start {
         }, 60000 * time);
     }
 
+    /**
+     *
+     * @param time
+     */
     public static void 在线时间(int time) {
         Timer.WorldTimer.getInstance().register(new Runnable() {
 
@@ -433,6 +480,10 @@ public class Start {
         }, 60000 * time);
     }
 
+    /**
+     *
+     * @param property
+     */
     public static void 设置白名单(String property) {
         try {
             unCheckList.clear();
@@ -446,6 +497,9 @@ public class Start {
         System.out.println("设置白名单" + unCheckList.toString());
     }
 
+    /**
+     *
+     */
     public static class Shutdown implements Runnable {
 
         @Override
@@ -454,9 +508,14 @@ public class Start {
         }
     }
 
+    /**
+     *
+     * @param time
+     */
     public static void 回收内存(int time) {
         Timer.WorldTimer.getInstance().register(new Runnable() {
 
+            @Override
             public void run() {
 
                 System.gc();

@@ -24,6 +24,10 @@ import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Collection;
 
+/**
+ *
+ * @author zjj
+ */
 public class MapleMessenger implements Serializable {
 
     private static final long serialVersionUID = 9179541993413738569L;
@@ -31,11 +35,21 @@ public class MapleMessenger implements Serializable {
     private String[] silentLink = new String[3];
     private int id;
 
+    /**
+     *
+     * @param id
+     * @param chrfor
+     */
     public MapleMessenger(int id, MapleMessengerCharacter chrfor) {
         this.id = id;
         addMem(0, chrfor);
     }
 
+    /**
+     *
+     * @param pos
+     * @param chrfor
+     */
     public void addMem(int pos, MapleMessengerCharacter chrfor) {
         if (members[pos] != null) {
             return;
@@ -43,10 +57,19 @@ public class MapleMessenger implements Serializable {
         members[pos] = chrfor;
     }
 
+    /**
+     *
+     * @param member
+     * @return
+     */
     public boolean containsMembers(MapleMessengerCharacter member) {
         return getPositionByName(member.getName()) < 4;
     }
 
+    /**
+     *
+     * @param member
+     */
     public void addMember(MapleMessengerCharacter member) {
         int position = getLowestPosition();
         if (position > -1 && position < 4) {
@@ -54,6 +77,10 @@ public class MapleMessenger implements Serializable {
         }
     }
 
+    /**
+     *
+     * @param member
+     */
     public void removeMember(MapleMessengerCharacter member) {
         final int position = getPositionByName(member.getName());
         if (position > -1 && position < 4) {
@@ -61,6 +88,10 @@ public class MapleMessenger implements Serializable {
         }
     }
 
+    /**
+     *
+     * @param member
+     */
     public void silentRemoveMember(MapleMessengerCharacter member) {
         final int position = getPositionByName(member.getName());
         if (position > -1 && position < 4) {
@@ -69,6 +100,10 @@ public class MapleMessenger implements Serializable {
         }
     }
 
+    /**
+     *
+     * @param member
+     */
     public void silentAddMember(MapleMessengerCharacter member) {
         for (int i = 0; i < silentLink.length; i++) {
             if (silentLink[i] != null && silentLink[i].equalsIgnoreCase(member.getName())) {
@@ -79,6 +114,10 @@ public class MapleMessenger implements Serializable {
         }
     }
 
+    /**
+     *
+     * @param member
+     */
     public void updateMember(MapleMessengerCharacter member) {
         for (int i = 0; i < members.length; i++) {
             MapleMessengerCharacter chr = members[i];
@@ -90,6 +129,10 @@ public class MapleMessenger implements Serializable {
         }
     }
 
+    /**
+     *
+     * @return
+     */
     public int getLowestPosition() {
         for (int i = 0; i < members.length; i++) {
             if (members[i] == null) {
@@ -99,6 +142,11 @@ public class MapleMessenger implements Serializable {
         return 4;
     }
 
+    /**
+     *
+     * @param name
+     * @return
+     */
     public int getPositionByName(String name) {
         for (int i = 0; i < members.length; i++) {
             MapleMessengerCharacter messengerchar = members[i];
@@ -109,10 +157,18 @@ public class MapleMessenger implements Serializable {
         return 4;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getId() {
         return id;
     }
 
+    /**
+     *
+     * @param id
+     */
     public void setId(int id) {
         this.id = id;
     }
@@ -134,12 +190,13 @@ public class MapleMessenger implements Serializable {
             return false;
         }
         final MapleMessenger other = (MapleMessenger) obj;
-        if (id != other.id) {
-            return false;
-        }
-        return true;
+        return id == other.id;
     }
 
+    /**
+     *
+     * @return
+     */
     public Collection<MapleMessengerCharacter> getMembers() {
         return Arrays.asList(members);
     }

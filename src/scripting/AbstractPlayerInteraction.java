@@ -1,26 +1,6 @@
-/*
- This file is part of the OdinMS Maple Story Server
- Copyright (C) 2008 ~ 2010 Patrick Huy <patrick.huy@frz.cc> 
- Matthias Butz <matze@odinms.de>
- Jan Christian Meyer <vimes@odinms.de>
 
- This program is free software: you can redistribute it and/or modify
- it under the terms of the GNU Affero General Public License version 3
- as published by the Free Software Foundation. You may not use, modify
- or distribute this program under any other version of the
- GNU Affero General Public License.
-
- This program is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- GNU Affero General Public License for more details.
-
- You should have received a copy of the GNU Affero General Public License
- along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
 package scripting;
 
-import java.rmi.RemoteException;
 import java.awt.Point;
 import java.util.List;
 
@@ -34,7 +14,6 @@ import client.inventory.MapleInventoryType;
 import client.inventory.MaplePet;
 import client.MapleQuestStatus;
 import client.inventory.*;
-import database.DatabaseConnection;
 import handling.channel.ChannelServer;
 import handling.world.MapleParty;
 import handling.world.MaplePartyCharacter;
@@ -54,56 +33,89 @@ import tools.MaplePacketCreator;
 import tools.packet.PetPacket;
 import tools.packet.UIPacket;
 import handling.world.World;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.LinkedHashSet;
-import java.util.Map;
 import server.*;
 import server.events.MapleEvent;
 import server.events.MapleEventType;
-import server.shops.HiredMerchant;
-import tools.Pair;
 
+/**
+ *
+ * @author zjj
+ */
 public abstract class AbstractPlayerInteraction {
 
     private MapleClient c;
 
+    /**
+     *
+     * @param c
+     */
     public AbstractPlayerInteraction(final MapleClient c) {
         this.c = c;
     }
 
+    /**
+     *
+     * @return
+     */
     public final MapleClient getClient() {
         return c;
     }
 
+    /**
+     *
+     * @return
+     */
     public final MapleClient getC() {
         return c;
     }
 
+    /**
+     *
+     * @return
+     */
     public MapleCharacter getChar() {
         c.getPlayer().getInventory(MapleInventoryType.USE).listById(1).iterator();  
         return c.getPlayer();
     }
 
+    /**
+     *
+     * @return
+     */
     public final ChannelServer getChannelServer() {
         return c.getChannelServer();
     }
 
+    /**
+     *
+     * @return
+     */
     public final MapleCharacter getPlayer() {
         return c.getPlayer();
     }
 
+    /**
+     *
+     * @param event
+     * @return
+     */
     public final EventManager getEventManager(final String event) {
         return c.getChannelServer().getEventSM().getEventManager(event);
     }
 
+    /**
+     *
+     * @return
+     */
     public final EventInstanceManager getEventInstance() {
         return c.getPlayer().getEventInstance();
     }
 
+    /**
+     *
+     * @param map
+     */
     public final void warp(final int map) {
         final MapleMap mapz = getWarpMap(map);
         try {
@@ -113,6 +125,11 @@ public abstract class AbstractPlayerInteraction {
         }
     }
 
+    /**
+     *
+     * @param map
+     * @param map2
+     */
     public final void warpPlayer(final int map, final int map2) {
         if (c.getPlayer().getMapId() == map) {
             final MapleMap mapz = getWarpMap(map2);
@@ -126,6 +143,10 @@ public abstract class AbstractPlayerInteraction {
         }
     }
 
+    /**
+     *
+     * @param map
+     */
     public final void warp_Instanced(final int map) {
         final MapleMap mapz = getMap_Instanced(map);
         try {
@@ -135,6 +156,11 @@ public abstract class AbstractPlayerInteraction {
         }
     }
 
+    /**
+     *
+     * @param map
+     * @param portal
+     */
     public final void warp(final int map, final int portal) {
         final MapleMap mapz = getWarpMap(map);
         if (portal != 0 && map == c.getPlayer().getMapId()) { //test
@@ -151,11 +177,21 @@ public abstract class AbstractPlayerInteraction {
         }
     }
 
+    /**
+     *
+     * @param map
+     * @param portal
+     */
     public final void warpS(final int map, final int portal) {
         final MapleMap mapz = getWarpMap(map);
         c.getPlayer().changeMap(mapz, mapz.getPortal(portal));
     }
 
+    /**
+     *
+     * @param map
+     * @param portal
+     */
     public final void warp(final int map, String portal) {
         final MapleMap mapz = getWarpMap(map);
         if (map == 109060000 || map == 109060002 || map == 109060004) {
@@ -175,6 +211,11 @@ public abstract class AbstractPlayerInteraction {
         }
     }
 
+    /**
+     *
+     * @param map
+     * @param portal
+     */
     public final void warpS(final int map, String portal) {
         final MapleMap mapz = getWarpMap(map);
         if (map == 109060000 || map == 109060002 || map == 109060004) {
@@ -183,6 +224,11 @@ public abstract class AbstractPlayerInteraction {
         c.getPlayer().changeMap(mapz, mapz.getPortal(portal));
     }
 
+    /**
+     *
+     * @param mapid
+     * @param portal
+     */
     public final void warpMap(final int mapid, final int portal) {
         final MapleMap map = getMap(mapid);
         for (MapleCharacter chr : c.getPlayer().getMap().getCharactersThreadsafe()) {
@@ -190,6 +236,9 @@ public abstract class AbstractPlayerInteraction {
         }
     }
 
+    /**
+     *
+     */
     public final void playPortalSE() {
         c.getSession().write(MaplePacketCreator.showOwnBuffEffect(0, 7));
     }
@@ -198,18 +247,37 @@ public abstract class AbstractPlayerInteraction {
         return ChannelServer.getInstance(c.getChannel()).getMapFactory().getMap(map);
     }
 
+    /**
+     *
+     * @return
+     */
     public final MapleMap getMap() {
         return c.getPlayer().getMap();
     }
 
+    /**
+     *
+     * @param map
+     * @return
+     */
     public final MapleMap getMap(final int map) {
         return getWarpMap(map);
     }
 
+    /**
+     *
+     * @param map
+     * @return
+     */
     public final MapleMap getMap_Instanced(final int map) {
         return c.getPlayer().getEventInstance() == null ? getMap(map) : c.getPlayer().getEventInstance().getMapInstance(map);
     }
 
+    /**
+     *
+     * @param MapID
+     * @param MapID2
+     */
     public final void spawnMap(int MapID, int MapID2) {
         for (ChannelServer chan : ChannelServer.getAllInstances()) {
             for (MapleCharacter chr : chan.getPlayerStorage().getAllCharacters()) {
@@ -225,6 +293,10 @@ public abstract class AbstractPlayerInteraction {
         }
     }
     
+    /**
+     *
+     * @param MapID
+     */
     public final void spawnMap(int MapID) {
         for (ChannelServer chan : ChannelServer.getAllInstances()) {
             for (MapleCharacter chr : chan.getPlayerStorage().getAllCharacters()) {
@@ -240,143 +312,257 @@ public abstract class AbstractPlayerInteraction {
         }
     }
     
+    /**
+     *
+     * @param id
+     * @param qty
+     */
     public void spawnMonster(final int id, final int qty) {
         spawnMob(id, qty, new Point(c.getPlayer().getPosition()));
     }
 
+    /**
+     *
+     * @param id
+     * @param qty
+     * @param x
+     * @param y
+     * @param map
+     */
     public final void spawnMobOnMap(final int id, final int qty, final int x, final int y, final int map) {
         for (int i = 0; i < qty; i++) {
             getMap(map).spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(id), new Point(x, y));
         }
     }
 
+    /**
+     *
+     * @param id
+     * @param qty
+     * @param x
+     * @param y
+     * @param map
+     * @param hp
+     */
     public final void spawnMobOnMap(final int id, final int qty, final int x, final int y, final int map, final int hp) {
         for (int i = 0; i < qty; i++) {
             getMap(map).spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(id), new Point(x, y), hp);
         }
     }
 
+    /**
+     *
+     * @param id
+     * @param qty
+     * @param x
+     * @param y
+     */
     public final void spawnMob(final int id, final int qty, final int x, final int y) {
         spawnMob(id, qty, new Point(x, y));
     }
 
+    /**
+     *
+     * @param id
+     * @param x
+     * @param y
+     */
     public final void spawnMob(final int id, final int x, final int y) {
         spawnMob(id, 1, new Point(x, y));
     }
 
+    /**
+     *
+     * @param id
+     * @param qty
+     * @param pos
+     */
     public final void spawnMob(final int id, final int qty, final Point pos) {
         for (int i = 0; i < qty; i++) {
             c.getPlayer().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(id), pos);
         }
     }
 
+    /**
+     *
+     * @param ids
+     */
     public final void killMob(int ids) {
         c.getPlayer().getMap().killMonster(ids);
     }
 
+    /**
+     *
+     */
     public final void killAllMob() {
         c.getPlayer().getMap().killAllMonsters(true);
     }
 
+    /**
+     *
+     * @param delta
+     */
     public final void addHP(final int delta) {
         c.getPlayer().addHP(delta);
     }
-public final void setPlayerStat(final String type, int x) {
-        if (type.equals("LVL")) {
-             c.getPlayer().setLevel((short) x);
-        } else if (type.equals("STR")) {
-             c.getPlayer().getStat().setStr((short) x);
-        } else if (type.equals("DEX")) {
-             c.getPlayer().getStat().setDex((short) x);
-        } else if (type.equals("INT")) {
-             c.getPlayer().getStat().setInt((short) x);
-        } else if (type.equals("LUK")) {
-             c.getPlayer().getStat().setLuk((short) x);
-        } else if (type.equals("HP")) {
-             c.getPlayer().getStat().setHp(x);
-        } else if (type.equals("MP")) {
-             c.getPlayer().getStat().setMp(x);
-        } else if (type.equals("MAXHP")) {
-             c.getPlayer().getStat().setMaxHp((short) x);
-        } else if (type.equals("MAXMP")) {
-             c.getPlayer().getStat().setMaxMp((short) x);
-        } else if (type.equals("RAP")) {
-             c.getPlayer().setRemainingAp((short) x);
-        } else if (type.equals("RSP")) {
-             c.getPlayer().setRemainingSp((short) x);
-        } else if (type.equals("GID")) {
-             c.getPlayer().setGuildId(x);
-        } else if (type.equals("GRANK")) {
-             c.getPlayer().setGuildRank((byte) x);
-        } else if (type.equals("ARANK")) {
-             c.getPlayer().setAllianceRank((byte) x);
-        } else if (type.equals("GENDER")) {
-             c.getPlayer().setGender((byte) x);
-        } else if (type.equals("FACE")) {
-             c.getPlayer().setFace(x);
-        } else if (type.equals("HAIR")) {
-              c.getPlayer().setHair(x);
+
+    /**
+     *
+     * @param type
+     * @param x
+     */
+    public final void setPlayerStat(final String type, int x) {
+        switch (type) {
+            case "LVL":
+                c.getPlayer().setLevel((short) x);
+                break;
+            case "STR":
+                c.getPlayer().getStat().setStr((short) x);
+                break;
+            case "DEX":
+                c.getPlayer().getStat().setDex((short) x);
+                break;
+            case "INT":
+                c.getPlayer().getStat().setInt((short) x);
+                break;
+            case "LUK":
+                c.getPlayer().getStat().setLuk((short) x);
+                break;
+            case "HP":
+                c.getPlayer().getStat().setHp(x);
+                break;
+            case "MP":
+                c.getPlayer().getStat().setMp(x);
+                break;
+            case "MAXHP":
+                c.getPlayer().getStat().setMaxHp((short) x);
+                break;
+            case "MAXMP":
+                c.getPlayer().getStat().setMaxMp((short) x);
+                break;
+            case "RAP":
+                c.getPlayer().setRemainingAp((short) x);
+                break;
+            case "RSP":
+                c.getPlayer().setRemainingSp((short) x);
+                break;
+            case "GID":
+                c.getPlayer().setGuildId(x);
+                break;
+            case "GRANK":
+                c.getPlayer().setGuildRank((byte) x);
+                break;
+            case "ARANK":
+                c.getPlayer().setAllianceRank((byte) x);
+                break;
+            case "GENDER":
+                c.getPlayer().setGender((byte) x);
+                break;
+            case "FACE":
+                c.getPlayer().setFace(x);
+                break;
+            case "HAIR":
+                c.getPlayer().setHair(x);
+                break;
+            default:
+                break;
         }
     }
+
+    /**
+     *
+     * @param type
+     * @return
+     */
     public final int getPlayerStat(final String type) {
-        if (type.equals("LVL")) {
-            return c.getPlayer().getLevel();
-        } else if (type.equals("STR")) {
-            return c.getPlayer().getStat().getStr();
-        } else if (type.equals("DEX")) {
-            return c.getPlayer().getStat().getDex();
-        } else if (type.equals("INT")) {
-            return c.getPlayer().getStat().getInt();
-        } else if (type.equals("LUK")) {
-            return c.getPlayer().getStat().getLuk();
-        } else if (type.equals("HP")) {
-            return c.getPlayer().getStat().getHp();
-        } else if (type.equals("MP")) {
-            return c.getPlayer().getStat().getMp();
-        } else if (type.equals("MAXHP")) {
-            return c.getPlayer().getStat().getMaxHp();
-        } else if (type.equals("MAXMP")) {
-            return c.getPlayer().getStat().getMaxMp();
-        } else if (type.equals("RAP")) {
-            return c.getPlayer().getRemainingAp();
-        } else if (type.equals("RSP")) {
-            return c.getPlayer().getRemainingSp();
-        } else if (type.equals("GID")) {
-            return c.getPlayer().getGuildId();
-        } else if (type.equals("GRANK")) {
-            return c.getPlayer().getGuildRank();
-        } else if (type.equals("ARANK")) {
-            return c.getPlayer().getAllianceRank();
-        } else if (type.equals("GM")) {
-            return c.getPlayer().isGM() ? 1 : 0;
-        } else if (type.equals("ADMIN")) {
-            return c.getPlayer().isAdmin() ? 1 : 0;
-        } else if (type.equals("GENDER")) {
-            return c.getPlayer().getGender();
-        } else if (type.equals("FACE")) {
-            return c.getPlayer().getFace();
-        } else if (type.equals("HAIR")) {
-            return c.getPlayer().getHair();
+        switch (type) {
+            case "LVL":
+                return c.getPlayer().getLevel();
+            case "STR":
+                return c.getPlayer().getStat().getStr();
+            case "DEX":
+                return c.getPlayer().getStat().getDex();
+            case "INT":
+                return c.getPlayer().getStat().getInt();
+            case "LUK":
+                return c.getPlayer().getStat().getLuk();
+            case "HP":
+                return c.getPlayer().getStat().getHp();
+            case "MP":
+                return c.getPlayer().getStat().getMp();
+            case "MAXHP":
+                return c.getPlayer().getStat().getMaxHp();
+            case "MAXMP":
+                return c.getPlayer().getStat().getMaxMp();
+            case "RAP":
+                return c.getPlayer().getRemainingAp();
+            case "RSP":
+                return c.getPlayer().getRemainingSp();
+            case "GID":
+                return c.getPlayer().getGuildId();
+            case "GRANK":
+                return c.getPlayer().getGuildRank();
+            case "ARANK":
+                return c.getPlayer().getAllianceRank();
+            case "GM":
+                return c.getPlayer().isGM() ? 1 : 0;
+            case "ADMIN":
+                return c.getPlayer().isAdmin() ? 1 : 0;
+            case "GENDER":
+                return c.getPlayer().getGender();
+            case "FACE":
+                return c.getPlayer().getFace();
+            case "HAIR":
+                return c.getPlayer().getHair();
+            default:
+                break;
         }
         return -1;
     }
 
+    /**
+     *
+     * @return
+     */
     public final String getName() {
         return c.getPlayer().getName();
     }
 
+    /**
+     *
+     * @param itemid
+     * @return
+     */
     public final boolean haveItem(final int itemid) {
         return haveItem(itemid, 1);
     }
 
+    /**
+     *
+     * @param itemid
+     * @param quantity
+     * @return
+     */
     public final boolean haveItem(final int itemid, final int quantity) {
         return haveItem(itemid, quantity, false, true);
     }
 
+    /**
+     *
+     * @param itemid
+     * @param quantity
+     * @param checkEquipped
+     * @param greaterOrEquals
+     * @return
+     */
     public final boolean haveItem(final int itemid, final int quantity, final boolean checkEquipped, final boolean greaterOrEquals) {
         return c.getPlayer().haveItem(itemid, quantity, checkEquipped, greaterOrEquals);
     }
 
+    /**
+     *
+     * @return
+     */
     public final boolean canHold() {
         for (int i = 1; i <= 5; i++) {
             if (c.getPlayer().getInventory(MapleInventoryType.getByType((byte) i)).getNextFreeSlot() <= -1) {
@@ -386,74 +572,160 @@ public final void setPlayerStat(final String type, int x) {
         return true;
     }
 
+    /**
+     *
+     * @param itemid
+     * @return
+     */
     public final boolean canHold(final int itemid) {
         return c.getPlayer().getInventory(GameConstants.getInventoryType(itemid)).getNextFreeSlot() > -1;
     }
 
+    /**
+     *
+     * @param itemid
+     * @param quantity
+     * @return
+     */
     public final boolean canHold(final int itemid, final int quantity) {
         return MapleInventoryManipulator.checkSpace(c, itemid, quantity, "");
     }
 
+    /**
+     *
+     * @param id
+     * @return
+     */
     public final MapleQuestStatus getQuestRecord(final int id) {
         return c.getPlayer().getQuestNAdd(MapleQuest.getInstance(id));
     }
 
+    /**
+     *
+     * @param id
+     * @return
+     */
     public final byte getQuestStatus(final int id) {
         return c.getPlayer().getQuestStatus(id);
     }
 
+    /**
+     *
+     * @param id
+     */
     public void completeQuest(int id) {
         c.getPlayer().setQuestAdd(id);
     }
 
+    /**
+     *
+     * @param id
+     * @return
+     */
     public final boolean isQuestActive(final int id) {
         return getQuestStatus(id) == 1;
     }
 
+    /**
+     *
+     * @param id
+     * @return
+     */
     public final boolean isQuestFinished(final int id) {
         return getQuestStatus(id) == 2;
     }
 
+    /**
+     *
+     * @param msg
+     */
     public final void showQuestMsg(final String msg) {
         c.getSession().write(MaplePacketCreator.showQuestMsg(msg));
     }
 
+    /**
+     *
+     * @param id
+     * @param data
+     */
     public final void forceStartQuest(final int id, final String data) {
         MapleQuest.getInstance(id).forceStart(c.getPlayer(), 0, data);
     }
 
+    /**
+     *
+     * @param id
+     * @param data
+     * @param filler
+     */
     public final void forceStartQuest(final int id, final int data, final boolean filler) {
         MapleQuest.getInstance(id).forceStart(c.getPlayer(), 0, filler ? String.valueOf(data) : null);
     }
 
+    /**
+     *
+     */
     public void clearAranPolearm() {
         this.c.getPlayer().getInventory(MapleInventoryType.EQUIPPED).removeItem((byte) -11);
     }
 
+    /**
+     *
+     * @param id
+     */
     public void forceStartQuest(final int id) {
         MapleQuest.getInstance(id).forceStart(c.getPlayer(), 0, null);
     }
 
+    /**
+     *
+     * @param id
+     */
     public void forceCompleteQuest(final int id) {
         MapleQuest.getInstance(id).forceComplete(getPlayer(), 0);
     }
 
+    /**
+     *
+     * @param npcId
+     */
     public void spawnNpc(final int npcId) {
         c.getPlayer().getMap().spawnNpc(npcId, c.getPlayer().getPosition());
     }
 
+    /**
+     *
+     * @param npcId
+     * @param x
+     * @param y
+     */
     public final void spawnNpc(final int npcId, final int x, final int y) {
         c.getPlayer().getMap().spawnNpc(npcId, new Point(x, y));
     }
 
+    /**
+     *
+     * @param npcId
+     * @param pos
+     */
     public final void spawnNpc(final int npcId, final Point pos) {
         c.getPlayer().getMap().spawnNpc(npcId, pos);
     }
 
+    /**
+     *
+     * @param mapid
+     * @param npcId
+     */
     public final void removeNpc(final int mapid, final int npcId) {
         c.getChannelServer().getMapFactory().getMap(mapid).removeNpc(npcId);
     }
 
+    /**
+     *
+     * @param mapid
+     * @param id
+     */
     public final void forceStartReactor(final int mapid, final int id) {
         MapleMap map = c.getChannelServer().getMapFactory().getMap(mapid);
         MapleReactor react;
@@ -467,6 +739,11 @@ public final void setPlayerStat(final String type, int x) {
         }
     }
 
+    /**
+     *
+     * @param mapid
+     * @param id
+     */
     public final void destroyReactor(final int mapid, final int id) {
         MapleMap map = c.getChannelServer().getMapFactory().getMap(mapid);
         MapleReactor react;
@@ -480,6 +757,11 @@ public final void setPlayerStat(final String type, int x) {
         }
     }
 
+    /**
+     *
+     * @param mapid
+     * @param id
+     */
     public final void hitReactor(final int mapid, final int id) {
         MapleMap map = c.getChannelServer().getMapFactory().getMap(mapid);
         MapleReactor react;
@@ -493,53 +775,140 @@ public final void setPlayerStat(final String type, int x) {
         }
     }
 
+    /**
+     *
+     * @return
+     */
     public final int getJob() {
         return c.getPlayer().getJob();
     }
 
+    /**
+     *
+     * @param 类型
+     * @return
+     */
     public final int getNX(int 类型) {
         return c.getPlayer().getCSPoints(类型);
     }
+
+    /**
+     *
+     * @param amount
+     */
     public final void gainNX(final int amount)   {
         c.getPlayer().modifyCSPoints(1, amount, true);
     }
 
+    /**
+     *
+     * @param id
+     * @param quantity
+     * @param period
+     */
     public final void gainItemPeriod(final int id, final short quantity, final int period) { //period is in days
         gainItem(id, quantity, false, period, -1, "", (byte) 0);
     }
 
+    /**
+     *
+     * @param id
+     * @param quantity
+     * @param period
+     * @param owner
+     */
     public final void gainItemPeriod(final int id, final short quantity, final long period, final String owner) { //period is in days
         gainItem(id, quantity, false, period, -1, owner, (byte) 0);
     }
 
+    /**
+     *
+     * @param id
+     * @param quantity
+     */
     public final void gainItem(final int id, final short quantity) {
         gainItem(id, quantity, false, 0, -1, "", (byte) 0);
     }
 
+    /**
+     *
+     * @param id
+     * @param quantity
+     * @param period
+     * @param Flag
+     */
     public final void gainItem(final int id, final short quantity, final long period, byte Flag) {
         gainItem(id, quantity, false, period, -1, "", (byte) Flag);
     }
 
+    /**
+     *
+     * @param id
+     * @param quantity
+     * @param randomStats
+     */
     public final void gainItem(final int id, final short quantity, final boolean randomStats) {
         gainItem(id, quantity, randomStats, 0, -1, "", (byte) 0);
     }
 
+    /**
+     *
+     * @param id
+     * @param quantity
+     * @param randomStats
+     * @param slots
+     */
     public final void gainItem(final int id, final short quantity, final boolean randomStats, final int slots) {
         gainItem(id, quantity, randomStats, 0, slots, "", (byte) 0);
     }
 
+    /**
+     *
+     * @param id
+     * @param quantity
+     * @param period
+     */
     public final void gainItem(final int id, final short quantity, final long period) {
         gainItem(id, quantity, false, period, -1, "", (byte) 0);
     }
 
+    /**
+     *
+     * @param id
+     * @param quantity
+     * @param randomStats
+     * @param period
+     * @param slots
+     */
     public final void gainItem(final int id, final short quantity, final boolean randomStats, final long period, final int slots) {
         gainItem(id, quantity, randomStats, period, slots, "", (byte) 0);
     }
 
+    /**
+     *
+     * @param id
+     * @param quantity
+     * @param randomStats
+     * @param period
+     * @param slots
+     * @param owner
+     * @param Flag
+     */
     public final void gainItem(final int id, final short quantity, final boolean randomStats, final long period, final int slots, final String owner, byte  Flag) {
         gainItem(id, quantity, randomStats, period, slots, owner, c, Flag);
     }
 
+    /**
+     *
+     * @param id
+     * @param quantity
+     * @param randomStats
+     * @param period
+     * @param slots
+     * @param owner
+     * @param cg
+     * @param Flag
+     */
     public final void gainItem(final int id, final short quantity, final boolean randomStats, final long period, final int slots, final String owner, final MapleClient cg, byte Flag) {
         if (quantity >= 0) {
             final MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
@@ -574,12 +943,72 @@ public final void setPlayerStat(final String type, int x) {
         }
         cg.getSession().write(MaplePacketCreator.getShowItemGain(id, quantity, true));
     }
-     public final void gainItem(final int id, final int str, final int dex, final int luk, final int Int, final int hp, int mp, int watk, int matk, int wdef, int mdef, int hb, int mz, int ty, int yd,int time) {
+
+    /**
+     *
+     * @param id
+     * @param str
+     * @param dex
+     * @param luk
+     * @param Int
+     * @param hp
+     * @param mp
+     * @param watk
+     * @param matk
+     * @param wdef
+     * @param mdef
+     * @param hb
+     * @param mz
+     * @param ty
+     * @param yd
+     * @param time
+     */
+    public final void gainItem(final int id, final int str, final int dex, final int luk, final int Int, final int hp, int mp, int watk, int matk, int wdef, int mdef, int hb, int mz, int ty, int yd,int time) {
         gainItemS(id,str,dex,luk,Int,hp,mp,watk,matk,wdef,mdef,hb,mz,ty,yd,c,time);
     }
+
+    /**
+     *
+     * @param id
+     * @param str
+     * @param dex
+     * @param luk
+     * @param Int
+     * @param hp
+     * @param mp
+     * @param watk
+     * @param matk
+     * @param wdef
+     * @param mdef
+     * @param hb
+     * @param mz
+     * @param ty
+     * @param yd
+     */
     public final void gainItem(final int id, final int str, final int dex, final int luk, final int Int, final int hp, int mp, int watk, int matk, int wdef, int mdef, int hb, int mz, int ty, int yd) {
         gainItemS(id,str,dex,luk,Int,hp,mp,watk,matk,wdef,mdef,hb,mz,ty,yd,c,0);
     }
+
+    /**
+     *
+     * @param id
+     * @param str
+     * @param dex
+     * @param luk
+     * @param Int
+     * @param hp
+     * @param mp
+     * @param watk
+     * @param matk
+     * @param wdef
+     * @param mdef
+     * @param hb
+     * @param mz
+     * @param ty
+     * @param yd
+     * @param cg
+     * @param time
+     */
     public final void gainItemS(final int id, final int str, final int dex, final int luk, final int Int, final int hp, int mp, int watk, int matk, int wdef, int mdef, int hb, int mz, int ty, int yd, final MapleClient cg,int time) {
         if (1 >= 0) {
             final MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
@@ -652,16 +1081,36 @@ public final void setPlayerStat(final String type, int x) {
         cg.getSession().write(MaplePacketCreator.getShowItemGain(id, (short)1, true));
     }
     
+    /**
+     *
+     * @param songName
+     */
     public final void changeMusic(final String songName) {
         getPlayer().getMap().broadcastMessage(MaplePacketCreator.musicChange(songName));
     }
+
+    /**
+     *
+     * @param songName
+     */
     public final void cs(final String songName) {
         getPlayer().getMap().broadcastMessage(MaplePacketCreator.showEffect(songName));
     }
+
+    /**
+     *
+     * @param type
+     * @param message
+     */
     public final void worldMessage(final int type, final String message) {
         World.Broadcast.broadcastMessage(MaplePacketCreator.serverNotice(type, message).getBytes());
     }
 
+    /**
+     *
+     * @param maxLevel
+     * @param mod
+     */
     public void givePartyExp_PQ(int maxLevel, double mod) {
         if ((getPlayer().getParty() == null) || (getPlayer().getParty().getMembers().size() == 1)) {
             int amount = (int) Math.round(GameConstants.getExpNeededForLevel(getPlayer().getLevel() > maxLevel ? maxLevel + getPlayer().getLevel() / 10 : getPlayer().getLevel()) / (Math.min(getPlayer().getLevel(), maxLevel) / 10.0D) / mod);
@@ -678,48 +1127,98 @@ public final void setPlayerStat(final String type, int x) {
         }
     }
     // default playerMessage and mapMessage to use type 5
+
+    /**
+     *
+     * @param message
+     */
     public final void playerMessage(final String message) {
         playerMessage(5, message);
     }
 
+    /**
+     *
+     * @param message
+     */
     public final void mapMessage(final String message) {
         mapMessage(5, message);
     }
 
+    /**
+     *
+     * @param message
+     */
     public final void guildMessage(final String message) {
         guildMessage(5, message);
     }
 
+    /**
+     *
+     * @param type
+     * @param message
+     */
     public final void playerMessage(final int type, final String message) {
         c.getSession().write(MaplePacketCreator.serverNotice(type, message));
     }
 
+    /**
+     *
+     * @param type
+     * @param message
+     */
     public final void mapMessage(final int type, final String message) {
         c.getPlayer().getMap().broadcastMessage(MaplePacketCreator.serverNotice(type, message));
     }
 
+    /**
+     *
+     * @param type
+     * @param message
+     */
     public final void guildMessage(final int type, final String message) {
         if (getPlayer().getGuildId() > 0) {
             World.Guild.guildPacket(getPlayer().getGuildId(), MaplePacketCreator.serverNotice(type, message));
         }
     }
 
+    /**
+     *
+     * @return
+     */
     public final MapleGuild getGuild() {
         return getGuild(getPlayer().getGuildId());
     }
 
+    /**
+     *
+     * @param guildid
+     * @return
+     */
     public final MapleGuild getGuild(int guildid) {
         return World.Guild.getGuild(guildid);
     }
 
+    /**
+     *
+     * @return
+     */
     public final MapleParty getParty() {
         return c.getPlayer().getParty();
     }
 
+    /**
+     *
+     * @param mapid
+     * @return
+     */
     public final int getCurrentPartyId(int mapid) {
         return getMap(mapid).getCurrentPartyId();
     }
     
+    /**
+     *
+     * @param MapID
+     */
     public void czdt(int MapID) {
         MapleCharacter player = c.getPlayer();
         int mapid = MapID;
@@ -727,7 +1226,7 @@ public final void setPlayerStat(final String type, int x) {
         if (player.getClient().getChannelServer().getMapFactory().destroyMap(mapid)) {
             MapleMap newMap = player.getClient().getChannelServer().getMapFactory().getMap(mapid);
             MaplePortal newPor = newMap.getPortal(0);
-            LinkedHashSet<MapleCharacter> mcs = new LinkedHashSet<MapleCharacter>(map.getCharacters()); // do NOT remove, fixing ConcurrentModificationEx.
+            LinkedHashSet<MapleCharacter> mcs = new LinkedHashSet<>(map.getCharacters()); // do NOT remove, fixing ConcurrentModificationEx.
             outerLoop:
             for (MapleCharacter m : mcs) {
                 for (int x = 0; x < 5; x++) {
@@ -741,6 +1240,10 @@ public final void setPlayerStat(final String type, int x) {
         }
     }
 
+    /**
+     *
+     * @return
+     */
     public final boolean isLeader() {
         if (getParty() == null) {
             return false;
@@ -748,14 +1251,21 @@ public final void setPlayerStat(final String type, int x) {
         return getParty().getLeader().getId() == c.getPlayer().getId();
     }
     
+    /**
+     *
+     * @return
+     */
     public final boolean isParty() {
-        if (getParty() == null) {
-            return false;
-        }
-        return true;
-     //   return getParty().getLeader().getId() == c.getPlayer().getId();
+        //   return getParty().getLeader().getId() == c.getPlayer().getId();
+        
+        return getParty() != null;
     }
 
+    /**
+     *
+     * @param job
+     * @return
+     */
     public final boolean isAllPartyMembersAllowedJob(final int job) {
         if (c.getPlayer().getParty() == null) {
             return false;
@@ -768,6 +1278,10 @@ public final void setPlayerStat(final String type, int x) {
         return true;
     }
 
+    /**
+     *
+     * @return
+     */
     public final boolean allMembersHere() {
         if (c.getPlayer().getParty() == null) {
             return false;
@@ -781,6 +1295,10 @@ public final void setPlayerStat(final String type, int x) {
         return true;
     }
 
+    /**
+     *
+     * @param item
+     */
     public final void warpPartyItem(final int item) {
         if (getPlayer().getParty() == null || getPlayer().getParty().getMembers().size() == 1) {
             removeAll(item);
@@ -795,6 +1313,10 @@ public final void setPlayerStat(final String type, int x) {
         }
     }
     
+    /**
+     *
+     * @param mapId
+     */
     public final void warpParty(final int mapId) {
         if (getPlayer().getParty() == null || getPlayer().getParty().getMembers().size() == 1) {
             warp(mapId, 0);
@@ -811,6 +1333,11 @@ public final void setPlayerStat(final String type, int x) {
         }
     }
 
+    /**
+     *
+     * @param mapId
+     * @param portal
+     */
     public final void warpParty(final int mapId, final int portal) {
         if (getPlayer().getParty() == null || getPlayer().getParty().getMembers().size() == 1) {
             if (portal < 0) {
@@ -840,6 +1367,10 @@ public final void setPlayerStat(final String type, int x) {
         }
     }
 
+    /**
+     *
+     * @param mapId
+     */
     public final void warpParty_Instanced(final int mapId) {
         if (getPlayer().getParty() == null || getPlayer().getParty().getMembers().size() == 1) {
             warp_Instanced(mapId);
@@ -856,22 +1387,44 @@ public final void setPlayerStat(final String type, int x) {
         }
     }
 
+    /**
+     *
+     * @param gain
+     */
     public void gainDY(int gain) {
         c.getPlayer().modifyCSPoints(2, gain, true);
     }
 
+    /**
+     *
+     * @param gain
+     */
     public void gainMeso(int gain) {
         c.getPlayer().gainMeso(gain, true, false, true);
     }
 
+    /**
+     *
+     * @param gain
+     */
     public void gainExp(int gain) {
         c.getPlayer().gainExp(gain, true, true, true);
     }
 
+    /**
+     *
+     * @param gain
+     */
     public void gainExpR(int gain) {
         c.getPlayer().gainExp(gain * c.getChannelServer().getExpRate(), true, true, true);
     }
 
+    /**
+     *
+     * @param id
+     * @param quantity
+     * @param party
+     */
     public final void givePartyItems(final int id, final short quantity, final List<MapleCharacter> party) {
         for (MapleCharacter chr : party) {
             if (quantity >= 0) {
@@ -883,10 +1436,21 @@ public final void setPlayerStat(final String type, int x) {
         }
     }
 
+    /**
+     *
+     * @param id
+     * @param quantity
+     */
     public final void givePartyItems(final int id, final short quantity) {
         givePartyItems(id, quantity, false);
     }
 
+    /**
+     *
+     * @param id
+     * @param quantity
+     * @param removeAll
+     */
     public final void givePartyItems(final int id, final short quantity, final boolean removeAll) {
         if (getPlayer().getParty() == null || getPlayer().getParty().getMembers().size() == 1) {
             gainItem(id, (short) (removeAll ? -getPlayer().itemQuantity(id) : quantity));
@@ -901,12 +1465,21 @@ public final void setPlayerStat(final String type, int x) {
         }
     }
 
+    /**
+     *
+     * @param amount
+     * @param party
+     */
     public final void givePartyExp(final int amount, final List<MapleCharacter> party) {
         for (final MapleCharacter chr : party) {
             chr.gainExp(amount, true, true, true);
         }
     }
 
+    /**
+     *
+     * @param amount
+     */
     public final void givePartyExp(final int amount) {
         if (getPlayer().getParty() == null || getPlayer().getParty().getMembers().size() == 1) {
             gainExp(amount);
@@ -920,6 +1493,10 @@ public final void setPlayerStat(final String type, int x) {
         }
     }
 
+    /**
+     *
+     * @param amount
+     */
     public final void givePartyFb(final int amount) {
         if (getPlayer().getParty() == null || getPlayer().getParty().getMembers().size() == 1) {
             if (getPlayer().getmrfbrws() > getFBRW()) {
@@ -937,6 +1514,10 @@ public final void setPlayerStat(final String type, int x) {
         }
     }
 
+    /**
+     *
+     * @param amount
+     */
     public final void givePartyFba(final int amount) {
         if (getPlayer().getParty() == null || getPlayer().getParty().getMembers().size() == 1) {
             if (getPlayer().getmrfbrwas() > getFBRWA()) {
@@ -954,12 +1535,21 @@ public final void setPlayerStat(final String type, int x) {
         }
     }
 
+    /**
+     *
+     * @param amount
+     * @param party
+     */
     public final void givePartyNX(final int amount, final List<MapleCharacter> party) {
         for (final MapleCharacter chr : party) {
             chr.modifyCSPoints(1, amount, true);
         }
     }
 
+    /**
+     *
+     * @param amount
+     */
     public final void givePartyDY(final int amount) {
         if (getPlayer().getParty() == null || getPlayer().getParty().getMembers().size() == 1) {
             gainDY(amount);
@@ -972,6 +1562,11 @@ public final void setPlayerStat(final String type, int x) {
             }
         }
     }
+
+    /**
+     *
+     * @param amount
+     */
     public final void givePartyMeso(final int amount) {
         if (getPlayer().getParty() == null || getPlayer().getParty().getMembers().size() == 1) {
             gainMeso(amount);
@@ -984,6 +1579,11 @@ public final void setPlayerStat(final String type, int x) {
             }
         }
     }
+
+    /**
+     *
+     * @param amount
+     */
     public final void givePartyNX(final int amount) {
         if (getPlayer().getParty() == null || getPlayer().getParty().getMembers().size() == 1) {
             gainNX(amount);
@@ -997,12 +1597,21 @@ public final void setPlayerStat(final String type, int x) {
         }
     }
 
+    /**
+     *
+     * @param amount
+     * @param party
+     */
     public final void endPartyQuest(final int amount, final List<MapleCharacter> party) {
         for (final MapleCharacter chr : party) {
             chr.endPartyQuest(amount);
         }
     }
 
+    /**
+     *
+     * @param amount
+     */
     public final void endPartyQuest(final int amount) {
         if (getPlayer().getParty() == null || getPlayer().getParty().getMembers().size() == 1) {
             getPlayer().endPartyQuest(amount);
@@ -1016,6 +1625,11 @@ public final void setPlayerStat(final String type, int x) {
         }
     }
 
+    /**
+     *
+     * @param id
+     * @param party
+     */
     public final void removeFromParty(final int id, final List<MapleCharacter> party) {
         for (final MapleCharacter chr : party) {
             final int possesed = chr.getInventory(GameConstants.getInventoryType(id)).countById(id);
@@ -1026,10 +1640,19 @@ public final void setPlayerStat(final String type, int x) {
         }
     }
 
+    /**
+     *
+     * @param id
+     */
     public final void removeFromParty(final int id) {
         givePartyItems(id, (short) 0, true);
     }
 
+    /**
+     *
+     * @param skill
+     * @param level
+     */
     public final void useSkill(final int skill, final int level) {
         if (level <= 0) {
             return;
@@ -1037,23 +1660,44 @@ public final void setPlayerStat(final String type, int x) {
         SkillFactory.getSkill(skill).getEffect(level).applyTo(c.getPlayer());
     }
 
+    /**
+     *
+     * @param id
+     */
     public final void useItem(final int id) {
         MapleItemInformationProvider.getInstance().getItemEffect(id).applyTo(c.getPlayer());
         c.getSession().write(UIPacket.getStatusMsg(id));
     }
 
+    /**
+     *
+     * @param id
+     */
     public final void cancelItem(final int id) {
         c.getPlayer().cancelEffect(MapleItemInformationProvider.getInstance().getItemEffect(id), false, -1);
     }
 
+    /**
+     *
+     * @return
+     */
     public final int getMorphState() {
         return c.getPlayer().getMorphState();
     }
 
+    /**
+     *
+     * @param id
+     */
     public final void removeAll(final int id) {
         c.getPlayer().removeAll(id);
     }
 
+    /**
+     *
+     * @param closeness
+     * @param index
+     */
     public final void gainCloseness(final int closeness, final int index) {
         final MaplePet pet = getPlayer().getPet(index);
         if (pet != null) {
@@ -1062,6 +1706,10 @@ public final void setPlayerStat(final String type, int x) {
         }
     }
 
+    /**
+     *
+     * @param closeness
+     */
     public final void gainClosenessAll(final int closeness) {
         for (final MaplePet pet : getPlayer().getPets()) {
             if (pet != null) {
@@ -1071,10 +1719,17 @@ public final void setPlayerStat(final String type, int x) {
         }
     }
 
+    /**
+     *
+     * @param mapid
+     */
     public final void resetMap(final int mapid) {
         getMap(mapid).resetFully();
     }
     
+    /**
+     *
+     */
     public final void resetMapS() {
         MapleCharacter player = c.getPlayer();
         int mapid = player.getMapId();
@@ -1082,7 +1737,7 @@ public final void setPlayerStat(final String type, int x) {
         if (player.getClient().getChannelServer().getMapFactory().destroyMap(mapid)) {
             MapleMap newMap = player.getClient().getChannelServer().getMapFactory().getMap(mapid);
             MaplePortal newPor = newMap.getPortal(0);
-            LinkedHashSet<MapleCharacter> mcs = new LinkedHashSet<MapleCharacter>(map.getCharacters()); // do NOT remove, fixing ConcurrentModificationEx.
+            LinkedHashSet<MapleCharacter> mcs = new LinkedHashSet<>(map.getCharacters()); // do NOT remove, fixing ConcurrentModificationEx.
             outerLoop:
             for (MapleCharacter m : mcs) {
                 for (int x = 0; x < 5; x++) {
@@ -1099,27 +1754,54 @@ public final void setPlayerStat(final String type, int x) {
         }
     }
 
+    /**
+     *
+     * @param id
+     */
     public final void openNpc(final int id) {
         NPCScriptManager.getInstance().start(getClient(), id);
     }
 
+    /**
+     *
+     * @param id
+     * @param wh
+     */
     public void openNpc(int id, int wh) {
         NPCScriptManager.getInstance().dispose(c);
         NPCScriptManager.getInstance().start(getClient(), id, wh);
     }
 
+    /**
+     *
+     * @param Text
+     */
     public void serverNotice(String Text) {
         getClient().getChannelServer().broadcastPacket(MaplePacketCreator.serverNotice(6, Text));
     }
 
+    /**
+     *
+     * @param cg
+     * @param id
+     */
     public final void openNpc(final MapleClient cg, final int id) {
         NPCScriptManager.getInstance().start(cg, id);
     }
 
+    /**
+     *
+     * @return
+     */
     public final int getMapId() {
         return c.getPlayer().getMap().getId();
     }
 
+    /**
+     *
+     * @param mobid
+     * @return
+     */
     public final boolean haveMonster(final int mobid) {
         for (MapleMapObject obj : c.getPlayer().getMap().getAllMonstersThreadsafe()) {
             final MapleMonster mob = (MapleMonster) obj;
@@ -1130,18 +1812,38 @@ public final void setPlayerStat(final String type, int x) {
         return false;
     }
 
+    /**
+     *
+     * @return
+     */
     public final int getChannelNumber() {
         return c.getChannel();
     }
 
+    /**
+     *
+     * @param mapid
+     * @return
+     */
     public final int getMonsterCount(final int mapid) {
         return c.getChannelServer().getMapFactory().getMap(mapid).getNumMonsters();
     }
 
+    /**
+     *
+     * @param id
+     * @param level
+     * @param masterlevel
+     */
     public final void teachSkill(final int id, final byte level, final byte masterlevel) {
         getPlayer().changeSkillLevel(SkillFactory.getSkill(id), level, masterlevel);
     }
 
+    /**
+     *
+     * @param id
+     * @param level
+     */
     public final void teachSkill(final int id, byte level) {
         final ISkill skil = SkillFactory.getSkill(id);
         if (getPlayer().getSkillLevel(skil) > level) {
@@ -1150,10 +1852,18 @@ public final void setPlayerStat(final String type, int x) {
         getPlayer().changeSkillLevel(skil, level, skil.getMaxLevel());
     }
 
+    /**
+     *
+     * @param mapid
+     * @return
+     */
     public final int getPlayerCount(final int mapid) {
         return c.getChannelServer().getMapFactory().getMap(mapid).getCharactersSize();
     }
 
+    /**
+     *
+     */
     public final void dojo_getUp() {
         c.getSession().write(MaplePacketCreator.updateInfoQuest(1207, "pt=1;min=4;belt=1;tuto=1")); //todo
         c.getSession().write(MaplePacketCreator.dojoWarpUp());
@@ -1161,6 +1871,12 @@ public final void setPlayerStat(final String type, int x) {
        // c.getSession().write(MaplePacketCreator.instantMapWarp((byte) 6));
     }
 
+    /**
+     *
+     * @param dojo
+     * @param fromresting
+     * @return
+     */
     public final boolean dojoAgent_NextMap(final boolean dojo, final boolean fromresting) {
         if (dojo) {
             return Event_DojoAgent.warpNextMap(c.getPlayer(), fromresting);
@@ -1168,18 +1884,36 @@ public final void setPlayerStat(final String type, int x) {
         return Event_DojoAgent.warpNextMap_Agent(c.getPlayer(), fromresting);
     }
 
+    /**
+     *
+     * @return
+     */
     public final int dojo_getPts() {
         return c.getPlayer().getDojo();
     }
 
+    /**
+     *
+     * @return
+     */
     public final byte getShopType() {
         return c.getPlayer().getPlayerShop().getShopType();
     }
 
+    /**
+     *
+     * @param loc
+     * @return
+     */
     public final MapleEvent getEvent(final String loc) {
         return c.getChannelServer().getEvent(MapleEventType.valueOf(loc));
     }
 
+    /**
+     *
+     * @param loc
+     * @return
+     */
     public final int getSavedLocation(final String loc) {
         final Integer ret = c.getPlayer().getSavedLocation(SavedLocationType.fromString(loc));
         if (ret == null || ret == -1) {
@@ -1188,18 +1922,34 @@ public final void setPlayerStat(final String type, int x) {
         return ret;
     }
 
+    /**
+     *
+     * @param loc
+     */
     public final void saveLocation(final String loc) {
         c.getPlayer().saveLocation(SavedLocationType.fromString(loc));
     }
 
+    /**
+     *
+     * @param loc
+     */
     public final void saveReturnLocation(final String loc) {
         c.getPlayer().saveLocation(SavedLocationType.fromString(loc), c.getPlayer().getMap().getReturnMap().getId());
     }
 
+    /**
+     *
+     * @param loc
+     */
     public final void clearSavedLocation(final String loc) {
         c.getPlayer().clearSavedLocation(SavedLocationType.fromString(loc));
     }
 
+    /**
+     *
+     * @param msg
+     */
     public final void summonMsg(final String msg) {
         if (!c.getPlayer().hasSummon()) {
             playerSummonHint(true);
@@ -1207,6 +1957,10 @@ public final void setPlayerStat(final String type, int x) {
         c.getSession().write(UIPacket.summonMessage(msg));
     }
 
+    /**
+     *
+     * @param type
+     */
     public final void summonMsg(final int type) {
         if (!c.getPlayer().hasSummon()) {
             playerSummonHint(true);
@@ -1214,75 +1968,161 @@ public final void setPlayerStat(final String type, int x) {
         c.getSession().write(UIPacket.summonMessage(type));
     }
 
+    /**
+     *
+     * @param msg
+     */
     public final void HSText(final String msg) {
         c.getSession().write(MaplePacketCreator.HSText(msg));
     }
+
+    /**
+     *
+     * @param msg
+     * @param width
+     * @param height
+     */
     public final void showInstruction(final String msg, final int width, final int height) {
         c.getSession().write(MaplePacketCreator.sendHint(msg, width, height));
     }
 
+    /**
+     *
+     * @param summon
+     */
     public final void playerSummonHint(final boolean summon) {
         c.getPlayer().setHasSummon(summon);
         c.getSession().write(UIPacket.summonHelper(summon));
     }
 
+    /**
+     *
+     * @param id
+     * @return
+     */
     public final String getInfoQuest(final int id) {
         return c.getPlayer().getInfoQuest(id);
     }
 
+    /**
+     *
+     * @param id
+     * @param data
+     */
     public final void updateInfoQuest(final int id, final String data) {
         c.getPlayer().updateInfoQuest(id, data);
     }
 
+    /**
+     *
+     * @param data
+     * @return
+     */
     public final boolean getEvanIntroState(final String data) {
         return getInfoQuest(22013).equals(data);
     }
 
+    /**
+     *
+     * @param data
+     */
     public final void updateEvanIntroState(final String data) {
         updateInfoQuest(22013, data);
     }
 
+    /**
+     *
+     */
     public final void Aran_Start() {
         c.getSession().write(UIPacket.Aran_Start());
     }
 
+    /**
+     *
+     * @param data
+     * @param v1
+     */
     public final void evanTutorial(final String data, final int v1) {
         c.getSession().write(MaplePacketCreator.getEvanTutorial(data));
     }
 
+    /**
+     *
+     * @param data
+     */
     public final void AranTutInstructionalBubble(final String data) {
         c.getSession().write(UIPacket.AranTutInstructionalBalloon(data));
     }
 
+    /**
+     *
+     * @param data
+     */
     public final void ShowWZEffect(final String data) {
         c.getSession().write(UIPacket.AranTutInstructionalBalloon(data));
     }
 
+    /**
+     *
+     * @param data
+     */
     public final void showWZEffect(final String data) {
         c.getSession().write(UIPacket.AranTutInstructionalBalloon(data));
     }
 
+    /**
+     *
+     * @param data
+     * @param info
+     */
     public final void showWZEffect(final String data, int info) {
         c.getSession().write(UIPacket.ShowWZEffect(data, info));
     }
 
+    /**
+     *
+     * @param data
+     */
     public final void EarnTitleMsg(final String data) {
         c.getSession().write(UIPacket.EarnTitleMsg(data));
     }
 
+    /**
+     *
+     * @param enabled
+     */
     public final void MovieClipIntroUI(final boolean enabled) {
         c.getSession().write(UIPacket.IntroDisableUI(enabled));
         c.getSession().write(UIPacket.IntroLock(enabled));
     }
 
+    /**
+     *
+     * @param i
+     * @return
+     */
     public MapleInventoryType getInvType(int i) {
         return MapleInventoryType.getByType((byte) i);
     }
 
+    /**
+     *
+     * @param id
+     * @return
+     */
     public String getItemName(final int id) {
         return MapleItemInformationProvider.getInstance().getName(id);
     }
 
+    /**
+     *
+     * @param id
+     * @param name
+     * @param level
+     * @param closeness
+     * @param fullness
+     * @param period
+     */
     public void gainPet(int id, String name, int level, int closeness, int fullness, long period) {//给予宠物
         if (id > 5001000 || id < 5000000) {
             id = 5000000;
@@ -1303,14 +2143,29 @@ public final void setPlayerStat(final String type, int x) {
         }
     }
 
+    /**
+     *
+     * @param invType
+     * @param slot
+     * @param quantity
+     */
     public void removeSlot(int invType, byte slot, short quantity) {
         MapleInventoryManipulator.removeFromSlot(c, getInvType(invType), slot, quantity, true);
     }
 
+    /**
+     *
+     * @param c
+     * @param item
+     */
     public void addFromDrop(MapleClient c, IItem item) {
         MapleInventoryManipulator.addFromDrop(c, item, true);
     }
     
+    /**
+     *
+     * @param gp
+     */
     public void gainGP(final int gp) {
         if (getPlayer().getGuildId() <= 0) {
             return;
@@ -1318,6 +2173,10 @@ public final void setPlayerStat(final String type, int x) {
         World.Guild.gainGP(getPlayer().getGuildId(), gp); //1 for
     }
 
+    /**
+     *
+     * @return
+     */
     public int getGP() {
         if (getPlayer().getGuildId() <= 0) {
             return 0;
@@ -1325,14 +2184,28 @@ public final void setPlayerStat(final String type, int x) {
         return World.Guild.getGP(getPlayer().getGuildId()); //1 for
     }
 
+    /**
+     *
+     * @param path
+     */
     public void showMapEffect(String path) {
         getClient().getSession().write(UIPacket.MapEff(path));
     }
 
+    /**
+     *
+     * @param itemid
+     * @return
+     */
     public int itemQuantity(int itemid) {//判断物品数量
         return getPlayer().itemQuantity(itemid);
     }
 
+    /**
+     *
+     * @param event
+     * @return
+     */
     public EventInstanceManager getDisconnected(String event) {
         EventManager em = getEventManager(event);
         if (em == null) {
@@ -1346,6 +2219,12 @@ public final void setPlayerStat(final String type, int x) {
         return null;
     }
 
+    /**
+     *
+     * @param event
+     * @param map
+     * @return
+     */
     public EventInstanceManager getDisconnecteda(String event,int map) {
         EventManager em = getEventManager(event);
         if (em == null) {
@@ -1359,6 +2238,12 @@ public final void setPlayerStat(final String type, int x) {
         return null;
     }
 
+    /**
+     *
+     * @param reactorId
+     * @param state
+     * @return
+     */
     public boolean isAllReactorState(final int reactorId, final int state) {
         boolean ret = false;
         for (MapleReactor r : getMap().getAllReactorsThreadsafe()) {
@@ -1369,75 +2254,153 @@ public final void setPlayerStat(final String type, int x) {
         return ret;
     }
 
+    /**
+     *
+     * @return
+     */
     public long getCurrentTime() {
         return System.currentTimeMillis();
     }
 
+    /**
+     *
+     * @param id
+     */
     public void spawnMonster(int id) {
         spawnMonster(id, 1, new Point(getPlayer().getPosition()));
     }
 
     // summon one monster, remote location
+
+    /**
+     *
+     * @param id
+     * @param x
+     * @param y
+     */
     public void spawnMonster(int id, int x, int y) {
         spawnMonster(id, 1, new Point(x, y));
     }
 
     // multiple monsters, remote location
+
+    /**
+     *
+     * @param id
+     * @param qty
+     * @param x
+     * @param y
+     */
     public void spawnMonster(int id, int qty, int x, int y) {
         spawnMonster(id, qty, new Point(x, y));
     }
 
     // handler for all spawnMonster
+
+    /**
+     *
+     * @param id
+     * @param qty
+     * @param pos
+     */
     public void spawnMonster(int id, int qty, Point pos) {
         for (int i = 0; i < qty; i++) {
             getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(id), pos);
         }
     }
 
+    /**
+     *
+     * @param text
+     * @param npc
+     */
     public void sendNPCText(final String text, final int npc) {
         getMap().broadcastMessage(MaplePacketCreator.getNPCTalk(npc, (byte) 0, text, "00 00", (byte) 0));
     }
 
+    /**
+     *
+     * @param flag
+     * @return
+     */
     public boolean getTempFlag(final int flag) {
         return (c.getChannelServer().getTempFlag() & flag) == flag;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getGamePoints() {
         return this.c.getPlayer().getGamePoints();
     }
 
+    /**
+     *
+     * @param amount
+     */
     public void gainGamePoints(int amount) {
         this.c.getPlayer().gainGamePoints(amount);
     }
 
+    /**
+     *
+     */
     public void resetGamePoints() {
         this.c.getPlayer().resetGamePoints();
     }
     
+    /**
+     *
+     * @return
+     */
     public int getGamePointsPD() {
         return this.c.getPlayer().getGamePointsPD();
     }
 
+    /**
+     *
+     * @param amount
+     */
     public void gainGamePointsPD(int amount) {
         this.c.getPlayer().gainGamePointsPD(amount);
     }
 
+    /**
+     *
+     */
     public void resetGamePointsPD() {
         this.c.getPlayer().resetGamePointsPD();
     }
     
+    /**
+     *
+     * @return
+     */
     public int getPS() {
         return this.c.getPlayer().getGamePointsPS();
     }
 
+    /**
+     *
+     * @param amount
+     */
     public void gainPS(int amount) {
         this.c.getPlayer().gainGamePointsPS(amount);
     }
 
+    /**
+     *
+     */
     public void resetPS() {
         this.c.getPlayer().resetGamePointsPS();
     }
     
+    /**
+     *
+     * @param A
+     * @return
+     */
     public boolean beibao(int A){
         if (this.c.getPlayer().getInventory(MapleInventoryType.EQUIP).getNextFreeSlot() > -1 && A == 1) {
             return true;
@@ -1451,11 +2414,15 @@ public final void setPlayerStat(final String type, int x) {
         if (this.c.getPlayer().getInventory(MapleInventoryType.ETC).getNextFreeSlot() > -1 && A == 4) {
             return true;
         }
-        if (this.c.getPlayer().getInventory(MapleInventoryType.CASH).getNextFreeSlot() > -1 && A == 5) {
-            return true;
-        }
-        return false;
+        return this.c.getPlayer().getInventory(MapleInventoryType.CASH).getNextFreeSlot() > -1 && A == 5;
     }
+
+    /**
+     *
+     * @param A
+     * @param kw
+     * @return
+     */
     public boolean beibao(int A, int kw){
         if (this.c.getPlayer().getInventory(MapleInventoryType.EQUIP).getNextFreeSlot() > kw && A == 1) {
             return true;
@@ -1469,13 +2436,13 @@ public final void setPlayerStat(final String type, int x) {
         if (this.c.getPlayer().getInventory(MapleInventoryType.ETC).getNextFreeSlot() > kw && A == 4) {
             return true;
         }
-        if (this.c.getPlayer().getInventory(MapleInventoryType.CASH).getNextFreeSlot() > kw && A == 5) {
-            return true;
-        }
-        return false;
+        return this.c.getPlayer().getInventory(MapleInventoryType.CASH).getNextFreeSlot() > kw && A == 5;
     }
     
-
+    /**
+     *
+     * @param bossid
+     */
     public final void givePartybossbog(int bossid) {
         if (getPlayer().getParty() == null || getPlayer().getParty().getMembers().size() == 1) {
             getPlayer().setbosslog(bossid);
@@ -1489,144 +2456,274 @@ public final void setPlayerStat(final String type, int x) {
         }
     }
     
+    /**
+     *
+     * @return
+     */
     public int getFishingJF() {//查询钓鱼积分
         return this.c.getPlayer().getFishingJF(1);
     }
 
+    /**
+     *
+     * @param amount
+     */
     public void gainFishingJF(int amount) {//给予钓鱼积分
         this.c.getPlayer().gainFishingJF(amount);
     }
     
+    /**
+     *
+     * @param amount
+     */
     public void addFishingJF(int amount) {//减少钓鱼积分
         this.c.getPlayer().addFishingJF(amount);
     }
     
+    /**
+     *
+     * @param web
+     */
     public void openWeb(String web) {
         this.c.getSession().write(MaplePacketCreator.openWeb(web));
     }
 
+    /**
+     *
+     * @return
+     */
     public int getskillzq() {//
         return this.c.getPlayer().getskillzq();
     }
 
+    /**
+     *
+     * @param amount
+     */
     public void setskillzq(int amount) {//
         this.c.getPlayer().setskillzq(amount);
     }
     
+    /**
+     *
+     * @return
+     */
     public int getscjs() {//
         return this.c.getPlayer().getskillzq();
     }
 
     //-----------------------------每日赏金任务
+
+    /**
+     *
+     * @return
+     */
     public int getSJRW() {
         return this.c.getPlayer().getSJRW();
     }
 
+    /**
+     *
+     * @param amount
+     */
     public void gainSJRW(int amount) {
         this.c.getPlayer().gainSJRW(amount);
     }
 
+    /**
+     *
+     */
     public void resetSJRW() {
         this.c.getPlayer().resetSJRW();
     }
     
     //-----------------------------每日副本任务
+
+    /**
+     *
+     * @return
+     */
     public int getFBRW() {
         return this.c.getPlayer().getFBRW();
     }
 
+    /**
+     *
+     * @param amount
+     */
     public void gainFBRW(int amount) {
         this.c.getPlayer().gainFBRW(amount);
     }
 
+    /**
+     *
+     */
     public void resetFBRW() {
         this.c.getPlayer().resetFBRW();
     }
     
+    /**
+     *
+     * @return
+     */
     public int getFBRWA() {
         return this.c.getPlayer().getFBRWA();
     }
 
+    /**
+     *
+     * @param amount
+     */
     public void gainFBRWA(int amount) {
         this.c.getPlayer().gainFBRWA(amount);
     }
 
+    /**
+     *
+     */
     public void resetFBRWA() {
         this.c.getPlayer().resetFBRWA();
     }
     
     //-----------------------------每日杀怪任务
+
+    /**
+     *
+     * @return
+     */
     public int getSGRW() {
         return this.c.getPlayer().getSGRW();
     }
 
+    /**
+     *
+     * @param amount
+     */
     public void gainSGRW(int amount) {
         this.c.getPlayer().gainSGRW(amount);
     }
 
+    /**
+     *
+     */
     public void resetSGRW() {
         this.c.getPlayer().resetSGRW();
     }
     
+    /**
+     *
+     * @return
+     */
     public int getSGRWA() {
         return this.c.getPlayer().getSGRWA();
     }
 
+    /**
+     *
+     * @param amount
+     */
     public void gainSGRWA(int amount) {
         this.c.getPlayer().gainSGRWA(amount);
     }
 
+    /**
+     *
+     */
     public void resetSGRWA() {
         this.c.getPlayer().resetSGRWA();
     }
     
     //-----------------------------每日杀BOSS任务
+
+    /**
+     *
+     * @return
+     */
     public int getSBOSSRW() {
         return this.c.getPlayer().getSBOSSRW();
     }
 
+    /**
+     *
+     * @param amount
+     */
     public void gainSBOSSRW(int amount) {
         this.c.getPlayer().gainSBOSSRW(amount);
     }
 
+    /**
+     *
+     */
     public void resetSBOSSRW() {
         this.c.getPlayer().resetSBOSSRW();
     }
     
+    /**
+     *
+     * @return
+     */
     public int getSBOSSRWA() {
         return this.c.getPlayer().getSBOSSRWA();
     }
 
+    /**
+     *
+     * @param amount
+     */
     public void gainSBOSSRWA(int amount) {
         this.c.getPlayer().gainSBOSSRWA(amount);
     }
 
+    /**
+     *
+     */
     public void resetSBOSSRWA() {
         this.c.getPlayer().resetSBOSSRWA();
     }
     
-    
+    /**
+     *
+     * @return
+     */
     public int getlb() {
         return this.c.getPlayer().getlb();
     }
 
+    /**
+     *
+     * @param amount
+     */
     public void gainlb(int amount) {
         this.c.getPlayer().gainlb(amount);
     }
 
+    /**
+     *
+     */
     public void resetlb() {
         this.c.getPlayer().resetlb();
     }
     
-    
+    /**
+     *
+     * @return
+     */
     public int getvip() {
         return this.c.getPlayer().getvip();
     }
 
+    /**
+     *
+     * @param amount
+     */
     public void gainvip(int amount) {
         this.c.getPlayer().gainvip(amount);
     }
 
+    /**
+     *
+     * @param s
+     */
     public void setvip(int s) {
         this.c.getPlayer().setvip(s);
     }

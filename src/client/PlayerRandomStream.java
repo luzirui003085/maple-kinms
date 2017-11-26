@@ -23,6 +23,10 @@ package client;
 import server.Randomizer;
 import tools.data.output.MaplePacketLittleEndianWriter;
 
+/**
+ *
+ * @author zjj
+ */
 public class PlayerRandomStream {
 
     private transient long seed1, seed2, seed3;
@@ -31,11 +35,20 @@ public class PlayerRandomStream {
     private transient long seed1___, seed2___, seed3___;
 //    private transient int past_s1 = -1, past_s2 = -1, past_s3 = -1;
 
+    /**
+     *
+     */
     public PlayerRandomStream() {
         final int v4 = 5;
         this.CRand32__Seed(Randomizer.nextLong(), 1170746341 * v4 - 755606699, 1170746341 * v4 - 755606699);
     }
 
+    /**
+     *
+     * @param s1
+     * @param s2
+     * @param s3
+     */
     public final void CRand32__Seed(final long s1, final long s2, final long s3) {
         seed1 = s1 | 0x100000;
         seed2 = s2 | 0x1000;
@@ -50,6 +63,10 @@ public class PlayerRandomStream {
         seed3__ = s3 | 0x10;
     }
 
+    /**
+     *
+     * @return
+     */
     public final long CRand32__Random() {
         long v4 = this.seed1;
         long v5 = this.seed2;
@@ -65,6 +82,10 @@ public class PlayerRandomStream {
         return (v8 ^ v9 ^ v10) & 0xffffffffL; // to be confirmed, I am not experienced in converting signed > unsigned
     }
 
+    /**
+     *
+     * @return
+     */
     public final long CRand32__Random_Character() {
         long v4 = this.seed1_;
         long v5 = this.seed2_;
@@ -80,6 +101,10 @@ public class PlayerRandomStream {
         return (v8 ^ v9 ^ v10) & 0xffffffffL;
     }
 
+    /**
+     *
+     * @return
+     */
     public final long CRand32__Random_CheckDamageMiss() {
         long v4 = this.seed1__;
         long v5 = this.seed2__;
@@ -95,6 +120,10 @@ public class PlayerRandomStream {
         return (v8 ^ v9 ^ v10) & 0xffffffffL;
     }
 
+    /**
+     *
+     * @return
+     */
     public final long CRand32__Random_ForMonster() {
         long v4 = this.seed1___;
         long v5 = this.seed2___;
@@ -110,6 +139,10 @@ public class PlayerRandomStream {
         return (v8 ^ v9 ^ v10) & 0xffffffffL;
     }
 
+    /**
+     *
+     * @param mplew
+     */
     public final void connectData(final MaplePacketLittleEndianWriter mplew) {
         long v5 = CRand32__Random();
         long s2 = CRand32__Random();

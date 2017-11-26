@@ -23,23 +23,90 @@ package client;
 import java.io.Serializable;
 import server.Randomizer;
 
+/**
+ *
+ * @author zjj
+ */
 public enum MapleDisease implements Serializable {
 
+    /**
+     *
+     */
     POTION(0x80000000000L, true),
+
+    /**
+     *
+     */
     SHADOW(0x100000000000L, true), //receiving damage/moving
+
+    /**
+     *
+     */
     BLIND(0x200000000000L, true),
+
+    /**
+     *
+     */
     FREEZE(0x8000000000000L, true),
+
+    /**
+     *
+     */
     SLOW(0x1),
+
+    /**
+     *
+     */
     MORPH(0x2),
+
+    /**
+     *
+     */
     SEDUCE(0x80),
+
+    /**
+     *
+     */
     ZOMBIFY(0x4000),
+
+    /**
+     *
+     */
     REVERSE_DIRECTION(0x80000),
+
+    /**
+     *
+     */
     WEIRD_FLAME(0x8000000),
+
+    /**
+     *
+     */
     STUN(562949953421312L),//0x2000000000000L
+
+    /**
+     *
+     */
     POISON(0x8000000000000L),//0x4000000000000L
+
+    /**
+     *
+     */
     SEAL(2251799813685248L),//0x8000000000000L
+
+    /**
+     *
+     */
     DARKNESS(4503599627370496L),//0x10000000000000L
+
+    /**
+     *
+     */
     WEAKEN(4611686018427387904L),//0x4000000000000000L
+
+    /**
+     *
+     */
     CURSE(0x8000000000000000L),;
     // 0x100 is disable skill except buff
     private static final long serialVersionUID = 0L;
@@ -56,14 +123,26 @@ public enum MapleDisease implements Serializable {
         this.first = first;
     }
 
+    /**
+     *
+     * @return
+     */
     public boolean isFirst() {
         return first;
     }
 
+    /**
+     *
+     * @return
+     */
     public long getValue() {
         return i;
     }
 
+    /**
+     *
+     * @return
+     */
     public static final MapleDisease getRandom() {
         while (true) {
             for (MapleDisease dis : MapleDisease.values()) {
@@ -74,6 +153,11 @@ public enum MapleDisease implements Serializable {
         }
     }
 
+    /**
+     *
+     * @param skill
+     * @return
+     */
     public static final MapleDisease getBySkill(final int skill) {
         switch (skill) {
             case 120:
@@ -108,6 +192,11 @@ public enum MapleDisease implements Serializable {
         return null;
     }
 
+    /**
+     *
+     * @param skill
+     * @return
+     */
     public static final int getByDisease(final MapleDisease skill) {
         switch (skill) {
             case SEAL:

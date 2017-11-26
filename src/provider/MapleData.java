@@ -21,18 +21,43 @@
 package provider;
 
 import java.util.List;
-
 import provider.WzXML.MapleDataType;
 
+/**
+ *
+ * @author zjj
+ */
 public interface MapleData extends MapleDataEntity, Iterable<MapleData> {
 
+    /**
+     *
+     * @return
+     */
+    @Override
     public String getName();
 
+    /**
+     *
+     * @return
+     */
     public MapleDataType getType();
 
+    /**
+     *
+     * @return
+     */
     public List<MapleData> getChildren();
 
+    /**
+     *
+     * @param path
+     * @return
+     */
     public MapleData getChildByPath(String path);
 
+    /**
+     *
+     * @return
+     */
     public Object getData();
 }

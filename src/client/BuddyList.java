@@ -1,23 +1,4 @@
-/*
- This file is part of the OdinMS Maple Story Server
- Copyright (C) 2008 ~ 2010 Patrick Huy <patrick.huy@frz.cc> 
- Matthias Butz <matze@odinms.de>
- Jan Christian Meyer <vimes@odinms.de>
 
- This program is free software: you can redistribute it and/or modify
- it under the terms of the GNU Affero General Public License version 3
- as published by the Free Software Foundation. You may not use, modify
- or distribute this program under any other version of the
- GNU Affero General Public License.
-
- This program is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- GNU Affero General Public License for more details.
-
- You should have received a copy of the GNU Affero General Public License
- along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
 package client;
 
 import java.sql.Connection;
@@ -33,33 +14,77 @@ import java.io.Serializable;
 
 import database.DatabaseConnection;
 import tools.MaplePacketCreator;
-import tools.Pair;
 
+/**
+ *
+ * @author zjj
+ */
 public class BuddyList implements Serializable {
 
+    /**
+     *
+     */
     public static enum BuddyOperation {
 
-        ADDED, DELETED
+        /**
+         *
+         */
+        ADDED, 
+
+        /**
+         *
+         */
+        DELETED
     }
 
+    /**
+     *
+     */
     public static enum BuddyAddResult {
 
-        BUDDYLIST_FULL, ALREADY_ON_LIST, OK
+        /**
+         *
+         */
+        BUDDYLIST_FULL, 
+
+        /**
+         *
+         */
+        ALREADY_ON_LIST, 
+
+        /**
+         *
+         */
+        OK
     }
     private static final long serialVersionUID = 1413738569L;
-    private Map<Integer, BuddylistEntry> buddies = new LinkedHashMap<Integer, BuddylistEntry>();
+    private Map<Integer, BuddylistEntry> buddies = new LinkedHashMap<>();
     private byte capacity;
-    private Deque<CharacterNameAndId> pendingRequests = new LinkedList<CharacterNameAndId>();
+    private Deque<CharacterNameAndId> pendingRequests = new LinkedList<>();
 
+    /**
+     *
+     * @param capacity
+     */
     public BuddyList(byte capacity) {
         super();
         this.capacity = capacity;
     }
 
+    /**
+     *
+     * @param characterId
+     * @return
+     */
     public boolean contains(int characterId) {
-        return buddies.containsKey(Integer.valueOf(characterId));
+        return buddies.containsKey(characterId);
     }
 
+    /**
+     *
+     * @param characterId
+     * @return
+     */
     public boolean containsVisible(int characterId) {
         BuddylistEntry ble = buddies.get(characterId);
         if (ble == null) {
@@ -68,18 +93,36 @@ public class BuddyList implements Serializable {
         return ble.isVisible();
     }
 
+    /**
+     *
+     * @return
+     */
     public byte getCapacity() {
         return capacity;
     }
 
+    /**
+     *
+     * @param capacity
+     */
     public void setCapacity(byte capacity) {
         this.capacity = capacity;
     }
 
+    /**
+     *
+     * @param characterId
+     * @return
+     */
     public BuddylistEntry get(int characterId) {
-        return buddies.get(Integer.valueOf(characterId));
+        return buddies.get(characterId);
     }
 
+    /**
+     *
+     * @param characterName
+     * @return
+     */
     public BuddylistEntry get(String characterName) {
         String lowerCaseName = characterName.toLowerCase();
         for (BuddylistEntry ble : buddies.values()) {
@@ -90,22 +133,42 @@ public class BuddyList implements Serializable {
         return null;
     }
 
+    /**
+     *
+     * @param entry
+     */
     public void put(BuddylistEntry entry) {
         buddies.put(entry.getCharacterId(), entry);
     }
 
+    /**
+     *
+     * @param characterId
+     */
     public void remove(int characterId) {
         buddies.remove(characterId);
     }
 
+    /**
+     *
+     * @return
+     */
     public Collection<BuddylistEntry> getBuddies() {
         return buddies.values();
     }
 
+    /**
+     *
+     * @return
+     */
     public boolean isFull() {
         return buddies.size() >= capacity;
     }
 
+    /**
+     *
+     * @return
+     */
     public int[] getBuddyIds() {
         int buddyIds[] = new int[buddies.size()];
         int i = 0;
@@ -115,6 +178,10 @@ public class BuddyList implements Serializable {
         return buddyIds;
     }
 
+    /**
+     *
+     * @param data
+     */
     public void loadFromTransfer(final Map<CharacterNameAndId, Boolean> data) {
         CharacterNameAndId buddyid;
         boolean pair;
@@ -129,6 +196,11 @@ public class BuddyList implements Serializable {
         }
     }
 
+    /**
+     *
+     * @param characterId
+     * @throws SQLException
+     */
     public void loadFromDb(int characterId) throws SQLException {
         //try{
         Connection con = DatabaseConnection.getConnection();
@@ -155,10 +227,23 @@ public class BuddyList implements Serializable {
          }*/
     }
 
+    /**
+     *
+     * @return
+     */
     public CharacterNameAndId pollPendingRequest() {
         return pendingRequests.pollLast();
     }
 
+    /**
+     *
+     * @param c
+     * @param cidFrom
+     * @param nameFrom
+     * @param channelFrom
+     * @param levelFrom
+     * @param jobFrom
+     */
     public void addBuddyRequest(MapleClient c, int cidFrom, String nameFrom, int channelFrom, int levelFrom, int jobFrom) {
         put(new BuddylistEntry(nameFrom, cidFrom, "其他", channelFrom, false, levelFrom, jobFrom));
         if (pendingRequests.isEmpty()) {

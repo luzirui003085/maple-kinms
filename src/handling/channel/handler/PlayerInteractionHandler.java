@@ -20,31 +20,34 @@
  */
 package handling.channel.handler;
 
-import java.util.Arrays;
-
+import client.MapleCharacter;
+import client.MapleClient;
 import client.inventory.IItem;
 import client.inventory.ItemFlag;
-import constants.GameConstants;
-import client.MapleClient;
-import client.MapleCharacter;
 import client.inventory.MapleInventoryType;
+import constants.GameConstants;
 import constants.OtherSettings;
+import java.util.Arrays;
+import scripting.NPCScriptManager;
 import server.MapleInventoryManipulator;
 import server.MapleItemInformationProvider;
 import server.MapleTrade;
 import server.maps.FieldLimitType;
-import server.shops.HiredMerchant;
-import server.shops.IMaplePlayerShop;
-import server.shops.MaplePlayerShop;
-import server.shops.MaplePlayerShopItem;
 import server.maps.MapleMapObject;
 import server.maps.MapleMapObjectType;
+import server.shops.HiredMerchant;
+import server.shops.IMaplePlayerShop;
 import server.shops.MapleMiniGame;
+import server.shops.MaplePlayerShop;
+import server.shops.MaplePlayerShopItem;
 import tools.MaplePacketCreator;
-import tools.packet.PlayerShopPacket;
 import tools.data.input.SeekableLittleEndianAccessor;
-import scripting.NPCScriptManager;
+import tools.packet.PlayerShopPacket;
 
+/**
+ *
+ * @author zjj
+ */
 public class PlayerInteractionHandler {
 
     private static final byte 
@@ -94,6 +97,12 @@ public class PlayerInteractionHandler {
             MOVE_OMOK = 0x3F,
             SELECT_CARD = 0x43;
 
+    /**
+     *
+     * @param slea
+     * @param c
+     * @param chr
+     */
     public static final void PlayerInteraction(final SeekableLittleEndianAccessor slea, final MapleClient c, final MapleCharacter chr) {
         //System.out.println(slea.toString());
         if (chr == null) {
@@ -110,11 +119,11 @@ public class PlayerInteractionHandler {
                         c.getSession().write(MaplePacketCreator.enableActions());
                         return;
                     }
-                    if (chr.getMap().getMapObjectsInRange(chr.getPosition(), 20000, Arrays.asList(MapleMapObjectType.SHOP, MapleMapObjectType.HIRED_MERCHANT)).size() != 0) {
+                    if (!chr.getMap().getMapObjectsInRange(chr.getPosition(), 20000, Arrays.asList(MapleMapObjectType.SHOP, MapleMapObjectType.HIRED_MERCHANT)).isEmpty()) {
                         chr.dropMessage(1, "You may not establish a store here.");
                         c.getSession().write(MaplePacketCreator.enableActions());
                         return;
-                    }else if (chr.getMap().getMapObjectsInRange(chr.getPosition(), 20000, Arrays.asList(MapleMapObjectType.SHOP, MapleMapObjectType.HIRED_MERCHANT)).size() != 0 && chr.getClient().getChannel() != 1) {
+                    }else if (!chr.getMap().getMapObjectsInRange(chr.getPosition(), 20000, Arrays.asList(MapleMapObjectType.SHOP, MapleMapObjectType.HIRED_MERCHANT)).isEmpty() && chr.getClient().getChannel() != 1) {
                         chr.dropMessage(1, "雇佣只能在1频道开启.");
                         c.getSession().write(MaplePacketCreator.enableActions());
                         return;
@@ -250,7 +259,6 @@ public class PlayerInteractionHandler {
                         } else {
                             if (ips instanceof MaplePlayerShop && ((MaplePlayerShop) ips).isBanned(chr.getName())) {
                                 chr.dropMessage(1, "你被這家商店加入黑名單了,所以不能進入.");
-                                return;
                             } else {
                                 if (ips.getFreeSlot() < 0 || ips.getVisitorSlot(chr) > -1 || !ips.isOpen() || !ips.isAvailable()) {
                                     c.getSession().write(PlayerShopPacket.getMiniGameFull());
@@ -317,7 +325,6 @@ public class PlayerInteractionHandler {
                         } else {
                             if (ips instanceof MaplePlayerShop && ((MaplePlayerShop) ips).isBanned(chr.getName())) {
                                 chr.dropMessage(1, "你被這家商店加入黑名單了,所以不能進入.");
-                                return;
                             } else {
                                 if (ips.getFreeSlot() < 0 || ips.getVisitorSlot(chr) > -1 || !ips.isOpen() || !ips.isAvailable()) {
                                     c.getSession().write(PlayerShopPacket.getMiniGameFull());
@@ -416,13 +423,13 @@ public class PlayerInteractionHandler {
                 final short quantity = slea.readShort();
                 final byte targetSlot = slea.readByte();
 
-                for (int i = 0; i < itemgy_id.length; i++) {
-                    if (item.getItemId() == Integer.parseInt(itemgy_id[i])) {
-                        c.getPlayer().dropMessage(1, "这个物品是禁止雇佣贩卖的.");
-                        c.getSession().write(MaplePacketCreator.enableActions());
-                        return;
-                    }
+            for (String itemgy_id1 : itemgy_id) {
+                if (item.getItemId() == Integer.parseInt(itemgy_id1)) {
+                    c.getPlayer().dropMessage(1, "这个物品是禁止雇佣贩卖的.");
+                    c.getSession().write(MaplePacketCreator.enableActions());
+                    return;
                 }
+            }
                 if (chr.getTrade() != null && item != null) {
                     if ((quantity <= item.getQuantity() && quantity >= 0) || GameConstants.isThrowingStar(item.getItemId()) || GameConstants.isBullet(item.getItemId())) {
                         chr.getTrade().setItems(c, item, targetSlot, quantity);

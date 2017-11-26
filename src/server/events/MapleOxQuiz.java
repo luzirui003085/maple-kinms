@@ -31,11 +31,20 @@ import server.maps.MapleMap;
 import tools.MaplePacketCreator;
 import tools.Pair;
 
+/**
+ *
+ * @author zjj
+ */
 public class MapleOxQuiz extends MapleEvent {
 
     private ScheduledFuture<?> oxSchedule, oxSchedule2;
     private int timesAsked = 0;
 
+    /**
+     *
+     * @param channel
+     * @param mapid
+     */
     public MapleOxQuiz(final int channel, final int[] mapid) {
         super(channel, mapid);
     }
@@ -51,6 +60,10 @@ public class MapleOxQuiz extends MapleEvent {
         }
     }
 
+    /**
+     *
+     * @param chr
+     */
     @Override
     public void onMapLoad(MapleCharacter chr) {
         if (chr.getMapId() == mapid[0] && !chr.isGM()) {
@@ -58,6 +71,9 @@ public class MapleOxQuiz extends MapleEvent {
         }
     }
 
+    /**
+     *
+     */
     @Override
     public void reset() {
         super.reset();
@@ -66,6 +82,9 @@ public class MapleOxQuiz extends MapleEvent {
         timesAsked = 0;
     }
 
+    /**
+     *
+     */
     @Override
     public void unreset() {
         super.unreset();
@@ -74,21 +93,32 @@ public class MapleOxQuiz extends MapleEvent {
     }
     //apparently npc says 10 questions
 
+    /**
+     *
+     */
     @Override
     public void startEvent() {
         sendQuestion();
     }
 
+    /**
+     *
+     */
     public void sendQuestion() {
         sendQuestion(getMap(0));
     }
 
+    /**
+     *
+     * @param toSend
+     */
     public void sendQuestion(final MapleMap toSend) {
         if (oxSchedule2 != null) {
             oxSchedule2.cancel(false);
         }
         oxSchedule2 = EventTimer.getInstance().schedule(new Runnable() {
 
+            @Override
             public void run() {
                 int number = 0;
                 for (MapleCharacter mc : toSend.getCharactersThreadsafe()) {

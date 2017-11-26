@@ -1,6 +1,5 @@
 package handling.cashshop.handler;
 
-import java.rmi.RemoteException;
 import java.sql.SQLException;
 import java.util.Map;
 import java.util.HashMap;
@@ -19,7 +18,6 @@ import handling.world.World;
 import java.util.List;
 import server.CashItemFactory;
 import server.CashItemInfo;
-import server.CashShop;
 import server.MTSStorage;
 import server.MapleInventoryManipulator;
 import server.MapleItemInformationProvider;
@@ -29,8 +27,18 @@ import tools.packet.MTSCSPacket;
 import tools.Pair;
 import tools.data.input.SeekableLittleEndianAccessor;
 
+/**
+ *
+ * @author zjj
+ */
 public class CashShopOperation {
 
+    /**
+     *
+     * @param slea
+     * @param c
+     * @param chr
+     */
     public static void LeaveCS(final SeekableLittleEndianAccessor slea, final MapleClient c, final MapleCharacter chr) {
         CashShopServer.getPlayerStorageMTS().deregisterPlayer(chr);
         CashShopServer.getPlayerStorage().deregisterPlayer(chr);
@@ -50,6 +58,11 @@ public class CashShopOperation {
         }
     }
 
+    /**
+     *
+     * @param playerid
+     * @param c
+     */
     public static void EnterCS(final int playerid, final MapleClient c) {
 
         CharacterTransfer transfer = CashShopServer.getPlayerStorage().getPendingCharacter(playerid);
@@ -96,6 +109,10 @@ public class CashShopOperation {
         }
     }
 
+    /**
+     *
+     * @param c
+     */
     public static void CSUpdate(final MapleClient c) {
         c.getSession().write(MTSCSPacket.sendWishList(c.getPlayer(), false));
         c.getSession().write(MTSCSPacket.showNXMapleTokens(c.getPlayer()));
@@ -105,10 +122,19 @@ public class CashShopOperation {
         //  doCSPackets(c);
     }
 
+    /**
+     *
+     * @param c
+     */
     public static void TouchingCashShop(final MapleClient c) {
         c.getSession().write(MTSCSPacket.showNXMapleTokens(c.getPlayer()));
     }
 
+    /**
+     *
+     * @param code
+     * @param c
+     */
     public static void CouponCode(final String code, final MapleClient c) {
         boolean validcode = false;
         int type = -1;
@@ -141,7 +167,7 @@ public class CashShopOperation {
              * Type 1: A-Cash, Type 2: Maple Points Type 3: Item.. use SN Type
              * 4: A-Cash Coupon that can be used over and over Type 5: Mesos
              */
-            Map<Integer, IItem> itemz = new HashMap<Integer, IItem>();
+            Map<Integer, IItem> itemz = new HashMap<>();
             int maplePoints = 0, mesos = 0;
             switch (type) {
                 case 0:
@@ -194,6 +220,12 @@ public class CashShopOperation {
         doCSPackets(c);
     }
 
+    /**
+     *
+     * @param slea
+     * @param c
+     * @param chr
+     */
     public static final void BuyCashItem(final SeekableLittleEndianAccessor slea, final MapleClient c, final MapleCharacter chr) {
         OtherSettings item_id = new OtherSettings();
         String itembp_id[] = item_id.getItempb_id();
@@ -228,11 +260,11 @@ public class CashShopOperation {
                         if (useNX == 1) {
                             byte flag = itemz.getFlag();
                             boolean 交易 = true;
-                            for (int i = 0; i < itemjy_id.length; i++) {
-                                if (itemz.getItemId() == Integer.parseInt(itemjy_id[i])) {
-                                    交易 = false;
-                                }
+                        for (String itemjy_id1 : itemjy_id) {
+                            if (itemz.getItemId() == Integer.parseInt(itemjy_id1)) {
+                                交易 = false;
                             }
+                        }
                             if (交易 == true) {
                                 if (itemz.getType() == MapleInventoryType.EQUIP.getType()) {
                                     flag |= ItemFlag.KARMA_EQ.getValue();
@@ -275,16 +307,16 @@ public class CashShopOperation {
                         return;
                     }
                     Pair<Integer, Pair<Integer, Integer>> info = MapleCharacterUtil.getInfoByName(recipient, c.getPlayer().getWorld());
-                    if (info == null || info.getLeft().intValue() <= 0 || info.getLeft().intValue() == c.getPlayer().getId() || info.getRight().getLeft().intValue() == c.getAccID()) {
+                    if (info == null || info.getLeft() <= 0 || info.getLeft() == c.getPlayer().getId() || info.getRight().getLeft() == c.getAccID()) {
                         c.getSession().write(MTSCSPacket.sendCSFail(0xA2)); //9E v75
                         doCSPackets(c);
                         return;
-                    } else if (!item.genderEquals(info.getRight().getRight().intValue())) {
+                    } else if (!item.genderEquals(info.getRight().getRight())) {
                         c.getSession().write(MTSCSPacket.sendCSFail(0xA3));
                         doCSPackets(c);
                         return;
                     } else {
-                        c.getPlayer().getCashInventory().gift(info.getLeft().intValue(), c.getPlayer().getName(), message, item.getSN(), MapleInventoryIdentifier.getInstance());
+                        c.getPlayer().getCashInventory().gift(info.getLeft(), c.getPlayer().getName(), message, item.getSN(), MapleInventoryIdentifier.getInstance());
                         c.getPlayer().modifyCSPoints(type, -item.getPrice(), false);
                         c.getSession().write(MTSCSPacket.sendGift(item.getId(), item.getCount(), recipient));
                     }
@@ -591,13 +623,13 @@ public class CashShopOperation {
                 int type = slea.readByte() + 1;
                 int snID = slea.readInt();
                 final CashItemInfo item = CashItemFactory.getInstance().getItem(snID);
-                for (int i = 0; i < itembp_id.length; i++) {
-                    if (snID == Integer.parseInt(itembp_id[i])) {
-                        c.getPlayer().dropMessage(1, "这个物品是禁止购买的.");
-                        doCSPackets(c);
-                        return;
-                    }
+            for (String itembp_id1 : itembp_id) {
+                if (snID == Integer.parseInt(itembp_id1)) {
+                    c.getPlayer().dropMessage(1, "这个物品是禁止购买的.");
+                    doCSPackets(c);
+                    return;
                 }
+            }
                 List<CashItemInfo> ccc = null;
                 if (item != null) {
                     ccc = CashItemFactory.getInstance().getPackageItems(item.getId());
@@ -618,7 +650,7 @@ public class CashShopOperation {
                     doCSPackets(c);
                     return;
                 }
-                Map<Integer, IItem> ccz = new HashMap<Integer, IItem>();
+                Map<Integer, IItem> ccz = new HashMap<>();
                 for (CashItemInfo i : ccc) {
                     IItem itemz = c.getPlayer().getCashInventory().toItem(i);
                     if (itemz == null || itemz.getUniqueId() <= 0 || itemz.getItemId() != i.getId()) {

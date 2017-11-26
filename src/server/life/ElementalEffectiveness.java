@@ -20,10 +20,42 @@
  */
 package server.life;
 
+/**
+ *
+ * @author zjj
+ */
 public enum ElementalEffectiveness {
 
-    NORMAL, IMMUNE, STRONG, WEAK, NEUTRAL;
+    /**
+     *
+     */
+    NORMAL, 
 
+    /**
+     *
+     */
+    IMMUNE, 
+
+    /**
+     *
+     */
+    STRONG, 
+
+    /**
+     *
+     */
+    WEAK, 
+
+    /**
+     *
+     */
+    NEUTRAL;
+
+    /**
+     *
+     * @param num
+     * @return
+     */
     public static ElementalEffectiveness getByNumber(int num) {
         switch (num) {
             case 1:

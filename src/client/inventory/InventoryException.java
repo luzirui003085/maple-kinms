@@ -20,6 +20,10 @@
  */
 package client.inventory;
 
+/**
+ *
+ * @author zjj
+ */
 public class InventoryException extends RuntimeException {
 
     private static final long serialVersionUID = 1L;
@@ -31,6 +35,10 @@ public class InventoryException extends RuntimeException {
         super();
     }
 
+    /**
+     *
+     * @param msg
+     */
     public InventoryException(String msg) {
         super(msg);
     }

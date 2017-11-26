@@ -21,11 +21,6 @@
 package handling.world.guild;
 
 import client.MapleCharacter;
-import database.DatabaseConnection;
-import handling.channel.ChannelServer;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 
 public class MapleGuildCharacter implements java.io.Serializable { // alias for a character
 

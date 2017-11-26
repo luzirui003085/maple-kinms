@@ -20,30 +20,34 @@
  */
 package handling.channel.handler;
 
+import client.MapleCharacter;
+import client.MapleCharacterUtil;
+import client.MapleClient;
+import client.inventory.IItem;
+import client.inventory.ItemFlag;
+import client.inventory.ItemLoader;
+import client.inventory.MapleInventoryType;
+import constants.GameConstants;
+import database.DatabaseConnection;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
-import client.inventory.IItem;
-import client.inventory.ItemFlag;
-import constants.GameConstants;
-import client.inventory.ItemLoader;
-import client.MapleCharacter;
-import client.MapleCharacterUtil;
-import client.MapleClient;
-import client.inventory.MapleInventoryType;
-import database.DatabaseConnection;
-import java.util.Collections;
 import java.util.Map;
-import tools.data.input.SeekableLittleEndianAccessor;
 import server.MapleDueyActions;
 import server.MapleInventoryManipulator;
 import server.MapleItemInformationProvider;
 import tools.MaplePacketCreator;
 import tools.Pair;
+import tools.data.input.SeekableLittleEndianAccessor;
 
+/**
+ *
+ * @author zjj
+ */
 public class DueyHandler {
 
     /*
@@ -53,6 +57,13 @@ public class DueyHandler {
      * 15 = Same account
      * 14 = Name does not exist
      */
+
+    /**
+     *
+     * @param slea
+     * @param c
+     */
+
     public static final void DueyOperation(final SeekableLittleEndianAccessor slea, final MapleClient c) {
 
         final byte operation = slea.readByte();
@@ -226,7 +237,7 @@ public class DueyHandler {
 
             ResultSet rs = ps.getGeneratedKeys();
             if (rs.next()) {
-                ItemLoader.DUEY.saveItems(Collections.singletonList(new Pair<IItem, MapleInventoryType>(item, GameConstants.getInventoryType(item.getItemId()))), rs.getInt(1));
+                ItemLoader.DUEY.saveItems(Collections.singletonList(new Pair<>(item, GameConstants.getInventoryType(item.getItemId()))), rs.getInt(1));
             }
             rs.close();
             ps.close();
@@ -238,8 +249,13 @@ public class DueyHandler {
         }
     }
 
+    /**
+     *
+     * @param chr
+     * @return
+     */
     public static final List<MapleDueyActions> loadItems(final MapleCharacter chr) {
-        List<MapleDueyActions> packages = new LinkedList<MapleDueyActions>();
+        List<MapleDueyActions> packages = new LinkedList<>();
         Connection con = DatabaseConnection.getConnection();
         try {
             PreparedStatement ps = con.prepareStatement("SELECT * FROM dueypackages WHERE RecieverId = ?");
@@ -261,8 +277,14 @@ public class DueyHandler {
         }
     }
 
+    /**
+     *
+     * @param packageid
+     * @param charid
+     * @return
+     */
     public static final MapleDueyActions loadSingleItem(final int packageid, final int charid) {
-        List<MapleDueyActions> packages = new LinkedList<MapleDueyActions>();
+        List<MapleDueyActions> packages = new LinkedList<>();
         Connection con = DatabaseConnection.getConnection();
         try {
             PreparedStatement ps = con.prepareStatement("SELECT * FROM dueypackages WHERE PackageId = ? and RecieverId = ?");
@@ -290,6 +312,11 @@ public class DueyHandler {
         }
     }
 
+    /**
+     *
+     * @param c
+     * @param recipientId
+     */
     public static final void reciveMsg(final MapleClient c, final int recipientId) {
         Connection con = DatabaseConnection.getConnection();
         try {

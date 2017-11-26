@@ -24,6 +24,12 @@ public class CommandObject {
      */
     private final CommandExecute exe;
 
+    /**
+     *
+     * @param com
+     * @param c
+     * @param gmLevel
+     */
     public CommandObject(String com, CommandExecute c, int gmLevel) {
         command = com;
         exe = c;
@@ -42,6 +48,10 @@ public class CommandObject {
         return exe.execute(c, splitted);
     }
 
+    /**
+     *
+     * @return
+     */
     public CommandType getType() {
         return exe.getType();
     }

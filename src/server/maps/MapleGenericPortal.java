@@ -20,11 +20,10 @@
  */
 package server.maps;
 
-import java.awt.Point;
-
 import client.MapleClient;
 import client.anticheat.CheatingOffense;
 import handling.channel.ChannelServer;
+import java.awt.Point;
 import scripting.PortalScriptManager;
 import server.MaplePortal;
 import tools.MaplePacketCreator;

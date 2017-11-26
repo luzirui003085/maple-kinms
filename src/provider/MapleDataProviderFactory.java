@@ -23,6 +23,10 @@ package provider;
 import java.io.File;
 import provider.WzXML.XMLWZFile;
 
+/**
+ *
+ * @author zjj
+ */
 public class MapleDataProviderFactory {
 
     private final static String wzPath = System.getProperty("net.sf.odinms.wzpath");
@@ -36,14 +40,29 @@ public class MapleDataProviderFactory {
         throw new IllegalArgumentException("Can't create data provider for input " + in);
     }
 
+    /**
+     *
+     * @param in
+     * @return
+     */
     public static MapleDataProvider getDataProvider(Object in) {
         return getWZ(in, false);
     }
 
+    /**
+     *
+     * @param in
+     * @return
+     */
     public static MapleDataProvider getImageProvidingDataProvider(Object in) {
         return getWZ(in, true);
     }
 
+    /**
+     *
+     * @param filename
+     * @return
+     */
     public static File fileInWZPath(String filename) {
         return new File(wzPath, filename);
     }

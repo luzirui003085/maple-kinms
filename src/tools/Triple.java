@@ -2,36 +2,75 @@ package tools;
 
 import java.io.Serializable;
 
+/**
+ *
+ * @author zjj
+ * @param <E>
+ * @param <F>
+ * @param <G>
+ */
 public class Triple<E, F, G>
         implements Serializable {
 
     private static final long serialVersionUID = 9179541993413739999L;
+
+    /**
+     *
+     */
     public E left;
+
+    /**
+     *
+     */
     public F mid;
+
+    /**
+     *
+     */
     public G right;
 
+    /**
+     *
+     * @param left
+     * @param mid
+     * @param right
+     */
     public Triple(E left, F mid, G right) {
         this.left = left;
         this.mid = mid;
         this.right = right;
     }
 
+    /**
+     *
+     * @return
+     */
     public E getLeft() {
         return this.left;
     }
 
+    /**
+     *
+     * @return
+     */
     public F getMid() {
         return this.mid;
     }
 
+    /**
+     *
+     * @return
+     */
     public G getRight() {
         return this.right;
     }
 
+    @Override
     public String toString() {
         return this.left.toString() + ":" + this.mid.toString() + ":" + this.right.toString();
     }
 
+    @Override
     public int hashCode() {
         int prime = 31;
         int result = 1;
@@ -41,6 +80,7 @@ public class Triple<E, F, G>
         return result;
     }
 
+    @Override
     public boolean equals(Object obj) {
         if (this == obj) {
             return true;

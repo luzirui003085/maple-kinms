@@ -23,41 +23,66 @@ package client;
 import constants.GameConstants;
 import java.util.ArrayList;
 import java.util.List;
-
 import provider.MapleData;
 import provider.MapleDataTool;
 import server.MapleStatEffect;
 import server.life.Element;
 
+/**
+ *
+ * @author zjj
+ */
 public class Skill implements ISkill {
 
     //public static final int[] skills = new int[]{4311003, 4321000, 4331002, 4331005, 4341004, 4341007};
     private String name = "";
-    private final List<MapleStatEffect> effects = new ArrayList<MapleStatEffect>();
+    private final List<MapleStatEffect> effects = new ArrayList<>();
     private Element element;
     private byte level;
     private int id, animationTime, requiredSkill, masterLevel;
     private boolean action, invisible, chargeskill, timeLimited;
 
+    /**
+     *
+     * @param id
+     */
     public Skill(final int id) {
         super();
         this.id = id;
     }
 
+    /**
+     *
+     * @param name
+     */
     public void setName(final String name) {
         this.name = name;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public int getId() {
         return id;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public String getName() {
         return name;
     }
 
+    /**
+     *
+     * @param id
+     * @param data
+     * @return
+     */
     public static final Skill loadFromData(final int id, final MapleData data) {
         Skill ret = new Skill(id);
 
@@ -219,6 +244,11 @@ public class Skill implements ISkill {
         return ret;
     }
 
+    /**
+     *
+     * @param level
+     * @return
+     */
     @Override
     public MapleStatEffect getEffect(final int level) {
         if (effects.size() < level) {
@@ -232,41 +262,74 @@ public class Skill implements ISkill {
         return effects.get(level - 1);
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public boolean getAction() {
         return action;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public boolean isChargeSkill() {
         return chargeskill;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public boolean isInvisible() {
         return invisible;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public boolean hasRequiredSkill() {
         return level > 0;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public int getRequiredSkillLevel() {
         return level;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public int getRequiredSkillId() {
         return requiredSkill;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public byte getMaxLevel() {
         return (byte) effects.size();
     }
 
+    /**
+     *
+     * @param job
+     * @return
+     */
     @Override
     public boolean canBeLearnedBy(int job) {
         int jid = job;
@@ -295,11 +358,19 @@ public class Skill implements ISkill {
         return true;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public boolean isTimeLimited() {
         return timeLimited;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public boolean isFourthJob() {
         if (id / 10000 >= 2212 && id / 10000 < 3000) { //evan skill
@@ -311,21 +382,37 @@ public class Skill implements ISkill {
         return ((id / 10000) % 10) == 2;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public Element getElement() {
         return element;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public int getAnimationTime() {
         return animationTime;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public int getMasterLevel() {
         return masterLevel;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public boolean isBeginnerSkill() {
         int jobId = id / 10000;

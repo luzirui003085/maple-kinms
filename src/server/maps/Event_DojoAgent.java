@@ -20,11 +20,10 @@
  */
 package server.maps;
 
-import java.awt.Point;
-
 import client.MapleCharacter;
 import handling.channel.ChannelServer;
 import handling.world.MaplePartyCharacter;
+import java.awt.Point;
 import server.Randomizer;
 import server.Timer.MapTimer;
 import server.life.MapleLifeFactory;

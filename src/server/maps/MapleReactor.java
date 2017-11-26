@@ -20,8 +20,8 @@
  */
 package server.maps;
 
-import java.awt.Rectangle;
 import client.MapleClient;
+import java.awt.Rectangle;
 import scripting.ReactorScriptManager;
 import server.Timer.MapTimer;
 import tools.MaplePacketCreator;

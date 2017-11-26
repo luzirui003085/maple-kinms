@@ -25,13 +25,17 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ *
+ * @author zjj
+ */
 public class MapleFootholdTree {
 
     private MapleFootholdTree nw = null;
     private MapleFootholdTree ne = null;
     private MapleFootholdTree sw = null;
     private MapleFootholdTree se = null;
-    private List<MapleFoothold> footholds = new LinkedList<MapleFoothold>();
+    private List<MapleFoothold> footholds = new LinkedList<>();
     private Point p1;
     private Point p2;
     private Point center;
@@ -40,12 +44,23 @@ public class MapleFootholdTree {
     private int maxDropX;
     private int minDropX;
 
+    /**
+     *
+     * @param p1
+     * @param p2
+     */
     public MapleFootholdTree(final Point p1, final Point p2) {
         this.p1 = p1;
         this.p2 = p2;
         center = new Point((p2.x - p1.x) / 2, (p2.y - p1.y) / 2);
     }
 
+    /**
+     *
+     * @param p1
+     * @param p2
+     * @param depth
+     */
     public MapleFootholdTree(final Point p1, final Point p2, final int depth) {
         this.p1 = p1;
         this.p2 = p2;
@@ -53,6 +68,10 @@ public class MapleFootholdTree {
         center = new Point((p2.x - p1.x) / 2, (p2.y - p1.y) / 2);
     }
 
+    /**
+     *
+     * @param f
+     */
     public final void insert(final MapleFoothold f) {
         if (depth == 0) {
             if (f.getX1() > maxDropX) {
@@ -146,6 +165,12 @@ public class MapleFootholdTree {
         return null;
     }
 
+    /**
+     *
+     * @param p1
+     * @param p2
+     * @return
+     */
     public final MapleFoothold findWall(final Point p1, final Point p2) {
         if (p1.y != p2.y) {
             throw new IllegalArgumentException();
@@ -154,6 +179,15 @@ public class MapleFootholdTree {
     }
 
     // To be refined, still inaccurate :(
+
+    /**
+     *
+     * @param fromx
+     * @param fromy
+     * @param tox
+     * @param toy
+     * @return
+     */
     public final boolean checkRelevantFH(final short fromx, final short fromy, final short tox, final short toy) {
         MapleFoothold fhdata = null;
         for (final MapleFoothold fh : footholds) { // From
@@ -174,10 +208,15 @@ public class MapleFootholdTree {
         return false;
     }
 
+    /**
+     *
+     * @param p
+     * @return
+     */
     public final MapleFoothold findBelow(final Point p) {
         final List<MapleFoothold> relevants = getRelevants(p);
         // find fhs with matching x coordinates
-        final List<MapleFoothold> xMatches = new LinkedList<MapleFoothold>();
+        final List<MapleFoothold> xMatches = new LinkedList<>();
         for (final MapleFoothold fh : relevants) {
             if (fh.getX1() <= p.x && fh.getX2() >= p.x) {
                 if (fh.getX1() == fh.getX2()) {
@@ -213,26 +252,50 @@ public class MapleFootholdTree {
         return null;
     }
 
+    /**
+     *
+     * @return
+     */
     public final int getX1() {
         return p1.x;
     }
 
+    /**
+     *
+     * @return
+     */
     public final int getX2() {
         return p2.x;
     }
 
+    /**
+     *
+     * @return
+     */
     public final int getY1() {
         return p1.y;
     }
 
+    /**
+     *
+     * @return
+     */
     public final int getY2() {
         return p2.y;
     }
 
+    /**
+     *
+     * @return
+     */
     public final int getMaxDropX() {
         return maxDropX;
     }
 
+    /**
+     *
+     * @return
+     */
     public final int getMinDropX() {
         return minDropX;
     }

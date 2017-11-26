@@ -1,23 +1,4 @@
-/*
- This file is part of the OdinMS Maple Story Server
- Copyright (C) 2008 ~ 2010 Patrick Huy <patrick.huy@frz.cc> 
- Matthias Butz <matze@odinms.de>
- Jan Christian Meyer <vimes@odinms.de>
 
- This program is free software: you can redistribute it and/or modify
- it under the terms of the GNU Affero General Public License version 3
- as published by the Free Software Foundation. You may not use, modify
- or distribute this program under any other version of the
- GNU Affero General Public License.
-
- This program is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- GNU Affero General Public License for more details.
-
- You should have received a copy of the GNU Affero General Public License
- along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
 package scripting;
 
 import java.awt.Point;
@@ -29,7 +10,6 @@ import client.inventory.Equip;
 import client.inventory.IItem;
 import client.inventory.Item;
 import constants.GameConstants;
-import client.MapleCharacter;
 import client.MapleClient;
 import client.inventory.MapleInventoryType;
 import handling.channel.ChannelServer;
@@ -40,31 +20,57 @@ import server.Randomizer;
 import server.life.MapleLifeFactory;
 import server.maps.ReactorDropEntry;
 import server.maps.MapleReactor;
-import tools.MaplePacketCreator;
 import server.life.MapleMonster;
-import server.maps.MapleMap;
 
+/**
+ *
+ * @author zjj
+ */
 public class ReactorActionManager extends AbstractPlayerInteraction {
 
     private MapleReactor reactor;
 
+    /**
+     *
+     * @param c
+     * @param reactor
+     */
     public ReactorActionManager(MapleClient c, MapleReactor reactor) {
         super(c);
         this.reactor = reactor;
     }
 
     // only used for meso = false, really. No minItems because meso is used to fill the gap
+
+    /**
+     *
+     */
     public void dropItems() {
         dropItems(false, 0, 0, 0, 0);
     }
 
+    /**
+     *
+     * @param meso
+     * @param mesoChance
+     * @param minMeso
+     * @param maxMeso
+     */
     public void dropItems(boolean meso, int mesoChance, int minMeso, int maxMeso) {
         dropItems(meso, mesoChance, minMeso, maxMeso, 0);
     }
 
+    /**
+     *
+     * @param meso
+     * @param mesoChance
+     * @param minMeso
+     * @param maxMeso
+     * @param minItems
+     */
     public void dropItems(boolean meso, int mesoChance, int minMeso, int maxMeso, int minItems) {
         final List<ReactorDropEntry> chances = ReactorScriptManager.getInstance().getDrops(reactor.getReactorId());
-        final List<ReactorDropEntry> items = new LinkedList<ReactorDropEntry>();
+        final List<ReactorDropEntry> items = new LinkedList<>();
 
         if (meso) {
             if (Math.random() < (1 / (double) mesoChance)) {
@@ -113,41 +119,82 @@ public class ReactorActionManager extends AbstractPlayerInteraction {
         }
     }
 
+    /**
+     *
+     * @param npcId
+     */
     @Override
     public void spawnNpc(int npcId) {
         spawnNpc(npcId, getPosition());
     }
 
     // returns slightly above the reactor's position for monster spawns
+
+    /**
+     *
+     * @return
+     */
     public Point getPosition() {
         Point pos = reactor.getPosition();
         pos.y -= 10;
         return pos;
     }
 
+    /**
+     *
+     * @return
+     */
     public MapleReactor getReactor() {
         return reactor;
     }
 
+    /**
+     *
+     */
     public void spawnZakum() {
         reactor.getMap().spawnZakum(getPosition().x, getPosition().y);
     }
 
+    /**
+     *
+     * @param id
+     */
     public void spawnFakeMonster(int id) {
         spawnFakeMonster(id, 1, getPosition());
     }
 
     // summon one monster, remote location
+
+    /**
+     *
+     * @param id
+     * @param x
+     * @param y
+     */
     public void spawnFakeMonster(int id, int x, int y) {
         spawnFakeMonster(id, 1, new Point(x, y));
     }
 
     // multiple monsters, reactor location
+
+    /**
+     *
+     * @param id
+     * @param qty
+     */
     public void spawnFakeMonster(int id, int qty) {
         spawnFakeMonster(id, qty, getPosition());
     }
 
     // multiple monsters, remote location
+
+    /**
+     *
+     * @param id
+     * @param qty
+     * @param x
+     * @param y
+     */
     public void spawnFakeMonster(int id, int qty, int x, int y) {
         spawnFakeMonster(id, qty, new Point(x, y));
     }
@@ -159,26 +206,48 @@ public class ReactorActionManager extends AbstractPlayerInteraction {
         }
     }
 
+    /**
+     *
+     */
     public void killAll() {
         reactor.getMap().killAllMonsters(true);
     }
 
+    /**
+     *
+     * @param monsId
+     */
     public void killMonster(int monsId) {
         reactor.getMap().killMonster(monsId);
     }
 
     // summon one monster on reactor location
+
+    /**
+     *
+     * @param id
+     */
     @Override
     public void spawnMonster(int id) {
         spawnMonster(id, 1, getPosition());
     }
 
     // summon monsters on reactor location
+
+    /**
+     *
+     * @param id
+     * @param qty
+     */
     @Override
     public void spawnMonster(int id, int qty) {
         spawnMonster(id, qty, getPosition());
     }
 
+    /**
+     *
+     * @param num
+     */
     public void dispelAllMonsters(final int num) { //dispels all mobs, cpq
         final MCSkill skil = MapleCarnivalFactory.getInstance().getGuardian(num);
         if (skil != null) {

@@ -35,7 +35,15 @@ import java.io.Serializable;
 public class Pair<E, F> implements Serializable {
 
     private static final long serialVersionUID = 9179541993413738569L;
+
+    /**
+     *
+     */
     public E left;
+
+    /**
+     *
+     */
     public F right;
 
     /**

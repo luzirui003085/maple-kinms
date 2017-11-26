@@ -21,27 +21,37 @@
 package client;
 
 import constants.GameConstants;
+import database.DatabaseConnection;
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Connection;
-import tools.Pair;
 import java.util.regex.Pattern;
+import tools.Pair;
 
-import database.DatabaseConnection;
-
+/**
+ *
+ * @author zjj
+ */
 public class MapleCharacterUtil {
 
     private static final Pattern namePattern = Pattern.compile("[a-zA-Z0-9_-]{3,12}");
     private static final Pattern petPattern = Pattern.compile("[a-zA-Z0-9_-]{4,12}");
 
+    /**
+     *
+     * @param name
+     * @return
+     */
     public static final boolean canCreateChar(final String name) {
-        if (getIdByName(name) != -1 || !isEligibleCharName(name)) {
-            return false;
-        }
-        return true;
+        return !(getIdByName(name) != -1 || !isEligibleCharName(name));
     }
 
+    /**
+     *
+     * @param name
+     * @return
+     */
     public static final boolean isEligibleCharName(final String name) {
         if (name.length() > 15) {
             return false;
@@ -50,17 +60,22 @@ public class MapleCharacterUtil {
             return false;
         }
         for (String z : GameConstants.RESERVED) {
-            if (name.indexOf(z) != -1) {
+            if (name.contains(z)) {
                 return false;
             }
         }
         return true;
     }
 
+    /**
+     *
+     * @param name
+     * @return
+     */
     public static final boolean canChangePetName(final String name) {
         if (petPattern.matcher(name).matches()) {
             for (String z : GameConstants.RESERVED) {
-                if (name.indexOf(z) != -1) {
+                if (name.contains(z)) {
                     return false;
                 }
             }
@@ -69,6 +84,11 @@ public class MapleCharacterUtil {
         return false;
     }
 
+    /**
+     *
+     * @param in
+     * @return
+     */
     public static final String makeMapleReadable(final String in) {
         String wui = in.replace('I', 'i');
         wui = wui.replace('l', 'L');
@@ -78,6 +98,11 @@ public class MapleCharacterUtil {
         return wui;
     }
 
+    /**
+     *
+     * @param name
+     * @return
+     */
     public static final int getIdByName(final String name) {
         Connection con = DatabaseConnection.getConnection();
         try {
@@ -101,6 +126,11 @@ public class MapleCharacterUtil {
         return -1;
     }
 
+    /**
+     *
+     * @param accountid
+     * @return
+     */
     public static final boolean PromptPoll(final int accountid) {
         PreparedStatement ps = null;
         ResultSet rs = null;
@@ -111,7 +141,7 @@ public class MapleCharacterUtil {
             ps.setInt(1, accountid);
 
             rs = ps.executeQuery();
-            prompt = rs.next() ? false : true;
+            prompt = !rs.next();
         } catch (SQLException e) {
         } finally {
             try {
@@ -127,6 +157,12 @@ public class MapleCharacterUtil {
         return prompt;
     }
 
+    /**
+     *
+     * @param accountid
+     * @param selection
+     * @return
+     */
     public static final boolean SetPoll(final int accountid, final int selection) {
         if (!PromptPoll(accountid)) { // Hacking OR spamming the db.
             return false;
@@ -156,6 +192,14 @@ public class MapleCharacterUtil {
     // 0 = You do not have a second password set currently.
     // 1 = The password you have input is wrong
     // 2 = Password Changed successfully
+
+    /**
+     *
+     * @param accid
+     * @param password
+     * @param newpassword
+     * @return
+     */
     public static final int Change_SecondPassword(final int accid, final String password, final String newpassword) {
         Connection con = DatabaseConnection.getConnection();
         try {
@@ -222,6 +266,13 @@ public class MapleCharacterUtil {
     }
 
     //id accountid gender
+
+    /**
+     *
+     * @param name
+     * @param world
+     * @return
+     */
     public static Pair<Integer, Pair<Integer, Integer>> getInfoByName(String name, int world) {
         try {
 
@@ -235,7 +286,7 @@ public class MapleCharacterUtil {
                 ps.close();
                 return null;
             }
-            Pair<Integer, Pair<Integer, Integer>> id = new Pair<Integer, Pair<Integer, Integer>>(rs.getInt("id"), new Pair<Integer, Integer>(rs.getInt("accountid"), rs.getInt("gender")));
+            Pair<Integer, Pair<Integer, Integer>> id = new Pair<>(rs.getInt("id"), new Pair<>(rs.getInt("accountid"), rs.getInt("gender")));
             rs.close();
             ps.close();
             return id;
@@ -245,6 +296,12 @@ public class MapleCharacterUtil {
         return null;
     }
 
+    /**
+     *
+     * @param name
+     * @param code
+     * @throws SQLException
+     */
     public static void setNXCodeUsed(String name, String code) throws SQLException {
         Connection con = DatabaseConnection.getConnection();
         PreparedStatement ps = con.prepareStatement("UPDATE nxcode SET `user` = ?, `valid` = 0 WHERE code = ?");
@@ -254,6 +311,13 @@ public class MapleCharacterUtil {
         ps.close();
     }
 
+    /**
+     *
+     * @param to
+     * @param name
+     * @param msg
+     * @param fame
+     */
     public static void sendNote(String to, String name, String msg, int fame) {
         try {
             Connection con = DatabaseConnection.getConnection();
@@ -270,6 +334,13 @@ public class MapleCharacterUtil {
         }
     }
 
+    /**
+     *
+     * @param code
+     * @param validcode
+     * @return
+     * @throws SQLException
+     */
     public static boolean getNXCodeValid(String code, boolean validcode) throws SQLException {
         Connection con = DatabaseConnection.getConnection();
         PreparedStatement ps = con.prepareStatement("SELECT `valid` FROM nxcode WHERE code = ?");
@@ -283,6 +354,12 @@ public class MapleCharacterUtil {
         return validcode;
     }
 
+    /**
+     *
+     * @param code
+     * @return
+     * @throws SQLException
+     */
     public static int getNXCodeType(String code) throws SQLException {
         int type = -1;
         Connection con = DatabaseConnection.getConnection();
@@ -297,6 +374,12 @@ public class MapleCharacterUtil {
         return type;
     }
 
+    /**
+     *
+     * @param code
+     * @return
+     * @throws SQLException
+     */
     public static int getNXCodeItem(String code) throws SQLException {
         int item = -1;
         Connection con = DatabaseConnection.getConnection();

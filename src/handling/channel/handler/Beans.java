@@ -15,20 +15,38 @@ public class Beans {
     private int type;
     private int pos;
 
+    /**
+     *
+     * @param pos
+     * @param type
+     * @param number
+     */
     public Beans(int pos, int type, int number) {
         this.pos = pos;
         this.number = number;
         this.type = type;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getType() {
         return type;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getNumber() {
         return number;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getPos() {
         return pos;
     }

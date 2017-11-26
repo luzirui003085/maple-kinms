@@ -1,27 +1,7 @@
-/*
- This file is part of the OdinMS Maple Story Server
- Copyright (C) 2008 ~ 2010 Patrick Huy <patrick.huy@frz.cc> 
- Matthias Butz <matze@odinms.de>
- Jan Christian Meyer <vimes@odinms.de>
 
- This program is free software: you can redistribute it and/or modify
- it under the terms of the GNU Affero General Public License version 3
- as published by the Free Software Foundation. You may not use, modify
- or distribute this program under any other version of the
- GNU Affero General Public License.
-
- This program is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- GNU Affero General Public License for more details.
-
- You should have received a copy of the GNU Affero General Public License
- along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
 package constants;
 
 import client.MapleCharacter;
-import client.MapleClient;
 import client.inventory.MapleInventoryType;
 import client.inventory.MapleWeaponType;
 import client.status.MonsterStatus;
@@ -35,8 +15,15 @@ import server.Randomizer;
 import server.ServerProperties;
 import server.maps.MapleMapObjectType;
 
+/**
+ *
+ * @author zjj
+ */
 public class GameConstants {
 
+    /**
+     *
+     */
     public static final List<MapleMapObjectType> rangedMapobjectTypes = Collections.unmodifiableList(Arrays.asList(
             MapleMapObjectType.ITEM,
             MapleMapObjectType.MONSTER,
@@ -71,7 +58,15 @@ public class GameConstants {
         30000};
     private static final int[] mountexp = {0, 6, 25, 50, 105, 134, 196, 254, 263, 315, 367, 430, 543, 587, 679, 725, 897, 1146, 1394, 1701, 2247,
         2543, 2898, 3156, 3313, 3584, 3923, 4150, 4305, 4550};
+
+    /**
+     *
+     */
     public static final int[] itemBlock = {2340000, 2049100, 4001129, 2040037, 2040006, 2040007, 2040303, 2040403, 2040506, 2040507, 2040603, 2040709, 2040710, 2040711, 2040806, 2040903, 2041024, 2041025, 2043003, 2043103, 2043203, 2043303, 2043703, 2043803, 2044003, 2044103, 2044203, 2044303, 2044403, 2044503, 2044603, 2044908, 2044815, 2044019, 2044703, 1004001, 4007008, 1004002, 5152053, 5150040};
+
+    /**
+     *
+     */
     public static final int[] cashBlock = {5062000, 5650000, 5431000, 5431001, 5432000, 5450000, 5550000, 5550001, 5640000, 5530013, 5150039, 5150046, 5150054, 1812006, 5650000, 5222000, 5221001, 5220014, 5220015, 5420007, 5451000,
         5210000, 5210001, 5210002, 5210003, 5210004, 5210005, 5210006, 5210007, 5210008, 5210009, 5210010, 5210011, 5211000, 5211001, 5211002, 5211003, 5211004, 5211005, 5211006, 5211007, 5211008, 5211009, 5211010, 5211011, 5211012, 5211013, 5211014, 5211015, 5211016, 5211017, 5211018,
         5211019, 5211020, 5211021, 5211022, 5211023, 5211024, 5211025, 5211026, 5211027, 5211028, 5211029, 5211030, 5211031, 5211032, 5211033, 5211034, 5211035, 5211036, 5211037, 5211038, 5211039, 5211040, 5211041, 5211042, 5211043,
@@ -80,12 +75,36 @@ public class GameConstants {
         1112810, 1112811, 5530013, 4001431, 4001432, 4032605,
         5270000, 5270001, 5270002, 5270003, 5270004, 5270005, 5270006, //2x meso
         9102328, 9102329, 9102330, 9102331, 9102332, 9102333}; //miracle cube and stuff
+
+    /**
+     *
+     */
     public static final int OMOK_SCORE = 122200;
+
+    /**
+     *
+     */
     public static final int MATCH_SCORE = 122210;
+
+    /**
+     *
+     */
     public static final int[] blockedSkills = {4341003};
+
+    /**
+     *
+     */
     public static final String MASTER = "%&HYGEomgLOL";
+
+    /**
+     *
+     */
     public static final String[] RESERVED = {"Rental"};
     private static final int[] mobHpVal = {0, 15, 20, 25, 35, 50, 65, 80, 95, 110, 125, 150, 175, 200, 225, 250, 275, 300, 325, 350, 375, 405, 435, 465, 495, 525, 580, 650, 720, 790, 900, 990, 1100, 1200, 1300, 1400, 1500, 1600, 1700, 1800, 1900, 2000, 2100, 2200, 2300, 2400, 2520, 2640, 2760, 2880, 3000, 3200, 3400, 3600, 3800, 4000, 4300, 4600, 4900, 5200, 5500, 5900, 6300, 6700, 7100, 7500, 8000, 8500, 9000, 9500, 10000, 11000, 12000, 13000, 14000, 15000, 17000, 19000, 21000, 23000, 25000, 27000, 29000, 31000, 33000, 35000, 37000, 39000, 41000, 43000, 45000, 47000, 49000, 51000, 53000, 55000, 57000, 59000, 61000, 63000, 65000, 67000, 69000, 71000, 73000, 75000, 77000, 79000, 81000, 83000, 85000, 89000, 91000, 93000, 95000, 97000, 99000, 101000, 103000, 105000, 107000, 109000, 111000, 113000, 115000, 118000, 120000, 125000, 130000, 135000, 140000, 145000, 150000, 155000, 160000, 165000, 170000, 175000, 180000, 185000, 190000, 195000, 200000, 205000, 210000, 215000, 220000, 225000, 230000, 235000, 240000, 250000, 260000, 270000, 280000, 290000, 300000, 310000, 320000, 330000, 340000, 350000, 360000, 370000, 380000, 390000, 400000, 410000, 420000, 430000, 440000, 450000, 460000, 470000, 480000, 490000, 500000, 510000, 520000, 530000, 550000, 570000, 590000, 610000, 630000, 650000, 670000, 690000, 710000, 730000, 750000, 770000, 790000, 810000, 830000, 850000, 870000, 890000, 910000};
+
+    /**
+     *
+     */
     public static final int game = 3;
     // game = 0 天成mxd
     // 1 囧少
@@ -93,6 +112,11 @@ public class GameConstants {
     // 3 4 棉花糖
     // 5 糖果单机
 
+    /**
+     *
+     * @param level
+     * @return
+     */
     public static int getExpNeededForLevel(final int level) {
         if (level < 0 || level >= exp.length) {
             return Integer.MAX_VALUE;
@@ -100,55 +124,120 @@ public class GameConstants {
         return exp[level];
     }
 
+    /**
+     *
+     * @param level
+     * @return
+     */
     public static int getClosenessNeededForLevel(final int level) {
         return closeness[level - 1];
     }
 
+    /**
+     *
+     * @param level
+     * @return
+     */
     public static int getMountExpNeededForLevel(final int level) {
         return mountexp[level - 1];
     }
 
+    /**
+     *
+     * @param level
+     * @return
+     */
     public static int getBookLevel(final int level) {
         return (int) ((5 * level) * (level + 1));
     }
 
+    /**
+     *
+     * @param level
+     * @return
+     */
     public static int getTimelessRequiredEXP(final int level) {
         return 70 + (level * 10);
     }
 
+    /**
+     *
+     * @param level
+     * @return
+     */
     public static int getReverseRequiredEXP(final int level) {
         return 60 + (level * 5);
     }
 
+    /**
+     *
+     * @return
+     */
     public static int maxViewRangeSq() {
         return 100000000; // 800 * 800
         // return 800000; // 800 * 800
     }
 
+    /**
+     *
+     * @param baseJob
+     * @param currentJob
+     * @return
+     */
     public static boolean isJobFamily(final int baseJob, final int currentJob) {
         return currentJob >= baseJob && currentJob / 100 == baseJob / 100;
     }
 
+    /**
+     *
+     * @param job
+     * @return
+     */
     public static boolean isKOC(final int job) {
         return job >= 1000 && job < 2000;
     }
 
+    /**
+     *
+     * @param job
+     * @return
+     */
     public static boolean isEvan(final int job) {
         return job == 2001 || (job >= 2200 && job <= 2218);
     }
 
+    /**
+     *
+     * @param job
+     * @return
+     */
     public static boolean isAran(final int job) {
         return job >= 2000 && job <= 2112 && job != 2001;
     }
 
+    /**
+     *
+     * @param job
+     * @return
+     */
     public static boolean isResist(final int job) {
         return job >= 3000 && job <= 3512;
     }
 
+    /**
+     *
+     * @param job
+     * @return
+     */
     public static boolean isAdventurer(final int job) {
         return job >= 0 && job < 1000;
     }
 
+    /**
+     *
+     * @param id
+     * @return
+     */
     public static boolean isRecoveryIncSkill(final int id) {
         switch (id) {
             case 1110000:
@@ -162,10 +251,20 @@ public class GameConstants {
         return false;
     }
 
+    /**
+     *
+     * @param id
+     * @return
+     */
     public static boolean isLinkedAranSkill(final int id) {
         return getLinkedAranSkill(id) != id;
     }
 
+    /**
+     *
+     * @param id
+     * @return
+     */
     public static int getLinkedAranSkill(final int id) {
         switch (id) {
             case 21110007:
@@ -191,6 +290,11 @@ public class GameConstants {
         return id;
     }
 
+    /**
+     *
+     * @param job
+     * @return
+     */
     public static int getBOF_ForJob(final int job) {
         if (isAdventurer(job)) {
             return 12;
@@ -204,6 +308,11 @@ public class GameConstants {
         return 20000012;
     }
 
+    /**
+     *
+     * @param skill
+     * @return
+     */
     public static boolean isElementAmp_Skill(final int skill) {
         switch (skill) {
             case 2110001:
@@ -215,6 +324,11 @@ public class GameConstants {
         return false;
     }
 
+    /**
+     *
+     * @param job
+     * @return
+     */
     public static int getMPEaterForJob(final int job) {
         switch (job) {
             case 210:
@@ -233,21 +347,38 @@ public class GameConstants {
         return 2100000; // Default, in case GM
     }
 
+    /**
+     *
+     * @param job
+     * @return
+     */
     public static int getJobShortValue(int job) {
         if (job >= 1000) {
             job -= (job / 1000) * 1000;
         }
         job /= 100;
-        if (job == 4) { // For some reason dagger/ claw is 8.. IDK
-            job *= 2;
-        } else if (job == 3) {
-            job += 1;
-        } else if (job == 5) {
-            job += 11; // 16
+        switch (job) {
+            case 4:
+                // For some reason dagger/ claw is 8.. IDK
+                job *= 2;
+                break;
+            case 3:
+                job += 1;
+                break;
+            case 5:
+                job += 11; // 16
+                break;
+            default:
+                break;
         }
         return job;
     }
 
+    /**
+     *
+     * @param skill
+     * @return
+     */
     public static boolean isPyramidSkill(final int skill) {
         switch (skill) {
             case 1020:
@@ -260,6 +391,11 @@ public class GameConstants {
         return false;
     }
 
+    /**
+     *
+     * @param skill
+     * @return
+     */
     public static boolean isMulungSkill(final int skill) {
         switch (skill) {
             case 1009:
@@ -282,44 +418,94 @@ public class GameConstants {
         return false;
     }
 
+    /**
+     *
+     * @param itemId
+     * @return
+     */
     public static boolean isThrowingStar(final int itemId) {
         return itemId / 10000 == 207;
         // return itemId <= 2070026 && itemId >= 2070000;
     }
 
+    /**
+     *
+     * @param itemId
+     * @return
+     */
     public static boolean isBullet(final int itemId) {
         return itemId / 10000 == 233;
     }
 
+    /**
+     *
+     * @param itemId
+     * @return
+     */
     public static boolean isRechargable(final int itemId) {
         return isThrowingStar(itemId) || isBullet(itemId);
     }
 
+    /**
+     *
+     * @param itemId
+     * @return
+     */
     public static boolean isOverall(final int itemId) {
         return itemId / 10000 == 105;
     }
 
+    /**
+     *
+     * @param itemId
+     * @return
+     */
     public static boolean isPet(final int itemId) {
         return itemId / 10000 == 500;
     }
 
+    /**
+     *
+     * @param itemId
+     * @return
+     */
     public static boolean isArrowForCrossBow(final int itemId) {
         return itemId >= 2061000 && itemId < 2062000;
     }
 
+    /**
+     *
+     * @param itemId
+     * @return
+     */
     public static boolean isArrowForBow(final int itemId) {
         return itemId >= 2060000 && itemId < 2061000;
     }
 
+    /**
+     *
+     * @param itemId
+     * @return
+     */
     public static boolean isMagicWeapon(final int itemId) {
         final int s = itemId / 10000;
         return s == 137 || s == 138;
     }
 
+    /**
+     *
+     * @param itemId
+     * @return
+     */
     public static boolean isWeapon(final int itemId) {
         return itemId >= 1300000 && itemId < 1500000;
     }
 
+    /**
+     *
+     * @param itemId
+     * @return
+     */
     public static MapleInventoryType getInventoryType(final int itemId) {
         final byte type = (byte) (itemId / 1000000);
         if (type < 1 || type > 5) {
@@ -328,6 +514,11 @@ public class GameConstants {
         return MapleInventoryType.getByType(type);
     }
 
+    /**
+     *
+     * @param itemId
+     * @return
+     */
     public static MapleWeaponType getWeaponType(final int itemId) {
         int cat = itemId / 10000;
         cat = cat % 100;
@@ -370,24 +561,49 @@ public class GameConstants {
         return MapleWeaponType.NOT_A_WEAPON;
     }
 
+    /**
+     *
+     * @param itemId
+     * @return
+     */
     public static boolean isShield(final int itemId) {
         int cat = itemId / 10000;
         cat = cat % 100;
         return cat == 9;
     }
 
+    /**
+     *
+     * @param itemId
+     * @return
+     */
     public static boolean isEquip(final int itemId) {
         return itemId / 1000000 == 1;
     }
 
+    /**
+     *
+     * @param itemId
+     * @return
+     */
     public static boolean isCleanSlate(int itemId) {
         return itemId / 100 == 20490;
     }
 
+    /**
+     *
+     * @param itemId
+     * @return
+     */
     public static boolean isAccessoryScroll(int itemId) {
         return itemId / 100 == 20492;
     }
 
+    /**
+     *
+     * @param itemId
+     * @return
+     */
     public static boolean isChaosScroll(int itemId) {
         if (itemId >= 2049105 && itemId <= 2049110) {
             return false;
@@ -395,22 +611,47 @@ public class GameConstants {
         return itemId / 100 == 20491;
     }
 
+    /**
+     *
+     * @param itemId
+     * @return
+     */
     public static int getChaosNumber(int itemId) {
         return itemId == 2049116 ? 10 : 5;
     }
 
+    /**
+     *
+     * @param scrollId
+     * @return
+     */
     public static boolean is还原类卷轴(int scrollId) {
         return scrollId / 100 == 20496;
     }
 
+    /**
+     *
+     * @param scrollId
+     * @return
+     */
     public static boolean isEquipScroll(int scrollId) {
         return scrollId / 100 == 20493;
     }
 
+    /**
+     *
+     * @param scrollId
+     * @return
+     */
     public static boolean isPotentialScroll(int scrollId) {
         return scrollId / 100 == 20494;
     }
 
+    /**
+     *
+     * @param scrollId
+     * @return
+     */
     public static boolean isSpecialScroll(final int scrollId) {
         switch (scrollId) {
             case 2040727: // Spikes on show
@@ -420,6 +661,11 @@ public class GameConstants {
         return false;
     }
 
+    /**
+     *
+     * @param itemId
+     * @return
+     */
     public static boolean isTwoHanded(final int itemId) {
         switch (getWeaponType(itemId)) {
             case AXE2H:
@@ -438,42 +684,92 @@ public class GameConstants {
         }
     }
 
+    /**
+     *
+     * @param id
+     * @return
+     */
     public static boolean isTownScroll(final int id) {
         return id >= 2030000 && id < 2040000;
     }
 
+    /**
+     *
+     * @param id
+     * @return
+     */
     public static boolean isUpgradeScroll(final int id) {
         return id >= 2040000 && id < 2050000;
     }
 
+    /**
+     *
+     * @param id
+     * @return
+     */
     public static boolean isGun(final int id) {
         return id >= 1492000 && id < 1500000;
     }
 
+    /**
+     *
+     * @param id
+     * @return
+     */
     public static boolean isUse(final int id) {
         return id >= 2000000 && id <= 2490000;
     }
 
+    /**
+     *
+     * @param id
+     * @return
+     */
     public static boolean isSummonSack(final int id) {
         return id / 10000 == 210;
     }
 
+    /**
+     *
+     * @param id
+     * @return
+     */
     public static boolean isMonsterCard(final int id) {
         return id / 10000 == 238;
     }
 
+    /**
+     *
+     * @param id
+     * @return
+     */
     public static boolean isSpecialCard(final int id) {
         return id / 1000 >= 2388;
     }
 
+    /**
+     *
+     * @param id
+     * @return
+     */
     public static int getCardShortId(final int id) {
         return id % 10000;
     }
 
+    /**
+     *
+     * @param id
+     * @return
+     */
     public static boolean isGem(final int id) {
         return id >= 4250000 && id <= 4251402;
     }
 
+    /**
+     *
+     * @param id
+     * @return
+     */
     public static boolean isOtherGem(final int id) {
         switch (id) {
             case 4001174:
@@ -502,10 +798,20 @@ public class GameConstants {
         return false;
     }
 
+    /**
+     *
+     * @param id
+     * @return
+     */
     public static boolean isCustomQuest(final int id) {
         return id > 99999;
     }
 
+    /**
+     *
+     * @param meso
+     * @return
+     */
     public static int getTaxAmount(final int meso) {
         if (meso >= 100000000) {
             return (int) Math.round(0.06 * meso);
@@ -523,6 +829,11 @@ public class GameConstants {
         return 0;
     }
 
+    /**
+     *
+     * @param meso
+     * @return
+     */
     public static int EntrustedStoreTax(final int meso) {
         if (meso >= 100000000) {
             return (int) Math.round(0.03 * meso);
@@ -540,6 +851,11 @@ public class GameConstants {
         return 0;
     }
 
+    /**
+     *
+     * @param id
+     * @return
+     */
     public static short getSummonAttackDelay(final int id) {
         switch (id) {
             case 15001004: // Lightning
@@ -573,6 +889,11 @@ public class GameConstants {
         return 0;
     }
 
+    /**
+     *
+     * @param id
+     * @return
+     */
     public static short getAttackDelay(final int id) {
         switch (id) { // Assume it's faster(2)
             case 4321001: //tornado spin
@@ -726,6 +1047,11 @@ public class GameConstants {
         return 330; // Default usually
     }
 
+    /**
+     *
+     * @param id
+     * @return
+     */
     public static byte gachaponRareItem(final int id) {
         switch (id) {
             case 2340000: // White Scroll
@@ -794,6 +1120,10 @@ public class GameConstants {
         }
         return 0;
     }
+
+    /**
+     *
+     */
     public final static int[] goldrewards = {
         2340000, 1, // white scroll
         2070018, 1, // balance fury 沒有的物品
@@ -855,6 +1185,10 @@ public class GameConstants {
         2000005, 10, // Power Elixir
         2000004, 10, // Elixir
         4280000, 4}; // Gold Box
+
+    /**
+     *
+     */
     public final static int[] silverrewards = {
         3010041, 1, // skull throne
         1002452, 3, // Starry Bandana
@@ -909,6 +1243,10 @@ public class GameConstants {
         2000005, 10, // Power Elixir
         2000004, 10, // Elixir
         4280001, 4}; // Silver Box
+
+    /**
+     *
+     */
     public static int[] eventCommonReward = {
         0, 40,
         1, 10,
@@ -920,6 +1258,10 @@ public class GameConstants {
         5490000, 3,
         5490001, 4
     };
+
+    /**
+     *
+     */
     public static int[] eventUncommonReward = {
         2, 4,
         3, 4,
@@ -973,6 +1315,10 @@ public class GameConstants {
         5152000, 5,
         5152001, 5
     };
+
+    /**
+     *
+     */
     public static int[] eventRareReward = {
         4031019, 5,
         2049100, 5,
@@ -1004,6 +1350,10 @@ public class GameConstants {
         1012060, 2,
         1012061, 2
     };
+
+    /**
+     *
+     */
     public static int[] eventSuperReward = {
         4031019, 5,
         2022121, 10,
@@ -1016,6 +1366,10 @@ public class GameConstants {
         1012140, 10,
         1012141, 10
     };
+
+    /**
+     *
+     */
     public static int[] fishingReward = {
         0, 90, // Meso
         1, 70, // EXP
@@ -1053,6 +1407,11 @@ public class GameConstants {
         4031629, 1 // Pot
     };
 
+    /**
+     *
+     * @param itemId
+     * @return
+     */
     public static boolean isDragonItem(int itemId) {
         switch (itemId) {
             case 1372032:
@@ -1079,6 +1438,12 @@ public class GameConstants {
     }
 
     // 重生
+
+    /**
+     *
+     * @param itemId
+     * @return
+     */
     public static boolean isReverseItem(int itemId) {
         switch (itemId) {
             case 1002790:
@@ -1128,6 +1493,12 @@ public class GameConstants {
     }
 
     // 永恒
+
+    /**
+     *
+     * @param itemId
+     * @return
+     */
     public static boolean isTimelessItem(int itemId) { // 永恒
         switch (itemId) {
             case 1032031: //shield earring, but technically
@@ -1183,16 +1554,32 @@ public class GameConstants {
         }
     }
 
+    /**
+     *
+     * @param itemId
+     * @return
+     */
     public static boolean isRing(int itemId) {
         return itemId >= 1112000 && itemId < 1113000;
     }// 112xxxx - pendants, 113xxxx - belts
 
     //if only there was a way to find in wz files -.-
+
+    /**
+     *
+     * @param itemid
+     * @return
+     */
     public static boolean isEffectRing(int itemid) {
 
         return isFriendshipRing(itemid) || isCrushRing(itemid) || isMarriageRing(itemid);
     }
-    
+
+    /**
+     *
+     * @param itemId
+     * @return
+     */
     public static boolean isFriendshipRing(int itemId) {
         switch (itemId) {
             case 1_112_800:
@@ -1212,6 +1599,11 @@ public class GameConstants {
         return false;
     }
 
+    /**
+     *
+     * @param itemId
+     * @return
+     */
     public static boolean isCrushRing(int itemId) {
         switch (itemId) {
             case 1_112_001:
@@ -1230,8 +1622,17 @@ public class GameConstants {
         }
         return false;
     }
+
+    /**
+     *
+     */
     public static int[] Equipments_Bonus = {1122017};
 
+    /**
+     *
+     * @param itemid
+     * @return
+     */
     public static int Equipment_Bonus_EXP(final int itemid) { // TODO : Add Time for more exp increase
         switch (itemid) {
             case 1122017:
@@ -1239,9 +1640,19 @@ public class GameConstants {
         }
         return 0;
     }
+
+    /**
+     *
+     */
     public static int[] blockedMaps = {109050000, 280030000, 240060200, 280090000, 280030001, 240060201, 950101100, 950101010};
     //If you can think of more maps that could be exploitable via npc,block nao pliz!
 
+    /**
+     *
+     * @param i
+     * @param itemId
+     * @return
+     */
     public static int getExpForLevel(int i, int itemId) {
         if (isReverseItem(itemId)) {
             return getReverseRequiredEXP(i);
@@ -1252,6 +1663,12 @@ public class GameConstants {
     }
 
     // 永恒
+
+    /**
+     *
+     * @param itemId
+     * @return
+     */
     public static int getMaxLevel(final int itemId) {
         if (isTimelessItem(itemId)) {
             return 5;
@@ -1299,10 +1716,19 @@ public class GameConstants {
         return 0;
     }
 
+    /**
+     *
+     * @return
+     */
     public static int getStatChance() {
         return 25;
     }
 
+    /**
+     *
+     * @param itemid
+     * @return
+     */
     public static MonsterStatus getStatFromWeapon(final int itemid) {
         switch (itemid) {
             case 1302109:
@@ -1341,6 +1767,11 @@ public class GameConstants {
         return null;
     }
 
+    /**
+     *
+     * @param stat
+     * @return
+     */
     public static int getXForStat(MonsterStatus stat) {
         switch (stat) {
             case ACC:
@@ -1351,6 +1782,11 @@ public class GameConstants {
         return 0;
     }
 
+    /**
+     *
+     * @param stat
+     * @return
+     */
     public static int getSkillForStat(MonsterStatus stat) {
         switch (stat) {
             case ACC:
@@ -1360,6 +1796,10 @@ public class GameConstants {
         }
         return 0;
     }
+
+    /**
+     *
+     */
     public final static int[] normalDrops = {
         4001009, //real
         4001010,
@@ -1455,6 +1895,10 @@ public class GameConstants {
         3994104,
         3994105,
         2430007}; //end
+
+    /**
+     *
+     */
     public final static int[] rareDrops = {
         2049100,
         2049301,
@@ -1464,11 +1908,20 @@ public class GameConstants {
         2049000,
         2049001,
         2049002};
+
+    /**
+     *
+     */
     public final static int[] superDrops = {
         2040804,
         2049400,
         2049100};
 
+    /**
+     *
+     * @param job
+     * @return
+     */
     public static int getSkillBook(final int job) {
         if (job >= 2210 && job <= 2218) {
             return job - 2209;
@@ -1490,10 +1943,20 @@ public class GameConstants {
         return 0;
     }
 
+    /**
+     *
+     * @param skillid
+     * @return
+     */
     public static int getSkillBookForSkill(final int skillid) {
         return getSkillBook(skillid / 10000);
     }
 
+    /**
+     *
+     * @param s
+     * @return
+     */
     public static int getMountS(int s) {
         // int s = Randomizer.nextInt(316);
         switch (s) {
@@ -2143,6 +2606,11 @@ public class GameConstants {
 
     }
 
+    /**
+     *
+     * @param sourceid
+     * @return
+     */
     public static int getMountItem(final int sourceid) {
         switch (sourceid) {
             case 5221006:
@@ -2358,163 +2826,223 @@ public class GameConstants {
         }
     }
 
+    /**
+     *
+     * @param itemId
+     * @return
+     */
     public static boolean isKatara(int itemId) {
         return itemId / 10000 == 134;
     }
 
+    /**
+     *
+     * @param itemId
+     * @return
+     */
     public static boolean isDagger(int itemId) {
         return itemId / 10000 == 133;
     }
 
+    /**
+     *
+     * @param skil
+     * @return
+     */
     public static boolean isApplicableSkill(int skil) {
         return skil < 40000000 && (skil % 10000 < 8000 || skil % 10000 > 8003); //no additional/decent skills
     }
 
+    /**
+     *
+     * @param skil
+     * @return
+     */
     public static boolean isApplicableSkill_(int skil) { //not applicable to saving but is more of temporary
         return skil >= 90000000 || (skil % 10000 >= 8000 && skil % 10000 <= 8003);
     }
 
+    /**
+     *
+     * @param itemId
+     * @return
+     */
     public static boolean isTablet(int itemId) {
         return itemId / 1000 == 2047;
     }
 
+    /**
+     *
+     * @param scrollId
+     * @param level
+     * @return
+     */
     public static int getSuccessTablet(final int scrollId, final int level) {
-        if (scrollId % 1000 / 100 == 2) { //2047_2_00 = armor, 2047_3_00 = accessory
-            switch (level) {
-                case 0:
-                    return 70;
-                case 1:
-                    return 55;
-                case 2:
-                    return 43;
-                case 3:
-                    return 33;
-                case 4:
-                    return 26;
-                case 5:
-                    return 20;
-                case 6:
-                    return 16;
-                case 7:
-                    return 12;
-                case 8:
-                    return 10;
-                default:
-                    return 7;
-            }
-        } else if (scrollId % 1000 / 100 == 3) {
-            switch (level) {
-                case 0:
-                    return 70;
-                case 1:
-                    return 35;
-                case 2:
-                    return 18;
-                case 3:
-                    return 12;
-                default:
-                    return 7;
-            }
-        } else {
-            switch (level) {
-                case 0:
-                    return 70;
-                case 1:
-                    return 50; //-20
-                case 2:
-                    return 36; //-14
-                case 3:
-                    return 26; //-10
-                case 4:
-                    return 19; //-7
-                case 5:
-                    return 14; //-5
-                case 6:
-                    return 10; //-4
-                default:
-                    return 7;  //-3
-            }
+        switch (scrollId % 1000 / 100) {
+            case 2:
+                //2047_2_00 = armor, 2047_3_00 = accessory
+                switch (level) {
+                    case 0:
+                        return 70;
+                    case 1:
+                        return 55;
+                    case 2:
+                        return 43;
+                    case 3:
+                        return 33;
+                    case 4:
+                        return 26;
+                    case 5:
+                        return 20;
+                    case 6:
+                        return 16;
+                    case 7:
+                        return 12;
+                    case 8:
+                        return 10;
+                    default:
+                        return 7;
+                }
+            case 3:
+                switch (level) {
+                    case 0:
+                        return 70;
+                    case 1:
+                        return 35;
+                    case 2:
+                        return 18;
+                    case 3:
+                        return 12;
+                    default:
+                        return 7;
+                }
+            default:
+                switch (level) {
+                    case 0:
+                        return 70;
+                    case 1:
+                        return 50; //-20
+                    case 2:
+                        return 36; //-14
+                    case 3:
+                        return 26; //-10
+                    case 4:
+                        return 19; //-7
+                    case 5:
+                        return 14; //-5
+                    case 6:
+                        return 10; //-4
+                    default:
+                        return 7;  //-3
+                }
         }
     }
 
+    /**
+     *
+     * @param scrollId
+     * @param level
+     * @return
+     */
     public static int getCurseTablet(final int scrollId, final int level) {
-        if (scrollId % 1000 / 100 == 2) { //2047_2_00 = armor, 2047_3_00 = accessory
-            switch (level) {
-                case 0:
-                    return 10;
-                case 1:
-                    return 12;
-                case 2:
-                    return 16;
-                case 3:
-                    return 20;
-                case 4:
-                    return 26;
-                case 5:
-                    return 33;
-                case 6:
-                    return 43;
-                case 7:
-                    return 55;
-                case 8:
-                    return 70;
-                default:
-                    return 100;
-            }
-        } else if (scrollId % 1000 / 100 == 3) {
-            switch (level) {
-                case 0:
-                    return 12;
-                case 1:
-                    return 18;
-                case 2:
-                    return 35;
-                case 3:
-                    return 70;
-                default:
-                    return 100;
-            }
-        } else {
-            switch (level) {
-                case 0:
-                    return 10;
-                case 1:
-                    return 14; //+4
-                case 2:
-                    return 19; //+5
-                case 3:
-                    return 26; //+7
-                case 4:
-                    return 36; //+10
-                case 5:
-                    return 50; //+14
-                case 6:
-                    return 70; //+20
-                default:
-                    return 100;  //+30
-            }
+        switch (scrollId % 1000 / 100) {
+            case 2:
+                //2047_2_00 = armor, 2047_3_00 = accessory
+                switch (level) {
+                    case 0:
+                        return 10;
+                    case 1:
+                        return 12;
+                    case 2:
+                        return 16;
+                    case 3:
+                        return 20;
+                    case 4:
+                        return 26;
+                    case 5:
+                        return 33;
+                    case 6:
+                        return 43;
+                    case 7:
+                        return 55;
+                    case 8:
+                        return 70;
+                    default:
+                        return 100;
+                }
+            case 3:
+                switch (level) {
+                    case 0:
+                        return 12;
+                    case 1:
+                        return 18;
+                    case 2:
+                        return 35;
+                    case 3:
+                        return 70;
+                    default:
+                        return 100;
+                }
+            default:
+                switch (level) {
+                    case 0:
+                        return 10;
+                    case 1:
+                        return 14; //+4
+                    case 2:
+                        return 19; //+5
+                    case 3:
+                        return 26; //+7
+                    case 4:
+                        return 36; //+10
+                    case 5:
+                        return 50; //+14
+                    case 6:
+                        return 70; //+20
+                    default:
+                        return 100;  //+30
+                }
         }
     }
 
+    /**
+     *
+     * @param itemId
+     * @return
+     */
     public static boolean isAccessory(final int itemId) {
         return (itemId >= 1010000 && itemId < 1040000) || (itemId >= 1122000 && itemId < 1153000) || (itemId >= 1112000 && itemId < 1113000);
     }
 
+    /**
+     *
+     * @param potentialID
+     * @param newstate
+     * @param i
+     * @return
+     */
     public static boolean potentialIDFits(final int potentialID, final int newstate, final int i) {
         //first line is always the best
         //but, sometimes it is possible to get second/third line as well
         //may seem like big chance, but it's not as it grabs random potential ID anyway
-        if (newstate == 7) {
-            return (i == 0 || Randomizer.nextInt(10) == 0 ? potentialID >= 30000 : potentialID >= 20000 && potentialID < 30000);
-        } else if (newstate == 6) {
-            return (i == 0 || Randomizer.nextInt(10) == 0 ? potentialID >= 20000 && potentialID < 30000 : potentialID >= 10000 && potentialID < 20000);
-        } else if (newstate == 5) {
-            return (i == 0 || Randomizer.nextInt(10) == 0 ? potentialID >= 10000 && potentialID < 20000 : potentialID < 10000);
-        } else {
-            return false;
+        switch (newstate) {
+            case 7:
+                return (i == 0 || Randomizer.nextInt(10) == 0 ? potentialID >= 30000 : potentialID >= 20000 && potentialID < 30000);
+            case 6:
+                return (i == 0 || Randomizer.nextInt(10) == 0 ? potentialID >= 20000 && potentialID < 30000 : potentialID >= 10000 && potentialID < 20000);
+            case 5:
+                return (i == 0 || Randomizer.nextInt(10) == 0 ? potentialID >= 10000 && potentialID < 20000 : potentialID < 10000);
+            default:
+                return false;
         }
     }
 
+    /**
+     *
+     * @param optionType
+     * @param itemId
+     * @return
+     */
     public static boolean optionTypeFits(final int optionType, final int itemId) {
         switch (optionType) {
             case 10: //weapon
@@ -2544,6 +3072,12 @@ public class GameConstants {
         }
     }
 
+    /**
+     *
+     * @param mountid
+     * @param jobid
+     * @return
+     */
     public static final boolean isMountItemAvailable(final int mountid, final int jobid) {
         if (jobid != 900 && mountid / 10000 == 190) {
             if (isKOC(jobid)) {
@@ -2567,25 +3101,41 @@ public class GameConstants {
         return true;
     }
 
+    /**
+     *
+     * @param itemId
+     * @return
+     */
     public static boolean isEvanDragonItem(final int itemId) {
         return itemId >= 1940000 && itemId < 1980000; //194 = mask, 195 = pendant, 196 = wings, 197 = tail
     }
 
+    /**
+     *
+     * @param itemId
+     * @return
+     */
     public static boolean canScroll(final int itemId) {
         return itemId / 100000 != 19 && itemId / 100000 != 16; //no mech/taming/dragon
     }
 
+    /**
+     *
+     * @param itemId
+     * @return
+     */
     public static boolean canHammer(final int itemId) {
         switch (itemId) {
             case 1122000:
             case 1122076: //ht, chaos ht
                 return false;
         }
-        if (!canScroll(itemId)) {
-            return false;
-        }
-        return true;
+        return canScroll(itemId);
     }
+
+    /**
+     *
+     */
     public static int[] owlItems = new int[]{
         1082002, // work gloves
         2070005,
@@ -2598,6 +3148,11 @@ public class GameConstants {
         1092030,
         2040804};
 
+    /**
+     *
+     * @param job
+     * @return
+     */
     public static int getMasterySkill(final int job) {
         if (job >= 1410 && job <= 1412) {
             return 14100000;
@@ -2609,6 +3164,11 @@ public class GameConstants {
         return 0;
     }
 
+    /**
+     *
+     * @param job
+     * @return
+     */
     public static int getExpRate_Below10(final int job) {
         if (GameConstants.isEvan(job)) {
             return 1;
@@ -2618,10 +3178,20 @@ public class GameConstants {
         return 1;
     }
 
+    /**
+     *
+     * @param level
+     * @return
+     */
     public static int getExpRate_Quest(final int level) {
         return 1;
     }
 
+    /**
+     *
+     * @param id
+     * @return
+     */
     public static String getCashBlockedMsg(final int id) {
         switch (id) {
             case 5062000:
@@ -2631,6 +3201,13 @@ public class GameConstants {
         return "This item is blocked from the Cash Shop.";
     }
 
+    /**
+     *
+     * @param rid
+     * @param iid
+     * @param original
+     * @return
+     */
     public static boolean isCustomReactItem(final int rid, final int iid, final int original) {
         if (rid == 2008006) { //orbis pq LOL
             return iid == (Calendar.getInstance().get(Calendar.DAY_OF_WEEK) + 4001055);
@@ -2640,6 +3217,11 @@ public class GameConstants {
         }
     }
 
+    /**
+     *
+     * @param jobz
+     * @return
+     */
     public static int getJobNumber(int jobz) {
         int job = (jobz % 1000);
         if (job / 100 == 0) {
@@ -2651,6 +3233,11 @@ public class GameConstants {
         }
     }
 
+    /**
+     *
+     * @param mapid
+     * @return
+     */
     public static boolean isForceRespawn(int mapid) {
         switch (mapid) {
             case 925100100: //crocs and stuff
@@ -2660,10 +3247,22 @@ public class GameConstants {
         }
     }
 
+    /**
+     *
+     * @param vip
+     * @param gm
+     * @return
+     */
     public static int getFishingTime(boolean vip, boolean gm) {
         return gm ? 1000 : (vip ? 50000 : 60000);
     }
 
+    /**
+     *
+     * @param summoner
+     * @param def
+     * @return
+     */
     public static int getCustomSpawnID(int summoner, int def) {
         switch (summoner) {
             case 9400589:
@@ -2674,6 +3273,11 @@ public class GameConstants {
         }
     }
 
+    /**
+     *
+     * @param questid
+     * @return
+     */
     public static boolean canForfeit(int questid) {
         switch (questid) {
             case 20000:
@@ -2686,10 +3290,20 @@ public class GameConstants {
         }
     }
 
+    /**
+     *
+     * @param mapid
+     * @return
+     */
     public static boolean isEventMap(final int mapid) {
         return (mapid >= 109010000 && mapid < 109050000) || (mapid > 109050001 && mapid < 109090000) || (mapid >= 809040000 && mapid <= 809040100);
     }
 
+    /**
+     *
+     * @param itemId
+     * @return
+     */
     public static boolean is豆豆装备(int itemId) {
         switch (itemId) {
             //帽子
@@ -2732,6 +3346,12 @@ public class GameConstants {
         return false;
     }
 
+    /**
+     *
+     * @param rid
+     * @param original
+     * @return
+     */
     public static int getCustomReactItem(int rid, int original) {
         if (rid == 2008006) {
             return Calendar.getInstance().get(7) + 4001055;
@@ -2740,6 +3360,11 @@ public class GameConstants {
         return original;
     }
 
+    /**
+     *
+     * @param SkillID
+     * @return
+     */
     public static boolean Summon_Skill_ID_550(int SkillID) {
         switch (SkillID) {
             case 3121006:// 火凤凰     550
@@ -2748,6 +3373,11 @@ public class GameConstants {
         return false;
     }
 
+    /**
+     *
+     * @param SkillID
+     * @return
+     */
     public static boolean Summon_Skill_ID_500(int SkillID) {
         switch (SkillID) {
             case 3221005:// 冰凤凰     500
@@ -2757,6 +3387,11 @@ public class GameConstants {
         return false;
     }
 
+    /**
+     *
+     * @param SkillID
+     * @return
+     */
     public static boolean Summon_Skill_ID_450(int SkillID) {
         switch (SkillID) {
             case 5211002:// 海鸥空袭     450
@@ -2765,6 +3400,11 @@ public class GameConstants {
         return false;
     }
 
+    /**
+     *
+     * @param SkillID
+     * @return
+     */
     public static boolean Summon_Skill_ID_300(int SkillID) {
         switch (SkillID) {
             case 2221005:// 火魔兽       300
@@ -2773,6 +3413,11 @@ public class GameConstants {
         return false;
     }
 
+    /**
+     *
+     * @param SkillID
+     * @return
+     */
     public static boolean Summon_Skill_ID_270(int SkillID) {
         switch (SkillID) {
             case 2121005:// 冰破魔兽     270
@@ -2781,6 +3426,11 @@ public class GameConstants {
         return false;
     }
 
+    /**
+     *
+     * @param SkillID
+     * @return
+     */
     public static boolean Summon_Skill_ID_250(int SkillID) {
         switch (SkillID) {
             case 12111004:// 火魔兽	 250
@@ -2789,6 +3439,11 @@ public class GameConstants {
         return false;
     }
 
+    /**
+     *
+     * @param SkillID
+     * @return
+     */
     public static boolean Summon_Skill_ID_230(int SkillID) {
         switch (SkillID) {
             case 2321003:// 强化圣龙     230
@@ -2797,6 +3452,11 @@ public class GameConstants {
         return false;
     }
 
+    /**
+     *
+     * @param SkillID
+     * @return
+     */
     public static boolean Summon_Skill_ID_200(int SkillID) {
         switch (SkillID) {
             case 5211001:// 章鱼炮台     200
@@ -2805,6 +3465,11 @@ public class GameConstants {
         return false;
     }
 
+    /**
+     *
+     * @param SkillID
+     * @return
+     */
     public static boolean Summon_Skill_ID_150(int SkillID) {
         switch (SkillID) {
             case 2311006:// 圣龙召唤     150
@@ -2813,6 +3478,11 @@ public class GameConstants {
         return false;
     }
 
+    /**
+     *
+     * @param SkillID
+     * @return
+     */
     public static boolean Summon_Skill_ID_100(int SkillID) {
         switch (SkillID) {
             case 3111005://银鹰召唤     100
@@ -2822,6 +3492,11 @@ public class GameConstants {
         return false;
     }
 
+    /**
+     *
+     * @param SkillID
+     * @return
+     */
     public static boolean Summon_Skill_ID_40(int SkillID) {
         switch (SkillID) {
             case 11001004:// 魂精灵  	 40
@@ -2834,6 +3509,13 @@ public class GameConstants {
         return false;
     }
 
+    /**
+     *
+     * @param skill
+     * @param c
+     * @param damage
+     * @return
+     */
     public static int Novice_Skill(int skill, MapleCharacter c, int damage) {
         switch (skill) {
             case 1000://新手 蜗牛壳
@@ -2863,6 +3545,11 @@ public class GameConstants {
         return false;
     }
 
+    /**
+     *
+     * @param skill
+     * @return
+     */
     public static boolean Ares_Skill_140(int skill) {//战神技能
         switch (skill) {
             case 21100002:
@@ -2875,6 +3562,11 @@ public class GameConstants {
         return false;
     }
 
+    /**
+     *
+     * @param skill
+     * @return
+     */
     public static boolean Ares_Skill_350(int skill) {//战神技能
         switch (skill) {
             case 21110003:
@@ -2887,6 +3579,11 @@ public class GameConstants {
         return false;
     }
 
+    /**
+     *
+     * @param skill
+     * @return
+     */
     public static boolean Ares_Skill_800(int skill) {//战神技能
         switch (skill) {
             case 21120005:
@@ -2898,6 +3595,11 @@ public class GameConstants {
         return false;
     }
 
+    /**
+     *
+     * @param skill
+     * @return
+     */
     public static boolean Ares_Skill_1500(int skill) {//战神技能
         switch (skill) {
             case 21120006:
@@ -2907,6 +3609,11 @@ public class GameConstants {
         return false;
     }
 
+    /**
+     *
+     * @param skill
+     * @return
+     */
     public static boolean Thief_Skill_270(int skill) {//奇袭者技能
         switch (skill) {
             case 15001001:
@@ -2920,6 +3627,11 @@ public class GameConstants {
         return false;
     }
 
+    /**
+     *
+     * @param skill
+     * @return
+     */
     public static boolean Thief_Skill_420(int skill) {//奇袭者技能
         switch (skill) {
             case 15111001:
@@ -2930,6 +3642,11 @@ public class GameConstants {
         return false;
     }
 
+    /**
+     *
+     * @param skill
+     * @return
+     */
     public static boolean Thief_Skill_650(int skill) {//奇袭者技能
         switch (skill) {
             case 15111003:
@@ -2938,6 +3655,11 @@ public class GameConstants {
         return false;
     }
 
+    /**
+     *
+     * @param skill
+     * @return
+     */
     public static boolean Night_Knight_Skill_220(int skill) {//夜行者技能
         switch (skill) {
             case 14001004:
@@ -2951,6 +3673,11 @@ public class GameConstants {
         return false;
     }
 
+    /**
+     *
+     * @param skill
+     * @return
+     */
     public static boolean Wind_Knight_Skill_160(int skill) {//风灵使者技能
         switch (skill) {
             case 13001003:
@@ -2963,6 +3690,11 @@ public class GameConstants {
         return false;
     }
 
+    /**
+     *
+     * @param skill
+     * @return
+     */
     public static boolean Wind_Knight_Skill_550(int skill) {//风灵使者技能
         switch (skill) {
             case 13111006:
@@ -2972,6 +3704,11 @@ public class GameConstants {
         return false;
     }
 
+    /**
+     *
+     * @param skill
+     * @return
+     */
     public static boolean Fire_Knight_Skill_140(int skill) {//魂骑士技能
         switch (skill) {
             case 12001003:
@@ -2984,6 +3721,11 @@ public class GameConstants {
         return false;
     }
 
+    /**
+     *
+     * @param skill
+     * @return
+     */
     public static boolean Fire_Knight_Skill_500(int skill) {//魂骑士技能
         switch (skill) {
             case 12111003:
@@ -2992,6 +3734,11 @@ public class GameConstants {
         return false;
     }
 
+    /**
+     *
+     * @param skill
+     * @return
+     */
     public static boolean Ghost_Knight_Skill_320(int skill) {//魂骑士技能
         switch (skill) {
             case 11001002:
@@ -3006,6 +3753,11 @@ public class GameConstants {
         return false;
     }
 
+    /**
+     *
+     * @param skill
+     * @return
+     */
     public static boolean Pirate_Skill_290(int skill) {//海盗技能
         switch (skill) {
             case 5001001:
@@ -3027,6 +3779,11 @@ public class GameConstants {
         return false;
     }
 
+    /**
+     *
+     * @param skill
+     * @return
+     */
     public static boolean Pirate_Skill_420(int skill) {//海盗技能
         switch (skill) {
             case 5221007:
@@ -3038,6 +3795,11 @@ public class GameConstants {
         return false;
     }
 
+    /**
+     *
+     * @param skill
+     * @return
+     */
     public static boolean Pirate_Skill_700(int skill) {//海盗技能
         switch (skill) {
             case 5111006:
@@ -3048,6 +3810,11 @@ public class GameConstants {
         return false;
     }
 
+    /**
+     *
+     * @param skill
+     * @return
+     */
     public static boolean Pirate_Skill_810(int skill) {//海盗技能
         switch (skill) {
             case 5221008:
@@ -3057,6 +3824,11 @@ public class GameConstants {
         return false;
     }
 
+    /**
+     *
+     * @param skill
+     * @return
+     */
     public static boolean Pirate_Skill_1200(int skill) {//海盗技能
         switch (skill) {
             case 5221003:
@@ -3065,6 +3837,11 @@ public class GameConstants {
         return false;
     }
 
+    /**
+     *
+     * @param skill
+     * @return
+     */
     public static boolean Thief_Skill_180(int skill) {//飞侠技能
         switch (skill) {
             case 4001334:
@@ -3080,6 +3857,11 @@ public class GameConstants {
         return false;
     }
 
+    /**
+     *
+     * @param skill
+     * @return
+     */
     public static boolean Thief_Skill_250(int skill) {//飞侠技能
         switch (skill) {
             case 4211004:
@@ -3088,6 +3870,11 @@ public class GameConstants {
         return false;
     }
 
+    /**
+     *
+     * @param skill
+     * @return
+     */
     public static boolean Thief_Skill_500(int skill) {//飞侠技能
         switch (skill) {
             case 4211002:
@@ -3105,6 +3892,11 @@ public class GameConstants {
 //        return false;
 //    }
 
+    /**
+     *
+     * @param skill
+     * @return
+     */
     public static boolean Bowman_Skill_180(int skill) {//弓箭手技能
         switch (skill) {
             case 3001005:
@@ -3124,6 +3916,11 @@ public class GameConstants {
         return false;
     }
 
+    /**
+     *
+     * @param skill
+     * @return
+     */
     public static boolean Bowman_Skill_260(int skill) {//弓箭手技能
         switch (skill) {
             case 3201003:
@@ -3135,6 +3932,11 @@ public class GameConstants {
         return false;
     }
 
+    /**
+     *
+     * @param skill
+     * @return
+     */
     public static boolean Bowman_Skill_850(int skill) {//弓箭手技能
         switch (skill) {
             case 3221001:
@@ -3143,6 +3945,11 @@ public class GameConstants {
         return false;
     }
 
+    /**
+     *
+     * @param skill
+     * @return
+     */
     public static boolean Magician_Skill_90(int skill) {//魔法师技能
         switch (skill) {
             case 2001004:
@@ -3153,6 +3960,11 @@ public class GameConstants {
         return false;
     }
 
+    /**
+     *
+     * @param skill
+     * @return
+     */
     public static boolean Magician_Skill_180(int skill) {//魔法师技能
         switch (skill) {
             case 2101004:
@@ -3171,6 +3983,11 @@ public class GameConstants {
         return false;
     }
 
+    /**
+     *
+     * @param skill
+     * @return
+     */
     public static boolean Magician_Skill_240(int skill) {//魔法师技能
         switch (skill) {
             case 2121006:
@@ -3182,6 +3999,11 @@ public class GameConstants {
         return false;
     }
 
+    /**
+     *
+     * @param skill
+     * @return
+     */
     public static boolean Magician_Skill_670(int skill) {//魔法师技能
         switch (skill) {
             case 2121001:
@@ -3212,6 +4034,12 @@ public class GameConstants {
 //        }
 //        return false;
 //    }
+
+    /**
+     *
+     * @param skill
+     * @return
+     */
     public static boolean Warrior_Skill_450(int skill) {//战士技能
         switch (skill) {
             case 1001004:
@@ -3237,6 +4065,11 @@ public class GameConstants {
         return false;
     }
 
+    /**
+     *
+     * @param skill
+     * @return
+     */
     public static boolean Warrior_Skill_2000(int skill) {//战士技能
         switch (skill) {
             case 1111003:
@@ -3248,6 +4081,11 @@ public class GameConstants {
         return false;
     }
 
+    /**
+     *
+     * @param MobID
+     * @return
+     */
     public static boolean No_Mob(int MobID) {
         switch (MobID) {
             case 9300028: //艾里葛斯
@@ -3331,6 +4169,11 @@ public class GameConstants {
         return false;
     }
 
+    /**
+     *
+     * @param SkillID
+     * @return
+     */
     public static boolean 不检测技能(int SkillID) {
         switch (SkillID) {
             case 1321001:
@@ -3348,6 +4191,11 @@ public class GameConstants {
         return false;
     }
 
+    /**
+     *
+     * @param level
+     * @return
+     */
     public static int getMonsterHP(int level) {
         if ((level < 0) || (level >= mobHpVal.length)) {
             return Integer.MAX_VALUE;
@@ -3356,8 +4204,16 @@ public class GameConstants {
     }
 
     // Custom Balloon Tips on the Login Screen
+
+    /**
+     *
+     */
     public static final List<Balloon> lBalloon = new ArrayList<>();
 
+    /**
+     *
+     * @return
+     */
     public static List<Balloon> getBalloons() {
         // Point 0,0 Coordinates: 232, 107
         // Point 96,0 Coordinates: 328, 107
@@ -3423,5 +4279,17 @@ public class GameConstants {
                 return true;
         }
         return false;
+    }
+
+    /**
+     *
+     * @param itemId
+     * @return
+     */
+    public static boolean is物理武器(int itemId) {
+        if (itemId == 1342069) {
+            return false;
+        }
+        return ((itemId >= 1300000) && (itemId < 1540000)) || (itemId / 1000 == 1212) || (itemId / 1000 == 1222) || (itemId / 1000 == 1232) || (itemId / 1000 == 1242) || (itemId / 1000 == 1252);
     }
 }

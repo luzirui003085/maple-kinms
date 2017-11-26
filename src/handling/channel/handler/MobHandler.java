@@ -26,7 +26,6 @@ import java.util.List;
 import client.MapleClient;
 import client.MapleCharacter;
 import client.inventory.MapleInventoryType;
-import constants.GameConstants;
 import server.MapleInventoryManipulator;
 import server.Randomizer;
 import server.maps.MapleMap;

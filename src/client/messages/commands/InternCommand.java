@@ -10,14 +10,28 @@ import server.maps.MapleMap;
 import tools.MaplePacketCreator;
 import tools.StringUtil;
 
+/**
+ *
+ * @author zjj
+ */
 public class InternCommand {
 
+    /**
+     *
+     * @return
+     */
     public static ServerConstants.PlayerGMRank getPlayerLevelRequired() {
         return ServerConstants.PlayerGMRank.INTERN;
     }
 
+    /**
+     *
+     */
     public static class 封号 extends CommandExecute {
 
+        /**
+         *
+         */
         protected boolean hellban = false;
 
         private String getCommand() {
@@ -70,6 +84,9 @@ public class InternCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class 传送 extends CommandExecute {
 
         @Override
@@ -110,8 +127,14 @@ public class InternCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class UnBan extends CommandExecute {
 
+        /**
+         *
+         */
         protected boolean hellban = false;
 
         private String getCommand() {
@@ -159,6 +182,9 @@ public class InternCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class DC extends CommandExecute {
 
         @Override
@@ -187,6 +213,9 @@ public class InternCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class spy extends CommandExecute {
 
         @Override
@@ -205,7 +234,7 @@ public class InternCommand {
                 if (victim != null) {
                     c.getPlayer().dropMessage(5, "此玩家狀態:");
                     c.getPlayer().dropMessage(5, "等級: " + victim.getLevel() + "職業: " + victim.getJob() + "名聲: " + victim.getFame());
-                    c.getPlayer().dropMessage(5, "地圖: " + victim.getMapId() + " - " + victim.getMap().getMapName().toString());
+                    c.getPlayer().dropMessage(5, "地圖: " + victim.getMapId() + " - " + victim.getMap().getMapName());
                     c.getPlayer().dropMessage(5, "力量: " + victim.getStat().getStr() + "  ||  敏捷: " + victim.getStat().getDex() + "  ||  智力: " + victim.getStat().getInt() + "  ||  幸運: " + victim.getStat().getLuk());
                     c.getPlayer().dropMessage(5, "擁有 " + victim.getMeso() + " 楓幣.");
                     victim.dropMessage(5, c.getPlayer().getName() + " GM在觀察您..");
@@ -217,6 +246,9 @@ public class InternCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class online1 extends CommandExecute {
 
         @Override
@@ -230,6 +262,9 @@ public class InternCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class online extends CommandExecute {
 
         @Override
@@ -255,7 +290,7 @@ public class InternCommand {
                     ret.append(chr.getJob());
                     if (chr.getMap() != null) {
                         ret.append(" 地圖: ");
-                        ret.append(chr.getMapId() + " - " + chr.getMap().getMapName().toString());
+                        ret.append(chr.getMapId()).append(" - ").append(chr.getMap().getMapName());
                         c.getPlayer().dropMessage(6, ret.toString());
                     }
                 }
@@ -266,6 +301,9 @@ public class InternCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class Warp extends CommandExecute {
 
         @Override
@@ -306,6 +344,9 @@ public class InternCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class CnGM extends CommandExecute {
 
         @Override
@@ -320,6 +361,9 @@ public class InternCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class Hide extends CommandExecute {
 
         @Override
@@ -333,6 +377,9 @@ public class InternCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class UnHide extends CommandExecute {
 
         @Override

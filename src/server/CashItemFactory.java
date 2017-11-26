@@ -4,42 +4,52 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.PreparedStatement;
 import database.DatabaseConnection;
-import handling.cashshop.CashShopServer;
 import java.io.File;
 import java.util.*;
 import java.util.Map.Entry;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import provider.MapleData;
 import provider.MapleDataProvider;
 import provider.MapleDataProviderFactory;
 import provider.MapleDataTool;
 import server.CashItemInfo.CashModInfo;
-import tools.wztosql.AddCashItemToDB;
 
+/**
+ *
+ * @author zjj
+ */
 public class CashItemFactory {
 
     private final static CashItemFactory instance = new CashItemFactory();
     private final static int[] bestItems = new int[]{50100010, 50100010, 50100010, 50100010, 50100010};
     private boolean initialized = false;
-    private final Map<Integer, CashItemInfo> itemStats = new HashMap<Integer, CashItemInfo>();
-    private final Map<Integer, List<CashItemInfo>> itemPackage = new HashMap<Integer, List<CashItemInfo>>();
-    private final Map<Integer, CashModInfo> itemMods = new HashMap<Integer, CashModInfo>();
+    private final Map<Integer, CashItemInfo> itemStats = new HashMap<>();
+    private final Map<Integer, List<CashItemInfo>> itemPackage = new HashMap<>();
+    private final Map<Integer, CashModInfo> itemMods = new HashMap<>();
     private final MapleDataProvider data = MapleDataProviderFactory.getDataProvider(new File(System.getProperty("net.sf.odinms.wzpath") + "/Etc.wz"));
     //是这个目录把，嗯
     private final MapleDataProvider itemStringInfo = MapleDataProviderFactory.getDataProvider(new File(System.getProperty("net.sf.odinms.wzpath") + "/String.wz"));
     private Map<Integer, Integer> idLookup = new HashMap();
 
+    /**
+     *
+     * @return
+     */
     public static final CashItemFactory getInstance() {
         return instance;
     }
 
+    /**
+     *
+     */
     protected CashItemFactory() {
     }
 
+    /**
+     *
+     */
     public void initialize() {
         System.out.println("Loading CashItemFactory :::");
-        final List<Integer> itemids = new ArrayList<Integer>();
+        final List<Integer> itemids = new ArrayList<>();
         for (MapleData field : data.getData("Commodity.img").getChildren()) {
             final int SN = MapleDataTool.getIntConvert("SN", field, 0);
             final int itemId = MapleDataTool.getIntConvert("ItemId", field, 0);
@@ -68,6 +78,11 @@ public class CashItemFactory {
         initialized = true;
     }
 
+    /**
+     *
+     * @param sn
+     * @return
+     */
     public final CashItemInfo getItem(int sn) {
         final CashItemInfo stats = itemStats.get(sn);
         // final CashItemInfo stats = itemStats.get(Integer.valueOf(sn));
@@ -82,11 +97,16 @@ public class CashItemFactory {
         return stats;
     }
 
+    /**
+     *
+     * @param itemId
+     * @return
+     */
     public final List<CashItemInfo> getPackageItems(int itemId) {
         if (itemPackage.get(itemId) != null) {
             return itemPackage.get(itemId);
         }
-        final List<CashItemInfo> packageItems = new ArrayList<CashItemInfo>();
+        final List<CashItemInfo> packageItems = new ArrayList<>();
 
         final MapleData b = data.getData("CashPackage.img");
 
@@ -103,12 +123,17 @@ public class CashItemFactory {
             return null;
         }
         for (MapleData d : b.getChildByPath(itemId + "/SN").getChildren()) {
-            packageItems.add(itemStats.get(Integer.valueOf(MapleDataTool.getIntConvert(d))));
+            packageItems.add(itemStats.get(MapleDataTool.getIntConvert(d)));
         }
         itemPackage.put(itemId, packageItems);
         return packageItems;
     }
 
+    /**
+     *
+     * @param sn
+     * @return
+     */
     public final CashModInfo getModInfo(int sn) {
         CashModInfo ret = itemMods.get(sn);
         if (ret == null) {
@@ -133,6 +158,11 @@ public class CashItemFactory {
         return ret;
     }
 
+    /**
+     *
+     * @param itemid
+     * @return
+     */
     public final int getItemSN(int itemid) {
         for (Entry<Integer, CashItemInfo> ci : itemStats.entrySet()) {
             if (ci.getValue().getId() == itemid) {
@@ -142,6 +172,10 @@ public class CashItemFactory {
         return 0;
     }
 
+    /**
+     *
+     * @return
+     */
     public final Collection<CashModInfo> getAllModInfo() {
         if (!initialized) {
             initialize();
@@ -149,14 +183,26 @@ public class CashItemFactory {
         return itemMods.values();
     }
 
+    /**
+     *
+     * @return
+     */
     public final int[] getBestItems() {
         return bestItems;
     }
 
+    /**
+     *
+     * @param itemId
+     * @return
+     */
     public int getSnFromId(int itemId) {
         return idLookup.get(itemId);
     }
 
+    /**
+     *
+     */
     public final void clearCashShop() {
         itemStats.clear();
         itemPackage.clear();

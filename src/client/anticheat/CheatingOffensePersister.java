@@ -24,23 +24,34 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
-
 import server.Timer.CheatTimer;
 
+/**
+ *
+ * @author zjj
+ */
 public class CheatingOffensePersister {
 
     private final static CheatingOffensePersister instance = new CheatingOffensePersister();
-    private final Set<CheatingOffenseEntry> toPersist = new LinkedHashSet<CheatingOffenseEntry>();
+    private final Set<CheatingOffenseEntry> toPersist = new LinkedHashSet<>();
     private final Lock mutex = new ReentrantLock();
 
     private CheatingOffensePersister() {
         CheatTimer.getInstance().register(new PersistingTask(), 61000);
     }
 
+    /**
+     *
+     * @return
+     */
     public static CheatingOffensePersister getInstance() {
         return instance;
     }
 
+    /**
+     *
+     * @param coe
+     */
     public void persistEntry(CheatingOffenseEntry coe) {
         mutex.lock();
         try {
@@ -51,6 +62,9 @@ public class CheatingOffensePersister {
         }
     }
 
+    /**
+     *
+     */
     public class PersistingTask implements Runnable {
 
         @Override

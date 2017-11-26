@@ -1,30 +1,8 @@
-/*
- This file is part of the OdinMS Maple Story Server
- Copyright (C) 2008 ~ 2010 Patrick Huy <patrick.huy@frz.cc> 
- Matthias Butz <matze@odinms.de>
- Jan Christian Meyer <vimes@odinms.de>
-
- This program is free software: you can redistribute it and/or modify
- it under the terms of the GNU Affero General Public License version 3
- as published by the Free Software Foundation. You may not use, modify
- or distribute this program under any other version of the
- GNU Affero General Public License.
-
- This program is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- GNU Affero General Public License for more details.
-
- You should have received a copy of the GNU Affero General Public License
- along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
 package handling.channel.handler;
 
 import client.ISkill;
 import client.MapleCharacter;
-import client.MapleCharacterUtil;
 import client.MapleClient;
-import client.MapleDisease;
 import client.MapleStat;
 import client.PlayerStats;
 import client.SkillFactory;
@@ -40,7 +18,6 @@ import client.inventory.MapleMount;
 import client.inventory.MaplePet;
 import client.inventory.MaplePet.PetFlag;
 import constants.GameConstants;
-import constants.ServerConstants;
 import handling.channel.ChannelServer;
 import handling.world.MaplePartyCharacter;
 import handling.world.World;
@@ -74,18 +51,24 @@ import server.maps.SavedLocationType;
 import server.quest.MapleQuest;
 import server.shops.HiredMerchant;
 import server.shops.IMaplePlayerShop;
-import tools.HexTool;
 import tools.MaplePacketCreator;
 import tools.Pair;
-import tools.data.input.ByteArrayByteStream;
-import tools.data.input.GenericSeekableLittleEndianAccessor;
 import tools.data.input.SeekableLittleEndianAccessor;
 import tools.packet.MTSCSPacket;
 import tools.packet.PetPacket;
 import tools.packet.PlayerShopPacket;
 
+/**
+ *
+ * @author zjj
+ */
 public class InventoryHandler {
 
+    /**
+     *
+     * @param slea
+     * @param c
+     */
     public static final void ItemMove(final SeekableLittleEndianAccessor slea, final MapleClient c) {
         if (c.getPlayer().getPlayerShop() != null || c.getPlayer().getConversation() > 0 || c.getPlayer().getTrade() != null) { //hack
             return;
@@ -111,6 +94,11 @@ public class InventoryHandler {
         }
     }
 
+    /**
+     *
+     * @param slea
+     * @param c
+     */
     public static final void ItemSort(final SeekableLittleEndianAccessor slea, final MapleClient c) {
         c.getPlayer().updateTick(slea.readInt());
 
@@ -145,6 +133,11 @@ public class InventoryHandler {
         c.getSession().write(MaplePacketCreator.enableActions());
     }
 
+    /**
+     *
+     * @param slea
+     * @param c
+     */
     public static final void ItemGather(final SeekableLittleEndianAccessor slea, final MapleClient c) {
         // [41 00] [E5 1D 55 00] [01]
         // [32 00] [01] [01] // Sent after
@@ -154,7 +147,7 @@ public class InventoryHandler {
         final MapleInventoryType invType = MapleInventoryType.getByType(mode);
         MapleInventory Inv = c.getPlayer().getInventory(invType);
 
-        final List<IItem> itemMap = new LinkedList<IItem>();
+        final List<IItem> itemMap = new LinkedList<>();
         for (IItem item : Inv.list()) {
             itemMap.add(item.copy()); // clone all  items T___T.
         }
@@ -173,13 +166,13 @@ public class InventoryHandler {
     }
 
     private static final List<IItem> sortItems(final List<IItem> passedMap) {
-        final List<Integer> itemIds = new ArrayList<Integer>(); // empty list.
+        final List<Integer> itemIds = new ArrayList<>(); // empty list.
         for (IItem item : passedMap) {
             itemIds.add(item.getItemId()); // adds all item ids to the empty list to be sorted.
         }
         Collections.sort(itemIds); // sorts item ids
 
-        final List<IItem> sortedList = new LinkedList<IItem>(); // ordered list pl0x <3.
+        final List<IItem> sortedList = new LinkedList<>(); // ordered list pl0x <3.
 
         for (Integer val : itemIds) {
             for (IItem item : passedMap) {
@@ -193,6 +186,14 @@ public class InventoryHandler {
         return sortedList;
     }
 
+    /**
+     *
+     * @param slot
+     * @param itemId
+     * @param c
+     * @param chr
+     * @return
+     */
     public static final boolean UseRewardItem(final byte slot, final int itemId, final MapleClient c, final MapleCharacter chr) {
         final IItem toUse = c.getPlayer().getInventory(GameConstants.getInventoryType(itemId)).getItem(slot);
         c.getSession().write(MaplePacketCreator.enableActions());
@@ -234,6 +235,12 @@ public class InventoryHandler {
         return false;
     }
 
+    /**
+     *
+     * @param slea
+     * @param c
+     * @param chr
+     */
     public static final void QuestKJ(final SeekableLittleEndianAccessor slea, final MapleClient c, final MapleCharacter chr) {
         if (chr == null || !chr.isAlive() || chr.getCSPoints(2) < 200) {
             chr.dropMessage(1, "你没有足够的抵用卷！");
@@ -262,6 +269,12 @@ public class InventoryHandler {
 
     }
 
+    /**
+     *
+     * @param slea
+     * @param c
+     * @param chr
+     */
     public static final void UseItem(final SeekableLittleEndianAccessor slea, final MapleClient c, final MapleCharacter chr) {
         if (chr == null || !chr.isAlive() || chr.getMapId() == 749040100 || chr.getMap() == null/* || chr.hasDisease(MapleDisease.POTION)*/) {
             c.getSession().write(MaplePacketCreator.enableActions());
@@ -295,6 +308,12 @@ public class InventoryHandler {
         }
     }
 
+    /**
+     *
+     * @param slea
+     * @param c
+     * @param chr
+     */
     public static final void UseReturnScroll(final SeekableLittleEndianAccessor slea, final MapleClient c, final MapleCharacter chr) {
         if (!chr.isAlive() || chr.getMapId() == 749040100) {
             c.getSession().write(MaplePacketCreator.enableActions());
@@ -320,6 +339,11 @@ public class InventoryHandler {
         }
     }
 
+    /**
+     *
+     * @param slea
+     * @param c
+     */
     public static final void UseMagnify(final SeekableLittleEndianAccessor slea, final MapleClient c) {
         c.getPlayer().updateTick(slea.readInt());
         final IItem magnify = c.getPlayer().getInventory(MapleInventoryType.USE).getItem((byte) slea.readShort());
@@ -332,7 +356,7 @@ public class InventoryHandler {
         final MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
         final int reqLevel = ii.getReqLevel(eqq.getItemId()) / 10;
         if (eqq.getState() == 1 && (magnify.getItemId() == 2460003 || (magnify.getItemId() == 2460002 && reqLevel <= 12) || (magnify.getItemId() == 2460001 && reqLevel <= 7) || (magnify.getItemId() == 2460000 && reqLevel <= 3))) {
-            final List<List<StructPotentialItem>> pots = new LinkedList<List<StructPotentialItem>>(ii.getAllPotentialInfo().values());
+            final List<List<StructPotentialItem>> pots = new LinkedList<>(ii.getAllPotentialInfo().values());
             int new_state = Math.abs(eqq.getPotential1());
             if (new_state > 7 || new_state < 5) { //luls
                 new_state = 5;
@@ -346,12 +370,18 @@ public class InventoryHandler {
                         StructPotentialItem pot = pots.get(Randomizer.nextInt(pots.size())).get(reqLevel);
                         if (pot != null && pot.reqLevel / 10 <= reqLevel && GameConstants.optionTypeFits(pot.optionType, eqq.getItemId()) && GameConstants.potentialIDFits(pot.potentialID, new_state, i)) { //optionType
                             //have to research optionType before making this truely sea-like
-                            if (i == 0) {
-                                eqq.setPotential1(pot.potentialID);
-                            } else if (i == 1) {
-                                eqq.setPotential2(pot.potentialID);
-                            } else if (i == 2) {
-                                eqq.setPotential3(pot.potentialID);
+                            switch (i) {
+                                case 0:
+                                    eqq.setPotential1(pot.potentialID);
+                                    break;
+                                case 1:
+                                    eqq.setPotential2(pot.potentialID);
+                                    break;
+                                case 2:
+                                    eqq.setPotential3(pot.potentialID);
+                                    break;
+                                default:
+                                    break;
                             }
                             rewarded = true;
                         }
@@ -363,14 +393,32 @@ public class InventoryHandler {
             MapleInventoryManipulator.removeFromSlot(c, MapleInventoryType.USE, magnify.getPosition(), (short) 1, false);
         } else {
             c.getSession().write(MaplePacketCreator.getInventoryFull());
-            return;
         }
     }
 
+    /**
+     *
+     * @param slot
+     * @param dst
+     * @param ws
+     * @param c
+     * @param chr
+     * @return
+     */
     public static final boolean UseUpgradeScroll(final byte slot, final byte dst, final byte ws, final MapleClient c, final MapleCharacter chr) {
         return UseUpgradeScroll(slot, dst, ws, c, chr, 0);
     }
 
+    /**
+     *
+     * @param slot
+     * @param dst
+     * @param ws
+     * @param c
+     * @param chr
+     * @param vegas
+     * @return
+     */
     public static final boolean UseUpgradeScroll(final byte slot, final byte dst, final byte ws, final MapleClient c, final MapleCharacter chr, final int vegas) {
         boolean whiteScroll = false; // white scroll being used?
         boolean legendarySpirit = false; // legendary spirit skill
@@ -534,6 +582,12 @@ public class InventoryHandler {
         return true;
     }
 
+    /**
+     *
+     * @param slea
+     * @param c
+     * @param chr
+     */
     public static final void UseCatchItem(final SeekableLittleEndianAccessor slea, final MapleClient c, final MapleCharacter chr) {
         c.getPlayer().updateTick(slea.readInt());
         final byte slot = (byte) slea.readShort();
@@ -607,6 +661,12 @@ public class InventoryHandler {
         c.getSession().write(MaplePacketCreator.enableActions());
     }
 
+    /**
+     *
+     * @param slea
+     * @param c
+     * @param chr
+     */
     public static final void UseMountFood(final SeekableLittleEndianAccessor slea, final MapleClient c, final MapleCharacter chr) {
         c.getPlayer().updateTick(slea.readInt());
         final byte slot = (byte) slea.readShort();
@@ -634,6 +694,12 @@ public class InventoryHandler {
         c.getSession().write(MaplePacketCreator.enableActions());
     }
 
+    /**
+     *
+     * @param slea
+     * @param c
+     * @param chr
+     */
     public static final void UseScriptedNPCItem(final SeekableLittleEndianAccessor slea, final MapleClient c, final MapleCharacter chr) {
         c.getPlayer().updateTick(slea.readInt());
         final byte slot = (byte) slea.readShort();
@@ -851,6 +917,12 @@ public class InventoryHandler {
         c.getSession().write(MaplePacketCreator.enableActions());
     }
 
+    /**
+     *
+     * @param slea
+     * @param c
+     * @param chr
+     */
     public static final void UseSummonBag(final SeekableLittleEndianAccessor slea, final MapleClient c, final MapleCharacter chr) {
         if (!chr.isAlive()) {
             c.getSession().write(MaplePacketCreator.enableActions());
@@ -891,6 +963,12 @@ public class InventoryHandler {
         c.getSession().write(MaplePacketCreator.enableActions());
     }
 
+    /**
+     *
+     * @param slea
+     * @param c
+     * @param chr
+     */
     public static final void UseTreasureChest(final SeekableLittleEndianAccessor slea, final MapleClient c, final MapleCharacter chr) {
         final short slot = slea.readShort();
         final int itemid = slea.readInt();
@@ -950,6 +1028,11 @@ public class InventoryHandler {
         }
     }
 
+    /**
+     *
+     * @param slea
+     * @param c
+     */
     public static final void UseCashItem(final SeekableLittleEndianAccessor slea, final MapleClient c) {
 //        c.getPlayer().updateTick(slea.readInt());
         final byte slot = (byte) slea.readShort();
@@ -1095,25 +1178,25 @@ public class InventoryHandler {
                         case 0x100: { // str
                             final int toSet = playerst.getStr() + 1;
                             playerst.setStr((short) toSet);
-                            statupdate.add(new Pair<MapleStat, Integer>(MapleStat.STR, toSet));
+                            statupdate.add(new Pair<>(MapleStat.STR, toSet));
                             break;
                         }
                         case 0x200: { // dex
                             final int toSet = playerst.getDex() + 1;
                             playerst.setDex((short) toSet);
-                            statupdate.add(new Pair<MapleStat, Integer>(MapleStat.DEX, toSet));
+                            statupdate.add(new Pair<>(MapleStat.DEX, toSet));
                             break;
                         }
                         case 0x400: { // int
                             final int toSet = playerst.getInt() + 1;
                             playerst.setInt((short) toSet);
-                            statupdate.add(new Pair<MapleStat, Integer>(MapleStat.INT, toSet));
+                            statupdate.add(new Pair<>(MapleStat.INT, toSet));
                             break;
                         }
                         case 0x800: { // luk
                             final int toSet = playerst.getLuk() + 1;
                             playerst.setLuk((short) toSet);
-                            statupdate.add(new Pair<MapleStat, Integer>(MapleStat.LUK, toSet));
+                            statupdate.add(new Pair<>(MapleStat.LUK, toSet));
                             break;
                         }
                         case 0x2000: // hp
@@ -1163,7 +1246,7 @@ public class InventoryHandler {
                             maxhp = (short) Math.min(30000, Math.abs(maxhp));
                             c.getPlayer().setHpApUsed((short) (c.getPlayer().getHpApUsed() + 1));
                             playerst.setMaxHp(maxhp);
-                            statupdate.add(new Pair<MapleStat, Integer>(MapleStat.MAXHP, (int) maxhp));
+                            statupdate.add(new Pair<>(MapleStat.MAXHP, (int) maxhp));
                             break;
 
                         case 0x8000: // mp
@@ -1199,26 +1282,26 @@ public class InventoryHandler {
                             maxmp = (short) Math.min(30000, Math.abs(maxmp));
                             c.getPlayer().setHpApUsed((short) (c.getPlayer().getHpApUsed() + 1));
                             playerst.setMaxMp(maxmp);
-                            statupdate.add(new Pair<MapleStat, Integer>(MapleStat.MAXMP, (int) maxmp));
+                            statupdate.add(new Pair<>(MapleStat.MAXMP, (int) maxmp));
                             break;
                     }
                     switch (apfrom) { // AP from
                         case 256: { // str
                             final int toSet = playerst.getStr() - 1;
                             playerst.setStr((short) toSet);
-                            statupdate.add(new Pair<MapleStat, Integer>(MapleStat.STR, toSet));
+                            statupdate.add(new Pair<>(MapleStat.STR, toSet));
                             break;
                         }
                         case 512: { // dex
                             final int toSet = playerst.getDex() - 1;
                             playerst.setDex((short) toSet);
-                            statupdate.add(new Pair<MapleStat, Integer>(MapleStat.DEX, toSet));
+                            statupdate.add(new Pair<>(MapleStat.DEX, toSet));
                             break;
                         }
                         case 1024: { // int
                             final int toSet = playerst.getInt() - 1;
                             playerst.setInt((short) toSet);
-                            statupdate.add(new Pair<MapleStat, Integer>(MapleStat.INT, toSet));
+                            statupdate.add(new Pair<>(MapleStat.INT, toSet));
                             break;
                         }
                         case 2048: { // luk
@@ -1308,8 +1391,8 @@ public class InventoryHandler {
                             c.getPlayer().setHpApUsed((short) (c.getPlayer().getHpApUsed() - 1));
                             playerst.setMp(maxmp);
                             playerst.setMaxMp(maxmp);
-                            statupdate.add(new Pair<MapleStat, Integer>(MapleStat.MP, (int) maxmp));
-                            statupdate.add(new Pair<MapleStat, Integer>(MapleStat.MAXMP, (int) maxmp));
+                            statupdate.add(new Pair<>(MapleStat.MP, (int) maxmp));
+                            statupdate.add(new Pair<>(MapleStat.MAXMP, (int) maxmp));
                             break;
                     }
                     c.getSession().write(MaplePacketCreator.updatePlayerStats(statupdate, true, c.getPlayer().getJob()));
@@ -1542,7 +1625,7 @@ public class InventoryHandler {
                     sb.append(" : ");
                     sb.append(message);
                     final boolean ear = slea.readByte() != 0;
-                    if (c.getPlayer().isPlayer() && message.indexOf("幹") != -1 || message.indexOf("豬") != -1 || message.indexOf("笨") != -1 || message.indexOf("靠") != -1 || message.indexOf("腦包") != -1 || message.indexOf("腦") != -1 || message.indexOf("智障") != -1 || message.indexOf("白目") != -1 || message.indexOf("白吃") != -1) {;
+                    if (c.getPlayer().isPlayer() && message.contains("幹") || message.contains("豬") || message.contains("笨") || message.contains("靠") || message.contains("腦包") || message.contains("腦") || message.contains("智障") || message.contains("白目") || message.contains("白吃")) {
                         c.getPlayer().dropMessage("說髒話是不禮貌的，請勿說髒話。");
                         c.getSession().write(MaplePacketCreator.enableActions());
                         return;
@@ -1576,7 +1659,7 @@ public class InventoryHandler {
                         break;
                     }
                     final boolean ear = slea.readByte() != 0;
-                    if (c.getPlayer().isPlayer() && message.indexOf("幹") != -1 || message.indexOf("豬") != -1 || message.indexOf("笨") != -1 || message.indexOf("靠") != -1 || message.indexOf("腦包") != -1 || message.indexOf("腦") != -1 || message.indexOf("智障") != -1 || message.indexOf("白目") != -1 || message.indexOf("白吃") != -1) {
+                    if (c.getPlayer().isPlayer() && message.contains("幹") || message.contains("豬") || message.contains("笨") || message.contains("靠") || message.contains("腦包") || message.contains("腦") || message.contains("智障") || message.contains("白目") || message.contains("白吃")) {
                         c.getPlayer().dropMessage("說髒話是不禮貌的，請勿說髒話。");
                         c.getSession().write(MaplePacketCreator.enableActions());
                         return;
@@ -1614,7 +1697,7 @@ public class InventoryHandler {
                     if (numLines > 3) {
                         return;
                     }
-                    final List<String> messages = new LinkedList<String>();
+                    final List<String> messages = new LinkedList<>();
                     String message;
                     for (int i = 0; i < numLines; i++) {
                         message = slea.readMapleAsciiString();
@@ -1664,7 +1747,7 @@ public class InventoryHandler {
                     sb.append(message);
 
                     final boolean ear = slea.readByte() != 0;
-                    if (c.getPlayer().isPlayer() && message.indexOf("幹") != -1 || message.indexOf("豬") != -1 || message.indexOf("笨") != -1 || message.indexOf("靠") != -1 || message.indexOf("腦包") != -1 || message.indexOf("腦") != -1 || message.indexOf("智障") != -1 || message.indexOf("白目") != -1 || message.indexOf("白吃") != -1) {
+                    if (c.getPlayer().isPlayer() && message.contains("幹") || message.contains("豬") || message.contains("笨") || message.contains("靠") || message.contains("腦包") || message.contains("腦") || message.contains("智障") || message.contains("白目") || message.contains("白吃")) {
                         c.getPlayer().dropMessage("說髒話是不禮貌的，請勿說髒話。");
                         c.getSession().write(MaplePacketCreator.enableActions());
                         return;
@@ -1704,7 +1787,7 @@ public class InventoryHandler {
                     sb.append(message);
 
                     final boolean ear = slea.readByte() != 0;
-                    if (c.getPlayer().isPlayer() && message.indexOf("幹") != -1 || message.indexOf("豬") != -1 || message.indexOf("笨") != -1 || message.indexOf("靠") != -1 || message.indexOf("腦包") != -1 || message.indexOf("腦") != -1 || message.indexOf("智障") != -1 || message.indexOf("白目") != -1 || message.indexOf("白吃") != -1) {
+                    if (c.getPlayer().isPlayer() && message.contains("幹") || message.contains("豬") || message.contains("笨") || message.contains("靠") || message.contains("腦包") || message.contains("腦") || message.contains("智障") || message.contains("白目") || message.contains("白吃")) {
                         c.getPlayer().dropMessage("說髒話是不禮貌的，請勿說髒話。");
                         c.getSession().write(MaplePacketCreator.enableActions());
                         return;
@@ -1744,7 +1827,7 @@ public class InventoryHandler {
                     sb.append(message);
 
                     final boolean ear = slea.readByte() != 0;
-                    if (c.getPlayer().isPlayer() && message.indexOf("幹") != -1 || message.indexOf("豬") != -1 || message.indexOf("笨") != -1 || message.indexOf("靠") != -1 || message.indexOf("腦包") != -1 || message.indexOf("腦") != -1 || message.indexOf("智障") != -1 || message.indexOf("白目") != -1 || message.indexOf("白吃") != -1) {
+                    if (c.getPlayer().isPlayer() && message.contains("幹") || message.contains("豬") || message.contains("笨") || message.contains("靠") || message.contains("腦包") || message.contains("腦") || message.contains("智障") || message.contains("白目") || message.contains("白吃")) {
                         c.getPlayer().dropMessage("說髒話是不禮貌的，請勿說髒話。");
                         c.getSession().write(MaplePacketCreator.enableActions());
                         return;
@@ -1791,7 +1874,7 @@ public class InventoryHandler {
                         byte pos = (byte) slea.readInt();
                         item = c.getPlayer().getInventory(MapleInventoryType.getByType(invType)).getItem(pos);
                     }
-                    if (c.getPlayer().isPlayer() && message.indexOf("幹") != -1 || message.indexOf("豬") != -1 || message.indexOf("笨") != -1 || message.indexOf("靠") != -1 || message.indexOf("腦包") != -1 || message.indexOf("腦") != -1 || message.indexOf("智障") != -1 || message.indexOf("白目") != -1 || message.indexOf("白吃") != -1) {
+                    if (c.getPlayer().isPlayer() && message.contains("幹") || message.contains("豬") || message.contains("笨") || message.contains("靠") || message.contains("腦包") || message.contains("腦") || message.contains("智障") || message.contains("白目") || message.contains("白吃")) {
                         c.getPlayer().dropMessage("說髒話是不禮貌的，請勿說髒話。");
                         c.getSession().write(MaplePacketCreator.enableActions());
                         return;
@@ -2150,7 +2233,7 @@ public class InventoryHandler {
                         break;
                     }
                     final boolean ear = slea.readByte() != 0;
-                    if (c.getPlayer().isPlayer() && text.indexOf("幹") != -1 || text.indexOf("豬") != -1 || text.indexOf("笨") != -1 || text.indexOf("靠") != -1 || text.indexOf("腦包") != -1 || text.indexOf("腦") != -1 || text.indexOf("智障") != -1 || text.indexOf("白目") != -1 || text.indexOf("白吃") != -1) {
+                    if (c.getPlayer().isPlayer() && text.contains("幹") || text.contains("豬") || text.contains("笨") || text.contains("靠") || text.contains("腦包") || text.contains("腦") || text.contains("智障") || text.contains("白目") || text.contains("白吃")) {
                         c.getPlayer().dropMessage("說髒話是不禮貌的，請勿說髒話。");
                         c.getSession().write(MaplePacketCreator.enableActions());
                         return;
@@ -2251,6 +2334,12 @@ public class InventoryHandler {
         }
     }
 
+    /**
+     *
+     * @param slea
+     * @param c
+     * @param chr
+     */
     public static final void Pickup_Player(final SeekableLittleEndianAccessor slea, MapleClient c, final MapleCharacter chr) {
         if (c.getPlayer().getPlayerShop() != null || c.getPlayer().getConversation() > 0 || c.getPlayer().getTrade() != null) { //hack
             return;
@@ -2291,7 +2380,7 @@ public class InventoryHandler {
             }
             if (mapitem.getMeso() > 0) {
                 if (chr.getParty() != null && mapitem.getOwner() != chr.getId()) {
-                    final List<MapleCharacter> toGive = new LinkedList<MapleCharacter>();
+                    final List<MapleCharacter> toGive = new LinkedList<>();
 
                     for (MaplePartyCharacter z : chr.getParty().getMembers()) {
                         MapleCharacter m = chr.getMap().getCharacterById(z.getId());
@@ -2328,6 +2417,12 @@ public class InventoryHandler {
         }
     }
 
+    /**
+     *
+     * @param slea
+     * @param c
+     * @param chr
+     */
     public static final void Pickup_Pet(final SeekableLittleEndianAccessor slea, final MapleClient c, final MapleCharacter chr) {
         if (chr == null) {
             return;
@@ -2371,7 +2466,7 @@ public class InventoryHandler {
 
             if (mapitem.getMeso() > 0) {
                 if (chr.getParty() != null && mapitem.getOwner() != chr.getId()) {
-                    final List<MapleCharacter> toGive = new LinkedList<MapleCharacter>();
+                    final List<MapleCharacter> toGive = new LinkedList<>();
                     final int splitMeso = mapitem.getMeso() * 40 / 100;
                     for (MaplePartyCharacter z : chr.getParty().getMembers()) {
                         MapleCharacter m = chr.getMap().getCharacterById(z.getId());
@@ -2403,6 +2498,12 @@ public class InventoryHandler {
         }
     }
 
+    /**
+     *
+     * @param c
+     * @param id
+     * @return
+     */
     public static final boolean useItem(final MapleClient c, final int id) {
         if (GameConstants.isUse(id)) { // TO prevent caching of everything, waste of mem
             final MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
@@ -2430,6 +2531,12 @@ public class InventoryHandler {
         return false;
     }
 
+    /**
+     *
+     * @param chr
+     * @param mapitem
+     * @param pet
+     */
     public static final void removeItem_Pet(final MapleCharacter chr, final MapleMapItem mapitem, int pet) {
         mapitem.setPickedUp(true);
         chr.getMap().broadcastMessage(MaplePacketCreator.removeItemFromMap(mapitem.getObjectId(), 5, chr.getId(), pet), mapitem.getPosition());
@@ -2502,6 +2609,11 @@ public class InventoryHandler {
 
     }
 
+    /**
+     *
+     * @param slea
+     * @param c
+     */
     public static final void OwlMinerva(final SeekableLittleEndianAccessor slea, final MapleClient c) {
         final byte slot = (byte) slea.readShort();
         final int itemid = slea.readInt();
@@ -2519,6 +2631,11 @@ public class InventoryHandler {
         c.getSession().write(MaplePacketCreator.enableActions());
     }
 
+    /**
+     *
+     * @param slea
+     * @param c
+     */
     public static final void SunziBF(final SeekableLittleEndianAccessor slea, final MapleClient c) {
         slea.readInt();
         byte slot = (byte) slea.readShort();
@@ -2536,6 +2653,11 @@ public class InventoryHandler {
         MapleInventoryManipulator.removeFromSlot(c, MapleInventoryType.USE, slot, (short) 1, false);
     }
 
+    /**
+     *
+     * @param slea
+     * @param c
+     */
     public static final void HeiLong_BaoWuHe(final SeekableLittleEndianAccessor slea, final MapleClient c) {
         byte slot = (byte) slea.readShort();
         int itemId = slea.readInt();
@@ -2607,6 +2729,11 @@ public class InventoryHandler {
         c.getSession().write(MaplePacketCreator.enableActions());
     }
 
+    /**
+     *
+     * @param slea
+     * @param c
+     */
     public static final void Owl(final SeekableLittleEndianAccessor slea, final MapleClient c) {
         if (c.getPlayer().haveItem(5230000, 1, true, false) || c.getPlayer().haveItem(2310000, 1, true, false)) {
             if (c.getPlayer().getMapId() >= 910000000 && c.getPlayer().getMapId() <= 910000022) {
@@ -2617,8 +2744,18 @@ public class InventoryHandler {
             }
         }
     }
+
+    /**
+     *
+     */
     public static final int OWL_ID = 2; //don't change. 0 = owner ID, 1 = store ID, 2 = object ID
 
+    /**
+     *
+     * @param slea
+     * @param c
+     * @param chr
+     */
     public static final void UseSkillBook(final SeekableLittleEndianAccessor slea, final MapleClient c, final MapleCharacter chr) {
         slea.skip(4);
         final byte slot = (byte) slea.readShort();
@@ -2668,6 +2805,11 @@ public class InventoryHandler {
         c.getSession().write(MaplePacketCreator.useSkillBook(chr, skill, maxlevel, canuse, success));
     }
 
+    /**
+     *
+     * @param slea
+     * @param c
+     */
     public static final void OwlWarp(final SeekableLittleEndianAccessor slea, final MapleClient c) {
         c.getSession().write(MaplePacketCreator.enableActions());
         if (c.getPlayer().getMapId() >= 910000000 && c.getPlayer().getMapId() <= 910000022 && c.getPlayer().getPlayerShop() == null) {

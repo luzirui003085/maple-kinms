@@ -25,42 +25,84 @@ import java.util.HashMap;
 import java.util.Map;
 import tools.Pair;
 
+/**
+ *
+ * @author zjj
+ */
 public class MapleReactorStats {
 
     private byte facingDirection;
     private Point tl;
     private Point br;
-    private Map<Byte, StateData> stateInfo = new HashMap<Byte, StateData>();
+    private Map<Byte, StateData> stateInfo = new HashMap<>();
 
+    /**
+     *
+     * @param facingDirection
+     */
     public final void setFacingDirection(final byte facingDirection) {
         this.facingDirection = facingDirection;
     }
 
+    /**
+     *
+     * @return
+     */
     public final byte getFacingDirection() {
         return facingDirection;
     }
 
+    /**
+     *
+     * @param tl
+     */
     public void setTL(Point tl) {
         this.tl = tl;
     }
 
+    /**
+     *
+     * @param br
+     */
     public void setBR(Point br) {
         this.br = br;
     }
 
+    /**
+     *
+     * @return
+     */
     public Point getTL() {
         return tl;
     }
 
+    /**
+     *
+     * @return
+     */
     public Point getBR() {
         return br;
     }
 
+    /**
+     *
+     * @param state
+     * @param type
+     * @param reactItem
+     * @param nextState
+     * @param timeOut
+     * @param canTouch
+     */
     public void addState(byte state, int type, Pair<Integer, Integer> reactItem, byte nextState, int timeOut, byte canTouch) {
         StateData newState = new StateData(type, reactItem, nextState, timeOut, canTouch);
         stateInfo.put(state, newState);
     }
 
+    /**
+     *
+     * @param state
+     * @return
+     */
     public byte getNextState(byte state) {
         StateData nextState = stateInfo.get(state);
         if (nextState != null) {
@@ -70,6 +112,11 @@ public class MapleReactorStats {
         }
     }
 
+    /**
+     *
+     * @param state
+     * @return
+     */
     public int getType(byte state) {
         StateData nextState = stateInfo.get(state);
         if (nextState != null) {
@@ -79,6 +126,11 @@ public class MapleReactorStats {
         }
     }
 
+    /**
+     *
+     * @param state
+     * @return
+     */
     public Pair<Integer, Integer> getReactItem(byte state) {
         StateData nextState = stateInfo.get(state);
         if (nextState != null) {
@@ -88,6 +140,11 @@ public class MapleReactorStats {
         }
     }
 
+    /**
+     *
+     * @param state
+     * @return
+     */
     public int getTimeOut(byte state) {
         StateData nextState = stateInfo.get(state);
         if (nextState != null) {
@@ -97,8 +154,13 @@ public class MapleReactorStats {
         }
     }
 
+    /**
+     *
+     * @param state
+     * @return
+     */
     public byte canTouch(byte state) {
-        StateData nextState = (StateData) this.stateInfo.get(Byte.valueOf(state));
+        StateData nextState = (StateData) this.stateInfo.get(state);
         if (nextState != null) {
             return nextState.canTouch();
         }

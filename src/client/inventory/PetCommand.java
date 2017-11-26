@@ -31,6 +31,13 @@ public class PetCommand {
     private int prob;
     private int inc;
 
+    /**
+     *
+     * @param petId
+     * @param skillId
+     * @param prob
+     * @param inc
+     */
     public PetCommand(int petId, int skillId, int prob, int inc) {
         this.petId = petId;
         this.skillId = skillId;
@@ -38,18 +45,34 @@ public class PetCommand {
         this.inc = inc;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getPetId() {
         return petId;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getSkillId() {
         return skillId;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getProbability() {
         return prob;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getIncrease() {
         return inc;
     }

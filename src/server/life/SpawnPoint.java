@@ -22,7 +22,6 @@ package server.life;
 
 import java.awt.Point;
 import java.util.concurrent.atomic.AtomicInteger;
-
 import server.MapleCarnivalFactory;
 import server.MapleCarnivalFactory.MCSkill;
 import server.maps.MapleMap;

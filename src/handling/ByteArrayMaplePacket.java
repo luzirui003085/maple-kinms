@@ -22,26 +22,49 @@ package handling;
 
 import tools.HexTool;
 
+/**
+ *
+ * @author zjj
+ */
 public class ByteArrayMaplePacket implements MaplePacket {
 
+    /**
+     *
+     */
     public static final long serialVersionUID = -7997681658570958848L;
     private byte[] data;
     private transient Runnable onSend;
 
+    /**
+     *
+     * @param data
+     */
     public ByteArrayMaplePacket(final byte[] data) {
         this.data = data;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public final byte[] getBytes() {
         return data;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public final Runnable getOnSend() {
         return onSend;
     }
 
+    /**
+     *
+     * @param onSend
+     */
     @Override
     public void setOnSend(final Runnable onSend) {
         this.onSend = onSend;

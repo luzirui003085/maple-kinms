@@ -20,6 +20,10 @@
  */
 package server.life;
 
+/**
+ *
+ * @author zjj
+ */
 public interface MonsterListener {
 
     /**

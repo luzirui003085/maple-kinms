@@ -1,23 +1,4 @@
-/*
- This file is part of the OdinMS Maple Story Server
- Copyright (C) 2008 ~ 2010 Patrick Huy <patrick.huy@frz.cc> 
- Matthias Butz <matze@odinms.de>
- Jan Christian Meyer <vimes@odinms.de>
 
- This program is free software: you can redistribute it and/or modify
- it under the terms of the GNU Affero General Public License version 3
- as published by the Free Software Foundation. You may not use, modify
- or distribute this program under any other version of the
- GNU Affero General Public License.
-
- This program is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- GNU Affero General Public License for more details.
-
- You should have received a copy of the GNU Affero General Public License
- along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
 package server.quest;
 
 import java.util.HashMap;
@@ -40,8 +21,11 @@ import server.MapleInventoryManipulator;
 import server.MapleItemInformationProvider;
 import server.Randomizer;
 import tools.MaplePacketCreator;
-import tools.packet.UIPacket;
 
+/**
+ *
+ * @author zjj
+ */
 public class MapleQuestAction implements Serializable {
 
     private static final long serialVersionUID = 9179541993413738569L;
@@ -90,6 +74,12 @@ public class MapleQuestAction implements Serializable {
         return true;
     }
 
+    /**
+     *
+     * @param c
+     * @param itemid
+     * @return
+     */
     public final boolean RestoreLostItem(final MapleCharacter c, final int itemid) {
         if (type == MapleQuestActionType.item) {
             int retitem;
@@ -107,6 +97,11 @@ public class MapleQuestAction implements Serializable {
         return false;
     }
 
+    /**
+     *
+     * @param c
+     * @param extSelection
+     */
     public void runStart(MapleCharacter c, Integer extSelection) {
         MapleQuestStatus status;
         switch (type) {
@@ -119,7 +114,7 @@ public class MapleQuestAction implements Serializable {
                 break;
             case item:
                 // first check for randomness in item selection
-                Map<Integer, Integer> props = new HashMap<Integer, Integer>();
+                Map<Integer, Integer> props = new HashMap<>();
                 MapleData prop;
                 for (MapleData iEntry : data.getChildren()) {
                     prop = iEntry.getChildByPath("prop");
@@ -266,11 +261,17 @@ public class MapleQuestAction implements Serializable {
         }
     }
 
+    /**
+     *
+     * @param c
+     * @param extSelection
+     * @return
+     */
     public boolean checkEnd(MapleCharacter c, Integer extSelection) {
         switch (type) {
             case item: {
                 // first check for randomness in item selection
-                final Map<Integer, Integer> props = new HashMap<Integer, Integer>();
+                final Map<Integer, Integer> props = new HashMap<>();
 
                 for (MapleData iEntry : data.getChildren()) {
                     final MapleData prop = iEntry.getChildByPath("prop");
@@ -364,6 +365,11 @@ public class MapleQuestAction implements Serializable {
         return true;
     }
 
+    /**
+     *
+     * @param c
+     * @param extSelection
+     */
     public void runEnd(MapleCharacter c, Integer extSelection) {
         switch (type) {
             case exp: {
@@ -372,7 +378,7 @@ public class MapleQuestAction implements Serializable {
             }
             case item: {
                 // first check for randomness in item selection
-                Map<Integer, Integer> props = new HashMap<Integer, Integer>();
+                Map<Integer, Integer> props = new HashMap<>();
 
                 for (MapleData iEntry : data.getChildren()) {
                     final MapleData prop = iEntry.getChildByPath("prop");
@@ -497,7 +503,7 @@ public class MapleQuestAction implements Serializable {
     }
 
     private static List<Integer> getJobBy5ByteEncoding(int encoded) {
-        List<Integer> ret = new ArrayList<Integer>();
+        List<Integer> ret = new ArrayList<>();
         if ((encoded & 0x1) != 0) {
             ret.add(0);
         }
@@ -559,6 +565,10 @@ public class MapleQuestAction implements Serializable {
         return ret;
     }
 
+    /**
+     *
+     * @return
+     */
     public MapleQuestActionType getType() {
         return type;
     }

@@ -21,6 +21,7 @@
 package client.inventory;
 
 import constants.GameConstants;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -28,8 +29,11 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.io.Serializable;
 
+/**
+ *
+ * @author zjj
+ */
 public class MapleInventory implements Iterable<IItem>, Serializable {
 
     private Map<Short, IItem> inventory;
@@ -40,11 +44,15 @@ public class MapleInventory implements Iterable<IItem>, Serializable {
      * Creates a new instance of MapleInventory
      */
     public MapleInventory(MapleInventoryType type, byte slotLimit) {
-        this.inventory = new LinkedHashMap<Short, IItem>();
+        this.inventory = new LinkedHashMap<>();
         this.slotLimit = slotLimit;
         this.type = type;
     }
 
+    /**
+     *
+     * @param slot
+     */
     public void addSlot(byte slot) {
         this.slotLimit += slot;
 
@@ -53,10 +61,18 @@ public class MapleInventory implements Iterable<IItem>, Serializable {
         }
     }
 
+    /**
+     *
+     * @return
+     */
     public byte getSlotLimit() {
         return slotLimit;
     }
 
+    /**
+     *
+     * @param slot
+     */
     public void setSlotLimit(byte slot) {
         if (slot > 96) {
             slot = 96;
@@ -77,6 +93,11 @@ public class MapleInventory implements Iterable<IItem>, Serializable {
         return null;
     }
 
+    /**
+     *
+     * @param itemId
+     * @return
+     */
     public IItem findByUniqueId(int itemId) {
         for (IItem item : inventory.values()) {
             if (item.getUniqueId() == itemId) {
@@ -86,6 +107,11 @@ public class MapleInventory implements Iterable<IItem>, Serializable {
         return null;
     }
 
+    /**
+     *
+     * @param itemId
+     * @return
+     */
     public int countById(int itemId) {
         int possesed = 0;
         for (IItem item : inventory.values()) {
@@ -96,8 +122,13 @@ public class MapleInventory implements Iterable<IItem>, Serializable {
         return possesed;
     }
 
+    /**
+     *
+     * @param itemId
+     * @return
+     */
     public List<IItem> listById(int itemId) {
-        List<IItem> ret = new ArrayList<IItem>();
+        List<IItem> ret = new ArrayList<>();
         for (IItem item : inventory.values()) {
             if (item.getItemId() == itemId) {
                 ret.add(item);
@@ -112,6 +143,10 @@ public class MapleInventory implements Iterable<IItem>, Serializable {
         return ret;
     }
 
+    /**
+     *
+     * @return
+     */
     public Collection<IItem> list() {
         return inventory.values();
     }
@@ -129,6 +164,10 @@ public class MapleInventory implements Iterable<IItem>, Serializable {
         return slotId;
     }
 
+    /**
+     *
+     * @param item
+     */
     public void addFromDB(IItem item) {
         if (item.getPosition() < 0 && !type.equals(MapleInventoryType.EQUIPPED)) {
             // This causes a lot of stuck problem, until we are done with position checking
@@ -137,6 +176,12 @@ public class MapleInventory implements Iterable<IItem>, Serializable {
         inventory.put(item.getPosition(), item);
     }
 
+    /**
+     *
+     * @param sSlot
+     * @param dSlot
+     * @param slotMax
+     */
     public void move(short sSlot, short dSlot, short slotMax) {
         if (dSlot > slotLimit) {
             return;
@@ -175,14 +220,29 @@ public class MapleInventory implements Iterable<IItem>, Serializable {
         inventory.put(target.getPosition(), target);
     }
 
+    /**
+     *
+     * @param slot
+     * @return
+     */
     public IItem getItem(short slot) {
         return inventory.get(slot);
     }
 
+    /**
+     *
+     * @param slot
+     */
     public void removeItem(short slot) {
         removeItem(slot, (short) 1, false);
     }
 
+    /**
+     *
+     * @param slot
+     * @param quantity
+     * @param allowZero
+     */
     public void removeItem(short slot, short quantity, boolean allowZero) {
         IItem item = inventory.get(slot);
         if (item == null) { // TODO is it ok not to throw an exception here?
@@ -197,14 +257,27 @@ public class MapleInventory implements Iterable<IItem>, Serializable {
         }
     }
 
+    /**
+     *
+     * @param slot
+     */
     public void removeSlot(short slot) {
         inventory.remove(slot);
     }
 
+    /**
+     *
+     * @return
+     */
     public boolean isFull() {
         return inventory.size() >= slotLimit;
     }
 
+    /**
+     *
+     * @param margin
+     * @return
+     */
     public boolean isFull(int margin) {
         return inventory.size() + margin >= slotLimit;
     }
@@ -224,6 +297,10 @@ public class MapleInventory implements Iterable<IItem>, Serializable {
         return -1;
     }
 
+    /**
+     *
+     * @return
+     */
     public short getNumFreeSlot() {
         if (isFull()) {
             return 0;
@@ -237,6 +314,10 @@ public class MapleInventory implements Iterable<IItem>, Serializable {
         return free;
     }
 
+    /**
+     *
+     * @return
+     */
     public MapleInventoryType getType() {
         return type;
     }

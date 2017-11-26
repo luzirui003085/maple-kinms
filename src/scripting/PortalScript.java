@@ -20,7 +20,15 @@
  */
 package scripting;
 
+/**
+ *
+ * @author zjj
+ */
 public interface PortalScript {
 
+    /**
+     *
+     * @param ppi
+     */
     public void enter(PortalPlayerInteraction ppi);
 }

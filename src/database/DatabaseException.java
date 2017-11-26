@@ -20,16 +20,34 @@
  */
 package database;
 
+/**
+ *
+ * @author zjj
+ */
 public class DatabaseException extends RuntimeException {
 
     private static final long serialVersionUID = -420103154764822555L;
 
+    /**
+     *
+     * @param msg
+     */
     public DatabaseException(String msg) {
         super(msg);
     }
 
+    /**
+     *
+     * @param e
+     */
     public DatabaseException(Exception e) {
     }
+
+    /**
+     *
+     * @param message
+     * @param cause
+     */
     public DatabaseException(String message, Throwable cause) {
         super(message, cause);
     }

@@ -20,7 +20,6 @@ import client.messages.CommandProcessorUtil;
 import constants.GameConstants;
 import database.DatabaseConnection;
 import handling.MaplePacket;
-import handling.MapleServerHandler;
 import handling.RecvPacketOpcode;
 import handling.SendPacketOpcode;
 import handling.channel.ChannelServer;
@@ -87,7 +86,6 @@ import tools.Pair;
 import tools.StringUtil;
 import tools.packet.MobPacket;
 import tools.packet.PlayerShopPacket;
-import com.mysql.jdbc.Connection;
 import java.util.concurrent.ScheduledFuture;
 import server.Start;
 
@@ -97,6 +95,10 @@ import server.Start;
  */
 public class AdminCommand {
 
+    /**
+     *
+     * @return
+     */
     public static PlayerGMRank getPlayerLevelRequired() {
         return PlayerGMRank.ADMIN;
     }
@@ -149,6 +151,10 @@ public class AdminCommand {
 //            return ret_ > 0 ? 1 : 0;
 //        }
 //    }
+
+    /**
+     *
+     */
     public static class DC extends CommandExecute {
 
         @Override
@@ -177,6 +183,9 @@ public class AdminCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class spy extends CommandExecute {
 
         @Override
@@ -195,7 +204,7 @@ public class AdminCommand {
                 if (victim != null) {
                     c.getPlayer().dropMessage(5, "此玩家狀態:");
                     c.getPlayer().dropMessage(5, "等級: " + victim.getLevel() + "職業: " + victim.getJob() + "名聲: " + victim.getFame());
-                    c.getPlayer().dropMessage(5, "地圖: " + victim.getMapId() + " - " + victim.getMap().getMapName().toString());
+                    c.getPlayer().dropMessage(5, "地圖: " + victim.getMapId() + " - " + victim.getMap().getMapName());
                     c.getPlayer().dropMessage(5, "力量: " + victim.getStat().getStr() + "  ||  敏捷: " + victim.getStat().getDex() + "  ||  智力: " + victim.getStat().getInt() + "  ||  幸運: " + victim.getStat().getLuk());
                     c.getPlayer().dropMessage(5, "擁有 " + victim.getMeso() + " 楓幣.");
                     victim.dropMessage(5, c.getPlayer().getName() + " GM在觀察您..");
@@ -207,6 +216,9 @@ public class AdminCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class online1 extends CommandExecute {
 
         @Override
@@ -220,6 +232,9 @@ public class AdminCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class 在线 extends CommandExecute {
 
         @Override
@@ -245,7 +260,7 @@ public class AdminCommand {
                     ret.append(chr.getJob());
                     if (chr.getMap() != null) {
                         ret.append(" 地圖: ");
-                        ret.append(chr.getMapId() + " - " + chr.getMap().getMapName().toString());
+                        ret.append(chr.getMapId()).append(" - ").append(chr.getMap().getMapName());
                         c.getPlayer().dropMessage(6, ret.toString());
                     }
                 }
@@ -256,6 +271,9 @@ public class AdminCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class CnGM extends CommandExecute {
 
         @Override
@@ -270,6 +288,9 @@ public class AdminCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class Hide extends CommandExecute {
 
         @Override
@@ -283,6 +304,9 @@ public class AdminCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class 设置检测白名单 extends CommandExecute {
 
         @Override
@@ -297,6 +321,9 @@ public class AdminCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class Shutdown_01 extends CommandExecute {
 
         @Override
@@ -310,6 +337,9 @@ public class AdminCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class Shutdown_02 extends CommandExecute {
 
         private static Thread t = null;
@@ -327,12 +357,16 @@ public class AdminCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class ShutdownTime111 extends CommandExecute {
 
         private static ScheduledFuture<?> ts = null;
         private int minutesLeft = 0;
         private static Thread t = null;
 
+        @Override
         public int execute(MapleClient c, String[] splitted) {
             minutesLeft = Integer.parseInt(splitted[1]);
             c.getPlayer().dropMessage(6, "本私服器將在 " + minutesLeft + "分鐘後關閉. 請盡速關閉精靈商人 並下線.");
@@ -360,6 +394,9 @@ public class AdminCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class saveall extends CommandExecute {
 
         private int p = 0;
@@ -377,8 +414,14 @@ public class AdminCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class ban extends CommandExecute {
 
+        /**
+         *
+         */
         protected boolean hellban = false;
 
         private String getCommand() {
@@ -422,6 +465,9 @@ public class AdminCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class LowHP extends CommandExecute {
 
         @Override
@@ -434,6 +480,9 @@ public class AdminCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class Heal extends CommandExecute {
 
         @Override
@@ -446,6 +495,9 @@ public class AdminCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class ReloadIPMonitor extends CommandExecute {
 
         @Override
@@ -456,15 +508,27 @@ public class AdminCommand {
 
     }
 
+    /**
+     *
+     */
     public static class HellBan extends Ban {
 
+        /**
+         *
+         */
         public HellBan() {
             hellban = true;
         }
     }
 
+    /**
+     *
+     */
     public static class Ban extends CommandExecute {
 
+        /**
+         *
+         */
         protected boolean hellban = false;
 
         private String getCommand() {
@@ -508,15 +572,27 @@ public class AdminCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class UnHellBan extends UnBan {
 
+        /**
+         *
+         */
         public UnHellBan() {
             hellban = true;
         }
     }
 
+    /**
+     *
+     */
     public static class UnBan extends CommandExecute {
 
+        /**
+         *
+         */
         protected boolean hellban = false;
 
         private String getCommand() {
@@ -565,6 +641,9 @@ public class AdminCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class UnbanIP extends CommandExecute {
 
         @Override
@@ -592,6 +671,9 @@ public class AdminCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class TempBan extends CommandExecute {
 
         @Override
@@ -638,8 +720,13 @@ public class AdminCommand {
 //            }
 //        }
 //    }
+
+    /**
+     *
+     */
     public static class Kill extends CommandExecute {
 
+        @Override
         public int execute(MapleClient c, String[] splitted) {
             MapleCharacter player = c.getPlayer();
             if (splitted.length < 2) {
@@ -664,6 +751,9 @@ public class AdminCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class Skill extends CommandExecute {
 
         @Override
@@ -680,6 +770,9 @@ public class AdminCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class Fame extends CommandExecute {
 
         @Override
@@ -705,6 +798,9 @@ public class AdminCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class HealHere extends CommandExecute {
 
         @Override
@@ -722,6 +818,9 @@ public class AdminCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class Invincible extends CommandExecute {
 
         @Override
@@ -738,6 +837,9 @@ public class AdminCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class GiveSkill extends CommandExecute {
 
         @Override
@@ -755,6 +857,9 @@ public class AdminCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class SP extends CommandExecute {
 
         @Override
@@ -765,18 +870,24 @@ public class AdminCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class AP extends CommandExecute {
 
         @Override
         public int execute(MapleClient c, String[] splitted) {
             c.getPlayer().setRemainingAp((short) CommandProcessorUtil.getOptionalIntArg(splitted, 1, 1));
-            final List<Pair<MapleStat, Integer>> statupdate = new ArrayList<Pair<MapleStat, Integer>>();
+            final List<Pair<MapleStat, Integer>> statupdate = new ArrayList<>();
             c.getSession().write(MaplePacketCreator.updatePlayerStats(statupdate, c.getPlayer().getJob()));
             return 1;
         }
 
     }
 
+    /**
+     *
+     */
     public static class Job extends CommandExecute {
 
         @Override
@@ -786,6 +897,9 @@ public class AdminCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class WhereAmI extends CommandExecute {
 
         @Override
@@ -795,6 +909,9 @@ public class AdminCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class Shop extends CommandExecute {
 
         @Override
@@ -808,6 +925,9 @@ public class AdminCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class GainMeso extends CommandExecute {
 
         @Override
@@ -817,6 +937,9 @@ public class AdminCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class GainCash extends CommandExecute {
 
         @Override
@@ -830,6 +953,9 @@ public class AdminCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class GainMP extends CommandExecute {
 
         @Override
@@ -843,6 +969,9 @@ public class AdminCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class GainP extends CommandExecute {
 
         @Override
@@ -856,6 +985,9 @@ public class AdminCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class GainVP extends CommandExecute {
 
         @Override
@@ -869,6 +1001,9 @@ public class AdminCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class LevelUp extends CommandExecute {
 
         @Override
@@ -880,43 +1015,55 @@ public class AdminCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class ClearInv extends CommandExecute {
 
         @Override
         public int execute(MapleClient c, String[] splitted) {
-            java.util.Map<Pair<Short, Short>, MapleInventoryType> eqs = new ArrayMap<Pair<Short, Short>, MapleInventoryType>();
-            if (splitted[1].equals("all")) {
-                for (MapleInventoryType type : MapleInventoryType.values()) {
-                    for (IItem item : c.getPlayer().getInventory(type)) {
-                        eqs.put(new Pair<Short, Short>(item.getPosition(), item.getQuantity()), type);
+            java.util.Map<Pair<Short, Short>, MapleInventoryType> eqs = new ArrayMap<>();
+            switch (splitted[1]) {
+                case "all":
+                    for (MapleInventoryType type : MapleInventoryType.values()) {
+                        for (IItem item : c.getPlayer().getInventory(type)) {
+                            eqs.put(new Pair<>(item.getPosition(), item.getQuantity()), type);
+                        }
                     }
-                }
-            } else if (splitted[1].equals("eqp")) {
-                for (IItem item : c.getPlayer().getInventory(MapleInventoryType.EQUIPPED)) {
-                    eqs.put(new Pair<Short, Short>(item.getPosition(), item.getQuantity()), MapleInventoryType.EQUIPPED);
-                }
-            } else if (splitted[1].equals("eq")) {
-                for (IItem item : c.getPlayer().getInventory(MapleInventoryType.EQUIP)) {
-                    eqs.put(new Pair<Short, Short>(item.getPosition(), item.getQuantity()), MapleInventoryType.EQUIP);
-                }
-            } else if (splitted[1].equals("u")) {
-                for (IItem item : c.getPlayer().getInventory(MapleInventoryType.USE)) {
-                    eqs.put(new Pair<Short, Short>(item.getPosition(), item.getQuantity()), MapleInventoryType.USE);
-                }
-            } else if (splitted[1].equals("s")) {
-                for (IItem item : c.getPlayer().getInventory(MapleInventoryType.SETUP)) {
-                    eqs.put(new Pair<Short, Short>(item.getPosition(), item.getQuantity()), MapleInventoryType.SETUP);
-                }
-            } else if (splitted[1].equals("e")) {
-                for (IItem item : c.getPlayer().getInventory(MapleInventoryType.ETC)) {
-                    eqs.put(new Pair<Short, Short>(item.getPosition(), item.getQuantity()), MapleInventoryType.ETC);
-                }
-            } else if (splitted[1].equals("c")) {
-                for (IItem item : c.getPlayer().getInventory(MapleInventoryType.CASH)) {
-                    eqs.put(new Pair<Short, Short>(item.getPosition(), item.getQuantity()), MapleInventoryType.CASH);
-                }
-            } else {
-                c.getPlayer().dropMessage(6, "[all/eqp/eq/u/s/e/c]");
+                    break;
+                case "eqp":
+                    for (IItem item : c.getPlayer().getInventory(MapleInventoryType.EQUIPPED)) {
+                        eqs.put(new Pair<>(item.getPosition(), item.getQuantity()), MapleInventoryType.EQUIPPED);
+                    }
+                    break;
+                case "eq":
+                    for (IItem item : c.getPlayer().getInventory(MapleInventoryType.EQUIP)) {
+                        eqs.put(new Pair<>(item.getPosition(), item.getQuantity()), MapleInventoryType.EQUIP);
+                    }
+                    break;
+                case "u":
+                    for (IItem item : c.getPlayer().getInventory(MapleInventoryType.USE)) {
+                        eqs.put(new Pair<>(item.getPosition(), item.getQuantity()), MapleInventoryType.USE);
+                    }
+                    break;
+                case "s":
+                    for (IItem item : c.getPlayer().getInventory(MapleInventoryType.SETUP)) {
+                        eqs.put(new Pair<>(item.getPosition(), item.getQuantity()), MapleInventoryType.SETUP);
+                    }
+                    break;
+                case "e":
+                    for (IItem item : c.getPlayer().getInventory(MapleInventoryType.ETC)) {
+                        eqs.put(new Pair<>(item.getPosition(), item.getQuantity()), MapleInventoryType.ETC);
+                    }
+                    break;
+                case "c":
+                    for (IItem item : c.getPlayer().getInventory(MapleInventoryType.CASH)) {
+                        eqs.put(new Pair<>(item.getPosition(), item.getQuantity()), MapleInventoryType.CASH);
+                    }
+                    break;
+                default:
+                    c.getPlayer().dropMessage(6, "[all/eqp/eq/u/s/e/c]");
+                    break;
             }
             for (Entry<Pair<Short, Short>, MapleInventoryType> eq : eqs.entrySet()) {
                 MapleInventoryManipulator.removeFromSlot(c, eq.getValue(), eq.getKey().left, eq.getKey().right, false, false);
@@ -925,11 +1072,14 @@ public class AdminCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class UnlockInv extends CommandExecute {
 
         @Override
         public int execute(MapleClient c, String[] splitted) {
-            java.util.Map<IItem, MapleInventoryType> eqs = new ArrayMap<IItem, MapleInventoryType>();
+            java.util.Map<IItem, MapleInventoryType> eqs = new ArrayMap<>();
             boolean add = false;
             if (splitted.length < 2 || splitted[1].equals("all")) {
                 for (MapleInventoryType type : MapleInventoryType.values()) {
@@ -1063,6 +1213,9 @@ public class AdminCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class Item extends CommandExecute {
 
         @Override
@@ -1107,6 +1260,9 @@ public class AdminCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class Drop extends CommandExecute {
 
         @Override
@@ -1135,6 +1291,9 @@ public class AdminCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class Level extends CommandExecute {
 
         @Override
@@ -1148,6 +1307,9 @@ public class AdminCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class Online extends CommandExecute {
 
         @Override
@@ -1158,6 +1320,9 @@ public class AdminCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class 所有在线玩家 extends CommandExecute {
 
         @Override
@@ -1170,6 +1335,9 @@ public class AdminCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class Say extends CommandExecute {
 
         @Override
@@ -1189,6 +1357,9 @@ public class AdminCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class Letter extends CommandExecute {
 
         @Override
@@ -1209,7 +1380,7 @@ public class AdminCommand {
                 return 0;
             }
             String splitString = StringUtil.joinStringFrom(splitted, 2);
-            List<Integer> chars = new ArrayList<Integer>();
+            List<Integer> chars = new ArrayList<>();
             splitString = splitString.toUpperCase();
             // System.out.println(splitString);
             for (int i = 0; i < splitString.length(); i++) {
@@ -1243,6 +1414,9 @@ public class AdminCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class Marry extends CommandExecute {
 
         @Override
@@ -1282,11 +1456,14 @@ public class AdminCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class ItemCheck extends CommandExecute {
 
         @Override
         public int execute(MapleClient c, String[] splitted) {
-            if (splitted.length < 3 || splitted[1] == null || splitted[1].equals("") || splitted[2] == null || splitted[2].equals("")) {
+            if (splitted.length < 3 || splitted[1] == null || splitted[1].isEmpty() || splitted[2] == null || splitted[2].isEmpty()) {
                 c.getPlayer().dropMessage(6, "!itemcheck <playername> <itemid>");
                 return 0;
             } else {
@@ -1303,6 +1480,9 @@ public class AdminCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class Vac extends CommandExecute {
 
         @Override
@@ -1316,6 +1496,9 @@ public class AdminCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class Song extends CommandExecute {
 
         @Override
@@ -1325,6 +1508,9 @@ public class AdminCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class StartAutoEvent extends CommandExecute {
 
         @Override
@@ -1337,6 +1523,9 @@ public class AdminCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class SetEvent extends CommandExecute {
 
         @Override
@@ -1346,6 +1535,9 @@ public class AdminCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class CheckPoint extends CommandExecute {
 
         @Override
@@ -1364,6 +1556,9 @@ public class AdminCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class GivePoint extends CommandExecute {
 
         @Override
@@ -1383,6 +1578,9 @@ public class AdminCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class CheckVPoint extends CommandExecute {
 
         @Override
@@ -1401,6 +1599,9 @@ public class AdminCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class GiveVPoint extends CommandExecute {
 
         @Override
@@ -1420,6 +1621,9 @@ public class AdminCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class StartEvent extends CommandExecute {
 
         @Override
@@ -1435,6 +1639,9 @@ public class AdminCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class ScheduleEvent extends CommandExecute {
 
         @Override
@@ -1456,6 +1663,9 @@ public class AdminCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class RemoveItem extends CommandExecute {
 
         @Override
@@ -1476,6 +1686,9 @@ public class AdminCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class LockItem extends CommandExecute {
 
         @Override
@@ -1507,6 +1720,9 @@ public class AdminCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class KillMap extends CommandExecute {
 
         @Override
@@ -1523,6 +1739,9 @@ public class AdminCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class SpeakMega extends CommandExecute {
 
         @Override
@@ -1533,6 +1752,9 @@ public class AdminCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class Speak extends CommandExecute {
 
         @Override
@@ -1548,6 +1770,9 @@ public class AdminCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class SpeakMap extends CommandExecute {
 
         @Override
@@ -1561,6 +1786,9 @@ public class AdminCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class SpeakChn extends CommandExecute {
 
         @Override
@@ -1574,6 +1802,9 @@ public class AdminCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class SpeakWorld extends CommandExecute {
 
         @Override
@@ -1589,6 +1820,9 @@ public class AdminCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class Disease extends CommandExecute {
 
         @Override
@@ -1654,6 +1888,9 @@ public class AdminCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class SQL extends CommandExecute {
 
         @Override
@@ -1669,6 +1906,9 @@ public class AdminCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class StripEveryone extends CommandExecute {
 
         @Override
@@ -1680,7 +1920,7 @@ public class AdminCommand {
                 }
                 MapleInventory equipped = mchr.getInventory(MapleInventoryType.EQUIPPED);
                 MapleInventory equip = mchr.getInventory(MapleInventoryType.EQUIP);
-                List<Byte> ids = new ArrayList<Byte>();
+                List<Byte> ids = new ArrayList<>();
                 for (IItem item : equipped.list()) {
                     ids.add((byte) item.getPosition());
                 }
@@ -1692,6 +1932,9 @@ public class AdminCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class SendAllNote extends CommandExecute {
 
         @Override
@@ -1710,6 +1953,9 @@ public class AdminCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class MesoEveryone extends CommandExecute {
 
         @Override
@@ -1723,6 +1969,9 @@ public class AdminCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class CloneMe extends CommandExecute {
 
         @Override
@@ -1732,6 +1981,9 @@ public class AdminCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class DisposeClones extends CommandExecute {
 
         @Override
@@ -1742,6 +1994,9 @@ public class AdminCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class Monitor extends CommandExecute {
 
         @Override
@@ -1763,6 +2018,9 @@ public class AdminCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class PermWeather extends CommandExecute {
 
         @Override
@@ -1785,6 +2043,9 @@ public class AdminCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class CharInfo extends CommandExecute {
 
         @Override
@@ -1865,6 +2126,9 @@ public class AdminCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class WhosThere extends CommandExecute {
 
         @Override
@@ -1885,6 +2149,9 @@ public class AdminCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class Cheaters extends CommandExecute {
 
         @Override
@@ -1898,6 +2165,9 @@ public class AdminCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class Connected extends CommandExecute {
 
         @Override
@@ -1926,6 +2196,9 @@ public class AdminCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class ResetQuest extends CommandExecute {
 
         @Override
@@ -1935,6 +2208,9 @@ public class AdminCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class StartQuest extends CommandExecute {
 
         @Override
@@ -1944,6 +2220,9 @@ public class AdminCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class CompleteQuest extends CommandExecute {
 
         @Override
@@ -1953,6 +2232,9 @@ public class AdminCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class FStartQuest extends CommandExecute {
 
         @Override
@@ -1962,6 +2244,9 @@ public class AdminCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class FCompleteQuest extends CommandExecute {
 
         @Override
@@ -1971,6 +2256,9 @@ public class AdminCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class FStartOther extends CommandExecute {
 
         @Override
@@ -1980,6 +2268,9 @@ public class AdminCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class FCompleteOther extends CommandExecute {
 
         @Override
@@ -1989,6 +2280,9 @@ public class AdminCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class NearestPortal extends CommandExecute {
 
         @Override
@@ -2000,6 +2294,9 @@ public class AdminCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class SpawnDebug extends CommandExecute {
 
         @Override
@@ -2009,6 +2306,9 @@ public class AdminCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class Threads extends CommandExecute {
 
         @Override
@@ -2021,7 +2321,7 @@ public class AdminCommand {
             }
             for (int i = 0; i < threads.length; i++) {
                 String tstring = threads[i].toString();
-                if (tstring.toLowerCase().indexOf(filter.toLowerCase()) > -1) {
+                if (tstring.toLowerCase().contains(filter.toLowerCase())) {
                     c.getPlayer().dropMessage(6, i + ": " + tstring);
                 }
             }
@@ -2029,6 +2329,9 @@ public class AdminCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class ShowTrace extends CommandExecute {
 
         @Override
@@ -2047,6 +2350,9 @@ public class AdminCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class FakeRelog extends CommandExecute {
 
         @Override
@@ -2059,6 +2365,9 @@ public class AdminCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class ToggleOffense extends CommandExecute {
 
         @Override
@@ -2073,6 +2382,9 @@ public class AdminCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class TDrops extends CommandExecute {
 
         @Override
@@ -2082,6 +2394,9 @@ public class AdminCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class TMegaphone extends CommandExecute {
 
         @Override
@@ -2092,6 +2407,9 @@ public class AdminCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class SReactor extends CommandExecute {
 
         @Override
@@ -2105,6 +2423,9 @@ public class AdminCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class HReactor extends CommandExecute {
 
         @Override
@@ -2114,6 +2435,9 @@ public class AdminCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class DReactor extends CommandExecute {
 
         @Override
@@ -2132,6 +2456,9 @@ public class AdminCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class ResetReactor extends CommandExecute {
 
         @Override
@@ -2141,6 +2468,9 @@ public class AdminCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class SetReactor extends CommandExecute {
 
         @Override
@@ -2150,6 +2480,9 @@ public class AdminCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class RemoveDrops extends CommandExecute {
 
         @Override
@@ -2160,6 +2493,9 @@ public class AdminCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class ExpRate extends CommandExecute {
 
         @Override
@@ -2181,6 +2517,9 @@ public class AdminCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class DropRate extends CommandExecute {
 
         @Override
@@ -2202,6 +2541,9 @@ public class AdminCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class MesoRate extends CommandExecute {
 
         @Override
@@ -2223,6 +2565,9 @@ public class AdminCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class CashRate extends CommandExecute {
 
         @Override
@@ -2254,11 +2599,16 @@ public class AdminCommand {
      return 1;
      }
      }*/
+
+    /**
+     *
+     */
+
     public static class ClearSquads extends CommandExecute {
 
         @Override
         public int execute(MapleClient c, String[] splitted) {
-            final Collection<MapleSquad> squadz = new ArrayList<MapleSquad>(c.getChannelServer().getAllSquads().values());
+            final Collection<MapleSquad> squadz = new ArrayList<>(c.getChannelServer().getAllSquads().values());
             for (MapleSquad squads : squadz) {
                 squads.clear();
             }
@@ -2266,6 +2616,9 @@ public class AdminCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class SetInstanceProperty extends CommandExecute {
 
         @Override
@@ -2283,6 +2636,9 @@ public class AdminCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class ListInstanceProperty extends CommandExecute {
 
         @Override
@@ -2299,6 +2655,9 @@ public class AdminCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class ListInstances extends CommandExecute {
 
         @Override
@@ -2315,6 +2674,9 @@ public class AdminCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class LeaveInstance extends CommandExecute {
 
         @Override
@@ -2328,6 +2690,9 @@ public class AdminCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class StartInstance extends CommandExecute {
 
         @Override
@@ -2349,6 +2714,9 @@ public class AdminCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class EventInstance extends CommandExecute {
 
         @Override
@@ -2363,6 +2731,9 @@ public class AdminCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class Uptime extends CommandExecute {
 
         @Override
@@ -2372,37 +2743,54 @@ public class AdminCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class DCAll extends CommandExecute {
 
         @Override
         public int execute(MapleClient c, String[] splitted) {
             int range = -1;
-            if (splitted[1].equals("m")) {
-                range = 0;
-            } else if (splitted[1].equals("c")) {
-                range = 1;
-            } else if (splitted[1].equals("w")) {
-                range = 2;
+            switch (splitted[1]) {
+                case "m":
+                    range = 0;
+                    break;
+                case "c":
+                    range = 1;
+                    break;
+                case "w":
+                    range = 2;
+                    break;
+                default:
+                    break;
             }
             if (range == -1) {
                 range = 1;
             }
-            if (range == 0) {
-                c.getPlayer().getMap().disconnectAll();
-            } else if (range == 1) {
-                c.getChannelServer().getPlayerStorage().disconnectAll(true);
-            } else if (range == 2) {
-                for (ChannelServer cserv : ChannelServer.getAllInstances()) {
-                    cserv.getPlayerStorage().disconnectAll(true);
-                }
+            switch (range) {
+                case 0:
+                    c.getPlayer().getMap().disconnectAll();
+                    break;
+                case 1:
+                    c.getChannelServer().getPlayerStorage().disconnectAll(true);
+                    break;
+                case 2:
+                    for (ChannelServer cserv : ChannelServer.getAllInstances()) {
+                        cserv.getPlayerStorage().disconnectAll(true);
+                    }   break;
+                default:
+                    break;
             }
             return 1;
         }
     }
 
+    /**
+     *
+     */
     public static class GoTo extends CommandExecute {
 
-        private static final HashMap<String, Integer> gotomaps = new HashMap<String, Integer>();
+        private static final HashMap<String, Integer> gotomaps = new HashMap<>();
 
         static {
             gotomaps.put("gmmap", 180000000);
@@ -2487,6 +2875,9 @@ public class AdminCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class KillAll extends CommandExecute {
 
         @Override
@@ -2511,6 +2902,9 @@ public class AdminCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class ResetMobs extends CommandExecute {
 
         @Override
@@ -2520,6 +2914,9 @@ public class AdminCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class KillMonster extends CommandExecute {
 
         @Override
@@ -2537,6 +2934,9 @@ public class AdminCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class KillMonsterByOID extends CommandExecute {
 
         @Override
@@ -2551,6 +2951,9 @@ public class AdminCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class HitMonsterByOID extends CommandExecute {
 
         @Override
@@ -2567,6 +2970,9 @@ public class AdminCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class HitAll extends CommandExecute {
 
         @Override
@@ -2592,6 +2998,9 @@ public class AdminCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class HitMonster extends CommandExecute {
 
         @Override
@@ -2611,6 +3020,9 @@ public class AdminCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class KillAllDrops extends CommandExecute {
 
         @Override
@@ -2636,6 +3048,9 @@ public class AdminCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class KillAllNoSpawn extends CommandExecute {
 
         @Override
@@ -2646,6 +3061,9 @@ public class AdminCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class MonsterDebug extends CommandExecute {
 
         @Override
@@ -2671,6 +3089,9 @@ public class AdminCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class NPC extends CommandExecute {
 
         @Override
@@ -2694,6 +3115,9 @@ public class AdminCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class RemoveNPCs extends CommandExecute {
 
         @Override
@@ -2703,6 +3127,9 @@ public class AdminCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class LookNPC extends CommandExecute {
 
         @Override
@@ -2715,6 +3142,9 @@ public class AdminCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class LookReactor extends CommandExecute {
 
         @Override
@@ -2727,6 +3157,9 @@ public class AdminCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class LookPortals extends CommandExecute {
 
         @Override
@@ -2738,6 +3171,9 @@ public class AdminCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class MakePNPC extends CommandExecute {
 
         @Override
@@ -2760,6 +3196,9 @@ public class AdminCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class MakeOfflineP extends CommandExecute {
 
         @Override
@@ -2783,6 +3222,9 @@ public class AdminCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class DestroyPNPC extends CommandExecute {
 
         @Override
@@ -2804,6 +3246,9 @@ public class AdminCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class MyNPCPos extends CommandExecute {
 
         @Override
@@ -2814,21 +3259,27 @@ public class AdminCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class Notice extends CommandExecute {
 
         private static int getNoticeType(String typestring) {
-            if (typestring.equals("n")) {
-                return 0;
-            } else if (typestring.equals("p")) {
-                return 1;
-            } else if (typestring.equals("l")) {
-                return 2;
-            } else if (typestring.equals("nv")) {
-                return 5;
-            } else if (typestring.equals("v")) {
-                return 5;
-            } else if (typestring.equals("b")) {
-                return 6;
+            switch (typestring) {
+                case "n":
+                    return 0;
+                case "p":
+                    return 1;
+                case "l":
+                    return 2;
+                case "nv":
+                    return 5;
+                case "v":
+                    return 5;
+                case "b":
+                    return 6;
+                default:
+                    break;
             }
             return -1;
         }
@@ -2837,12 +3288,18 @@ public class AdminCommand {
         public int execute(MapleClient c, String[] splitted) {
             int joinmod = 1;
             int range = -1;
-            if (splitted[1].equals("m")) {
-                range = 0;
-            } else if (splitted[1].equals("c")) {
-                range = 1;
-            } else if (splitted[1].equals("w")) {
-                range = 2;
+            switch (splitted[1]) {
+                case "m":
+                    range = 0;
+                    break;
+                case "c":
+                    range = 1;
+                    break;
+                case "w":
+                    range = 2;
+                    break;
+                default:
+                    break;
             }
 
             int tfrom = 2;
@@ -2865,47 +3322,74 @@ public class AdminCommand {
             sb.append(StringUtil.joinStringFrom(splitted, joinmod));
 
             MaplePacket packet = MaplePacketCreator.serverNotice(type, sb.toString());
-            if (range == 0) {
-                c.getPlayer().getMap().broadcastMessage(packet);
-            } else if (range == 1) {
-                ChannelServer.getInstance(c.getChannel()).broadcastPacket(packet);
-            } else if (range == 2) {
-                World.Broadcast.broadcastMessage(packet.getBytes());
+            switch (range) {
+                case 0:
+                    c.getPlayer().getMap().broadcastMessage(packet);
+                    break;
+                case 1:
+                    ChannelServer.getInstance(c.getChannel()).broadcastPacket(packet);
+                    break;
+                case 2:
+                    World.Broadcast.broadcastMessage(packet.getBytes());
+                    break;
+                default:
+                    break;
             }
             return 1;
         }
     }
 
+    /**
+     *
+     */
     public static class Yellow extends CommandExecute {
 
         @Override
         public int execute(MapleClient c, String[] splitted) {
             int range = -1;
-            if (splitted[1].equals("m")) {
-                range = 0;
-            } else if (splitted[1].equals("c")) {
-                range = 1;
-            } else if (splitted[1].equals("w")) {
-                range = 2;
+            switch (splitted[1]) {
+                case "m":
+                    range = 0;
+                    break;
+                case "c":
+                    range = 1;
+                    break;
+                case "w":
+                    range = 2;
+                    break;
+                default:
+                    break;
             }
             if (range == -1) {
                 range = 2;
             }
             MaplePacket packet = MaplePacketCreator.yellowChat((splitted[0].equals("!y") ? ("[" + c.getPlayer().getName() + "] ") : "") + StringUtil.joinStringFrom(splitted, 2));
-            if (range == 0) {
-                c.getPlayer().getMap().broadcastMessage(packet);
-            } else if (range == 1) {
-                ChannelServer.getInstance(c.getChannel()).broadcastPacket(packet);
-            } else if (range == 2) {
-                World.Broadcast.broadcastMessage(packet.getBytes());
+            switch (range) {
+                case 0:
+                    c.getPlayer().getMap().broadcastMessage(packet);
+                    break;
+                case 1:
+                    ChannelServer.getInstance(c.getChannel()).broadcastPacket(packet);
+                    break;
+                case 2:
+                    World.Broadcast.broadcastMessage(packet.getBytes());
+                    break;
+                default:
+                    break;
             }
             return 1;
         }
     }
 
+    /**
+     *
+     */
     public static class Y extends Yellow {
     }
 
+    /**
+     *
+     */
     public static class ReloadOps extends CommandExecute {
 
         @Override
@@ -2916,6 +3400,9 @@ public class AdminCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class ReloadDrops extends CommandExecute {
 
         @Override
@@ -2926,6 +3413,9 @@ public class AdminCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class ReloadPortal extends CommandExecute {
 
         @Override
@@ -2935,6 +3425,9 @@ public class AdminCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class ReloadShops extends CommandExecute {
 
         @Override
@@ -2944,6 +3437,9 @@ public class AdminCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class ReloadEvents extends CommandExecute {
 
         @Override
@@ -2955,6 +3451,9 @@ public class AdminCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class ReloadQuests extends CommandExecute {
 
         @Override
@@ -2964,133 +3463,143 @@ public class AdminCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class Find extends CommandExecute {
 
         @Override
         public int execute(MapleClient c, String[] splitted) {
-            if (splitted.length == 1) {
-                c.getPlayer().dropMessage(6, splitted[0] + ": <NPC> <MOB> <ITEM> <MAP> <SKILL>");
-            } else if (splitted.length == 2) {
-                c.getPlayer().dropMessage(6, "Provide something to search.");
-            } else {
-                String type = splitted[1];
-                String search = StringUtil.joinStringFrom(splitted, 2);
-                MapleData data = null;
-                MapleDataProvider dataProvider = MapleDataProviderFactory.getDataProvider(new File(System.getProperty("net.sf.odinms.wzpath", "wz") + "/" + "String.wz"));
-                c.getPlayer().dropMessage(6, "<<Type: " + type + " | Search: " + search + ">>");
-
-                if (type.equalsIgnoreCase("NPC")) {
-                    List<String> retNpcs = new ArrayList<String>();
-                    data = dataProvider.getData("Npc.img");
-                    List<Pair<Integer, String>> npcPairList = new LinkedList<Pair<Integer, String>>();
-                    for (MapleData npcIdData : data.getChildren()) {
-                        npcPairList.add(new Pair<Integer, String>(Integer.parseInt(npcIdData.getName()), MapleDataTool.getString(npcIdData.getChildByPath("name"), "NO-NAME")));
-                    }
-                    for (Pair<Integer, String> npcPair : npcPairList) {
-                        if (npcPair.getRight().toLowerCase().contains(search.toLowerCase())) {
-                            retNpcs.add(npcPair.getLeft() + " - " + npcPair.getRight());
+            switch (splitted.length) {
+                case 1:
+                    c.getPlayer().dropMessage(6, splitted[0] + ": <NPC> <MOB> <ITEM> <MAP> <SKILL>");
+                    break;
+                case 2:
+                    c.getPlayer().dropMessage(6, "Provide something to search.");
+                    break;
+                default:
+                    String type = splitted[1];
+                    String search = StringUtil.joinStringFrom(splitted, 2);
+                    MapleData data = null;
+                    MapleDataProvider dataProvider = MapleDataProviderFactory.getDataProvider(new File(System.getProperty("net.sf.odinms.wzpath", "wz") + "/" + "String.wz"));
+                    c.getPlayer().dropMessage(6, "<<Type: " + type + " | Search: " + search + ">>");
+                    if (type.equalsIgnoreCase("NPC")) {
+                        List<String> retNpcs = new ArrayList<>();
+                        data = dataProvider.getData("Npc.img");
+                        List<Pair<Integer, String>> npcPairList = new LinkedList<>();
+                        for (MapleData npcIdData : data.getChildren()) {
+                            npcPairList.add(new Pair<>(Integer.parseInt(npcIdData.getName()), MapleDataTool.getString(npcIdData.getChildByPath("name"), "NO-NAME")));
                         }
-                    }
-                    if (retNpcs != null && retNpcs.size() > 0) {
-                        for (String singleRetNpc : retNpcs) {
-                            c.getPlayer().dropMessage(6, singleRetNpc);
+                        for (Pair<Integer, String> npcPair : npcPairList) {
+                            if (npcPair.getRight().toLowerCase().contains(search.toLowerCase())) {
+                                retNpcs.add(npcPair.getLeft() + " - " + npcPair.getRight());
+                            }
+                        }   if (retNpcs != null && retNpcs.size() > 0) {
+                            for (String singleRetNpc : retNpcs) {
+                                c.getPlayer().dropMessage(6, singleRetNpc);
+                            }
+                        } else {
+                            c.getPlayer().dropMessage(6, "No NPC's Found");
                         }
-                    } else {
-                        c.getPlayer().dropMessage(6, "No NPC's Found");
-                    }
-
-                } else if (type.equalsIgnoreCase("MAP")) {
-                    List<String> retMaps = new ArrayList<String>();
-                    data = dataProvider.getData("Map.img");
-                    List<Pair<Integer, String>> mapPairList = new LinkedList<Pair<Integer, String>>();
-                    for (MapleData mapAreaData : data.getChildren()) {
-                        for (MapleData mapIdData : mapAreaData.getChildren()) {
-                            mapPairList.add(new Pair<Integer, String>(Integer.parseInt(mapIdData.getName()), MapleDataTool.getString(mapIdData.getChildByPath("streetName"), "NO-NAME") + " - " + MapleDataTool.getString(mapIdData.getChildByPath("mapName"), "NO-NAME")));
+                    } else if (type.equalsIgnoreCase("MAP")) {
+                        List<String> retMaps = new ArrayList<>();
+                        data = dataProvider.getData("Map.img");
+                        List<Pair<Integer, String>> mapPairList = new LinkedList<>();
+                        for (MapleData mapAreaData : data.getChildren()) {
+                            for (MapleData mapIdData : mapAreaData.getChildren()) {
+                                mapPairList.add(new Pair<>(Integer.parseInt(mapIdData.getName()), MapleDataTool.getString(mapIdData.getChildByPath("streetName"), "NO-NAME") + " - " + MapleDataTool.getString(mapIdData.getChildByPath("mapName"), "NO-NAME")));
+                            }
                         }
-                    }
-                    for (Pair<Integer, String> mapPair : mapPairList) {
-                        if (mapPair.getRight().toLowerCase().contains(search.toLowerCase())) {
-                            retMaps.add(mapPair.getLeft() + " - " + mapPair.getRight());
+                        for (Pair<Integer, String> mapPair : mapPairList) {
+                            if (mapPair.getRight().toLowerCase().contains(search.toLowerCase())) {
+                                retMaps.add(mapPair.getLeft() + " - " + mapPair.getRight());
+                            }
+                        }   if (retMaps != null && retMaps.size() > 0) {
+                            for (String singleRetMap : retMaps) {
+                                c.getPlayer().dropMessage(6, singleRetMap);
+                            }
+                        } else {
+                            c.getPlayer().dropMessage(6, "No Maps Found");
                         }
-                    }
-                    if (retMaps != null && retMaps.size() > 0) {
-                        for (String singleRetMap : retMaps) {
-                            c.getPlayer().dropMessage(6, singleRetMap);
+                    } else if (type.equalsIgnoreCase("MOB")) {
+                        List<String> retMobs = new ArrayList<>();
+                        data = dataProvider.getData("Mob.img");
+                        List<Pair<Integer, String>> mobPairList = new LinkedList<>();
+                        for (MapleData mobIdData : data.getChildren()) {
+                            mobPairList.add(new Pair<>(Integer.parseInt(mobIdData.getName()), MapleDataTool.getString(mobIdData.getChildByPath("name"), "NO-NAME")));
                         }
-                    } else {
-                        c.getPlayer().dropMessage(6, "No Maps Found");
-                    }
-                } else if (type.equalsIgnoreCase("MOB")) {
-                    List<String> retMobs = new ArrayList<String>();
-                    data = dataProvider.getData("Mob.img");
-                    List<Pair<Integer, String>> mobPairList = new LinkedList<Pair<Integer, String>>();
-                    for (MapleData mobIdData : data.getChildren()) {
-                        mobPairList.add(new Pair<Integer, String>(Integer.parseInt(mobIdData.getName()), MapleDataTool.getString(mobIdData.getChildByPath("name"), "NO-NAME")));
-                    }
-                    for (Pair<Integer, String> mobPair : mobPairList) {
-                        if (mobPair.getRight().toLowerCase().contains(search.toLowerCase())) {
-                            retMobs.add(mobPair.getLeft() + " - " + mobPair.getRight());
+                        for (Pair<Integer, String> mobPair : mobPairList) {
+                            if (mobPair.getRight().toLowerCase().contains(search.toLowerCase())) {
+                                retMobs.add(mobPair.getLeft() + " - " + mobPair.getRight());
+                            }
+                        }   if (retMobs != null && retMobs.size() > 0) {
+                            for (String singleRetMob : retMobs) {
+                                c.getPlayer().dropMessage(6, singleRetMob);
+                            }
+                        } else {
+                            c.getPlayer().dropMessage(6, "No Mob's Found");
                         }
-                    }
-                    if (retMobs != null && retMobs.size() > 0) {
-                        for (String singleRetMob : retMobs) {
-                            c.getPlayer().dropMessage(6, singleRetMob);
+                    } else if (type.equalsIgnoreCase("ITEM")) {
+                        List<String> retItems = new ArrayList<>();
+                        for (Pair<Integer, String> itemPair : MapleItemInformationProvider.getInstance().getAllItems()) {
+                            if (itemPair.getRight().toLowerCase().contains(search.toLowerCase())) {
+                                retItems.add(itemPair.getLeft() + " - " + itemPair.getRight());
+                            }
+                        }   if (retItems != null && retItems.size() > 0) {
+                            for (String singleRetItem : retItems) {
+                                c.getPlayer().dropMessage(6, singleRetItem);
+                            }
+                        } else {
+                            c.getPlayer().dropMessage(6, "No Item's Found");
                         }
-                    } else {
-                        c.getPlayer().dropMessage(6, "No Mob's Found");
-                    }
-
-                } else if (type.equalsIgnoreCase("ITEM")) {
-                    List<String> retItems = new ArrayList<String>();
-                    for (Pair<Integer, String> itemPair : MapleItemInformationProvider.getInstance().getAllItems()) {
-                        if (itemPair.getRight().toLowerCase().contains(search.toLowerCase())) {
-                            retItems.add(itemPair.getLeft() + " - " + itemPair.getRight());
+                    } else if (type.equalsIgnoreCase("SKILL")) {
+                        List<String> retSkills = new ArrayList<>();
+                        data = dataProvider.getData("Skill.img");
+                        List<Pair<Integer, String>> skillPairList = new LinkedList<>();
+                        for (MapleData skillIdData : data.getChildren()) {
+                            skillPairList.add(new Pair<>(Integer.parseInt(skillIdData.getName()), MapleDataTool.getString(skillIdData.getChildByPath("name"), "NO-NAME")));
                         }
-                    }
-                    if (retItems != null && retItems.size() > 0) {
-                        for (String singleRetItem : retItems) {
-                            c.getPlayer().dropMessage(6, singleRetItem);
-                        }
-                    } else {
-                        c.getPlayer().dropMessage(6, "No Item's Found");
-                    }
-
-                } else if (type.equalsIgnoreCase("SKILL")) {
-                    List<String> retSkills = new ArrayList<String>();
-                    data = dataProvider.getData("Skill.img");
-                    List<Pair<Integer, String>> skillPairList = new LinkedList<Pair<Integer, String>>();
-                    for (MapleData skillIdData : data.getChildren()) {
-                        skillPairList.add(new Pair<Integer, String>(Integer.parseInt(skillIdData.getName()), MapleDataTool.getString(skillIdData.getChildByPath("name"), "NO-NAME")));
-                    }
-                    for (Pair<Integer, String> skillPair : skillPairList) {
-                        if (skillPair.getRight().toLowerCase().contains(search.toLowerCase())) {
-                            retSkills.add(skillPair.getLeft() + " - " + skillPair.getRight());
-                        }
-                    }
-                    if (retSkills != null && retSkills.size() > 0) {
-                        for (String singleRetSkill : retSkills) {
-                            c.getPlayer().dropMessage(6, singleRetSkill);
+                        for (Pair<Integer, String> skillPair : skillPairList) {
+                            if (skillPair.getRight().toLowerCase().contains(search.toLowerCase())) {
+                                retSkills.add(skillPair.getLeft() + " - " + skillPair.getRight());
+                            }
+                        }   if (retSkills != null && retSkills.size() > 0) {
+                            for (String singleRetSkill : retSkills) {
+                                c.getPlayer().dropMessage(6, singleRetSkill);
+                            }
+                        } else {
+                            c.getPlayer().dropMessage(6, "No Skills Found");
                         }
                     } else {
-                        c.getPlayer().dropMessage(6, "No Skills Found");
+                        c.getPlayer().dropMessage(6, "Sorry, that search call is unavailable");
                     }
-                } else {
-                    c.getPlayer().dropMessage(6, "Sorry, that search call is unavailable");
-                }
+                    break;
             }
             return 1;
         }
     }
 
+    /**
+     *
+     */
     public static class ID extends Find {
     }
 
+    /**
+     *
+     */
     public static class LookUp extends Find {
     }
 
+    /**
+     *
+     */
     public static class Search extends Find {
     }
 
+    /**
+     *
+     */
     public static class ServerMessage extends CommandExecute {
 
         @Override
@@ -3104,6 +3613,9 @@ public class AdminCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class Spawn extends CommandExecute {
 
         @Override
@@ -3127,16 +3639,16 @@ public class AdminCommand {
             long newhp = 0;
             int newexp = 0;
             if (hp != null) {
-                newhp = hp.longValue();
+                newhp = hp;
             } else if (php != null) {
-                newhp = (long) (onemob.getMobMaxHp() * (php.doubleValue() / 100));
+                newhp = (long) (onemob.getMobMaxHp() * (php / 100));
             } else {
                 newhp = onemob.getMobMaxHp();
             }
             if (exp != null) {
-                newexp = exp.intValue();
+                newexp = exp;
             } else if (pexp != null) {
-                newexp = (int) (onemob.getMobExp() * (pexp.doubleValue() / 100));
+                newexp = (int) (onemob.getMobExp() * (pexp / 100));
             } else {
                 newexp = onemob.getMobExp();
             }
@@ -3155,6 +3667,9 @@ public class AdminCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class Test extends CommandExecute {
 
         @Override
@@ -3164,6 +3679,9 @@ public class AdminCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class Test2 extends CommandExecute {
 
         @Override
@@ -3174,6 +3692,9 @@ public class AdminCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class Clock extends CommandExecute {
 
         @Override
@@ -3183,6 +3704,9 @@ public class AdminCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class Packet extends CommandExecute {
 
         @Override
@@ -3196,6 +3720,9 @@ public class AdminCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class PacketToServer extends CommandExecute {
 
         @Override
@@ -3209,6 +3736,9 @@ public class AdminCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class Warp extends CommandExecute {
 
         @Override
@@ -3246,6 +3776,9 @@ public class AdminCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class WarpMapTo extends CommandExecute {
 
         @Override
@@ -3264,6 +3797,9 @@ public class AdminCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class WarpHere extends CommandExecute {
 
         @Override
@@ -3290,6 +3826,9 @@ public class AdminCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class LOLCastle extends CommandExecute {
 
         @Override
@@ -3305,6 +3844,9 @@ public class AdminCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class Map extends CommandExecute {
 
         @Override
@@ -3334,6 +3876,9 @@ public class AdminCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class StartProfiling extends CommandExecute {
 
         @Override
@@ -3352,6 +3897,9 @@ public class AdminCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class StopProfiling extends CommandExecute {
 
         @Override
@@ -3379,6 +3927,9 @@ public class AdminCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class ReloadMap extends CommandExecute {
 
         @Override
@@ -3399,6 +3950,9 @@ public class AdminCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class Respawn extends CommandExecute {
 
         @Override
@@ -3408,6 +3962,9 @@ public class AdminCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class ResetMap extends CommandExecute {
 
         @Override
@@ -3417,8 +3974,14 @@ public class AdminCommand {
         }
     }
 
+    /**
+     *
+     */
     public abstract static class TestTimer extends CommandExecute {
 
+        /**
+         *
+         */
         protected Timer toTest = null;
 
         @Override
@@ -3427,6 +3990,7 @@ public class AdminCommand {
             c.getPlayer().dropMessage(5, "Message will pop up in " + sec + " seconds.");
             final long oldMillis = System.currentTimeMillis();
             toTest.schedule(new Runnable() {
+                @Override
                 public void run() {
                     c.getPlayer().dropMessage(5, "Message has popped up in " + ((System.currentTimeMillis() - oldMillis) / 1000) + " seconds, expected was " + sec + " seconds");
                 }
@@ -3435,50 +3999,92 @@ public class AdminCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class TestEventTimer extends TestTimer {
 
+        /**
+         *
+         */
         public TestEventTimer() {
             toTest = EventTimer.getInstance();
         }
     }
 
+    /**
+     *
+     */
     public static class TestCloneTimer extends TestTimer {
 
+        /**
+         *
+         */
         public TestCloneTimer() {
             toTest = CloneTimer.getInstance();
         }
     }
 
+    /**
+     *
+     */
     public static class TestEtcTimer extends TestTimer {
 
+        /**
+         *
+         */
         public TestEtcTimer() {
             toTest = EtcTimer.getInstance();
         }
     }
 
+    /**
+     *
+     */
     public static class TestMobTimer extends TestTimer {
 
+        /**
+         *
+         */
         public TestMobTimer() {
             toTest = MobTimer.getInstance();
         }
     }
 
+    /**
+     *
+     */
     public static class TestMapTimer extends TestTimer {
 
+        /**
+         *
+         */
         public TestMapTimer() {
             toTest = MapTimer.getInstance();
         }
     }
 
+    /**
+     *
+     */
     public static class TestWorldTimer extends TestTimer {
 
+        /**
+         *
+         */
         public TestWorldTimer() {
             toTest = WorldTimer.getInstance();
         }
     }
 
+    /**
+     *
+     */
     public static class TestBuffTimer extends TestTimer {
 
+        /**
+         *
+         */
         public TestBuffTimer() {
             toTest = BuffTimer.getInstance();
         }

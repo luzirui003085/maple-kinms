@@ -22,13 +22,35 @@ package client;
 
 import java.io.Serializable;
 
+/**
+ *
+ * @author zjj
+ */
 public class SkillEntry implements Serializable {
 
     private static final long serialVersionUID = 9179541993413738569L;
+
+    /**
+     *
+     */
     public final byte skillevel;
+
+    /**
+     *
+     */
     public final byte masterlevel;
+
+    /**
+     *
+     */
     public final long expiration;
 
+    /**
+     *
+     * @param skillevel
+     * @param masterlevel
+     * @param expiration
+     */
     public SkillEntry(final byte skillevel, final byte masterlevel, final long expiration) {
         this.skillevel = skillevel;
         this.masterlevel = masterlevel;

@@ -20,15 +20,14 @@
  */
 package tools.packet;
 
-import client.inventory.IItem;
-import java.util.List;
-
-import client.inventory.MaplePet;
-import client.MapleStat;
 import client.MapleCharacter;
+import client.MapleStat;
+import client.inventory.IItem;
+import client.inventory.MaplePet;
 import constants.ServerConstants;
 import handling.MaplePacket;
 import handling.SendPacketOpcode;
+import java.util.List;
 import server.movement.LifeMovementFragment;
 import tools.MaplePacketCreator;
 import tools.data.output.MaplePacketLittleEndianWriter;

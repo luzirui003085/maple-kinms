@@ -22,21 +22,38 @@ package server.life;
 
 import java.lang.ref.WeakReference;
 
+/**
+ *
+ * @author zjj
+ */
 public class SummonAttackEntry {
 
     private WeakReference<MapleMonster> mob;
     private int damage;
 
+    /**
+     *
+     * @param mob
+     * @param damage
+     */
     public SummonAttackEntry(MapleMonster mob, int damage) {
         super();
-        this.mob = new WeakReference<MapleMonster>(mob);
+        this.mob = new WeakReference<>(mob);
         this.damage = damage;
     }
 
+    /**
+     *
+     * @return
+     */
     public MapleMonster getMonster() {
         return mob.get();
     }
 
+    /**
+     *
+     * @return
+     */
     public int getDamage() {
         return damage;
     }

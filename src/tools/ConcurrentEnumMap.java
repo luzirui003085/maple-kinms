@@ -9,12 +9,22 @@ import java.util.Set;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
+/**
+ *
+ * @author zjj
+ * @param <K>
+ * @param <V>
+ */
 public final class ConcurrentEnumMap<K extends Enum<K>, V> extends EnumMap<K, V> implements Serializable { //TODO: Implement Externalizable.
 
     private static final long serialVersionUID = 11920818021L;
     private ReentrantReadWriteLock reentlock = new ReentrantReadWriteLock();
     private Lock rL = reentlock.readLock(), wL = reentlock.writeLock();
 
+    /**
+     *
+     * @param keyType
+     */
     public ConcurrentEnumMap(Class<K> keyType) {
         super(keyType);
     }

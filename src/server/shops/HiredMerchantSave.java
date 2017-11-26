@@ -1,28 +1,42 @@
 package server.shops;
 
-import java.io.PrintStream;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ *
+ * @author zjj
+ */
 public class HiredMerchantSave {
 
+    /**
+     *
+     */
     public static final int NumSavingThreads = 5;
     private static final TimingThread[] Threads = new TimingThread[5];
     private static final AtomicInteger Distribute;
 
+    /**
+     *
+     * @param hm
+     */
     public static void QueueShopForSave(HiredMerchant hm) {
         int Current = Distribute.getAndIncrement() % 5;
         Threads[Current].getRunnable().Queue(hm);
     }
 
+    /**
+     *
+     * @param ToNotify
+     */
     public static void Execute(Object ToNotify) {
-        for (int i = 0; i < Threads.length; i++) {
-            Threads[i].getRunnable().SetToNotify(ToNotify);
+        for (TimingThread Thread : Threads) {
+            Thread.getRunnable().SetToNotify(ToNotify);
         }
-        for (int i = 0; i < Threads.length; i++) {
-            Threads[i].start();
+        for (TimingThread Thread : Threads) {
+            Thread.start();
         }
     }
 
@@ -58,6 +72,7 @@ public class HiredMerchantSave {
         private Object ToNotify;
         private ArrayBlockingQueue<HiredMerchant> Queue = new ArrayBlockingQueue(500);
 
+        @Override
         public void run() {
             try {
                 while (!this.Queue.isEmpty()) {

@@ -32,7 +32,6 @@ import org.apache.mina.common.IoAcceptor;
 import org.apache.mina.filter.codec.ProtocolCodecFilter;
 import org.apache.mina.transport.socket.nio.SocketAcceptorConfig;
 import org.apache.mina.transport.socket.nio.SocketAcceptor;
-import server.MTSStorage;
 import server.ServerProperties;
 
 public class CashShopServer {

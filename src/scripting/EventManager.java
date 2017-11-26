@@ -1,29 +1,9 @@
-/*
- This file is part of the OdinMS Maple Story Server
- Copyright (C) 2008 ~ 2010 Patrick Huy <patrick.huy@frz.cc> 
- Matthias Butz <matze@odinms.de>
- Jan Christian Meyer <vimes@odinms.de>
 
- This program is free software: you can redistribute it and/or modify
- it under the terms of the GNU Affero General Public License version 3
- as published by the Free Software Foundation. You may not use, modify
- or distribute this program under any other version of the
- GNU Affero General Public License.
-
- This program is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; w"ithout even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- GNU Affero General Public License for more details.
-
- You should have received a copy of the GNU Affero General Public License
- along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
 package scripting;
 
 import java.util.Collection;
 import java.util.Collections;
 import java.util.WeakHashMap;
-import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.concurrent.ScheduledFuture;
 import javax.script.Invocable;
@@ -56,21 +36,34 @@ import tools.FileoutputUtil;
 import tools.MaplePacketCreator;
 import database.DatabaseConnection;
 
+/**
+ *
+ * @author zjj
+ */
 public class EventManager {
 
     private static int[] eventChannel = new int[2];
     private Invocable iv;
     private int channel;
-    private Map<String, EventInstanceManager> instances = new WeakHashMap<String, EventInstanceManager>();
+    private Map<String, EventInstanceManager> instances = new WeakHashMap<>();
     private Properties props = new Properties();
     private String name;
 
+    /**
+     *
+     * @param cserv
+     * @param iv
+     * @param name
+     */
     public EventManager(ChannelServer cserv, Invocable iv, String name) {
         this.iv = iv;
         this.channel = cserv.getChannel();
         this.name = name;
     }
 
+    /**
+     *
+     */
     public void cancel() {
         try {
             iv.invokeFunction("cancelSchedule", (Object) null);
@@ -80,9 +73,16 @@ public class EventManager {
         }
     }
 
+    /**
+     *
+     * @param methodName
+     * @param delay
+     * @return
+     */
     public ScheduledFuture<?> schedule(final String methodName, long delay) {
         return EventTimer.getInstance().schedule(new Runnable() {
 
+            @Override
             public void run() {
                 try {
                     iv.invokeFunction(methodName, (Object) null);
@@ -94,9 +94,17 @@ public class EventManager {
         }, delay);
     }
 
+    /**
+     *
+     * @param methodName
+     * @param delay
+     * @param eim
+     * @return
+     */
     public ScheduledFuture<?> schedule(final String methodName, long delay, final EventInstanceManager eim) {
         return EventTimer.getInstance().schedule(new Runnable() {
 
+            @Override
             public void run() {
                 try {
                     iv.invokeFunction(methodName, eim);
@@ -108,9 +116,17 @@ public class EventManager {
         }, delay);
     }
 
+    /**
+     *
+     * @param methodName
+     * @param eim
+     * @param delay
+     * @return
+     */
     public ScheduledFuture<?> schedule(final String methodName, final EventInstanceManager eim, long delay) {
         return EventTimer.getInstance().schedule(new Runnable() {
 
+            @Override
             public void run() {
                 try {
                     iv.invokeFunction(methodName, eim);
@@ -121,9 +137,17 @@ public class EventManager {
             }
         }, delay);
     }
+
+    /**
+     *
+     * @param methodName
+     * @param timestamp
+     * @return
+     */
     public ScheduledFuture<?> scheduleAtTimestamp(final String methodName, long timestamp) {
         return EventTimer.getInstance().scheduleAtTimestamp(new Runnable() {
 
+            @Override
             public void run() {
                 try {
                     iv.invokeFunction(methodName, (Object) null);
@@ -136,34 +160,60 @@ public class EventManager {
         }, timestamp);
     }
 
+    /**
+     *
+     * @return
+     */
     public int getChannel() {
         return channel;
     }
 
+    /**
+     *
+     * @return
+     */
     public ChannelServer getChannelServer() {
         return ChannelServer.getInstance(channel);
     }
 
+    /**
+     *
+     * @param name
+     * @return
+     */
     public EventInstanceManager getInstance(String name) {
         return instances.get(name);
     }
 
+    /**
+     *
+     * @return
+     */
     public Collection<EventInstanceManager> getInstances() {
         return Collections.unmodifiableCollection(instances.values());
     }
 
+    /**
+     *
+     * @param name
+     * @return
+     */
     public EventInstanceManager newInstance(String name) {
         EventInstanceManager ret = new EventInstanceManager(this, name, channel);
         instances.put(name, ret);
         return ret;
     }
 
+    /**
+     *
+     * @param name
+     */
     public void disposeInstance(String name) {
         instances.remove(name);
-        if (getProperty("state") != null && instances.size() == 0) {
+        if (getProperty("state") != null && instances.isEmpty()) {
             setProperty("state", "0");
         }
-        if (getProperty("leader") != null && instances.size() == 0 && getProperty("leader").equals("false")) {
+        if (getProperty("leader") != null && instances.isEmpty() && getProperty("leader").equals("false")) {
             setProperty("leader", "true");
         }
         if (this.name.equals("CWKPQ")) { //hard code it because i said so
@@ -174,26 +224,51 @@ public class EventManager {
         }
     }
 
+    /**
+     *
+     * @return
+     */
     public Invocable getIv() {
         return iv;
     }
 
+    /**
+     *
+     * @param key
+     * @param value
+     */
     public void setProperty(String key, String value) {
         props.setProperty(key, value);
     }
 
+    /**
+     *
+     * @param key
+     * @return
+     */
     public String getProperty(String key) {
         return props.getProperty(key);
     }
 
+    /**
+     *
+     * @return
+     */
     public final Properties getProperties() {
         return props;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     *
+     */
     public void startInstance() {
         try {
             iv.invokeFunction("setup", (Object) null);
@@ -203,6 +278,11 @@ public class EventManager {
         }
     }
 
+    /**
+     *
+     * @param mapid
+     * @param chr
+     */
     public void startInstance(String mapid, MapleCharacter chr) {
         try {
             EventInstanceManager eim = (EventInstanceManager) iv.invokeFunction("setup", (Object) mapid);
@@ -213,6 +293,11 @@ public class EventManager {
         }
     }
 
+    /**
+     *
+     * @param mapid
+     * @param chr
+     */
     public void startInstance_Party(String mapid, MapleCharacter chr) {
         try {
             EventInstanceManager eim = (EventInstanceManager) iv.invokeFunction("setup", (Object) mapid);
@@ -224,6 +309,12 @@ public class EventManager {
     }
 
     //GPQ
+
+    /**
+     *
+     * @param character
+     * @param leader
+     */
     public void startInstance(MapleCharacter character, String leader) {
         try {
             EventInstanceManager eim = (EventInstanceManager) (iv.invokeFunction("setup", (Object) null));
@@ -237,6 +328,10 @@ public class EventManager {
         }
     }
 
+    /**
+     *
+     * @param character
+     */
     public void startInstance_CharID(MapleCharacter character) {
         try {
             EventInstanceManager eim = (EventInstanceManager) (iv.invokeFunction("setup", character.getId()));
@@ -247,6 +342,10 @@ public class EventManager {
         }
     }
 
+    /**
+     *
+     * @param character
+     */
     public void startInstance(MapleCharacter character) {
         try {
             EventInstanceManager eim = (EventInstanceManager) (iv.invokeFunction("setup", (Object) null));
@@ -258,6 +357,12 @@ public class EventManager {
     }
 
     //PQ method: starts a PQ
+
+    /**
+     *
+     * @param party
+     * @param map
+     */
     public void startInstance(MapleParty party, MapleMap map) {
         try {
             EventInstanceManager eim = (EventInstanceManager) (iv.invokeFunction("setup", party.getId()));
@@ -271,10 +376,21 @@ public class EventManager {
         }
     }
 
+    /**
+     *
+     * @param party
+     * @param map
+     */
     public void startInstance_NoID(MapleParty party, MapleMap map) {
         startInstance_NoID(party, map, null);
     }
 
+    /**
+     *
+     * @param party
+     * @param map
+     * @param old
+     */
     public void startInstance_NoID(MapleParty party, MapleMap map, final Exception old) {
         try {
             EventInstanceManager eim = (EventInstanceManager) (iv.invokeFunction("setup", (Object) null));
@@ -286,6 +402,12 @@ public class EventManager {
     }
 
     //non-PQ method for starting instance
+
+    /**
+     *
+     * @param eim
+     * @param leader
+     */
     public void startInstance(EventInstanceManager eim, String leader) {
         try {
             iv.invokeFunction("setup", eim);
@@ -296,10 +418,21 @@ public class EventManager {
         }
     }
 
+    /**
+     *
+     * @param squad
+     * @param map
+     */
     public void startInstance(MapleSquad squad, MapleMap map) {
         startInstance(squad, map, -1);
     }
 
+    /**
+     *
+     * @param squad
+     * @param map
+     * @param questID
+     */
     public void startInstance(MapleSquad squad, MapleMap map, int questID) {
         if (squad.getStatus() == 0) {
             return; //we dont like cleared squads
@@ -323,6 +456,12 @@ public class EventManager {
         }
     }
 
+    /**
+     *
+     * @param squad
+     * @param map
+     * @param bossid
+     */
     public void startInstance(MapleSquad squad, MapleMap map, String bossid) {
         if (squad.getStatus() == 0) {
             return;
@@ -353,6 +492,12 @@ public class EventManager {
             FileoutputUtil.log("log\\Script_Except.log", new StringBuilder().append("Event name : ").append(this.name).append(", method Name : setup-squad:\n").append(ex).toString());
         }
     }
+
+    /**
+     *
+     * @param from
+     * @param to
+     */
     public void warpAllPlayer(int from, int to) {
         final MapleMap tomap = getMapFactory().getMap(to);
         final MapleMap frommap = getMapFactory().getMap(from);
@@ -364,7 +509,11 @@ public class EventManager {
         }
     }
     
-        public int online() {
+    /**
+     *
+     * @return
+     */
+    public int online() {
         Connection con = DatabaseConnection.getConnection();
         PreparedStatement ps;
         ResultSet re;
@@ -381,34 +530,70 @@ public class EventManager {
         return count;
     }    
 
+    /**
+     *
+     * @return
+     */
     public MapleMapFactory getMapFactory() {
         return getChannelServer().getMapFactory();
     }
 
+    /**
+     *
+     * @return
+     */
     public OverrideMonsterStats newMonsterStats() {
         return new OverrideMonsterStats();
     }
 
+    /**
+     *
+     * @return
+     */
     public List<MapleCharacter> newCharList() {
-        return new ArrayList<MapleCharacter>();
+        return new ArrayList<>();
     }
 
+    /**
+     *
+     * @param id
+     * @return
+     */
     public MapleMonster getMonster(final int id) {
         return MapleLifeFactory.getMonster(id);
     }
 
+    /**
+     *
+     * @param mapid
+     * @param effect
+     */
     public void broadcastShip(final int mapid, final int effect) {
         getMapFactory().getMap(mapid).broadcastMessage(MaplePacketCreator.boatPacket(effect));
     }
 
+    /**
+     *
+     * @param mapid
+     */
     public void broadcastChangeMusic(final int mapid) {
         getMapFactory().getMap(mapid).broadcastMessage(MaplePacketCreator.musicChange("Bgm04/ArabPirate"));
     }
 
+    /**
+     *
+     * @param msg
+     */
     public void broadcastYellowMsg(final String msg) {
         getChannelServer().broadcastPacket(MaplePacketCreator.yellowChat(msg));
     }
 
+    /**
+     *
+     * @param type
+     * @param msg
+     * @param weather
+     */
     public void broadcastServerMsg(final int type, final String msg, final boolean weather) {
         if (!weather) {
             getChannelServer().broadcastPacket(MaplePacketCreator.serverNotice(type, msg));
@@ -421,6 +606,10 @@ public class EventManager {
         }
     }
 
+    /**
+     *
+     * @return
+     */
     public boolean scheduleRandomEvent() {
         boolean omg = false;
         for (int i = 0; i < eventChannel.length; i++) {
@@ -429,6 +618,11 @@ public class EventManager {
         return omg;
     }
 
+    /**
+     *
+     * @param chz
+     * @return
+     */
     public boolean scheduleRandomEventInChannel(int chz) {
         final ChannelServer cs = ChannelServer.getInstance(chz);
         if (cs == null || cs.getEvent() > -1) {
@@ -451,6 +645,7 @@ public class EventManager {
         }
         EventTimer.getInstance().schedule(new Runnable() {
 
+            @Override
             public void run() {
                 if (cs.getEvent() >= 0) {
                     MapleEvent.setEvent(cs, true);
@@ -460,41 +655,50 @@ public class EventManager {
         return true;
     }
 
+    /**
+     *
+     * @param chr
+     * @param chz
+     * @param A
+     * @return
+     */
     public boolean scheduleRandomEventInChannel(MapleCharacter chr, int chz, int A) {
         final ChannelServer cs = ChannelServer.getInstance(chz);
         if (cs == null || cs.getEvent() > -1) {
             return false;
         }
         MapleEventType t = null;
+        OUTER:
         while (t == null) {
-          //  for (MapleEventType x : MapleEventType.values()) {
-                if (A == 1) {
+            //  for (MapleEventType x : MapleEventType.values()) {
+            switch (A) {
+                case 1:
                     t = MapleEventType.Coconut;
-                    break;
-                } else if (A == 2) {
+                    break OUTER;
+            /*if (Randomizer.nextInt(MapleEventType.values().length) == 0 && x != MapleEventType.OxQuiz) {
+            t = x;
+            break;
+            }*/
+            //  }
+                case 2:
                     t = MapleEventType.CokePlay;
-                    break;
-                } else if (A == 3) {
+                    break OUTER;
+                case 3:
                     t = MapleEventType.Fitness;
-                    break;
-                } else if (A == 4) {
+                    break OUTER;
+                case 4:
                     t = MapleEventType.OlaOla;
-                    break;
-                } else if (A == 5) {
+                    break OUTER;
+                case 5:
                     t = MapleEventType.OxQuiz;
-                    break;
-                } else if (A == 6) {
+                    break OUTER;
+                case 6:
                     t = MapleEventType.Snowball;
-                    break;
-                }else{
+                    break OUTER;
+                default:
                     chr.dropMessage(6, "输入指令错误！");
                     return false;
-                }
-                /*if (Randomizer.nextInt(MapleEventType.values().length) == 0 && x != MapleEventType.OxQuiz) {
-                    t = x;
-                    break;
-                }*/
-          //  }
+            }
         }
         final String msg = MapleEvent.scheduleEvent(t, cs);
         if (msg.length() > 0) {
@@ -503,6 +707,7 @@ public class EventManager {
         }
         EventTimer.getInstance().schedule(new Runnable() {
 
+            @Override
             public void run() {
                 if (cs.getEvent() >= 0) {
                     MapleEvent.setEvent(cs, true);
@@ -512,6 +717,9 @@ public class EventManager {
         return true;
     }
     
+    /**
+     *
+     */
     public void setWorldEvent() {
         for (int i = 0; i < eventChannel.length; i++) {
 //            eventChannel[i] = 1; //2-8

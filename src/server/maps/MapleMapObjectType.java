@@ -20,17 +20,64 @@
  */
 package server.maps;
 
+/**
+ *
+ * @author zjj
+ */
 public enum MapleMapObjectType {
 
+    /**
+     *
+     */
     NPC,
+
+    /**
+     *
+     */
     MONSTER,
+
+    /**
+     *
+     */
     ITEM,
+
+    /**
+     *
+     */
     PLAYER,
+
+    /**
+     *
+     */
     DOOR,
+
+    /**
+     *
+     */
     SUMMON,
+
+    /**
+     *
+     */
     SHOP,
+
+    /**
+     *
+     */
     MIST,
+
+    /**
+     *
+     */
     REACTOR,
+
+    /**
+     *
+     */
     LOVE, 
+
+    /**
+     *
+     */
     HIRED_MERCHANT;
 }

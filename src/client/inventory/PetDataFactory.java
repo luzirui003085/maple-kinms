@@ -29,14 +29,24 @@ import provider.MapleDataProviderFactory;
 import provider.MapleDataTool;
 import tools.Pair;
 
+/**
+ *
+ * @author zjj
+ */
 public class PetDataFactory {
 
     private static MapleDataProvider dataRoot = MapleDataProviderFactory.getDataProvider(new File(System.getProperty("net.sf.odinms.wzpath") + "/Item.wz"));
-    private static Map<Pair<Integer, Integer>, PetCommand> petCommands = new HashMap<Pair<Integer, Integer>, PetCommand>();
-    private static Map<Integer, Integer> petHunger = new HashMap<Integer, Integer>();
+    private static Map<Pair<Integer, Integer>, PetCommand> petCommands = new HashMap<>();
+    private static Map<Integer, Integer> petHunger = new HashMap<>();
 
+    /**
+     *
+     * @param petId
+     * @param skillId
+     * @return
+     */
     public static final PetCommand getPetCommand(final int petId, final int skillId) {
-        PetCommand ret = petCommands.get(new Pair<Integer, Integer>(Integer.valueOf(petId), Integer.valueOf(skillId)));
+        PetCommand ret = petCommands.get(new Pair<>(Integer.valueOf(petId), Integer.valueOf(skillId)));
         if (ret != null) {
             return ret;
         }
@@ -48,18 +58,23 @@ public class PetDataFactory {
             inc = MapleDataTool.getInt("interact/" + skillId + "/inc", skillData, 0);
         }
         ret = new PetCommand(petId, skillId, prob, inc);
-        petCommands.put(new Pair<Integer, Integer>(Integer.valueOf(petId), Integer.valueOf(skillId)), ret);
+        petCommands.put(new Pair<>(Integer.valueOf(petId), Integer.valueOf(skillId)), ret);
 
         return ret;
     }
 
+    /**
+     *
+     * @param petId
+     * @return
+     */
     public static final int getHunger(final int petId) {
-        Integer ret = petHunger.get(Integer.valueOf(petId));
+        Integer ret = petHunger.get(petId);
         if (ret != null) {
             return ret;
         }
         final MapleData hungerData = dataRoot.getData("Pet/" + petId + ".img").getChildByPath("info/hungry");
-        ret = Integer.valueOf(MapleDataTool.getInt(hungerData, 1));
+        ret = MapleDataTool.getInt(hungerData, 1);
         petHunger.put(petId, ret);
 
         return ret;

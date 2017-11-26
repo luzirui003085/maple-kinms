@@ -21,8 +21,8 @@
 package tools;
 
 import java.net.SocketAddress;
-
 import org.apache.mina.common.CloseFuture;
+import org.apache.mina.common.IoFilter.WriteRequest;
 import org.apache.mina.common.IoFilterChain;
 import org.apache.mina.common.IoHandler;
 import org.apache.mina.common.IoService;
@@ -30,7 +30,6 @@ import org.apache.mina.common.IoServiceConfig;
 import org.apache.mina.common.IoSessionConfig;
 import org.apache.mina.common.TransportType;
 import org.apache.mina.common.WriteFuture;
-import org.apache.mina.common.IoFilter.WriteRequest;
 import org.apache.mina.common.support.BaseIoSession;
 
 /**

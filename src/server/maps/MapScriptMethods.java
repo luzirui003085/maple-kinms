@@ -33,7 +33,6 @@ import server.life.MapleLifeFactory;
 import server.life.MapleMonster;
 import server.quest.MapleQuest;
 import server.quest.MapleQuest.MedalQuest;
-import tools.FileoutputUtil;
 import tools.MaplePacketCreator;
 import tools.packet.UIPacket;
 

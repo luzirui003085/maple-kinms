@@ -20,8 +20,8 @@
  */
 package handling.channel.handler;
 
-import client.MapleClient;
 import client.MapleCharacter;
+import client.MapleClient;
 import client.messages.CommandProcessor;
 import constants.ServerConstants.CommandType;
 import handling.channel.ChannelServer;
@@ -31,8 +31,19 @@ import handling.world.World;
 import tools.MaplePacketCreator;
 import tools.data.input.SeekableLittleEndianAccessor;
 
+/**
+ *
+ * @author zjj
+ */
 public class ChatHandler {
 
+    /**
+     *
+     * @param text
+     * @param unk
+     * @param c
+     * @param chr
+     */
     public static final void GeneralChat(final String text, final byte unk, final MapleClient c, final MapleCharacter chr) {
         if (chr != null) {
             try {
@@ -73,6 +84,12 @@ public class ChatHandler {
         }
     }
 
+    /**
+     *
+     * @param slea
+     * @param c
+     * @param chr
+     */
     public static final void Others(final SeekableLittleEndianAccessor slea, final MapleClient c, final MapleCharacter chr) {
         final int type = slea.readByte();
         final byte numRecipients = slea.readByte();
@@ -115,6 +132,11 @@ public class ChatHandler {
         }
     }
 
+    /**
+     *
+     * @param slea
+     * @param c
+     */
     public static final void Messenger(final SeekableLittleEndianAccessor slea, final MapleClient c) {
         String input;
         MapleMessenger messenger = c.getPlayer().getMessenger();
@@ -196,6 +218,11 @@ public class ChatHandler {
         }
     }
 
+    /**
+     *
+     * @param slea
+     * @param c
+     */
     public static final void Whisper_Find(final SeekableLittleEndianAccessor slea, final MapleClient c) {
         final byte mode = slea.readByte();
 //        slea.readInt(); //ticks
@@ -228,13 +255,17 @@ public class ChatHandler {
                             return;
                         }
                     }
-                    if (ch == -10) {
+                switch (ch) {
+                    case -10:
                         c.getSession().write(MaplePacketCreator.getFindReplyWithCS(recipient, mode == 68));
-                    } else if (ch == -20) {
+                        break;
+                    case -20:
                         c.getSession().write(MaplePacketCreator.getFindReplyWithMTS(recipient, mode == 68));
-                    } else {
+                        break;
+                    default:
                         c.getSession().write(MaplePacketCreator.getWhisperReply(recipient, (byte) 0));
-                    }
+                        break;
+                }
                 }
                 break;
             }

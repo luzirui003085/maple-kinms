@@ -20,23 +20,26 @@
  */
 package server.life;
 
-import constants.GameConstants;
-import java.awt.Point;
-import java.awt.Rectangle;
-import java.util.Map;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.LinkedList;
-
 import client.MapleCharacter;
 import client.MapleDisease;
 import client.status.MonsterStatus;
+import constants.GameConstants;
+import java.awt.Point;
+import java.awt.Rectangle;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.EnumMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 import server.maps.MapleMapObject;
 import server.maps.MapleMapObjectType;
 import server.maps.MapleMist;
 
+/**
+ *
+ * @author zjj
+ */
 public class MobSkill {
 
     private int skillId, skillLevel, mpCon, spawnEffect, hp, x, y;
@@ -44,18 +47,31 @@ public class MobSkill {
     private float prop;
 //    private short effect_delay;
     private short limit;
-    private List<Integer> toSummon = new ArrayList<Integer>();
+    private List<Integer> toSummon = new ArrayList<>();
     private Point lt, rb;
 
+    /**
+     *
+     * @param skillId
+     * @param level
+     */
     public MobSkill(int skillId, int level) {
         this.skillId = skillId;
         this.skillLevel = level;
     }
 
+    /**
+     *
+     * @param mpCon
+     */
     public void setMpCon(int mpCon) {
         this.mpCon = mpCon;
     }
 
+    /**
+     *
+     * @param toSummon
+     */
     public void addSummons(List<Integer> toSummon) {
         this.toSummon = toSummon;
     }
@@ -63,43 +79,88 @@ public class MobSkill {
     /*   public void setEffectDelay(short effect_delay) {
      this.effect_delay = effect_delay;
      }*/
+
+    /**
+     *
+     * @param spawnEffect
+     */
+
     public void setSpawnEffect(int spawnEffect) {
         this.spawnEffect = spawnEffect;
     }
 
+    /**
+     *
+     * @param hp
+     */
     public void setHp(int hp) {
         this.hp = hp;
     }
 
+    /**
+     *
+     * @param x
+     */
     public void setX(int x) {
         this.x = x;
     }
 
+    /**
+     *
+     * @param y
+     */
     public void setY(int y) {
         this.y = y;
     }
 
+    /**
+     *
+     * @param duration
+     */
     public void setDuration(long duration) {
         this.duration = duration;
     }
 
+    /**
+     *
+     * @param cooltime
+     */
     public void setCoolTime(long cooltime) {
         this.cooltime = cooltime;
     }
 
+    /**
+     *
+     * @param prop
+     */
     public void setProp(float prop) {
         this.prop = prop;
     }
 
+    /**
+     *
+     * @param lt
+     * @param rb
+     */
     public void setLtRb(Point lt, Point rb) {
         this.lt = lt;
         this.rb = rb;
     }
 
+    /**
+     *
+     * @param limit
+     */
     public void setLimit(short limit) {
         this.limit = limit;
     }
 
+    /**
+     *
+     * @param player
+     * @param monster
+     * @return
+     */
     public boolean checkCurrentBuff(MapleCharacter player, MapleMonster monster) {
         boolean stop = false;
         switch (skillId) {
@@ -139,43 +200,49 @@ public class MobSkill {
         return stop;
     }
 
+    /**
+     *
+     * @param player
+     * @param monster
+     * @param skill
+     */
     public void applyEffect(MapleCharacter player, MapleMonster monster, boolean skill) {
         MapleDisease disease = null;
-        Map<MonsterStatus, Integer> stats = new EnumMap<MonsterStatus, Integer>(MonsterStatus.class);
-        List<Integer> reflection = new LinkedList<Integer>();
+        Map<MonsterStatus, Integer> stats = new EnumMap<>(MonsterStatus.class);
+        List<Integer> reflection = new LinkedList<>();
 
         switch (skillId) {
             case 100:
             case 110:
             case 150:
-                stats.put(MonsterStatus.WEAPON_ATTACK_UP, Integer.valueOf(x));
+                stats.put(MonsterStatus.WEAPON_ATTACK_UP, x);
                 break;
             case 101:
             case 111:
             case 151:
-                stats.put(MonsterStatus.MAGIC_ATTACK_UP, Integer.valueOf(x));
+                stats.put(MonsterStatus.MAGIC_ATTACK_UP, x);
                 break;
             case 102:
             case 112:
             case 152:
-                stats.put(MonsterStatus.WEAPON_DEFENSE_UP, Integer.valueOf(x));
+                stats.put(MonsterStatus.WEAPON_DEFENSE_UP, x);
                 break;
             case 103:
             case 113:
             case 153:
-                stats.put(MonsterStatus.MAGIC_DEFENSE_UP, Integer.valueOf(x));
+                stats.put(MonsterStatus.MAGIC_DEFENSE_UP, x);
                 break;
             case 154:
-                stats.put(MonsterStatus.ACC, Integer.valueOf(x));
+                stats.put(MonsterStatus.ACC, x);
                 break;
             case 155:
-                stats.put(MonsterStatus.AVOID, Integer.valueOf(x));
+                stats.put(MonsterStatus.AVOID, x);
                 break;
             case 156:
-                stats.put(MonsterStatus.SPEED, Integer.valueOf(x));
+                stats.put(MonsterStatus.SPEED, x);
                 break;
             case 157:
-                stats.put(MonsterStatus.SEAL, Integer.valueOf(x)); //o.o
+                stats.put(MonsterStatus.SEAL, x); //o.o
                 break;
             case 114:
                 if (lt != null && rb != null && skill && monster != null) {
@@ -216,7 +283,7 @@ public class MobSkill {
 
             case 129: // Banish
                 if (monster != null) {
-                    if (monster.getEventInstance() != null && monster.getEventInstance().getName().indexOf("BossQuest") != -1) {
+                    if (monster.getEventInstance() != null && monster.getEventInstance().getName().contains("BossQuest")) {
                         break;
                     }
                     final BanishInfo info = monster.getStats().getBanishInfo();
@@ -237,29 +304,29 @@ public class MobSkill {
                 }
                 break;
             case 140:
-                stats.put(MonsterStatus.WEAPON_IMMUNITY, Integer.valueOf(x));
+                stats.put(MonsterStatus.WEAPON_IMMUNITY, x);
                 break;
             case 141:
-                stats.put(MonsterStatus.MAGIC_IMMUNITY, Integer.valueOf(x));
+                stats.put(MonsterStatus.MAGIC_IMMUNITY, x);
                 break;
             case 142: // Weapon / Magic Immunity
-                stats.put(MonsterStatus.DAMAGE_IMMUNITY, Integer.valueOf(x));
+                stats.put(MonsterStatus.DAMAGE_IMMUNITY, x);
                 break;
             case 143: // Weapon Reflect
-                stats.put(MonsterStatus.WEAPON_DAMAGE_REFLECT, Integer.valueOf(x));
-                stats.put(MonsterStatus.WEAPON_IMMUNITY, Integer.valueOf(x));
+                stats.put(MonsterStatus.WEAPON_DAMAGE_REFLECT, x);
+                stats.put(MonsterStatus.WEAPON_IMMUNITY, x);
                 reflection.add(x);
                 break;
             case 144: // Magic Reflect
-                stats.put(MonsterStatus.MAGIC_DAMAGE_REFLECT, Integer.valueOf(x));
-                stats.put(MonsterStatus.MAGIC_IMMUNITY, Integer.valueOf(x));
+                stats.put(MonsterStatus.MAGIC_DAMAGE_REFLECT, x);
+                stats.put(MonsterStatus.MAGIC_IMMUNITY, x);
                 reflection.add(x);
                 break;
             case 145: // Weapon / Magic reflect
-                stats.put(MonsterStatus.WEAPON_DAMAGE_REFLECT, Integer.valueOf(x));
-                stats.put(MonsterStatus.WEAPON_IMMUNITY, Integer.valueOf(x));
-                stats.put(MonsterStatus.MAGIC_DAMAGE_REFLECT, Integer.valueOf(x));
-                stats.put(MonsterStatus.MAGIC_IMMUNITY, Integer.valueOf(x));
+                stats.put(MonsterStatus.WEAPON_DAMAGE_REFLECT, x);
+                stats.put(MonsterStatus.WEAPON_IMMUNITY, x);
+                stats.put(MonsterStatus.MAGIC_DAMAGE_REFLECT, x);
+                stats.put(MonsterStatus.MAGIC_IMMUNITY, x);
                 reflection.add(x);
                 reflection.add(x);
                 break;
@@ -347,18 +414,34 @@ public class MobSkill {
         }
     }
 
+    /**
+     *
+     * @return
+     */
     public int getSkillId() {
         return skillId;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getSkillLevel() {
         return skillLevel;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getMpCon() {
         return mpCon;
     }
 
+    /**
+     *
+     * @return
+     */
     public List<Integer> getSummons() {
         return Collections.unmodifiableList(toSummon);
     }
@@ -366,42 +449,84 @@ public class MobSkill {
     /*    public short getEffectDelay() {
      return effect_delay;
      }*/
+
+    /**
+     *
+     * @return
+     */
+
     public int getSpawnEffect() {
         return spawnEffect;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getHP() {
         return hp;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getX() {
         return x;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getY() {
         return y;
     }
 
+    /**
+     *
+     * @return
+     */
     public long getDuration() {
         return duration;
     }
 
+    /**
+     *
+     * @return
+     */
     public long getCoolTime() {
         return cooltime;
     }
 
+    /**
+     *
+     * @return
+     */
     public Point getLt() {
         return lt;
     }
 
+    /**
+     *
+     * @return
+     */
     public Point getRb() {
         return rb;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getLimit() {
         return limit;
     }
 
+    /**
+     *
+     * @return
+     */
     public boolean makeChanceResult() {
         return prop >= 1.0 || Math.random() < prop;
     }
@@ -421,14 +546,14 @@ public class MobSkill {
 
     private List<MapleCharacter> getPlayersInRange(MapleMonster monster, MapleCharacter player) {
         final Rectangle bounds = calculateBoundingBox(monster.getPosition(), monster.isFacingLeft());
-        List<MapleCharacter> players = new ArrayList<MapleCharacter>();
+        List<MapleCharacter> players = new ArrayList<>();
         players.add(player);
         return monster.getMap().getPlayersInRectAndInList(bounds, players);
     }
 
     private List<MapleMapObject> getObjectsInRange(MapleMonster monster, MapleMapObjectType objectType) {
         final Rectangle bounds = calculateBoundingBox(monster.getPosition(), monster.isFacingLeft());
-        List<MapleMapObjectType> objectTypes = new ArrayList<MapleMapObjectType>();
+        List<MapleMapObjectType> objectTypes = new ArrayList<>();
         objectTypes.add(objectType);
         return monster.getMap().getMapObjectsInRect(bounds, objectTypes);
     }

@@ -20,11 +20,27 @@
  */
 package server.maps;
 
+/**
+ *
+ * @author zjj
+ */
 public interface AnimatedMapleMapObject extends MapleMapObject {
 
+    /**
+     *
+     * @return
+     */
     int getStance();
 
+    /**
+     *
+     * @param stance
+     */
     void setStance(int stance);
 
+    /**
+     *
+     * @return
+     */
     boolean isFacingLeft();
 }

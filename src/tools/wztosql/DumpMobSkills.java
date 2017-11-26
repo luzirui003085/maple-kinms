@@ -34,14 +34,35 @@ import provider.MapleDataProvider;
 import provider.MapleDataProviderFactory;
 import provider.MapleDataTool;
 
+/**
+ *
+ * @author zjj
+ */
 public class DumpMobSkills {
 
     private MapleDataProvider skill;
+
+    /**
+     *
+     */
     protected boolean hadError = false;
+
+    /**
+     *
+     */
     protected boolean update = false;
+
+    /**
+     *
+     */
     protected int id = 0;
     private Connection con = DatabaseConnection.getConnection();
 
+    /**
+     *
+     * @param update
+     * @throws Exception
+     */
     public DumpMobSkills(boolean update) throws Exception {
         this.update = update;
         this.skill = MapleDataProviderFactory.getDataProvider(new File(System.getProperty("net.sf.odinms.wzpath") + "/Skill.wz"));
@@ -50,10 +71,18 @@ public class DumpMobSkills {
         }
     }
 
+    /**
+     *
+     * @return
+     */
     public boolean isHadError() {
         return hadError;
     }
 
+    /**
+     *
+     * @throws Exception
+     */
     public void dumpMobSkills() throws Exception {
         if (!hadError) {
             PreparedStatement ps = con.prepareStatement("INSERT INTO wz_mobskilldata(skillid, `level`, hp, mpcon, x, y, time, prop, `limit`, spawneffect,`interval`, summons, ltx, lty, rbx, rby, once) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
@@ -70,12 +99,23 @@ public class DumpMobSkills {
         }
     }
 
+    /**
+     *
+     * @param sql
+     * @throws Exception
+     */
     public void delete(String sql) throws Exception {
         PreparedStatement ps = con.prepareStatement(sql);
         ps.executeUpdate();
         ps.close();
     }
 
+    /**
+     *
+     * @param sql
+     * @return
+     * @throws Exception
+     */
     public boolean doesExist(String sql) throws Exception {
         PreparedStatement ps = con.prepareStatement(sql);
         ResultSet rs = ps.executeQuery();
@@ -86,6 +126,12 @@ public class DumpMobSkills {
     }
 
     //kinda inefficient
+
+    /**
+     *
+     * @param ps
+     * @throws Exception
+     */
     public void dumpMobSkills(PreparedStatement ps) throws Exception {
         if (!update) {
             delete("DELETE FROM wz_mobskilldata");
@@ -114,12 +160,12 @@ public class DumpMobSkills {
                 ps.setInt(11, MapleDataTool.getInt("interval", lvlz, 0)); // * 1000
 
                 StringBuilder summ = new StringBuilder();
-                List<Integer> toSummon = new ArrayList<Integer>();
+                List<Integer> toSummon = new ArrayList<>();
                 for (int i = 0; i > -1; i++) {
                     if (lvlz.getChildByPath(String.valueOf(i)) == null) {
                         break;
                     }
-                    toSummon.add(Integer.valueOf(MapleDataTool.getInt(lvlz.getChildByPath(String.valueOf(i)), 0)));
+                    toSummon.add(MapleDataTool.getInt(lvlz.getChildByPath(String.valueOf(i)), 0));
                 }
                 for (Integer summon : toSummon) {
                     if (summ.length() > 0) {
@@ -152,10 +198,18 @@ public class DumpMobSkills {
         System.out.println("Done wz_mobskilldata...");
     }
 
+    /**
+     *
+     * @return
+     */
     public int currentId() {
         return id;
     }
 
+    /**
+     *
+     * @param args
+     */
     public static void main(String[] args) {
         boolean hadError = false;
         boolean update = false;

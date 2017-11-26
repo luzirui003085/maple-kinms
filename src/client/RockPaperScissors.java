@@ -24,12 +24,21 @@ import server.MapleInventoryManipulator;
 import server.Randomizer;
 import tools.MaplePacketCreator;
 
+/**
+ *
+ * @author zjj
+ */
 public class RockPaperScissors {
 
     private int round = 0;
     private boolean ableAnswer = true;
     private boolean win = false;
 
+    /**
+     *
+     * @param c
+     * @param mode
+     */
     public RockPaperScissors(final MapleClient c, final byte mode) {
         c.getSession().write(MaplePacketCreator.getRPSMode((byte) (0x09 + mode), -1, -1, -1));
         if (mode == 0) {
@@ -37,6 +46,12 @@ public class RockPaperScissors {
         }
     }
 
+    /**
+     *
+     * @param c
+     * @param answer
+     * @return
+     */
     public final boolean answer(final MapleClient c, final int answer) {
         if (ableAnswer && !win && answer >= 0 && answer <= 2) {
             final int response = Randomizer.nextInt(3);
@@ -57,6 +72,11 @@ public class RockPaperScissors {
         return false;
     }
 
+    /**
+     *
+     * @param c
+     * @return
+     */
     public final boolean timeOut(final MapleClient c) {
         if (ableAnswer && !win) {
             ableAnswer = false;
@@ -67,6 +87,11 @@ public class RockPaperScissors {
         return false;
     }
 
+    /**
+     *
+     * @param c
+     * @return
+     */
     public final boolean nextRound(final MapleClient c) {
         if (win) {
             round++;
@@ -81,6 +106,10 @@ public class RockPaperScissors {
         return false;
     }
 
+    /**
+     *
+     * @param c
+     */
     public final void reward(final MapleClient c) {
         if (win) {
             MapleInventoryManipulator.addById(c, 4031332 + round, (short) 1, "", null, 0, (byte) 0);
@@ -90,6 +119,10 @@ public class RockPaperScissors {
         c.getPlayer().setRPS(null);
     }
 
+    /**
+     *
+     * @param c
+     */
     public final void dispose(final MapleClient c) {
         reward(c);
         c.getSession().write(MaplePacketCreator.getRPSMode((byte) 0x0D, -1, -1, -1));

@@ -20,40 +20,52 @@
  */
 package handling.channel;
 
-import java.util.Map;
-import java.util.HashMap;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.concurrent.locks.Lock;
-import java.util.Collections;
-import java.util.Collection;
-import client.MapleCharacterUtil;
 import client.MapleCharacter;
+import client.MapleCharacterUtil;
 import handling.MaplePacket;
 import handling.world.CharacterTransfer;
 import handling.world.CheaterData;
 import handling.world.World;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import server.Timer.PingTimer;
 
+/**
+ *
+ * @author zjj
+ */
 public class PlayerStorage {
 
     private final ReentrantReadWriteLock mutex = new ReentrantReadWriteLock();
     private final Lock rL = mutex.readLock(), wL = mutex.writeLock();
     private final ReentrantReadWriteLock mutex2 = new ReentrantReadWriteLock();
     private final Lock rL2 = mutex2.readLock(), wL2 = mutex2.writeLock();
-    private final Map<String, MapleCharacter> nameToChar = new HashMap<String, MapleCharacter>();
-    private final Map<Integer, MapleCharacter> idToChar = new HashMap<Integer, MapleCharacter>();
-    private final Map<Integer, CharacterTransfer> PendingCharacter = new HashMap<Integer, CharacterTransfer>();
+    private final Map<String, MapleCharacter> nameToChar = new HashMap<>();
+    private final Map<Integer, MapleCharacter> idToChar = new HashMap<>();
+    private final Map<Integer, CharacterTransfer> PendingCharacter = new HashMap<>();
     private final int channel;
 
+    /**
+     *
+     * @param channel
+     */
     public PlayerStorage(int channel) {
         this.channel = channel;
         // Prune once every 15 minutes
         PingTimer.getInstance().schedule(new PersistingTask(), 900000);
     }
 
+    /**
+     *
+     * @return
+     */
     public final Collection<MapleCharacter> getAllCharacters() {
         rL.lock();
         try {
@@ -63,6 +75,10 @@ public class PlayerStorage {
         }
     }
 
+    /**
+     *
+     * @param chr
+     */
     public final void registerPlayer(final MapleCharacter chr) {
         wL.lock();
         try {
@@ -74,6 +90,11 @@ public class PlayerStorage {
         World.Find.register(chr.getId(), chr.getName(), channel);
     }
 
+    /**
+     *
+     * @param chr
+     * @param playerid
+     */
     public final void registerPendingPlayer(final CharacterTransfer chr, final int playerid) {
         wL2.lock();
         try {
@@ -83,6 +104,10 @@ public class PlayerStorage {
         }
     }
 
+    /**
+     *
+     * @param chr
+     */
     public final void deregisterPlayer(final MapleCharacter chr) {
         wL.lock();
         try {
@@ -94,6 +119,11 @@ public class PlayerStorage {
         World.Find.forceDeregister(chr.getId(), chr.getName());
     }
 
+    /**
+     *
+     * @param idz
+     * @param namez
+     */
     public final void deregisterPlayer(final int idz, final String namez) {
         wL.lock();
         try {
@@ -105,6 +135,10 @@ public class PlayerStorage {
         World.Find.forceDeregister(idz, namez);
     }
 
+    /**
+     *
+     * @param charid
+     */
     public final void deregisterPendingPlayer(final int charid) {
         wL2.lock();
         try {
@@ -114,6 +148,11 @@ public class PlayerStorage {
         }
     }
 
+    /**
+     *
+     * @param charid
+     * @return
+     */
     public final CharacterTransfer getPendingCharacter(final int charid) {
         final CharacterTransfer toreturn;
         rL2.lock();
@@ -128,6 +167,11 @@ public class PlayerStorage {
         return toreturn;
     }
 
+    /**
+     *
+     * @param name
+     * @return
+     */
     public final MapleCharacter getCharacterByName(final String name) {
         rL.lock();
         try {
@@ -146,6 +190,13 @@ public class PlayerStorage {
      }
      return null;
      }*/
+
+    /**
+     *
+     * @param id
+     * @return
+     */
+
     public final MapleCharacter getCharacterById(final int id) {
         rL.lock();
         try {
@@ -155,12 +206,20 @@ public class PlayerStorage {
         }
     }
 
+    /**
+     *
+     * @return
+     */
     public final int getConnectedClients() {
         return idToChar.size();
     }
 
+    /**
+     *
+     * @return
+     */
     public final List<CheaterData> getCheaters() {
-        final List<CheaterData> cheaters = new ArrayList<CheaterData>();
+        final List<CheaterData> cheaters = new ArrayList<>();
 
         rL.lock();
         try {
@@ -179,10 +238,17 @@ public class PlayerStorage {
         return cheaters;
     }
 
+    /**
+     *
+     */
     public final void disconnectAll() {
         disconnectAll(false);
     }
 
+    /**
+     *
+     * @param checkGM
+     */
     public final void disconnectAll(final boolean checkGM) {
         wL.lock();
         try {
@@ -203,6 +269,11 @@ public class PlayerStorage {
         }
     }
 
+    /**
+     *
+     * @param byGM
+     * @return
+     */
     public final String getOnlinePlayers(final boolean byGM) {
         final StringBuilder sb = new StringBuilder();
 
@@ -237,6 +308,10 @@ public class PlayerStorage {
         return sb.toString();
     }
 
+    /**
+     *
+     * @param data
+     */
     public final void broadcastPacket(final MaplePacket data) {
         rL.lock();
         try {
@@ -249,6 +324,10 @@ public class PlayerStorage {
         }
     }
 
+    /**
+     *
+     * @param data
+     */
     public final void broadcastSmegaPacket(final MaplePacket data) {
         rL.lock();
         try {
@@ -266,6 +345,10 @@ public class PlayerStorage {
         }
     }
 
+    /**
+     *
+     * @param data
+     */
     public final void broadcastGMPacket(final MaplePacket data) {
         rL.lock();
         try {
@@ -283,6 +366,9 @@ public class PlayerStorage {
         }
     }
 
+    /**
+     *
+     */
     public class PersistingTask implements Runnable {
 
         @Override

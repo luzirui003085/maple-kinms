@@ -3,7 +3,6 @@ package server;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import provider.MapleData;
@@ -12,6 +11,10 @@ import provider.MapleDataProviderFactory;
 import provider.MapleDataTool;
 import tools.StringUtil;
 
+/**
+ *
+ * @author zjj
+ */
 public class CashItemFactoryA {
 
     private static Map<Integer, Integer> snLookup = new HashMap();
@@ -21,6 +24,11 @@ public class CashItemFactoryA {
     private static MapleData commodities = data.getData(StringUtil.getLeftPaddedStr("Commodity.img", '0', 11));
     private static Map<Integer, List<CashItemInfoA>> cashPackages = new HashMap();
 
+    /**
+     *
+     * @param sn
+     * @return
+     */
     public static CashItemInfoA getItem(int sn) {
         CashItemInfoA stats = itemStats.get(sn);
         if (stats == null) {
@@ -43,7 +51,7 @@ public class CashItemFactoryA {
 
     private static int getCommodityFromSN(int sn) {
         int cid;
-        if (snLookup.get(Integer.valueOf(sn)) == null) {
+        if (snLookup.get(sn) == null) {
             int curr = snLookup.size() - 1;
             int currSN = 0;
             if (curr == -1) {
@@ -64,11 +72,16 @@ public class CashItemFactoryA {
         return cid;
     }
 
+    /**
+     *
+     * @param itemId
+     * @return
+     */
     public static List<CashItemInfoA> getPackageItems(int itemId) {
         if (cashPackages.containsKey(itemId)) {
             return cashPackages.get(itemId);
         }
-        List<CashItemInfoA> packageItems = new ArrayList<CashItemInfoA>();
+        List<CashItemInfoA> packageItems = new ArrayList<>();
         MapleDataProvider dataProvider = MapleDataProviderFactory.getDataProvider(new File(System.getProperty("net.sf.cherry.wzpath") + "/" + "Etc.wz"));
         MapleData a = dataProvider.getData("CashPackage.img");
         for (MapleData b : a.getChildren()) {
@@ -86,25 +99,30 @@ public class CashItemFactoryA {
         return packageItems;
     }
 
+    /**
+     *
+     * @param id
+     * @return
+     */
     public static int getSnFromId(int id) {
         int cid;
-        if (idLookup.get(Integer.valueOf(id)) == null) {
+        if (idLookup.get(id) == null) {
             int curr = idLookup.size() - 1;
             int currSN = 0;
             if (curr == -1) {
                 curr = 0;
                 currSN = MapleDataTool.getIntConvert("0/ItemId", commodities);
-                idLookup.put(Integer.valueOf(currSN), Integer.valueOf(curr));
+                idLookup.put(currSN, curr);
             }
 
             for (int i = idLookup.size() - 1; currSN != id; i++) {
                 curr = i;
                 currSN = MapleDataTool.getIntConvert(curr + "/ItemId", commodities);
-                idLookup.put(Integer.valueOf(currSN), Integer.valueOf(curr));
+                idLookup.put(currSN, curr);
             }
             cid = curr;
         } else {
-            cid = ((Integer) idLookup.get(Integer.valueOf(id))).intValue();
+            cid = (idLookup.get(id));
         }
         return MapleDataTool.getIntConvert(cid + "/SN", commodities);
     }

@@ -22,16 +22,19 @@ package client.inventory;
 
 import client.MapleBuffStat;
 import client.MapleCharacter;
+import database.DatabaseConnection;
+import java.io.Serializable;
 import java.lang.ref.WeakReference;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.io.Serializable;
-
-import database.DatabaseConnection;
 import server.Randomizer;
 import tools.MaplePacketCreator;
 
+/**
+ *
+ * @author zjj
+ */
 public class MapleMount implements Serializable {
 
     private static final long serialVersionUID = 9179541993413738569L;
@@ -41,15 +44,29 @@ public class MapleMount implements Serializable {
     private long lastFatigue = 0;
     private transient WeakReference<MapleCharacter> owner;
 
+    /**
+     *
+     * @param owner
+     * @param id
+     * @param skillid
+     * @param fatigue
+     * @param level
+     * @param exp
+     */
     public MapleMount(MapleCharacter owner, int id, int skillid, byte fatigue, byte level, int exp) {
         this.itemid = id;
         this.skillid = skillid;
         this.fatigue = fatigue;
         this.level = level;
         this.exp = exp;
-        this.owner = new WeakReference<MapleCharacter>(owner);
+        this.owner = new WeakReference<>(owner);
     }
 
+    /**
+     *
+     * @param charid
+     * @throws SQLException
+     */
     public void saveMount(final int charid) throws SQLException {
         if (!changed) {
             return;
@@ -64,31 +81,59 @@ public class MapleMount implements Serializable {
         ps.close();
     }
 
+    /**
+     *
+     * @return
+     */
     public int getItemId() {
         return itemid;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getSkillId() {
         return skillid;
     }
 
+    /**
+     *
+     * @return
+     */
     public byte getFatigue() {
         return fatigue;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getExp() {
         return exp;
     }
 
+    /**
+     *
+     * @return
+     */
     public byte getLevel() {
         return level;
     }
 
+    /**
+     *
+     * @param c
+     */
     public void setItemId(int c) {
         changed = true;
         this.itemid = c;
     }
 
+    /**
+     *
+     * @param amount
+     */
     public void setFatigue(byte amount) {
         changed = true;
         fatigue += amount;
@@ -97,16 +142,27 @@ public class MapleMount implements Serializable {
         }
     }
 
+    /**
+     *
+     * @param c
+     */
     public void setExp(int c) {
         changed = true;
         this.exp = c;
     }
 
+    /**
+     *
+     * @param c
+     */
     public void setLevel(byte c) {
         changed = true;
         this.level = c;
     }
 
+    /**
+     *
+     */
     public void increaseFatigue() {
         changed = true;
         this.fatigue++;
@@ -116,18 +172,32 @@ public class MapleMount implements Serializable {
         update();
     }
 
+    /**
+     *
+     * @param now
+     * @return
+     */
     public final boolean canTire(long now) {
         return lastFatigue > 0 && lastFatigue + 30000 < now;
     }
 
+    /**
+     *
+     */
     public void startSchedule() {
         lastFatigue = System.currentTimeMillis();
     }
 
+    /**
+     *
+     */
     public void cancelSchedule() {
         lastFatigue = 0;
     }
 
+    /**
+     *
+     */
     public void increaseExp() {
         int e;
         if (level >= 1 && level <= 7) {
@@ -142,6 +212,9 @@ public class MapleMount implements Serializable {
         setExp(exp + e);
     }
 
+    /**
+     *
+     */
     public void update() {
         final MapleCharacter chr = owner.get();
         if (chr != null) {

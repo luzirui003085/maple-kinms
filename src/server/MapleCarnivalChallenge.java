@@ -1,12 +1,8 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package server;
 
 import java.lang.ref.WeakReference;
 import client.MapleCharacter;
-import handling.world.MapleParty;
 import handling.world.MaplePartyCharacter;
 
 /**
@@ -19,8 +15,12 @@ public class MapleCarnivalChallenge {
     WeakReference<MapleCharacter> challenger;
     String challengeinfo = "";
 
+    /**
+     *
+     * @param challenger
+     */
     public MapleCarnivalChallenge(MapleCharacter challenger) {
-        this.challenger = new WeakReference<MapleCharacter>(challenger);
+        this.challenger = new WeakReference<>(challenger);
         challengeinfo += "#b";
         for (MaplePartyCharacter pc : challenger.getParty().getMembers()) {
             MapleCharacter c = challenger.getMap().getCharacterById(pc.getId());
@@ -31,14 +31,27 @@ public class MapleCarnivalChallenge {
         challengeinfo += "#k";
     }
 
+    /**
+     *
+     * @return
+     */
     public MapleCharacter getChallenger() {
         return challenger.get();
     }
 
+    /**
+     *
+     * @return
+     */
     public String getChallengeInfo() {
         return challengeinfo;
     }
 
+    /**
+     *
+     * @param job
+     * @return
+     */
     public static final String getJobNameById(int job) {
         switch (job) {
             case 0:
@@ -220,6 +233,11 @@ public class MapleCarnivalChallenge {
         }
     }
 
+    /**
+     *
+     * @param job
+     * @return
+     */
     public static final String getJobBasicNameById(int job) {
         switch (job) {
             case 0:

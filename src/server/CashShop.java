@@ -1,24 +1,4 @@
-/*
- This file is part of the ZeroFusion MapleStory Server
- Copyright (C) 2008 Patrick Huy <patrick.huy@frz.cc> 
- Matthias Butz <matze@odinms.de>
- Jan Christian Meyer <vimes@odinms.de>
- ZeroFusion organized by "RMZero213" <RMZero213@hotmail.com>
 
- This program is free software: you can redistribute it and/or modify
- it under the terms of the GNU Affero General Public License version 3
- as published by the Free Software Foundation. You may not use, modify
- or distribute this program under any other version of the
- GNU Affero General Public License.
-
- This program is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- GNU Affero General Public License for more details.
-
- You should have received a copy of the GNU Affero General Public License
- along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
 package server;
 
 import java.io.Serializable;
@@ -29,7 +9,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Calendar;
 import client.inventory.IItem;
 import constants.GameConstants;
 import client.inventory.MaplePet;
@@ -41,17 +20,27 @@ import client.inventory.MapleInventoryIdentifier;
 import client.inventory.MapleInventoryType;
 import database.DatabaseConnection;
 import tools.packet.MTSCSPacket;
-import tools.MaplePacketCreator;
 import tools.Pair;
 
+/**
+ *
+ * @author zjj
+ */
 public class CashShop implements Serializable {
 
     private static final long serialVersionUID = 231541893513373579L;
     private int accountId, characterId;
     private ItemLoader factory;
-    private List<IItem> inventory = new ArrayList<IItem>();
-    private List<Integer> uniqueids = new ArrayList<Integer>();
+    private List<IItem> inventory = new ArrayList<>();
+    private List<Integer> uniqueids = new ArrayList<>();
 
+    /**
+     *
+     * @param accountId
+     * @param characterId
+     * @param jobType
+     * @throws SQLException
+     */
     public CashShop(int accountId, int characterId, int jobType) throws SQLException {
         this.accountId = accountId;
         this.characterId = characterId;
@@ -75,14 +64,27 @@ public class CashShop implements Serializable {
         }
     }
 
+    /**
+     *
+     * @return
+     */
     public int getItemsSize() {
         return inventory.size();
     }
 
+    /**
+     *
+     * @return
+     */
     public List<IItem> getInventory() {
         return inventory;
     }
 
+    /**
+     *
+     * @param cashId
+     * @return
+     */
     public IItem findByCashId(int cashId) {
         for (IItem item : inventory) {
             if (item.getUniqueId() == cashId) {
@@ -93,8 +95,12 @@ public class CashShop implements Serializable {
         return null;
     }
 
+    /**
+     *
+     * @param c
+     */
     public void checkExpire(MapleClient c) {
-        List<IItem> toberemove = new ArrayList<IItem>();
+        List<IItem> toberemove = new ArrayList<>();
         for (IItem item : inventory) {
             if (item != null && !GameConstants.isPet(item.getItemId()) && item.getExpiration() > 0 && item.getExpiration() < System.currentTimeMillis()) {
                 toberemove.add(item);
@@ -108,18 +114,43 @@ public class CashShop implements Serializable {
             toberemove.clear();
         }
     }
-  public IItem toItemA(CashItemInfoA cItem) {
+
+    /**
+     *
+     * @param cItem
+     * @return
+     */
+    public IItem toItemA(CashItemInfoA cItem) {
         return toItemA(cItem, MapleInventoryManipulator.getUniqueId(cItem.getId(), null), "");
     }
 
+    /**
+     *
+     * @param cItem
+     * @param gift
+     * @return
+     */
     public IItem toItemA(CashItemInfoA cItem, String gift) {
         return toItemA(cItem, MapleInventoryManipulator.getUniqueId(cItem.getId(), null), gift);
     }
 
+    /**
+     *
+     * @param cItem
+     * @param uniqueid
+     * @return
+     */
     public IItem toItemA(CashItemInfoA cItem, int uniqueid) {
         return toItemA(cItem, uniqueid, "");
     }
 
+    /**
+     *
+     * @param cItem
+     * @param uniqueid
+     * @param gift
+     * @return
+     */
     public IItem toItemA(CashItemInfoA cItem, int uniqueid, String gift) {
         if (uniqueid <= 0) {
             uniqueid = MapleInventoryIdentifier.getInstance();
@@ -155,18 +186,43 @@ public class CashShop implements Serializable {
         }
         return ret;
     }
+
+    /**
+     *
+     * @param cItem
+     * @return
+     */
     public IItem toItem(CashItemInfo cItem) {
         return toItem(cItem, MapleInventoryManipulator.getUniqueId(cItem.getId(), null), "");
     }
 
+    /**
+     *
+     * @param cItem
+     * @param gift
+     * @return
+     */
     public IItem toItem(CashItemInfo cItem, String gift) {
         return toItem(cItem, MapleInventoryManipulator.getUniqueId(cItem.getId(), null), gift);
     }
 
+    /**
+     *
+     * @param cItem
+     * @param uniqueid
+     * @return
+     */
     public IItem toItem(CashItemInfo cItem, int uniqueid) {
         return toItem(cItem, uniqueid, "");
     }
 
+    /**
+     *
+     * @param cItem
+     * @param uniqueid
+     * @param gift
+     * @return
+     */
     public IItem toItem(CashItemInfo cItem, int uniqueid, String gift) {
         if (uniqueid <= 0) {
             uniqueid = MapleInventoryIdentifier.getInstance();
@@ -212,18 +268,41 @@ public class CashShop implements Serializable {
         return ret;
     }
 
+    /**
+     *
+     * @param item
+     */
     public void addToInventory(IItem item) {
         inventory.add(item);
     }
 
+    /**
+     *
+     * @param item
+     */
     public void removeFromInventory(IItem item) {
         inventory.remove(item);
     }
 
+    /**
+     *
+     * @param recipient
+     * @param from
+     * @param message
+     * @param sn
+     */
     public void gift(int recipient, String from, String message, int sn) {
         gift(recipient, from, message, sn, 0);
     }
 
+    /**
+     *
+     * @param recipient
+     * @param from
+     * @param message
+     * @param sn
+     * @param uniqueid
+     */
     public void gift(int recipient, String from, String message, int sn, int uniqueid) {
         try {
             try (PreparedStatement ps = DatabaseConnection.getConnection().prepareStatement("INSERT INTO `gifts` VALUES (DEFAULT, ?, ?, ?, ?, ?)")) {
@@ -238,8 +317,12 @@ public class CashShop implements Serializable {
         }
     }
 
+    /**
+     *
+     * @return
+     */
     public List<Pair<IItem, String>> loadGifts() {
-        List<Pair<IItem, String>> gifts = new ArrayList<Pair<IItem, String>>();
+        List<Pair<IItem, String>> gifts = new ArrayList<>();
         Connection con = DatabaseConnection.getConnection();
         try {
             PreparedStatement ps = con.prepareStatement("SELECT * FROM `gifts` WHERE `recipient` = ?");
@@ -249,7 +332,7 @@ public class CashShop implements Serializable {
             while (rs.next()) {
                 CashItemInfo cItem = CashItemFactory.getInstance().getItem(rs.getInt("sn"));
                 IItem item = toItem(cItem, rs.getInt("uniqueid"), rs.getString("from"));
-                gifts.add(new Pair<IItem, String>(item, rs.getString("message")));
+                gifts.add(new Pair<>(item, rs.getString("message")));
                 uniqueids.add(item.getUniqueId());
                 List<CashItemInfo> packages = CashItemFactory.getInstance().getPackageItems(cItem.getId());
                 if (packages != null && packages.size() > 0) {
@@ -274,23 +357,36 @@ public class CashShop implements Serializable {
         return gifts;
     }
 
+    /**
+     *
+     * @param uniqueid
+     * @return
+     */
     public boolean canSendNote(int uniqueid) {
         return uniqueids.contains(uniqueid);
     }
 
+    /**
+     *
+     * @param uniqueid
+     */
     public void sendedNote(int uniqueid) {
         for (int i = 0; i < uniqueids.size(); i++) {
-            if (uniqueids.get(i).intValue() == uniqueid) {
+            if (uniqueids.get(i) == uniqueid) {
                 uniqueids.remove(i);
             }
         }
     }
 
+    /**
+     *
+     * @throws SQLException
+     */
     public void save() throws SQLException {
-        List<Pair<IItem, MapleInventoryType>> itemsWithType = new ArrayList<Pair<IItem, MapleInventoryType>>();
+        List<Pair<IItem, MapleInventoryType>> itemsWithType = new ArrayList<>();
 
         for (IItem item : inventory) {
-            itemsWithType.add(new Pair<IItem, MapleInventoryType>(item, GameConstants.getInventoryType(item.getItemId())));
+            itemsWithType.add(new Pair<>(item, GameConstants.getInventoryType(item.getItemId())));
         }
 
         factory.saveItems(itemsWithType, accountId);

@@ -21,33 +21,42 @@
  */
 package server.life;
 
-import java.awt.Point;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import client.inventory.IItem;
 import client.MapleCharacter;
 import client.MapleClient;
+import client.inventory.IItem;
 import client.inventory.MapleInventoryType;
 import client.inventory.MaplePet;
 import database.DatabaseConnection;
 import handling.channel.ChannelServer;
 import handling.world.World;
+import java.awt.Point;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import server.maps.*;
 import tools.MaplePacketCreator;
 
+/**
+ *
+ * @author zjj
+ */
 public class PlayerNPC extends MapleNPC {
 
-    private Map<Byte, Integer> equips = new HashMap<Byte, Integer>();
+    private Map<Byte, Integer> equips = new HashMap<>();
     private int mapid, face, hair, charId;
     private byte skin, gender;
     private int[] pets = new int[3];
 
+    /**
+     *
+     * @param rs
+     * @throws Exception
+     */
     public PlayerNPC(ResultSet rs) throws Exception {
         super(rs.getInt("ScriptId"), rs.getString("name"));
         hair = rs.getInt("hair");
@@ -77,6 +86,13 @@ public class PlayerNPC extends MapleNPC {
         ps.close();
     }
 
+    /**
+     *
+     * @param cid
+     * @param npc
+     * @param map
+     * @param base
+     */
     public PlayerNPC(MapleCharacter cid, int npc, MapleMap map, MapleCharacter base) {
         super(npc, cid.getName());
         this.charId = cid.getId();
@@ -85,6 +101,13 @@ public class PlayerNPC extends MapleNPC {
         update(cid);
     }
 
+    /**
+     *
+     * @param x
+     * @param y
+     * @param f
+     * @param fh
+     */
     public void setCoords(int x, int y, int f, int fh) {
         setPosition(new Point(x, y));
         setCy(y);
@@ -94,8 +117,11 @@ public class PlayerNPC extends MapleNPC {
         setFh(fh);
     }
 
+    /**
+     *
+     */
     public static void loadAll() {
-        List<PlayerNPC> toAdd = new ArrayList<PlayerNPC>();
+        List<PlayerNPC> toAdd = new ArrayList<>();
         Connection con = DatabaseConnection.getConnection();
         try {
             PreparedStatement ps = con.prepareStatement("SELECT * FROM playernpcs");
@@ -113,6 +139,10 @@ public class PlayerNPC extends MapleNPC {
         }
     }
 
+    /**
+     *
+     * @param chr
+     */
     public static void updateByCharId(MapleCharacter chr) {
         if (World.Find.findChannel(chr.getId()) > 0) { //if character is in cserv
             for (PlayerNPC npc : ChannelServer.getInstance(World.Find.findChannel(chr.getId())).getAllPlayerNPC()) {
@@ -121,18 +151,28 @@ public class PlayerNPC extends MapleNPC {
         }
     }
 
+    /**
+     *
+     */
     public void addToServer() {
         for (ChannelServer cserv : ChannelServer.getAllInstances()) {
             cserv.addPlayerNPC(this);
         }
     }
 
+    /**
+     *
+     */
     public void removeFromServer() {
         for (ChannelServer cserv : ChannelServer.getAllInstances()) {
             cserv.removePlayerNPC(this);
         }
     }
 
+    /**
+     *
+     * @param chr
+     */
     public void update(MapleCharacter chr) {
         if (chr == null || charId != chr.getId()) {
             return; //cant use name as it mightve been change actually..
@@ -144,7 +184,7 @@ public class PlayerNPC extends MapleNPC {
         setGender(chr.getGender());
         setPets(chr.getPets());
 
-        equips = new HashMap<Byte, Integer>();
+        equips = new HashMap<>();
         for (IItem item : chr.getInventory(MapleInventoryType.EQUIPPED).list()) {
             if (item.getPosition() < -128) {
                 continue;
@@ -154,10 +194,17 @@ public class PlayerNPC extends MapleNPC {
         saveToDB();
     }
 
+    /**
+     *
+     */
     public void destroy() {
         destroy(false); //just sql
     }
 
+    /**
+     *
+     * @param remove
+     */
     public void destroy(boolean remove) {
         Connection con = DatabaseConnection.getConnection();
         try {
@@ -178,6 +225,9 @@ public class PlayerNPC extends MapleNPC {
         }
     }
 
+    /**
+     *
+     */
     public void saveToDB() {
         Connection con = DatabaseConnection.getConnection();
         try {
@@ -224,54 +274,107 @@ public class PlayerNPC extends MapleNPC {
         }
     }
 
+    /**
+     *
+     * @return
+     */
     public Map<Byte, Integer> getEquips() {
         return equips;
     }
 
+    /**
+     *
+     * @return
+     */
     public byte getSkin() {
         return skin;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getGender() {
         return gender;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getFace() {
         return face;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getHair() {
         return hair;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getCharId() {
         return charId;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getMapId() {
         return mapid;
     }
 
+    /**
+     *
+     * @param s
+     */
     public void setSkin(byte s) {
         this.skin = s;
     }
 
+    /**
+     *
+     * @param f
+     */
     public void setFace(int f) {
         this.face = f;
     }
 
+    /**
+     *
+     * @param h
+     */
     public void setHair(int h) {
         this.hair = h;
     }
 
+    /**
+     *
+     * @param g
+     */
     public void setGender(int g) {
         this.gender = (byte) g;
     }
 
+    /**
+     *
+     * @param i
+     * @return
+     */
     public int getPet(int i) {
         return pets[i] > 0 ? pets[i] : 0;
     }
 
+    /**
+     *
+     * @param p
+     */
     public void setPets(List<MaplePet> p) {
         for (int i = 0; i < 3; i++) {
             if (p != null && p.size() > i && p.get(i) != null) {
@@ -282,6 +385,10 @@ public class PlayerNPC extends MapleNPC {
         }
     }
 
+    /**
+     *
+     * @param client
+     */
     @Override
     public void sendSpawnData(MapleClient client) {
         client.getSession().write(MaplePacketCreator.spawnNPC(this, true));
@@ -289,6 +396,10 @@ public class PlayerNPC extends MapleNPC {
         client.getSession().write(MaplePacketCreator.spawnNPCRequestController(this, true));
     }
 
+    /**
+     *
+     * @return
+     */
     public MapleNPC getNPCFromWZ() {
         MapleNPC npc = MapleLifeFactory.getNPC(getId());
         if (npc != null) {

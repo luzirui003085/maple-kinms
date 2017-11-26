@@ -1,28 +1,7 @@
-/*
- This file is part of the OdinMS Maple Story Server
- Copyright (C) 2008 ~ 2010 Patrick Huy <patrick.huy@frz.cc> 
- Matthias Butz <matze@odinms.de>
- Jan Christian Meyer <vimes@odinms.de>
 
- This program is free software: you can redistribute it and/or modify
- it under the terms of the GNU Affero General Public License version 3
- as published by the Free Software Foundation. You may not use, modify
- or distribute this program under any other version of the
- GNU Affero General Public License.
-
- This program is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- GNU Affero General Public License for more details.
-
- You should have received a copy of the GNU Affero General Public License
- along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
 package handling;
 
 import constants.ServerConstants;
-import java.io.IOException;
-import java.util.Arrays;
 import java.util.Map;
 import java.util.List;
 import java.util.ArrayList;
@@ -38,14 +17,8 @@ import handling.login.handler.*;
 import handling.mina.MaplePacketDecoder;
 import java.io.File;
 import java.io.FileWriter;
-import java.lang.management.ManagementFactory;
 import java.util.EnumSet;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Scanner;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
-import javax.management.MBeanServer;
-import javax.management.ObjectName;
 import server.Randomizer;
 import tools.MapleAESOFB;
 import tools.packet.LoginPacket;
@@ -61,27 +34,45 @@ import server.MTSStorage;
 import server.ServerProperties;
 import tools.FileoutputUtil;
 
+/**
+ *
+ * @author zjj
+ */
 public class MapleServerHandler extends IoHandlerAdapter {
 
+    /**
+     *
+     */
     public static final boolean Log_Packets = true;
     private int channel = -1;
     private final boolean cs;
-    private final List<String> BlockedIP = new ArrayList<String>();
-    private final Map<String, Pair<Long, Byte>> tracker = new ConcurrentHashMap<String, Pair<Long, Byte>>();
+    private final List<String> BlockedIP = new ArrayList<>();
+    private final Map<String, Pair<Long, Byte>> tracker = new ConcurrentHashMap<>();
     //Screw locking. Doesn't matter.
 //    private static final ReentrantReadWriteLock IPLoggingLock = new ReentrantReadWriteLock();
     private static final String nl = System.getProperty("line.separator");
     private static final File loggedIPs = new File("Logs/LogIPs.txt");
-    private static final HashMap<String, FileWriter> logIPMap = new HashMap<String, FileWriter>();
+    private static final HashMap<String, FileWriter> logIPMap = new HashMap<>();
     private static final boolean debugMode = Boolean.parseBoolean(ServerProperties.getProperty("KinMS.Debug", "false"));
     //Note to Zero: Use an enumset. Don't iterate through an array.
     private static final EnumSet<RecvPacketOpcode> blocked = EnumSet.noneOf(RecvPacketOpcode.class);
 
+    /**
+     *
+     * @param channel
+     * @param cs
+     */
     public MapleServerHandler(final int channel, final boolean cs) {
         this.channel = channel;
         this.cs = cs;
     }
 
+    /**
+     *
+     * @param session
+     * @param message
+     * @throws Exception
+     */
     @Override
     public void messageSent(final IoSession session, final Object message) throws Exception {
         final Runnable r = ((MaplePacket) message).getOnSend();
@@ -91,6 +82,12 @@ public class MapleServerHandler extends IoHandlerAdapter {
         super.messageSent(session, message);
     }
 
+    /**
+     *
+     * @param session
+     * @param cause
+     * @throws Exception
+     */
     @Override
     public void exceptionCaught(final IoSession session, final Throwable cause) throws Exception {
         /*	MapleClient client = (MapleClient) session.getAttribute(MapleClient.CLIENT_KEY);
@@ -98,6 +95,11 @@ public class MapleServerHandler extends IoHandlerAdapter {
 //	cause.printStackTrace();
     }
 
+    /**
+     *
+     * @param session
+     * @throws Exception
+     */
     @Override
     public void sessionOpened(final IoSession session) throws Exception {
         // Start of IP checking
@@ -128,7 +130,7 @@ public class MapleServerHandler extends IoHandlerAdapter {
                 return;
             }
         }
-        tracker.put(address, new Pair<Long, Byte>(System.currentTimeMillis(), count));
+        tracker.put(address, new Pair<>(System.currentTimeMillis(), count));
         String IP = address.substring(address.indexOf('/') + 1, address.length());
         // End of IP checking.
 
@@ -183,6 +185,11 @@ public class MapleServerHandler extends IoHandlerAdapter {
         System.out.println(sb.toString());
     }
 
+    /**
+     *
+     * @param session
+     * @throws Exception
+     */
     @Override
     public void sessionClosed(final IoSession session) throws Exception {
         final MapleClient client = (MapleClient) session.getAttribute(MapleClient.CLIENT_KEY);
@@ -198,6 +205,11 @@ public class MapleServerHandler extends IoHandlerAdapter {
         super.sessionClosed(session);
     }
 
+    /**
+     *
+     * @param session
+     * @param message
+     */
     @Override
     public void messageReceived(final IoSession session, final Object message) {
         try {
@@ -249,6 +261,12 @@ public class MapleServerHandler extends IoHandlerAdapter {
 
     }
 
+    /**
+     *
+     * @param session
+     * @param status
+     * @throws Exception
+     */
     @Override
     public void sessionIdle(final IoSession session, final IdleStatus status) throws Exception {
         final MapleClient client = (MapleClient) session.getAttribute(MapleClient.CLIENT_KEY);
@@ -262,6 +280,14 @@ public class MapleServerHandler extends IoHandlerAdapter {
         super.sessionIdle(session, status);
     }
 
+    /**
+     *
+     * @param header
+     * @param slea
+     * @param c
+     * @param cs
+     * @throws Exception
+     */
     public static void handlePacket(final RecvPacketOpcode header, final SeekableLittleEndianAccessor slea, final MapleClient c, final boolean cs) throws Exception {
         switch (header) {
             case PONG:

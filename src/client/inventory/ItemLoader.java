@@ -1,24 +1,4 @@
-/*
- This file is part of the ZeroFusion MapleStory Server
- Copyright (C) 2008 Patrick Huy <patrick.huy@frz.cc> 
- Matthias Butz <matze@odinms.de>
- Jan Christian Meyer <vimes@odinms.de>
- ZeroFusion organized by "RMZero213" <RMZero213@hotmail.com>
 
- This program is free software: you can redistribute it and/or modify
- it under the terms of the GNU Affero General Public License version 3
- as published by the Free Software Foundation. You may not use, modify
- or distribute this program under any other version of the
- GNU Affero General Public License.
-
- This program is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- GNU Affero General Public License for more details.
-
- You should have received a copy of the GNU Affero General Public License
- along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
 package client.inventory;
 
 import constants.GameConstants;
@@ -33,23 +13,72 @@ import database.DatabaseConnection;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
 import tools.Pair;
 
+/**
+ *
+ * @author zjj
+ */
 public enum ItemLoader {
 
+    /**
+     *
+     */
     INVENTORY("inventoryitems", "inventoryequipment", 0, "characterid"),
+
+    /**
+     *
+     */
     STORAGE("inventoryitems", "inventoryequipment", 1, "accountid"),
+
+    /**
+     *
+     */
     CASHSHOP_EXPLORER("csitems", "csequipment", 2, "accountid"),
+
+    /**
+     *
+     */
     CASHSHOP_CYGNUS("csitems", "csequipment", 3, "accountid"),
+
+    /**
+     *
+     */
     CASHSHOP_ARAN("csitems", "csequipment", 4, "accountid"),
+
+    /**
+     *
+     */
     HIRED_MERCHANT("hiredmerchitems", "hiredmerchequipment", 5, "packageid", "accountid", "characterid"),
+
+    /**
+     *
+     */
     DUEY("dueyitems", "dueyequipment", 6, "packageid"),
+
+    /**
+     *
+     */
     CASHSHOP_EVAN("csitems", "csequipment", 7, "accountid"),
+
+    /**
+     *
+     */
     MTS("mtsitems", "mtsequipment", 8, "packageid"),
+
+    /**
+     *
+     */
     MTS_TRANSFER("mtstransfer", "mtstransferequipment", 9, "characterid"),
+
+    /**
+     *
+     */
     CASHSHOP_DB("csitems", "csequipment", 10, "accountid"),
+
+    /**
+     *
+     */
     CASHSHOP_RESIST("csitems", "csequipment", 11, "accountid");
     private int value;
     private String table, table_equip;
@@ -62,14 +91,26 @@ public enum ItemLoader {
         this.arg = Arrays.asList(arg);
     }
 
+    /**
+     *
+     * @return
+     */
     public int getValue() {
         return value;
     }
 
     //does not need connection con to be auto commit
+
+    /**
+     *
+     * @param login
+     * @param id
+     * @return
+     * @throws SQLException
+     */
     public Map<Integer, Pair<IItem, MapleInventoryType>> loadItems(boolean login, Integer... id) throws SQLException {
         List<Integer> lulz = Arrays.asList(id);
-        Map<Integer, Pair<IItem, MapleInventoryType>> items = new LinkedHashMap<Integer, Pair<IItem, MapleInventoryType>>();
+        Map<Integer, Pair<IItem, MapleInventoryType>> items = new LinkedHashMap<>();
         if (lulz.size() != arg.size()) {
             return items;
         }
@@ -144,7 +185,7 @@ public enum ItemLoader {
                         }
                     }
                 }
-                items.put(rs.getInt("inventoryitemid"), new Pair<IItem, MapleInventoryType>(equip.copy(), mit));
+                items.put(rs.getInt("inventoryitemid"), new Pair<>(equip.copy(), mit));
             } else {
                 Item item = new Item(rs.getInt("itemid"), rs.getShort("position"), rs.getShort("quantity"), rs.getByte("flag"));
                 item.setUniqueId(rs.getInt("uniqueid"));
@@ -165,7 +206,7 @@ public enum ItemLoader {
                         item.setPet(MaplePet.createPet(item.getItemId(), new_unique));
                     }
                 }
-                items.put(rs.getInt("inventoryitemid"), new Pair<IItem, MapleInventoryType>(item.copy(), mit));
+                items.put(rs.getInt("inventoryitemid"), new Pair<>(item.copy(), mit));
             }
         }
 
@@ -174,6 +215,12 @@ public enum ItemLoader {
         return items;
     }
 
+    /**
+     *
+     * @param items
+     * @param id
+     * @throws SQLException
+     */
     public void saveItems(List<Pair<IItem, MapleInventoryType>> items, Integer... id) throws SQLException {
         Connection con = DatabaseConnection.getConnection();
         /*try {
@@ -200,6 +247,13 @@ public enum ItemLoader {
          }*/
     }
 
+    /**
+     *
+     * @param items
+     * @param con
+     * @param id
+     * @throws SQLException
+     */
     public void saveItems(List<Pair<IItem, MapleInventoryType>> items, final Connection con, Integer... id) throws SQLException {
         List<Integer> lulz = Arrays.asList(id);
         if (lulz.size() != arg.size()) {

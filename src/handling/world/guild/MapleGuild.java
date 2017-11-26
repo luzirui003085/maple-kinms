@@ -20,16 +20,6 @@
  */
 package handling.world.guild;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.List;
-import java.util.Map;
-import java.util.Iterator;
-import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.locks.Lock;
-
 import client.MapleCharacter;
 import client.MapleCharacterUtil;
 import client.MapleClient;
@@ -37,36 +27,57 @@ import database.DatabaseConnection;
 import handling.MaplePacket;
 import handling.world.World;
 import handling.world.guild.MapleBBSThread.MapleBBSReply;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import tools.MaplePacketCreator;
 import tools.StringUtil;
 import tools.data.output.MaplePacketLittleEndianWriter;
 import tools.packet.UIPacket;
 
+/**
+ *
+ * @author zjj
+ */
 public class MapleGuild implements java.io.Serializable {
 
     private static enum BCOp {
 
         NONE, DISBAND, EMBELMCHANGE
     }
+
+    /**
+     *
+     */
     public static final long serialVersionUID = 6322150443228168192L;
-    private final List<MapleGuildCharacter> members = new CopyOnWriteArrayList<MapleGuildCharacter>();
+    private final List<MapleGuildCharacter> members = new CopyOnWriteArrayList<>();
     private final String rankTitles[] = new String[5]; // 1 = master, 2 = jr, 5 = lowest member
     private String name, notice;
     private int id, gp, logo, logoColor, leader, capacity, logoBG, logoBGColor, signature;
     private boolean bDirty = true, proper = true;
     private int allianceid = 0, invitedid = 0;
-    private final Map<Integer, MapleBBSThread> bbs = new HashMap<Integer, MapleBBSThread>();
+    private final Map<Integer, MapleBBSThread> bbs = new HashMap<>();
     private final ReentrantReadWriteLock lock = new ReentrantReadWriteLock();
     private final Lock rL = lock.readLock(), wL = lock.writeLock();
     private boolean init = false;
 
+    /**
+     *
+     * @param guildid
+     */
     public MapleGuild(final int guildid) {
         super();
 
@@ -155,12 +166,20 @@ public class MapleGuild implements java.io.Serializable {
         }
     }
 
+    /**
+     *
+     * @return
+     */
     public boolean isProper() {
         return proper;
     }
 
+    /**
+     *
+     * @return
+     */
     public static final Collection<MapleGuild> loadAll() {
-        final Collection<MapleGuild> ret = new ArrayList<MapleGuild>();
+        final Collection<MapleGuild> ret = new ArrayList<>();
         MapleGuild g;
         try {
             Connection con = DatabaseConnection.getConnection();
@@ -181,13 +200,17 @@ public class MapleGuild implements java.io.Serializable {
         return ret;
     }
 
+    /**
+     *
+     * @param bDisband
+     */
     public final void writeToDB(final boolean bDisband) {
         try {
             Connection con = DatabaseConnection.getConnection();
             if (!bDisband) {
                 StringBuilder buf = new StringBuilder("UPDATE guilds SET GP = ?, logo = ?, logoColor = ?, logoBG = ?, logoBGColor = ?, ");
                 for (int i = 1; i < 6; i++) {
-                    buf.append("rank" + i + "title = ?, ");
+                    buf.append("rank").append(i).append("title = ?, ");
                 }
                 buf.append("capacity = ?, " + "notice = ?, alliance = ? WHERE guildid = ?");
 
@@ -283,54 +306,107 @@ public class MapleGuild implements java.io.Serializable {
         }
     }
 
+    /**
+     *
+     * @return
+     */
     public final int getId() {
         return id;
     }
 
+    /**
+     *
+     * @return
+     */
     public final int getLeaderId() {
         return leader;
     }
 
+    /**
+     *
+     * @param c
+     * @return
+     */
     public final MapleCharacter getLeader(final MapleClient c) {
         return c.getChannelServer().getPlayerStorage().getCharacterById(leader);
     }
 
+    /**
+     *
+     * @return
+     */
     public final int getGP() {
         return gp;
     }
 
+    /**
+     *
+     * @return
+     */
     public final int getLogo() {
         return logo;
     }
 
+    /**
+     *
+     * @param l
+     */
     public final void setLogo(final int l) {
         logo = l;
     }
 
+    /**
+     *
+     * @return
+     */
     public final int getLogoColor() {
         return logoColor;
     }
 
+    /**
+     *
+     * @param c
+     */
     public final void setLogoColor(final int c) {
         logoColor = c;
     }
 
+    /**
+     *
+     * @return
+     */
     public final int getLogoBG() {
         return logoBG;
     }
 
+    /**
+     *
+     * @param bg
+     */
     public final void setLogoBG(final int bg) {
         logoBG = bg;
     }
 
+    /**
+     *
+     * @return
+     */
     public final int getLogoBGColor() {
         return logoBGColor;
     }
 
+    /**
+     *
+     * @param c
+     */
     public final void setLogoBGColor(final int c) {
         logoBGColor = c;
     }
 
+    /**
+     *
+     * @return
+     */
     public final String getNotice() {
         if (notice == null) {
             return "";
@@ -338,32 +414,63 @@ public class MapleGuild implements java.io.Serializable {
         return notice;
     }
 
+    /**
+     *
+     * @return
+     */
     public final String getName() {
         return name;
     }
 
-
+    /**
+     *
+     * @param name
+     */
     public final void setName(String name) {
         this.name = name;
     }
     
+    /**
+     *
+     * @return
+     */
     public final int getCapacity() {
         return capacity;
     }
 
+    /**
+     *
+     * @return
+     */
     public final int getSignature() {
         return signature;
     }
 
+    /**
+     *
+     * @param packet
+     */
     public final void broadcast(final MaplePacket packet) {
         broadcast(packet, -1, BCOp.NONE);
     }
 
+    /**
+     *
+     * @param packet
+     * @param exception
+     */
     public final void broadcast(final MaplePacket packet, final int exception) {
         broadcast(packet, exception, BCOp.NONE);
     }
 
     // multi-purpose function that reaches every member of guild (except the character with exceptionId) in all channels with as little access to rmi as possible
+
+    /**
+     *
+     * @param packet
+     * @param exceptionId
+     * @param bcop
+     */
     public final void broadcast(final MaplePacket packet, final int exceptionId, final BCOp bcop) {
         wL.lock();
         try {
@@ -399,7 +506,7 @@ public class MapleGuild implements java.io.Serializable {
         if (!bDirty) {
             return;
         }
-        final List<Integer> mem = new LinkedList<Integer>();
+        final List<Integer> mem = new LinkedList<>();
         final Iterator<MapleGuildCharacter> toRemove = members.iterator();
         while (toRemove.hasNext()) {
             MapleGuildCharacter mgc = toRemove.next();
@@ -416,6 +523,12 @@ public class MapleGuild implements java.io.Serializable {
         bDirty = false;
     }
 
+    /**
+     *
+     * @param cid
+     * @param online
+     * @param channel
+     */
     public final void setOnline(final int cid, final boolean online, final int channel) {
         boolean bBroadcast = true;
         for (MapleGuildCharacter mgc : members) {
@@ -438,31 +551,64 @@ public class MapleGuild implements java.io.Serializable {
         init = true;
     }
 
+    /**
+     *
+     * @param name
+     * @param cid
+     * @param msg
+     */
     public final void guildChat(final String name, final int cid, final String msg) {
         broadcast(MaplePacketCreator.multiChat(name, msg, 2), cid);
     }
 
+    /**
+     *
+     * @param name
+     * @param cid
+     * @param msg
+     */
     public final void allianceChat(final String name, final int cid, final String msg) {
         broadcast(MaplePacketCreator.multiChat(name, msg, 3), cid);
     }
 
+    /**
+     *
+     * @param rank
+     * @return
+     */
     public final String getRankTitle(final int rank) {
         return rankTitles[rank - 1];
     }
 
+    /**
+     *
+     * @return
+     */
     public int getAllianceId() {
         //return alliance.getId();
         return this.allianceid;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getInvitedId() {
         return this.invitedid;
     }
 
+    /**
+     *
+     * @param iid
+     */
     public void setInvitedId(int iid) {
         this.invitedid = iid;
     }
 
+    /**
+     *
+     * @param a
+     */
     public void setAllianceId(int a) {
         this.allianceid = a;
         try {
@@ -478,6 +624,13 @@ public class MapleGuild implements java.io.Serializable {
     }
 
     // function to create guild, returns the guild id if successful, 0 if not
+
+    /**
+     *
+     * @param leaderId
+     * @param name
+     * @return
+     */
     public static final int createGuild(final int leaderId, final String name) {
         if (name.length() > 12) {
             return 0;
@@ -516,6 +669,11 @@ public class MapleGuild implements java.io.Serializable {
         }
     }
 
+    /**
+     *
+     * @param mgc
+     * @return
+     */
     public final int addGuildMember(final MapleGuildCharacter mgc) {
         // first of all, insert it into the members keeping alphabetical order of lowest ranks ;)
         wL.lock();
@@ -541,6 +699,10 @@ public class MapleGuild implements java.io.Serializable {
         return 1;
     }
 
+    /**
+     *
+     * @param mgc
+     */
     public final void leaveGuild(final MapleGuildCharacter mgc) {
         broadcast(MaplePacketCreator.memberLeft(mgc, false));
         gainGP(-50);
@@ -561,6 +723,12 @@ public class MapleGuild implements java.io.Serializable {
         }
     }
 
+    /**
+     *
+     * @param initiator
+     * @param name
+     * @param cid
+     */
     public final void expelMember(final MapleGuildCharacter initiator, final String name, final int cid) {
         wL.lock();
         try {
@@ -592,10 +760,17 @@ public class MapleGuild implements java.io.Serializable {
         }
     }
 
+    /**
+     *
+     */
     public final void changeARank() {
         changeARank(false);
     }
 
+    /**
+     *
+     * @param leader
+     */
     public final void changeARank(final boolean leader) {
         for (final MapleGuildCharacter mgc : members) {
             if (this.leader == mgc.getId()) {
@@ -606,12 +781,21 @@ public class MapleGuild implements java.io.Serializable {
         }
     }
 
+    /**
+     *
+     * @param newRank
+     */
     public final void changeARank(final int newRank) {
         for (final MapleGuildCharacter mgc : members) {
             changeARank(mgc.getId(), newRank);
         }
     }
 
+    /**
+     *
+     * @param cid
+     * @param newRank
+     */
     public final void changeARank(final int cid, final int newRank) {
         if (allianceid <= 0) {
             return;
@@ -634,6 +818,11 @@ public class MapleGuild implements java.io.Serializable {
         System.err.println("INFO: unable to find the correct id for changeRank({" + cid + "}, {" + newRank + "})");
     }
 
+    /**
+     *
+     * @param cid
+     * @param newRank
+     */
     public final void changeRank(final int cid, final int newRank) {
         for (final MapleGuildCharacter mgc : members) {
             if (cid == mgc.getId()) {
@@ -651,11 +840,19 @@ public class MapleGuild implements java.io.Serializable {
         System.err.println("INFO: unable to find the correct id for changeRank({" + cid + "}, {" + newRank + "})");
     }
 
+    /**
+     *
+     * @param notice
+     */
     public final void setGuildNotice(final String notice) {
         this.notice = notice;
         broadcast(MaplePacketCreator.guildNotice(id, notice));
     }
 
+    /**
+     *
+     * @param mgc
+     */
     public final void memberLevelJobUpdate(final MapleGuildCharacter mgc) {
         for (final MapleGuildCharacter member : members) {
             if (member.getId() == mgc.getId()) {
@@ -681,19 +878,29 @@ public class MapleGuild implements java.io.Serializable {
         }
     }
 
+    /**
+     *
+     * @param ranks
+     */
     public final void changeRankTitle(final String[] ranks) {
-        for (int i = 0; i < 5; i++) {
-            rankTitles[i] = ranks[i];
-        }
+        System.arraycopy(ranks, 0, rankTitles, 0, 5);
         broadcast(MaplePacketCreator.rankTitleChange(id, ranks));
     }
 
+    /**
+     *
+     */
     public final void disbandGuild() {
 
         writeToDB(true);
         broadcast(null, -1, BCOp.DISBAND);
     }
 
+    /**
+     *
+     * @param c
+     * @param npcid
+     */
     public static void displayGuildRanks(MapleClient c, int npcid) {
         try {
             Connection con = DatabaseConnection.getConnection();
@@ -710,6 +917,11 @@ public class MapleGuild implements java.io.Serializable {
         }
     }
 
+    /**
+     *
+     * @param c
+     * @param npcid
+     */
     public static void meso(MapleClient c, int npcid) {
         try {
             Connection con = DatabaseConnection.getConnection();
@@ -725,6 +937,11 @@ public class MapleGuild implements java.io.Serializable {
         }
     }
 
+    /**
+     *
+     * @param c
+     * @param npcid
+     */
     public static void displayLevelRanks(MapleClient c, int npcid) {
         try {
             Connection con = DatabaseConnection.getConnection();
@@ -740,6 +957,11 @@ public class MapleGuild implements java.io.Serializable {
         }
     }
 
+    /**
+     *
+     * @param c
+     * @param npcid
+     */
     public static void displayRenwu2Ranks(MapleClient c, int npcid) {
         try {
             Connection con = DatabaseConnection.getConnection();
@@ -755,6 +977,11 @@ public class MapleGuild implements java.io.Serializable {
         }
     }
 
+    /**
+     *
+     * @param c
+     * @param npcid
+     */
     public static void 人气排行(MapleClient c, int npcid) {
         try {
             Connection con = DatabaseConnection.getConnection();
@@ -770,6 +997,13 @@ public class MapleGuild implements java.io.Serializable {
         }
     }
 
+    /**
+     *
+     * @param bg
+     * @param bgcolor
+     * @param logo
+     * @param logocolor
+     */
     public final void setGuildEmblem(final short bg, final byte bgcolor, final short logo, final byte logocolor) {
         this.logoBG = bg;
         this.logoBGColor = bgcolor;
@@ -793,6 +1027,11 @@ public class MapleGuild implements java.io.Serializable {
         }
     }
 
+    /**
+     *
+     * @param cid
+     * @return
+     */
     public final MapleGuildCharacter getMGC(final int cid) {
         for (final MapleGuildCharacter mgc : members) {
             if (mgc.getId() == cid) {
@@ -802,6 +1041,10 @@ public class MapleGuild implements java.io.Serializable {
         return null;
     }
 
+    /**
+     *
+     * @return
+     */
     public final boolean increaseCapacity() {
         if (capacity >= 100 || ((capacity + 5) > 100)) {
             return false;
@@ -823,10 +1066,19 @@ public class MapleGuild implements java.io.Serializable {
         return true;
     }
 
+    /**
+     *
+     * @param amount
+     */
     public final void gainGP(final int amount) {
         gainGP(amount, true);
     }
 
+    /**
+     *
+     * @param amount
+     * @param broadcast
+     */
     public final void gainGP(int amount, final boolean broadcast) {
         if (amount == 0) { //no change, no broadcast and no sql.
             return;
@@ -841,6 +1093,10 @@ public class MapleGuild implements java.io.Serializable {
         }
     }
 
+    /**
+     *
+     * @param mplew
+     */
     public final void addMemberData(final MaplePacketLittleEndianWriter mplew) {
         mplew.write(members.size());
 
@@ -862,6 +1118,13 @@ public class MapleGuild implements java.io.Serializable {
     // keep in mind that this will be called by a handler most of the time
     // so this will be running mostly on a channel server, unlike the rest
     // of the class
+
+    /**
+     *
+     * @param c
+     * @param targetName
+     * @return
+     */
     public static final MapleGuildResponse sendInvite(final MapleClient c, final String targetName) {
         final MapleCharacter mc = c.getChannelServer().getPlayerStorage().getCharacterByName(targetName);
         if (mc == null) {
@@ -874,20 +1137,41 @@ public class MapleGuild implements java.io.Serializable {
         return null;
     }
 
+    /**
+     *
+     * @return
+     */
     public java.util.Collection<MapleGuildCharacter> getMembers() {
         return java.util.Collections.unmodifiableCollection(members);
     }
 
+    /**
+     *
+     * @return
+     */
     public final boolean isInit() {
         return init;
     }
 
+    /**
+     *
+     * @return
+     */
     public final List<MapleBBSThread> getBBS() {
-        final List<MapleBBSThread> ret = new ArrayList<MapleBBSThread>(bbs.values());
+        final List<MapleBBSThread> ret = new ArrayList<>(bbs.values());
         Collections.sort(ret, new MapleBBSThread.ThreadComparator());
         return ret;
     }
 
+    /**
+     *
+     * @param title
+     * @param text
+     * @param icon
+     * @param bNotice
+     * @param posterID
+     * @return
+     */
     public final int addBBSThread(final String title, final String text, final int icon, final boolean bNotice, final int posterID) {
         final int add = bbs.get(0) == null ? 1 : 0; //add 1 if no notice
         final int ret = bNotice ? 0 : Math.max(1, bbs.size() + add);
@@ -895,6 +1179,15 @@ public class MapleGuild implements java.io.Serializable {
         return ret;
     }
 
+    /**
+     *
+     * @param localthreadid
+     * @param title
+     * @param text
+     * @param icon
+     * @param posterID
+     * @param guildRank
+     */
     public final void editBBSThread(final int localthreadid, final String title, final String text, final int icon, final int posterID, final int guildRank) {
         final MapleBBSThread thread = bbs.get(localthreadid);
         if (thread != null && (thread.ownerID == posterID || guildRank <= 2)) {
@@ -902,6 +1195,12 @@ public class MapleGuild implements java.io.Serializable {
         }
     }
 
+    /**
+     *
+     * @param localthreadid
+     * @param posterID
+     * @param guildRank
+     */
     public final void deleteBBSThread(final int localthreadid, final int posterID, final int guildRank) {
         final MapleBBSThread thread = bbs.get(localthreadid);
         if (thread != null && (thread.ownerID == posterID || guildRank <= 2)) {
@@ -909,6 +1208,12 @@ public class MapleGuild implements java.io.Serializable {
         }
     }
 
+    /**
+     *
+     * @param localthreadid
+     * @param text
+     * @param posterID
+     */
     public final void addBBSReply(final int localthreadid, final String text, final int posterID) {
         final MapleBBSThread thread = bbs.get(localthreadid);
         if (thread != null) {
@@ -916,6 +1221,13 @@ public class MapleGuild implements java.io.Serializable {
         }
     }
 
+    /**
+     *
+     * @param localthreadid
+     * @param replyid
+     * @param posterID
+     * @param guildRank
+     */
     public final void deleteBBSReply(final int localthreadid, final int replyid, final int posterID, final int guildRank) {
         final MapleBBSThread thread = bbs.get(localthreadid);
         if (thread != null) {
@@ -926,6 +1238,13 @@ public class MapleGuild implements java.io.Serializable {
         }
     }
 
+    /**
+     *
+     * @param guildid
+     * @param guildrank
+     * @param alliancerank
+     * @param cid
+     */
     public static void setOfflineGuildStatus(int guildid, byte guildrank, byte alliancerank, int cid) {
         try {
             java.sql.Connection con = DatabaseConnection.getConnection();
@@ -941,7 +1260,13 @@ public class MapleGuild implements java.io.Serializable {
             se.printStackTrace();
         }
     }
-        public int getPrefix(MapleCharacter chr) {
+
+    /**
+     *
+     * @param chr
+     * @return
+     */
+    public int getPrefix(MapleCharacter chr) {
         return chr.getPrefix();
     }
 }

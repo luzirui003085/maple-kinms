@@ -20,10 +20,9 @@
  */
 package tools.data.output;
 
-import java.io.ByteArrayOutputStream;
-
 import handling.ByteArrayMaplePacket;
 import handling.MaplePacket;
+import java.io.ByteArrayOutputStream;
 import server.ServerProperties;
 import tools.HexTool;
 

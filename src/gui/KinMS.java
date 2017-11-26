@@ -1,36 +1,25 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package gui;
 
 import client.MapleCharacter;
-import client.MapleClient;
 import client.inventory.Equip;
 import client.inventory.ItemFlag;
 import client.inventory.MapleInventoryType;
 import constants.GameConstants;
-import database.DatabaseConnection;
 import handling.RecvPacketOpcode;
 import handling.SendPacketOpcode;
 import handling.channel.ChannelServer;
 import handling.world.World;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.concurrent.ScheduledFuture;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
-import javax.swing.table.DefaultTableModel;
 import scripting.PortalScriptManager;
 import scripting.ReactorScriptManager;
 import server.*;
 import server.Timer.EventTimer;
 import server.life.MapleMonsterInformationProvider;
-import server.maps.MapleMap;
 import server.quest.MapleQuest;
 import tools.MaplePacketCreator;
 
@@ -49,6 +38,9 @@ public class KinMS extends javax.swing.JFrame {
         return instance;
     }
 
+    /**
+     *
+     */
     public KinMS() {
         ImageIcon icon = new ImageIcon(getClass().getClassLoader().getResource("gui/Icon.png"));
         setIconImage(icon.getImage());
@@ -779,47 +771,58 @@ public class KinMS extends javax.swing.JFrame {
             }
             String 输出 = "";
             int ret = 0;
-            if (类型 == 1 || 类型 == 2) {
-                for (ChannelServer cserv1 : ChannelServer.getAllInstances()) {
-                    for (MapleCharacter mch : cserv1.getPlayerStorage().getAllCharacters()) {
-                        mch.modifyCSPoints(类型, 数量);
-                        String cash = null;
-                        if (类型 == 1) {
-                            cash = "点卷";
-                        } else if (类型 == 2) {
-                            cash = "抵用卷";
+            switch (类型) {
+                case 1:
+                case 2:
+                    for (ChannelServer cserv1 : ChannelServer.getAllInstances()) {
+                        for (MapleCharacter mch : cserv1.getPlayerStorage().getAllCharacters()) {
+                            mch.modifyCSPoints(类型, 数量);
+                            String cash = null;
+                            if (类型 == 1) {
+                                cash = "点卷";
+                            } else if (类型 == 2) {
+                                cash = "抵用卷";
+                            }
+                            mch.startMapEffect("管理员发放" + 数量 + cash + "给在线的所以玩家！快感谢管理员吧！", 5121009);
+                            ret++;
                         }
-                        mch.startMapEffect("管理员发放" + 数量 + cash + "给在线的所以玩家！快感谢管理员吧！", 5121009);
-                        ret++;
-                    }
-                }
-            } else if (类型 == 3) {
-                for (ChannelServer cserv1 : ChannelServer.getAllInstances()) {
-                    for (MapleCharacter mch : cserv1.getPlayerStorage().getAllCharacters()) {
-                        // mch.modifyCSPoints(类型, 数量);
-                        mch.gainMeso(数量, true);
-                        mch.startMapEffect("管理员发放" + 数量 + "冒险币给在线的所以玩家！快感谢管理员吧！", 5121009);
-                        ret++;
-                    }
-                }
-            } else if (类型 == 4) {
-                for (ChannelServer cserv1 : ChannelServer.getAllInstances()) {
-                    for (MapleCharacter mch : cserv1.getPlayerStorage().getAllCharacters()) {
-                        mch.gainExp(数量, true, false, true);
-                        mch.startMapEffect("管理员发放" + 数量 + "经验给在线的所以玩家！快感谢管理员吧！", 5121009);
-                        ret++;
-                    }
-                }
+                    }   break;
+                case 3:
+                    for (ChannelServer cserv1 : ChannelServer.getAllInstances()) {
+                        for (MapleCharacter mch : cserv1.getPlayerStorage().getAllCharacters()) {
+                            // mch.modifyCSPoints(类型, 数量);
+                            mch.gainMeso(数量, true);
+                            mch.startMapEffect("管理员发放" + 数量 + "冒险币给在线的所以玩家！快感谢管理员吧！", 5121009);
+                            ret++;
+                        }
+                    }   break;
+                case 4:
+                    for (ChannelServer cserv1 : ChannelServer.getAllInstances()) {
+                        for (MapleCharacter mch : cserv1.getPlayerStorage().getAllCharacters()) {
+                            mch.gainExp(数量, true, false, true);
+                            mch.startMapEffect("管理员发放" + 数量 + "经验给在线的所以玩家！快感谢管理员吧！", 5121009);
+                            ret++;
+                        }
+                    }   break;
+                default:
+                    break;
             }
             String 类型A = "";
-            if (类型 == 1) {
-                类型A = "点卷";
-            } else if (类型 == 2) {
-                类型A = "抵用卷";
-            } else if (类型 == 3) {
-                类型A = "金币";
-            } else if (类型 == 4) {
-                类型A = "经验";
+            switch (类型) {
+                case 1:
+                    类型A = "点卷";
+                    break;
+                case 2:
+                    类型A = "抵用卷";
+                    break;
+                case 3:
+                    类型A = "金币";
+                    break;
+                case 4:
+                    类型A = "经验";
+                    break;
+                default:
+                    break;
             }
             输出 = "一个发放[" + 数量 * ret + "]." + 类型A + "!一共发放给了" + ret + "人！";
             jTextField20.setText("输入数量");
@@ -1148,6 +1151,7 @@ public class KinMS extends javax.swing.JFrame {
          */
         java.awt.EventQueue.invokeLater(new Runnable() {
 
+            @Override
             public void run() {
                 new KinMS().setVisible(true);
             }

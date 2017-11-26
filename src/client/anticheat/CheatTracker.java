@@ -20,20 +20,20 @@
  */
 package client.anticheat;
 
+import client.MapleCharacter;
+import client.MapleCharacterUtil;
+import constants.GameConstants;
+import handling.world.World;
 import java.awt.Point;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.EnumMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ScheduledFuture;
-
-import constants.GameConstants;
-import client.MapleCharacter;
-import client.MapleCharacterUtil;
-import handling.world.World;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import server.AutobanManager;
@@ -42,11 +42,15 @@ import tools.FileoutputUtil;
 import tools.MaplePacketCreator;
 import tools.StringUtil;
 
+/**
+ *
+ * @author zjj
+ */
 public class CheatTracker {
 
     private final ReentrantReadWriteLock lock = new ReentrantReadWriteLock();
     private final Lock rL = lock.readLock(), wL = lock.writeLock();
-    private final Map<CheatingOffense, CheatingOffenseEntry> offenses = new LinkedHashMap<CheatingOffense, CheatingOffenseEntry>();
+    private final Map<CheatingOffense, CheatingOffenseEntry> offenses = new EnumMap<CheatingOffense, CheatingOffenseEntry>(CheatingOffense.class);
     private final WeakReference<MapleCharacter> chr;
     // For keeping track of speed attack hack.
     private int lastAttackTickCount = 0;
@@ -75,12 +79,21 @@ public class CheatTracker {
     private long lastSaveTime = 0L;
     private long[] lastTime = new long[6];
 
+    /**
+     *
+     * @param chr
+     */
     public CheatTracker(final MapleCharacter chr) {
-        this.chr = new WeakReference<MapleCharacter>(chr);
+        this.chr = new WeakReference<>(chr);
         invalidationTask = CheatTimer.getInstance().register(new InvalidationTask(), 60000);
         takingDamageSince = System.currentTimeMillis();
     }
 
+    /**
+     *
+     * @param skillId
+     * @param tickcount
+     */
     public final void checkAttack(final int skillId, final int tickcount) {
         final short AtkDelay = GameConstants.getAttackDelay(skillId);
         if ((tickcount - lastAttackTickCount) < AtkDelay) {
@@ -104,6 +117,10 @@ public class CheatTracker {
         lastAttackTickCount = tickcount;
     }
 
+    /**
+     *
+     * @param damage
+     */
     public final void checkTakeDamage(final int damage) {
         numSequentialDamage++;
         lastDamageTakenTime = System.currentTimeMillis();
@@ -135,6 +152,10 @@ public class CheatTracker {
         }
     }
 
+    /**
+     *
+     * @return
+     */
     public boolean canSaveDB() {
         if (!this.saveToDB) {
             this.saveToDB = true;
@@ -146,6 +167,11 @@ public class CheatTracker {
         this.lastSaveTime = System.currentTimeMillis();
         return true;
     }
+
+    /**
+     *
+     * @param dmg
+     */
     public final void checkSameDamage(final int dmg) {
         if (dmg > 2000 && lastDamage == dmg) {
             numSameDamage++;
@@ -160,6 +186,11 @@ public class CheatTracker {
         }
     }
 
+    /**
+     *
+     * @param pos
+     * @param chr
+     */
     public final void checkMoveMonster(final Point pos, MapleCharacter chr) {
 
         //double dis = Math.abs(pos.distance(lastMonsterMove));
@@ -185,7 +216,13 @@ public class CheatTracker {
             monsterMoveCount = 1;
         }
     }
-public void checkSameDamage(int dmg, double expected) {
+
+    /**
+     *
+     * @param dmg
+     * @param expected
+     */
+    public void checkSameDamage(int dmg, double expected) {
         if ((dmg > 2000) && (this.lastDamage == dmg) && (this.chr.get() != null) && ((this.chr.get().getLevel() < 180) || (dmg > expected * 2.0D))) {
             this.numSameDamage += 1;
             if (this.numSameDamage > 5) {
@@ -197,11 +234,19 @@ public void checkSameDamage(int dmg, double expected) {
             this.numSameDamage = 0;
         }
     }
+
+    /**
+     *
+     */
     public final void resetSummonAttack() {
         summonSummonTime = System.currentTimeMillis();
         numSequentialSummonAttack = 0;
     }
 
+    /**
+     *
+     * @return
+     */
     public final boolean checkSummonAttack() {
         numSequentialSummonAttack++;
         //estimated
@@ -213,10 +258,17 @@ public void checkSameDamage(int dmg, double expected) {
         return true;
     }
 
+    /**
+     *
+     */
     public final void checkDrop() {
         checkDrop(false);
     }
 
+    /**
+     *
+     * @param dc
+     */
     public final void checkDrop(final boolean dc) {
         if ((System.currentTimeMillis() - lastDropTime) < 1000) {
             dropsPerSecond++;
@@ -232,6 +284,11 @@ public void checkSameDamage(int dmg, double expected) {
         }
         lastDropTime = System.currentTimeMillis();
     }
+
+    /**
+     *
+     * @return
+     */
     public boolean canAvatarSmega2() {
 	if (lastASmegaTime + 10000 > System.currentTimeMillis() && chr.get() != null && !chr.get().isGM()) {
 	    return false;
@@ -239,7 +296,14 @@ public void checkSameDamage(int dmg, double expected) {
 	lastASmegaTime = System.currentTimeMillis();
 	return true;
     }
-        public synchronized boolean GMSpam(int limit, int type) {
+
+    /**
+     *
+     * @param limit
+     * @param type
+     * @return
+     */
+    public synchronized boolean GMSpam(int limit, int type) {
         if (type < 0 || lastTime.length < type) {
             type = 1; // default xD
         }
@@ -249,6 +313,10 @@ public void checkSameDamage(int dmg, double expected) {
         lastTime[type] = System.currentTimeMillis();
         return false;
     }
+
+    /**
+     *
+     */
     public final void checkMsg() { //ALL types of msg. caution with number of  msgsPerSecond
         if ((System.currentTimeMillis() - lastMsgTime) < 1000) { //luckily maplestory has auto-check for too much msging
             msgsPerSecond++;
@@ -261,10 +329,18 @@ public void checkSameDamage(int dmg, double expected) {
         lastMsgTime = System.currentTimeMillis();
     }
 
+    /**
+     *
+     * @return
+     */
     public final int getAttacksWithoutHit() {
         return attacksWithoutHit;
     }
 
+    /**
+     *
+     * @param increase
+     */
     public final void setAttacksWithoutHit(final boolean increase) {
         if (increase) {
             this.attacksWithoutHit++;
@@ -273,10 +349,19 @@ public void checkSameDamage(int dmg, double expected) {
         }
     }
 
+    /**
+     *
+     * @param offense
+     */
     public final void registerOffense(final CheatingOffense offense) {
         registerOffense(offense, null);
     }
 
+    /**
+     *
+     * @param offense
+     * @param param
+     */
     public final void registerOffense(final CheatingOffense offense, final String param) {
         final MapleCharacter chrhardref = chr.get();
         if (chrhardref == null || !offense.isEnabled() || chrhardref.isClone() || chrhardref.isGM()) {
@@ -342,6 +427,10 @@ public void checkSameDamage(int dmg, double expected) {
         CheatingOffensePersister.getInstance().persistEntry(entry);
     }
 
+    /**
+     *
+     * @param newTick
+     */
     public void updateTick(int newTick) {
         if (newTick == lastTickCount) { //definitely packet spamming
 /*	    if (tickSame >= 5) {
@@ -355,6 +444,10 @@ public void checkSameDamage(int dmg, double expected) {
         lastTickCount = newTick;
     }
 
+    /**
+     *
+     * @param coe
+     */
     public final void expireEntry(final CheatingOffenseEntry coe) {
         wL.lock();
         try {
@@ -364,6 +457,10 @@ public void checkSameDamage(int dmg, double expected) {
         }
     }
 
+    /**
+     *
+     * @return
+     */
     public final int getPoints() {
         int ret = 0;
         CheatingOffenseEntry[] offenses_copy;
@@ -383,13 +480,21 @@ public void checkSameDamage(int dmg, double expected) {
         return ret;
     }
 
+    /**
+     *
+     * @return
+     */
     public final Map<CheatingOffense, CheatingOffenseEntry> getOffenses() {
         return Collections.unmodifiableMap(offenses);
     }
 
+    /**
+     *
+     * @return
+     */
     public final String getSummary() {
         final StringBuilder ret = new StringBuilder();
-        final List<CheatingOffenseEntry> offenseList = new ArrayList<CheatingOffenseEntry>();
+        final List<CheatingOffenseEntry> offenseList = new ArrayList<>();
         rL.lock();
         try {
             for (final CheatingOffenseEntry entry : offenses.values()) {
@@ -421,6 +526,9 @@ public void checkSameDamage(int dmg, double expected) {
         return ret.toString();
     }
 
+    /**
+     *
+     */
     public final void dispose() {
         if (invalidationTask != null) {
             invalidationTask.cancel(false);

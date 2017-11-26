@@ -1,23 +1,25 @@
 package server.quest;
 
 import client.ISkill;
-import java.util.Calendar;
-import java.util.List;
-import java.util.LinkedList;
-import java.io.Serializable;
-
-import client.inventory.IItem;
-import client.SkillFactory;
-import constants.GameConstants;
 import client.MapleCharacter;
-import client.inventory.MaplePet;
-import client.inventory.MapleInventoryType;
 import client.MapleQuestStatus;
+import client.SkillFactory;
+import client.inventory.IItem;
+import client.inventory.MapleInventoryType;
+import client.inventory.MaplePet;
+import constants.GameConstants;
+import java.io.Serializable;
+import java.util.Calendar;
+import java.util.LinkedList;
+import java.util.List;
 import provider.MapleData;
 import provider.MapleDataTool;
-
 import tools.Pair;
 
+/**
+ *
+ * @author zjj
+ */
 public class MapleQuestRequirement implements Serializable {
 
     private static final long serialVersionUID = 9179541993413738569L;
@@ -37,42 +39,42 @@ public class MapleQuestRequirement implements Serializable {
         switch (type) {
             case job: {
                 final List<MapleData> child = data.getChildren();
-                dataStore = new LinkedList<Pair<Integer, Integer>>();
+                dataStore = new LinkedList<>();
 
                 for (int i = 0; i < child.size(); i++) {
-                    dataStore.add(new Pair<Integer, Integer>(i, MapleDataTool.getInt(child.get(i), -1)));
+                    dataStore.add(new Pair<>(i, MapleDataTool.getInt(child.get(i), -1)));
                 }
                 break;
             }
             case skill: {
                 final List<MapleData> child = data.getChildren();
-                dataStore = new LinkedList<Pair<Integer, Integer>>();
+                dataStore = new LinkedList<>();
 
                 for (int i = 0; i < child.size(); i++) {
                     final MapleData childdata = child.get(i);
-                    dataStore.add(new Pair<Integer, Integer>(MapleDataTool.getInt(childdata.getChildByPath("id"), 0),
+                    dataStore.add(new Pair<>(MapleDataTool.getInt(childdata.getChildByPath("id"), 0),
                             MapleDataTool.getInt(childdata.getChildByPath("acquire"), 0)));
                 }
                 break;
             }
             case quest: {
                 final List<MapleData> child = data.getChildren();
-                dataStore = new LinkedList<Pair<Integer, Integer>>();
+                dataStore = new LinkedList<>();
 
                 for (int i = 0; i < child.size(); i++) {
                     final MapleData childdata = child.get(i);
-                    dataStore.add(new Pair<Integer, Integer>(MapleDataTool.getInt(childdata.getChildByPath("id")),
+                    dataStore.add(new Pair<>(MapleDataTool.getInt(childdata.getChildByPath("id")),
                             MapleDataTool.getInt(childdata.getChildByPath("state"), 0)));
                 }
                 break;
             }
             case item: {
                 final List<MapleData> child = data.getChildren();
-                dataStore = new LinkedList<Pair<Integer, Integer>>();
+                dataStore = new LinkedList<>();
 
                 for (int i = 0; i < child.size(); i++) {
                     final MapleData childdata = child.get(i);
-                    dataStore.add(new Pair<Integer, Integer>(MapleDataTool.getInt(childdata.getChildByPath("id")),
+                    dataStore.add(new Pair<>(MapleDataTool.getInt(childdata.getChildByPath("id")),
                             MapleDataTool.getInt(childdata.getChildByPath("count"), 0)));
                 }
                 break;
@@ -94,11 +96,11 @@ public class MapleQuestRequirement implements Serializable {
             }
             case mob: {
                 final List<MapleData> child = data.getChildren();
-                dataStore = new LinkedList<Pair<Integer, Integer>>();
+                dataStore = new LinkedList<>();
 
                 for (int i = 0; i < child.size(); i++) {
                     final MapleData childdata = child.get(i);
-                    dataStore.add(new Pair<Integer, Integer>(MapleDataTool.getInt(childdata.getChildByPath("id"), 0),
+                    dataStore.add(new Pair<>(MapleDataTool.getInt(childdata.getChildByPath("id"), 0),
                             MapleDataTool.getInt(childdata.getChildByPath("count"), 0)));
                 }
                 break;
@@ -114,26 +116,32 @@ public class MapleQuestRequirement implements Serializable {
             }
             case mbcard: {
                 final List<MapleData> child = data.getChildren();
-                dataStore = new LinkedList<Pair<Integer, Integer>>();
+                dataStore = new LinkedList<>();
 
                 for (int i = 0; i < child.size(); i++) {
                     final MapleData childdata = child.get(i);
-                    dataStore.add(new Pair<Integer, Integer>(MapleDataTool.getInt(childdata.getChildByPath("id"), 0),
+                    dataStore.add(new Pair<>(MapleDataTool.getInt(childdata.getChildByPath("id"), 0),
                             MapleDataTool.getInt(childdata.getChildByPath("min"), 0)));
                 }
                 break;
             }
             case pet: {
-                dataStore = new LinkedList<Pair<Integer, Integer>>();
+                dataStore = new LinkedList<>();
 
                 for (MapleData child : data) {
-                    dataStore.add(new Pair<Integer, Integer>(-1, MapleDataTool.getInt("id", child, 0)));
+                    dataStore.add(new Pair<>(-1, MapleDataTool.getInt("id", child, 0)));
                 }
                 break;
             }
         }
     }
 
+    /**
+     *
+     * @param c
+     * @param npcid
+     * @return
+     */
     public boolean check(MapleCharacter c, Integer npcid) {
         switch (type) {
             case job:
@@ -262,6 +270,10 @@ public class MapleQuestRequirement implements Serializable {
         }
     }
 
+    /**
+     *
+     * @return
+     */
     public MapleQuestRequirementType getType() {
         return type;
     }

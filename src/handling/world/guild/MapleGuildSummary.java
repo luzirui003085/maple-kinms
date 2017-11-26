@@ -20,8 +20,15 @@
  */
 package handling.world.guild;
 
+/**
+ *
+ * @author zjj
+ */
 public class MapleGuildSummary implements java.io.Serializable {
 
+    /**
+     *
+     */
     public static final long serialVersionUID = 3565477792085301248L;
     private String name;
     private short logoBG;
@@ -30,6 +37,10 @@ public class MapleGuildSummary implements java.io.Serializable {
     private byte logoColor;
     private int allianceid;
 
+    /**
+     *
+     * @param g
+     */
     public MapleGuildSummary(MapleGuild g) {
         name = g.getName();
         logoBG = (short) g.getLogoBG();
@@ -39,26 +50,50 @@ public class MapleGuildSummary implements java.io.Serializable {
         allianceid = g.getAllianceId();
     }
 
+    /**
+     *
+     * @return
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     *
+     * @return
+     */
     public short getLogoBG() {
         return logoBG;
     }
 
+    /**
+     *
+     * @return
+     */
     public byte getLogoBGColor() {
         return logoBGColor;
     }
 
+    /**
+     *
+     * @return
+     */
     public short getLogo() {
         return logo;
     }
 
+    /**
+     *
+     * @return
+     */
     public byte getLogoColor() {
         return logoColor;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getAllianceId() {
         return allianceid;
     }

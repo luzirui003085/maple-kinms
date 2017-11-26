@@ -20,7 +20,6 @@
  */
 package client.inventory;
 
-import constants.GameConstants;
 import java.awt.Point;
 import java.sql.Connection;
 import java.sql.PreparedStatement;

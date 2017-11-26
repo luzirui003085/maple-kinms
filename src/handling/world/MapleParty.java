@@ -1,56 +1,62 @@
-/*
- This file is part of the OdinMS Maple Story Server
- Copyright (C) 2008 ~ 2010 Patrick Huy <patrick.huy@frz.cc> 
- Matthias Butz <matze@odinms.de>
- Jan Christian Meyer <vimes@odinms.de>
 
- This program is free software: you can redistribute it and/or modify
- it under the terms of the GNU Affero General Public License version 3
- as published by the Free Software Foundation. You may not use, modify
- or distribute this program under any other version of the
- GNU Affero General Public License.
-
- This program is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- GNU Affero General Public License for more details.
-
- You should have received a copy of the GNU Affero General Public License
- along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
 package handling.world;
 
 import java.io.Serializable;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ *
+ * @author zjj
+ */
 public class MapleParty implements Serializable {
 
     private static final long serialVersionUID = 9179541993413738569L;
     private MaplePartyCharacter leader;
-    private List<MaplePartyCharacter> members = new LinkedList<MaplePartyCharacter>();
+    private List<MaplePartyCharacter> members = new LinkedList<>();
     private int id;
 
+    /**
+     *
+     * @param id
+     * @param chrfor
+     */
     public MapleParty(int id, MaplePartyCharacter chrfor) {
         this.leader = chrfor;
         this.members.add(this.leader);
         this.id = id;
     }
 
+    /**
+     *
+     * @param member
+     * @return
+     */
     public boolean containsMembers(MaplePartyCharacter member) {
         return members.contains(member);
     }
 
+    /**
+     *
+     * @param member
+     */
     public void addMember(MaplePartyCharacter member) {
         members.add(member);
     }
 
+    /**
+     *
+     * @param member
+     */
     public void removeMember(MaplePartyCharacter member) {
         members.remove(member);
     }
 
+    /**
+     *
+     * @param member
+     */
     public void updateMember(MaplePartyCharacter member) {
         for (int i = 0; i < members.size(); i++) {
             MaplePartyCharacter chr = members.get(i);
@@ -60,6 +66,11 @@ public class MapleParty implements Serializable {
         }
     }
 
+    /**
+     *
+     * @param id
+     * @return
+     */
     public MaplePartyCharacter getMemberById(int id) {
         for (MaplePartyCharacter chr : members) {
             if (chr.getId() == id) {
@@ -69,26 +80,51 @@ public class MapleParty implements Serializable {
         return null;
     }
 
+    /**
+     *
+     * @param index
+     * @return
+     */
     public MaplePartyCharacter getMemberByIndex(int index) {
         return members.get(index);
     }
 
+    /**
+     *
+     * @return
+     */
     public Collection<MaplePartyCharacter> getMembers() {
-        return new LinkedList<MaplePartyCharacter>(members);
+        return new LinkedList<>(members);
     }
 
+    /**
+     *
+     * @return
+     */
     public int getId() {
         return id;
     }
 
+    /**
+     *
+     * @param id
+     */
     public void setId(int id) {
         this.id = id;
     }
 
+    /**
+     *
+     * @return
+     */
     public MaplePartyCharacter getLeader() {
         return leader;
     }
 
+    /**
+     *
+     * @param nLeader
+     */
     public void setLeader(MaplePartyCharacter nLeader) {
         leader = nLeader;
     }
@@ -113,9 +149,6 @@ public class MapleParty implements Serializable {
             return false;
         }
         final MapleParty other = (MapleParty) obj;
-        if (id != other.id) {
-            return false;
-        }
-        return true;
+        return id == other.id;
     }
 }

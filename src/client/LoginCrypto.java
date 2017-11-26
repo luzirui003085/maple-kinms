@@ -6,13 +6,24 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Random;
 import tools.HexTool;
 
+/**
+ *
+ * @author zjj
+ */
 public class LoginCrypto {
 
+    /**
+     *
+     */
     protected final static int extralength = 6;
     private final static String[] Alphabet = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"};
     private final static String[] Number = {"1", "2", "3", "4", "5", "6", "7", "8", "9"};
     private final static Random rand = new Random();
 
+    /**
+     *
+     * @return
+     */
     public static String Generate_13DigitAsiasoftPassport() {
         StringBuilder sb = new StringBuilder();
         sb.append(Alphabet[rand.nextInt(Alphabet.length)]); // First Letter
@@ -42,6 +53,11 @@ public class LoginCrypto {
 
     }
 
+    /**
+     *
+     * @param in
+     * @return
+     */
     public static String hexSha1(final String in) {
         return hashWithDigest(in, "SHA-1");
     }
@@ -50,28 +66,61 @@ public class LoginCrypto {
         return hashWithDigest(in, "SHA-512");
     }
 
+    /**
+     *
+     * @param hash
+     * @param password
+     * @return
+     */
     public static boolean checkSha1Hash(final String hash, final String password) {
         return hash.equals(makeSaltedSha1Hash(password));
     }
 
+    /**
+     *
+     * @param hash
+     * @param password
+     * @param salt
+     * @return
+     */
     public static boolean checkSaltedSha512Hash(final String hash, final String password, final String salt) {
         return hash.equals(makeSaltedSha512Hash(password, salt));
     }
 
+    /**
+     *
+     * @param password
+     * @param salt
+     * @return
+     */
     public static String makeSaltedSha512Hash(final String password, final String salt) {
         return hexSha512(password + salt);
     }
 
+    /**
+     *
+     * @param password
+     * @return
+     */
     public static String makeSaltedSha1Hash(final String password) {
         return hexSha1(password);
     }
 
+    /**
+     *
+     * @return
+     */
     public static String makeSalt() {
         byte[] salt = new byte[16];
         rand.nextBytes(salt);
         return toSimpleHexString(salt);
     }
 
+    /**
+     *
+     * @param in
+     * @return
+     */
     public static String rand_s(final String in) {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < extralength; i++) {
@@ -80,6 +129,11 @@ public class LoginCrypto {
         return sb.toString() + in;
     }
 
+    /**
+     *
+     * @param in
+     * @return
+     */
     public static String rand_r(final String in) {
         return in.substring(extralength, extralength + 128);
     }

@@ -20,19 +20,26 @@
  */
 package handling.login;
 
-import java.util.Map;
-import java.util.Map.Entry;
-
 import client.MapleClient;
 import handling.channel.ChannelServer;
+import java.util.Map;
+import java.util.Map.Entry;
 import server.Timer.PingTimer;
-import tools.packet.LoginPacket;
 import tools.MaplePacketCreator;
+import tools.packet.LoginPacket;
 
+/**
+ *
+ * @author zjj
+ */
 public class LoginWorker {
 
     private static long lastUpdate = 0;
 
+    /**
+     *
+     * @param c
+     */
     public static void registerClient(final MapleClient c) {
         if (LoginServer.isAdminOnly() && !c.isGm()) {
             c.getSession().write(MaplePacketCreator.serverNotice(1, "The server is currently set to Admin login only.\r\nWe are currently testing some issues.\r\nPlease try again later."));
@@ -76,6 +83,7 @@ public class LoginWorker {
             }
             c.setIdleTask(PingTimer.getInstance().schedule(new Runnable() {
 
+                @Override
                 public void run() {
 //                    c.getSession().close();
                 }

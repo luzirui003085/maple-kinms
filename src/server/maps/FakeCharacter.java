@@ -27,6 +27,12 @@ public class FakeCharacter {
     private MapleCharacter owner;
     private boolean follow = true;
 
+    /**
+     *
+     * @param player
+     * @param id
+     * @param lx
+     */
     public FakeCharacter(MapleCharacter player, int id, int lx) {
         String pz = null;
 
@@ -84,18 +90,34 @@ public class FakeCharacter {
         owner = player;
     }
 
+    /**
+     *
+     * @return
+     */
     public MapleCharacter getFakeChar() {
         return ch;
     }
 
+    /**
+     *
+     * @return
+     */
     public boolean follow() {
         return follow;
     }
 
+    /**
+     *
+     * @param set
+     */
     public void setFollow(boolean set) {
         follow = set;
     }
 
+    /**
+     *
+     * @return
+     */
     public MapleCharacter getOwner() {
         return owner;
     }

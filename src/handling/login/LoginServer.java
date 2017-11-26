@@ -1,43 +1,15 @@
-/*
- This file is part of the OdinMS Maple Story Server
- Copyright (C) 2008 ~ 2010 Patrick Huy <patrick.huy@frz.cc> 
- Matthias Butz <matze@odinms.de>
- Jan Christian Meyer <vimes@odinms.de>
 
- This program is free software: you can redistribute it and/or modify
- it under the terms of the GNU Affero General Public License version 3
- as published by the Free Software Foundation. You may not use, modify
- or distribute this program under any other version of the
- GNU Affero General Public License.
-
- This program is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- GNU Affero General Public License for more details.
-
- You should have received a copy of the GNU Affero General Public License
- along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
 package handling.login;
 
-import constants.GameConstants;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.InetSocketAddress;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
-import database.DatabaseConnection;
 import handling.MapleServerHandler;
 import handling.mina.MapleCodecFactory;
 import java.net.InetAddress;
-import java.net.UnknownHostException;
-import java.rmi.NotBoundException;
 import java.util.HashSet;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.apache.mina.common.ByteBuffer;
 import org.apache.mina.common.SimpleByteBufferAllocator;
 import org.apache.mina.common.IoAcceptor;
@@ -48,13 +20,20 @@ import org.apache.mina.transport.socket.nio.SocketAcceptor;
 import server.ServerProperties;
 import tools.Triple;
 
+/**
+ *
+ * @author zjj
+ */
 public class LoginServer {
 
+    /**
+     *
+     */
     public static  int PORT = 8484;
     private static String ip;
     private static InetSocketAddress InetSocketadd;
     private static IoAcceptor acceptor;
-    private static Map<Integer, Integer> load = new HashMap<Integer, Integer>();
+    private static Map<Integer, Integer> load = new HashMap<>();
     private static String serverName, eventMessage;
     private static byte flag;
     private static int maxCharacters, userLimit, usersOn = 0;
@@ -64,37 +43,79 @@ public class LoginServer {
 
     private static LoginServer instance = new LoginServer();
 
+    /**
+     *
+     * @return
+     */
     public static LoginServer getInstance() {
         return instance;
     }
+
+    /**
+     *
+     * @param chrid
+     * @param ip
+     * @param tempIp
+     * @param channel
+     */
     public static void putLoginAuth(int chrid, String ip, String tempIp, int channel) {
-        loginAuth.put(Integer.valueOf(chrid), new Triple(ip, tempIp, Integer.valueOf(channel)));
+        loginAuth.put(chrid, new Triple(ip, tempIp, channel));
         loginIPAuth.add(ip);
     }
 
+    /**
+     *
+     * @param chrid
+     * @return
+     */
     public static Triple<String, String, Integer> getLoginAuth(int chrid) {
-        return (Triple) loginAuth.remove(Integer.valueOf(chrid));
+        return (Triple) loginAuth.remove(chrid);
     }
 
+    /**
+     *
+     * @param ip
+     * @return
+     */
     public static boolean containsIPAuth(String ip) {
         return loginIPAuth.contains(ip);
     }
 
+    /**
+     *
+     * @param ip
+     */
     public static void removeIPAuth(String ip) {
         loginIPAuth.remove(ip);
     }
 
+    /**
+     *
+     * @param ip
+     */
     public static void addIPAuth(String ip) {
         loginIPAuth.add(ip);
     }
+
+    /**
+     *
+     * @param channel
+     */
     public static final void addChannel(final int channel) {
         load.put(channel, 0);
     }
 
+    /**
+     *
+     * @param channel
+     */
     public static final void removeChannel(final int channel) {
         load.remove(channel);
     }
 
+    /**
+     *
+     */
     public static final void run_startup_configurations() {
         /*userLimit = Integer.parseInt(ServerProperties.getProperty("net.sf.odinms.login.userlimit"));
          serverName = ServerProperties.getProperty("net.sf.odinms.login.serverName");
@@ -130,6 +151,9 @@ public class LoginServer {
         }
     }
 
+    /**
+     *
+     */
     public static final void shutdown() {
         if (finishedShutdown) {
             return;
@@ -139,63 +163,123 @@ public class LoginServer {
         finishedShutdown = true; //nothing. lol
     }
 
+    /**
+     *
+     * @return
+     */
     public static final String getServerName() {
         return serverName;
     }
 
+    /**
+     *
+     * @return
+     */
     public static final String getEventMessage() {
         return eventMessage;
     }
 
+    /**
+     *
+     * @return
+     */
     public static final byte getFlag() {
         return flag;
     }
 
+    /**
+     *
+     * @return
+     */
     public static final int getMaxCharacters() {
         return maxCharacters;
     }
 
+    /**
+     *
+     * @return
+     */
     public static final Map<Integer, Integer> getLoad() {
         return load;
     }
 
+    /**
+     *
+     * @param load_
+     * @param usersOn_
+     */
     public static void setLoad(final Map<Integer, Integer> load_, final int usersOn_) {
         load = load_;
         usersOn = usersOn_;
     }
 
+    /**
+     *
+     * @param newMessage
+     */
     public static final void setEventMessage(final String newMessage) {
         eventMessage = newMessage;
     }
 
+    /**
+     *
+     * @param newflag
+     */
     public static final void setFlag(final byte newflag) {
         flag = newflag;
     }
 
+    /**
+     *
+     * @return
+     */
     public static final int getUserLimit() {
         return userLimit;
     }
 
+    /**
+     *
+     * @return
+     */
     public static final int getUsersOn() {
         return usersOn;
     }
 
+    /**
+     *
+     * @param newLimit
+     */
     public static final void setUserLimit(final int newLimit) {
         userLimit = newLimit;
     }
 
+    /**
+     *
+     * @return
+     */
     public static final int getNumberOfSessions() {
         return acceptor.getManagedSessions(InetSocketadd).size();
     }
 
+    /**
+     *
+     * @return
+     */
     public static final boolean isAdminOnly() {
         return adminOnly;
     }
 
+    /**
+     *
+     * @return
+     */
     public static final boolean isShutdown() {
         return finishedShutdown;
     }
 
+    /**
+     *
+     */
     public static final void setOn() {
         finishedShutdown = false;
     }

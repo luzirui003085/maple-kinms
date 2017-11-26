@@ -21,7 +21,6 @@
 package handling.mina;
 
 import client.MapleClient;
-import constants.GameConstants;
 import constants.ServerConstants;
 import handling.RecvPacketOpcode;
 import tools.MapleAESOFB;

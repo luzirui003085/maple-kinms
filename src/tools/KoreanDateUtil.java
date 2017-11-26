@@ -36,21 +36,43 @@ public class KoreanDateUtil {
     private final static long REAL_YEAR2000 = 946681229830l;
     private final static int QUEST_UNIXAGE = 27111908;
     private final static long FT_UT_OFFSET = 116444736000000000L; // 100 nsseconds from 1/1/1601 -> 1/1/1970
+
+    /**
+     *
+     */
     public final static long MAX_TIME = 150842304000000000L; //00 80 05 BB 46 E6 17 02
+
+    /**
+     *
+     */
     public final static long ZERO_TIME = 94354848000000000L; //00 40 E0 FD 3B 37 4F 01
+
+    /**
+     *
+     */
     public final static long PERMANENT = 150841440000000000L; // 00 C0 9B 90 7D E5 17 02
     
+    /**
+     *
+     * @param realTimestamp
+     * @return
+     */
     public static long getKoreanTimestamp(final long realTimestamp) {
         return getTime(realTimestamp);
     }
 
+    /**
+     *
+     * @param realTimestamp
+     * @return
+     */
     public static long getTime(long realTimestamp) {
         if (realTimestamp == -1) {
-            return MAX_TIME;
+                return MAX_TIME;
         } else if (realTimestamp == -2) {
-            return ZERO_TIME;
+                return ZERO_TIME;
         } else if (realTimestamp == -3) {
-            return PERMANENT;
+                return PERMANENT;
         }
         return ((realTimestamp * 10000) + FT_UT_OFFSET);
     }
@@ -88,10 +110,20 @@ public class KoreanDateUtil {
         return (int) (time * 0.1396987) + QUEST_UNIXAGE;
     }
 
+    /**
+     *
+     * @return
+     */
     public static boolean isDST() {
         return SimpleTimeZone.getDefault().inDaylightTime(new Date());
     }
 
+    /**
+     *
+     * @param timeStampinMillis
+     * @param roundToMinutes
+     * @return
+     */
     public static long getFileTimestamp(long timeStampinMillis, boolean roundToMinutes) {
         if (isDST()) {
             timeStampinMillis -= 3600000L;

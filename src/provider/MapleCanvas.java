@@ -22,11 +22,27 @@ package provider;
 
 import java.awt.image.BufferedImage;
 
+/**
+ *
+ * @author zjj
+ */
 public interface MapleCanvas {
 
+    /**
+     *
+     * @return
+     */
     int getHeight();
 
+    /**
+     *
+     * @return
+     */
     int getWidth();
 
+    /**
+     *
+     * @return
+     */
     BufferedImage getImage();
 }

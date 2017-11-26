@@ -22,25 +22,43 @@ package handling.world;
 
 import java.io.Serializable;
 
+/**
+ *
+ * @author zjj
+ */
 public class CheaterData implements Serializable, Comparable<CheaterData> {
 
     private static final long serialVersionUID = -8733673311051249885L;
     private int points;
     private String info;
 
+    /**
+     *
+     * @param points
+     * @param info
+     */
     public CheaterData(int points, String info) {
         this.points = points;
         this.info = info;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getInfo() {
         return info;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getPoints() {
         return points;
     }
 
+    @Override
     public int compareTo(CheaterData o) {
         int thisVal = getPoints();
         int anotherVal = o.getPoints();

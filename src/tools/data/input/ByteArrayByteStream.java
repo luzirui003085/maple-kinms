@@ -21,7 +21,6 @@
 package tools.data.input;
 
 import java.io.IOException;
-
 import tools.HexTool;
 
 /**

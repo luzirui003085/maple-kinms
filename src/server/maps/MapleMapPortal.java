@@ -22,8 +22,15 @@ package server.maps;
 
 import server.MaplePortal;
 
+/**
+ *
+ * @author zjj
+ */
 public class MapleMapPortal extends MapleGenericPortal {
 
+    /**
+     *
+     */
     public MapleMapPortal() {
         super(MaplePortal.MAP_PORTAL);
     }

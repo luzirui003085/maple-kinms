@@ -20,12 +20,33 @@
  */
 package client;
 
+/**
+ *
+ * @author zjj
+ */
 public class MapleCoolDownValueHolder {
 
+    /**
+     *
+     */
     public int skillId;
+
+    /**
+     *
+     */
     public long startTime;
+
+    /**
+     *
+     */
     public long length;
 
+    /**
+     *
+     * @param skillId
+     * @param startTime
+     * @param length
+     */
     public MapleCoolDownValueHolder(int skillId, long startTime, long length) {
         super();
         this.skillId = skillId;

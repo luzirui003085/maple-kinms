@@ -16,25 +16,60 @@ import provider.MapleData;
 import provider.MapleDataProvider;
 import provider.MapleDataProviderFactory;
 import provider.MapleDataTool;
-import tools.FileoutputUtil;
 import tools.MaplePacketCreator;
 import tools.Pair;
 
+/**
+ *
+ * @author zjj
+ */
 public class MapleQuest implements Serializable {
 
     private static final long serialVersionUID = 9179541993413738569L;
-    private static Map<Integer, MapleQuest> quests = new LinkedHashMap<Integer, MapleQuest>();
+    private static Map<Integer, MapleQuest> quests = new LinkedHashMap<>();
+
+    /**
+     *
+     */
     protected int id;
+
+    /**
+     *
+     */
     protected List<MapleQuestRequirement> startReqs;
+
+    /**
+     *
+     */
     protected List<MapleQuestRequirement> completeReqs;
+
+    /**
+     *
+     */
     protected List<MapleQuestAction> startActs;
+
+    /**
+     *
+     */
     protected List<MapleQuestAction> completeActs;
+
+    /**
+     *
+     */
     protected Map<String, List<Pair<String, Pair<String, Integer>>>> partyQuestInfo; //[rank, [more/less/equal, [property, value]]]
+
+    /**
+     *
+     */
     protected Map<Integer, Integer> relevantMobs;
     private boolean autoStart = false;
     private boolean autoPreComplete = false;
     private boolean repeatable = false, customend = false;
     private int viewMedalItem = 0, selectedSkillID = 0;
+
+    /**
+     *
+     */
     protected String name = "";
     private static MapleDataProvider questData;
     private static MapleData actions;
@@ -42,13 +77,17 @@ public class MapleQuest implements Serializable {
     private static MapleData info;
     private static MapleData pinfo;
 
+    /**
+     *
+     * @param id
+     */
     protected MapleQuest(final int id) {
-        relevantMobs = new LinkedHashMap<Integer, Integer>();
-        startReqs = new LinkedList<MapleQuestRequirement>();
-        completeReqs = new LinkedList<MapleQuestRequirement>();
-        startActs = new LinkedList<MapleQuestAction>();
-        completeActs = new LinkedList<MapleQuestAction>();
-        partyQuestInfo = new LinkedHashMap<String, List<Pair<String, Pair<String, Integer>>>>();
+        relevantMobs = new LinkedHashMap<>();
+        startReqs = new LinkedList<>();
+        completeReqs = new LinkedList<>();
+        startActs = new LinkedList<>();
+        completeActs = new LinkedList<>();
+        partyQuestInfo = new LinkedHashMap<>();
         this.id = id;
     }
 
@@ -133,11 +172,11 @@ public class MapleQuest implements Serializable {
         final MapleData pquestInfo = pinfo.getChildByPath(String.valueOf(id));
         if (pquestInfo != null) {
             for (MapleData d : pquestInfo.getChildByPath("rank")) {
-                List<Pair<String, Pair<String, Integer>>> pInfo = new ArrayList<Pair<String, Pair<String, Integer>>>();
+                List<Pair<String, Pair<String, Integer>>> pInfo = new ArrayList<>();
                 //LinkedHashMap<String, List<Pair<String, Pair<String, Integer>>>>
                 for (MapleData c : d) {
                     for (MapleData b : c) {
-                        pInfo.add(new Pair<String, Pair<String, Integer>>(c.getName(), new Pair<String, Integer>(b.getName(), MapleDataTool.getInt(b, 0))));
+                        pInfo.add(new Pair<>(c.getName(), new Pair<>(b.getName(), MapleDataTool.getInt(b, 0))));
                     }
                 }
                 ret.partyQuestInfo.put(d.getName(), pInfo);
@@ -147,18 +186,34 @@ public class MapleQuest implements Serializable {
         return true;
     }
 
+    /**
+     *
+     * @param rank
+     * @return
+     */
     public List<Pair<String, Pair<String, Integer>>> getInfoByRank(final String rank) {
         return partyQuestInfo.get(rank);
     }
 
+    /**
+     *
+     * @return
+     */
     public final int getSkillID() {
         return selectedSkillID;
     }
 
+    /**
+     *
+     * @return
+     */
     public final String getName() {
         return name;
     }
 
+    /**
+     *
+     */
     public static void initQuests() {
         questData = MapleDataProviderFactory.getDataProvider(new File(System.getProperty("net.sf.odinms.wzpath") + "/Quest.wz"));
         actions = questData.getData("Act.img");
@@ -167,11 +222,19 @@ public class MapleQuest implements Serializable {
         pinfo = questData.getData("PQuest.img");
     }
 
+    /**
+     *
+     */
     public static void clearQuests() {
         quests.clear();
         initQuests(); //test
     }
 
+    /**
+     *
+     * @param id
+     * @return
+     */
     public static MapleQuest getInstance(int id) {
         MapleQuest ret = quests.get(id);
         if (ret == null) {
@@ -192,6 +255,12 @@ public class MapleQuest implements Serializable {
         return ret;
     }
 
+    /**
+     *
+     * @param c
+     * @param npcid
+     * @return
+     */
     public boolean canStart(MapleCharacter c, Integer npcid) {
         if (c.getQuest(this).getStatus() != 0 && !(c.getQuest(this).getStatus() == 2 && repeatable)) {
             return false;
@@ -204,6 +273,12 @@ public class MapleQuest implements Serializable {
         return true;
     }
 
+    /**
+     *
+     * @param c
+     * @param npcid
+     * @return
+     */
     public boolean canComplete(MapleCharacter c, Integer npcid) {
         if (c.getQuest(this).getStatus() != 1) {
             return false;
@@ -216,6 +291,11 @@ public class MapleQuest implements Serializable {
         return true;
     }
 
+    /**
+     *
+     * @param c
+     * @param itemid
+     */
     public final void RestoreLostItem(final MapleCharacter c, final int itemid) {
         for (final MapleQuestAction a : startActs) {
             if (a.RestoreLostItem(c, itemid)) {
@@ -224,6 +304,11 @@ public class MapleQuest implements Serializable {
         }
     }
 
+    /**
+     *
+     * @param c
+     * @param npc
+     */
     public void start(MapleCharacter c, int npc) {
         if ((autoStart || checkNPCOnMap(c, npc)) && canStart(c, npc)) {
             for (MapleQuestAction a : startActs) {
@@ -242,10 +327,21 @@ public class MapleQuest implements Serializable {
         }
     }
 
+    /**
+     *
+     * @param c
+     * @param npc
+     */
     public void complete(MapleCharacter c, int npc) {
         complete(c, npc, null);
     }
     
+    /**
+     *
+     * @param c
+     * @param npc
+     * @param selection
+     */
     public void complete(MapleCharacter c, int npc, Integer selection) {
         if ((autoPreComplete || checkNPCOnMap(c, npc)) && canComplete(c, npc)) {
             if (npc != 9010000) {
@@ -284,6 +380,10 @@ public class MapleQuest implements Serializable {
         }
     }
 
+    /**
+     *
+     * @param c
+     */
     public void forfeit(MapleCharacter c) {
         if (c.getQuest(this).getStatus() != (byte) 1) {
             return;
@@ -295,6 +395,12 @@ public class MapleQuest implements Serializable {
         c.updateQuest(newStatus);
     }
 
+    /**
+     *
+     * @param c
+     * @param npc
+     * @param customData
+     */
     public void forceStart(MapleCharacter c, int npc, String customData) {
         final MapleQuestStatus newStatus = new MapleQuestStatus(this, (byte) 1, npc);
         newStatus.setForfeited(c.getQuest(this).getForfeited());
@@ -303,16 +409,29 @@ public class MapleQuest implements Serializable {
         c.updateQuest(newStatus);
     }
 
+    /**
+     *
+     * @param c
+     * @param npc
+     */
     public void forceComplete(MapleCharacter c, int npc) {
         final MapleQuestStatus newStatus = new MapleQuestStatus(this, (byte) 2, npc);
         newStatus.setForfeited(c.getQuest(this).getForfeited());
         c.updateQuest(newStatus);
     }
 
+    /**
+     *
+     * @return
+     */
     public int getId() {
         return id;
     }
 
+    /**
+     *
+     * @return
+     */
     public Map<Integer, Integer> getRelevantMobs() {
         return relevantMobs;
     }
@@ -322,21 +441,73 @@ public class MapleQuest implements Serializable {
         return (GameConstants.isEvan(player.getJob()) && npcid == 1013000) || (player.getMap() != null && player.getMap().containsNPC(npcid));
     }
 
+    /**
+     *
+     * @return
+     */
     public int getMedalItem() {
         return viewMedalItem;
     }
 
+    /**
+     *
+     */
     public static enum MedalQuest {
 
+        /**
+         *
+         */
         新手冒險家(29005, 29015, 15, new int[]{104000000, 104010001, 100000006, 104020000, 100000000, 100010000, 100040000, 100040100, 101010103, 101020000, 101000000, 102000000, 101030104, 101030406, 102020300, 103000000, 102050000, 103010001, 103030200, 110000000}),
+
+        /**
+         *
+         */
         ElNath(29006, 29012, 50, new int[]{200000000, 200010100, 200010300, 200080000, 200080100, 211000000, 211030000, 211040300, 211040400, 211040401}),
+
+        /**
+         *
+         */
         LudusLake(29007, 29012, 40, new int[]{222000000, 222010400, 222020000, 220000000, 220020300, 220040200, 221020701, 221000000, 221030600, 221040400}),
+
+        /**
+         *
+         */
         Underwater(29008, 29012, 40, new int[]{230000000, 230010400, 230010200, 230010201, 230020000, 230020201, 230030100, 230040000, 230040200, 230040400}),
+
+        /**
+         *
+         */
         MuLung(29009, 29012, 50, new int[]{251000000, 251010200, 251010402, 251010500, 250010500, 250010504, 250000000, 250010300, 250010304, 250020300}),
+
+        /**
+         *
+         */
         NihalDesert(29010, 29012, 70, new int[]{261030000, 261020401, 261020000, 261010100, 261000000, 260020700, 260020300, 260000000, 260010600, 260010300}),
+
+        /**
+         *
+         */
         MinarForest(29011, 29012, 70, new int[]{240000000, 240010200, 240010800, 240020401, 240020101, 240030000, 240040400, 240040511, 240040521, 240050000}),
+
+        /**
+         *
+         */
         Sleepywood(29014, 29015, 50, new int[]{105040300, 105070001, 105040305, 105090200, 105090300, 105090301, 105090312, 105090500, 105090900, 105080000});
-        public int questid, level, lquestid;
+        public int questid,
+
+        /**
+         *
+         */
+        level, 
+
+        /**
+         *
+         */
+        lquestid;
+
+        /**
+         *
+         */
         public int[] maps;
 
         private MedalQuest(int questid, int lquestid, int level, int[] maps) {

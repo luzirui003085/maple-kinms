@@ -1,23 +1,4 @@
-/*
- This file is part of the OdinMS Maple Story Server
- Copyright (C) 2008 ~ 2010 Patrick Huy <patrick.huy@frz.cc> 
- Matthias Butz <matze@odinms.de>
- Jan Christian Meyer <vimes@odinms.de>
 
- This program is free software: you can redistribute it and/or modify
- it under the terms of the GNU Affero General Public License version 3
- as published by the Free Software Foundation. You may not use, modify
- or distribute this program under any other version of the
- GNU Affero General Public License.
-
- This program is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- GNU Affero General Public License for more details.
-
- You should have received a copy of the GNU Affero General Public License
- along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
 package server.shops;
 
 import java.util.ArrayList;
@@ -27,18 +8,33 @@ import client.inventory.ItemFlag;
 import client.MapleCharacter;
 import client.MapleClient;
 import server.MapleInventoryManipulator;
-import server.maps.MapleMapObjectType;
 import tools.packet.PlayerShopPacket;
 
+/**
+ *
+ * @author zjj
+ */
 public class MaplePlayerShop extends AbstractPlayerStore {
 
     private int boughtnumber = 0;
-    private List<String> bannedList = new ArrayList<String>();
+    private List<String> bannedList = new ArrayList<>();
 
+    /**
+     *
+     * @param owner
+     * @param itemId
+     * @param desc
+     */
     public MaplePlayerShop(MapleCharacter owner, int itemId, String desc) {
         super(owner, itemId, desc, "", 3);
     }
 
+    /**
+     *
+     * @param c
+     * @param item
+     * @param quantity
+     */
     @Override
     public void buy(MapleClient c, int item, short quantity) {
         MaplePlayerShopItem pItem = items.get(item);
@@ -77,11 +73,20 @@ public class MaplePlayerShop extends AbstractPlayerStore {
         }
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public byte getShopType() {
         return IMaplePlayerShop.PLAYER_SHOP;
     }
 
+    /**
+     *
+     * @param saveItems
+     * @param remove
+     */
     @Override
     public void closeShop(boolean saveItems, boolean remove) {
         MapleCharacter owner = getMCOwner();
@@ -105,6 +110,10 @@ public class MaplePlayerShop extends AbstractPlayerStore {
         getMCOwner().getClient().getSession().write(PlayerShopPacket.shopErrorMessage(10, 1));
     }
 
+    /**
+     *
+     * @param name
+     */
     public void banPlayer(String name) {
         if (!bannedList.contains(name)) {
             bannedList.add(name);
@@ -119,10 +128,12 @@ public class MaplePlayerShop extends AbstractPlayerStore {
         }
     }
 
+    /**
+     *
+     * @param name
+     * @return
+     */
     public boolean isBanned(String name) {
-        if (bannedList.contains(name)) {
-            return true;
-        }
-        return false;
+        return bannedList.contains(name);
     }
 }

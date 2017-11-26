@@ -27,32 +27,66 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ *
+ * @author zjj
+ */
 public class PlayerBuffStorage implements Serializable {
 
-    private static final Map<Integer, List<PlayerBuffValueHolder>> buffs = new ConcurrentHashMap<Integer, List<PlayerBuffValueHolder>>();
-    private static final Map<Integer, List<MapleCoolDownValueHolder>> coolDowns = new ConcurrentHashMap<Integer, List<MapleCoolDownValueHolder>>();
-    private static final Map<Integer, List<MapleDiseaseValueHolder>> diseases = new ConcurrentHashMap<Integer, List<MapleDiseaseValueHolder>>();
+    private static final Map<Integer, List<PlayerBuffValueHolder>> buffs = new ConcurrentHashMap<>();
+    private static final Map<Integer, List<MapleCoolDownValueHolder>> coolDowns = new ConcurrentHashMap<>();
+    private static final Map<Integer, List<MapleDiseaseValueHolder>> diseases = new ConcurrentHashMap<>();
 
+    /**
+     *
+     * @param chrid
+     * @param toStore
+     */
     public static final void addBuffsToStorage(final int chrid, final List<PlayerBuffValueHolder> toStore) {
         buffs.put(chrid, toStore);
     }
 
+    /**
+     *
+     * @param chrid
+     * @param toStore
+     */
     public static final void addCooldownsToStorage(final int chrid, final List<MapleCoolDownValueHolder> toStore) {
         coolDowns.put(chrid, toStore);
     }
 
+    /**
+     *
+     * @param chrid
+     * @param toStore
+     */
     public static final void addDiseaseToStorage(final int chrid, final List<MapleDiseaseValueHolder> toStore) {
         diseases.put(chrid, toStore);
     }
 
+    /**
+     *
+     * @param chrid
+     * @return
+     */
     public static final List<PlayerBuffValueHolder> getBuffsFromStorage(final int chrid) {
         return buffs.remove(chrid);
     }
 
+    /**
+     *
+     * @param chrid
+     * @return
+     */
     public static final List<MapleCoolDownValueHolder> getCooldownsFromStorage(final int chrid) {
         return coolDowns.remove(chrid);
     }
 
+    /**
+     *
+     * @param chrid
+     * @return
+     */
     public static final List<MapleDiseaseValueHolder> getDiseaseFromStorage(final int chrid) {
         return diseases.remove(chrid);
     }

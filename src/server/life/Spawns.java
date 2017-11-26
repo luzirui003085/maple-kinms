@@ -23,19 +23,52 @@ package server.life;
 import java.awt.Point;
 import server.maps.MapleMap;
 
+/**
+ *
+ * @author zjj
+ */
 public abstract class Spawns {
 
+    /**
+     *
+     * @return
+     */
     public abstract MapleMonster getMonster();
 
+    /**
+     *
+     * @return
+     */
     public abstract byte getCarnivalTeam();
 
+    /**
+     *
+     * @return
+     */
     public abstract boolean shouldSpawn();
 
+    /**
+     *
+     * @return
+     */
     public abstract int getCarnivalId();
 
+    /**
+     *
+     * @param map
+     * @return
+     */
     public abstract MapleMonster spawnMonster(MapleMap map);
 
+    /**
+     *
+     * @return
+     */
     public abstract int getMobTime();
 
+    /**
+     *
+     * @return
+     */
     public abstract Point getPosition();
 }

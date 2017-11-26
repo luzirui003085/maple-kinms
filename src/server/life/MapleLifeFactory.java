@@ -22,11 +22,10 @@ package server.life;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.HashMap;
 import java.util.Map;
-
 import provider.MapleData;
 import provider.MapleDataDirectoryEntry;
 import provider.MapleDataFileEntry;
@@ -37,6 +36,10 @@ import provider.WzXML.MapleDataType;
 import tools.Pair;
 import tools.StringUtil;
 
+/**
+ *
+ * @author zjj
+ */
 public class MapleLifeFactory {
 
     private static final MapleDataProvider data = MapleDataProviderFactory.getDataProvider(new File(System.getProperty("net.sf.odinms.wzpath") + "/Mob.wz"));
@@ -45,11 +48,17 @@ public class MapleLifeFactory {
     private static final MapleData mobStringData = stringDataWZ.getData("Mob.img");
     private static final MapleData npcStringData = stringDataWZ.getData("Npc.img");
     private static final MapleData npclocData = etcDataWZ.getData("NpcLocation.img");
-    private static Map<Integer, String> npcNames = new HashMap<Integer, String>();
-    private static Map<Integer, MapleMonsterStats> monsterStats = new HashMap<Integer, MapleMonsterStats>();
-    private static Map<Integer, Integer> NPCLoc = new HashMap<Integer, Integer>();
-    private static Map<Integer, List<Integer>> questCount = new HashMap<Integer, List<Integer>>();
+    private static Map<Integer, String> npcNames = new HashMap<>();
+    private static Map<Integer, MapleMonsterStats> monsterStats = new HashMap<>();
+    private static Map<Integer, Integer> NPCLoc = new HashMap<>();
+    private static Map<Integer, List<Integer>> questCount = new HashMap<>();
 
+    /**
+     *
+     * @param id
+     * @param type
+     * @return
+     */
     public static AbstractLoadedMapleLife getLife(int id, String type) {
         if (type.equalsIgnoreCase("n")) {
             return getNPC(id);
@@ -61,6 +70,11 @@ public class MapleLifeFactory {
         }
     }
 
+    /**
+     *
+     * @param npcid
+     * @return
+     */
     public static int getNPCLocation(int npcid) {
         if (NPCLoc.containsKey(npcid)) {
             return NPCLoc.get(npcid);
@@ -70,6 +84,9 @@ public class MapleLifeFactory {
         return map;
     }
 
+    /**
+     *
+     */
     public static final void loadQuestCounts() {
         if (questCount.size() > 0) {
             return;
@@ -80,7 +97,7 @@ public class MapleLifeFactory {
                     final int id = Integer.parseInt(entry.getName().substring(0, entry.getName().length() - 4));
                     MapleData dat = data.getData("QuestCountGroup/" + entry.getName());
                     if (dat != null && dat.getChildByPath("info") != null) {
-                        List<Integer> z = new ArrayList<Integer>();
+                        List<Integer> z = new ArrayList<>();
                         for (MapleData da : dat.getChildByPath("info")) {
                             z.add(MapleDataTool.getInt(da, 0));
                         }
@@ -93,12 +110,22 @@ public class MapleLifeFactory {
         }
     }
 
+    /**
+     *
+     * @param id
+     * @return
+     */
     public static final List<Integer> getQuestCount(final int id) {
         return questCount.get(id);
     }
 
+    /**
+     *
+     * @param mid
+     * @return
+     */
     public static MapleMonster getMonster(int mid) {
-        MapleMonsterStats stats = monsterStats.get(Integer.valueOf(mid));
+        MapleMonsterStats stats = monsterStats.get(mid);
 
         if (stats == null) {
             MapleData monsterData = data.getData(StringUtil.getLeftPaddedStr(Integer.toString(mid) + ".img", '0', 11));
@@ -168,7 +195,7 @@ public class MapleLifeFactory {
 
             final MapleData reviveInfo = monsterInfoData.getChildByPath("revive");
             if (reviveInfo != null) {
-                List<Integer> revives = new LinkedList<Integer>();
+                List<Integer> revives = new LinkedList<>();
                 for (MapleData bdata : reviveInfo) {
                     revives.add(MapleDataTool.getInt(bdata));
                 }
@@ -178,9 +205,9 @@ public class MapleLifeFactory {
             final MapleData monsterSkillData = monsterInfoData.getChildByPath("skill");
             if (monsterSkillData != null) {
                 int i = 0;
-                List<Pair<Integer, Integer>> skills = new ArrayList<Pair<Integer, Integer>>();
+                List<Pair<Integer, Integer>> skills = new ArrayList<>();
                 while (monsterSkillData.getChildByPath(Integer.toString(i)) != null) {
-                    skills.add(new Pair<Integer, Integer>(Integer.valueOf(MapleDataTool.getInt(i + "/skill", monsterSkillData, 0)), Integer.valueOf(MapleDataTool.getInt(i + "/level", monsterSkillData, 0))));
+                    skills.add(new Pair<>(Integer.valueOf(MapleDataTool.getInt(i + "/skill", monsterSkillData, 0)), Integer.valueOf(MapleDataTool.getInt(i + "/level", monsterSkillData, 0))));
                     i++;
                 }
                 stats.setSkills(skills);
@@ -216,11 +243,16 @@ public class MapleLifeFactory {
             }
             stats.setHPDisplayType(hpdisplaytype);
 
-            monsterStats.put(Integer.valueOf(mid), stats);
+            monsterStats.put(mid, stats);
         }
         return new MapleMonster(mid, stats);
     }
 
+    /**
+     *
+     * @param stats
+     * @param elemAttr
+     */
     public static final void decodeElementalString(MapleMonsterStats stats, String elemAttr) {
         for (int i = 0; i < elemAttr.length(); i += 2) {
             stats.setEffectiveness(
@@ -248,13 +280,18 @@ public class MapleLifeFactory {
         return false;
     }
 
+    /**
+     *
+     * @param nid
+     * @return
+     */
     public static MapleNPC getNPC(final int nid) {
         String name = npcNames.get(nid);
         if (name == null) {
             name = MapleDataTool.getString(nid + "/name", npcStringData, "MISSINGNO");
             npcNames.put(nid, name);
         }
-        if (name.indexOf("Maple TV") != -1) {
+        if (name.contains("Maple TV")) {
             return null;
         }
         return new MapleNPC(nid, name);

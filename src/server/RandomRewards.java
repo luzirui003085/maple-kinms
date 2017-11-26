@@ -1,11 +1,14 @@
 package server;
 
-import java.util.List;
+import constants.GameConstants;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
-import constants.GameConstants;
-
+/**
+ *
+ * @author zjj
+ */
 public class RandomRewards {
 
     private final static RandomRewards instance = new RandomRewards();
@@ -17,53 +20,60 @@ public class RandomRewards {
     private List<Integer> compiledEventB = null;
     private List<Integer> compiledEventA = null;
 
+    /**
+     *
+     * @return
+     */
     public static RandomRewards getInstance() {
         return instance;
     }
 
+    /**
+     *
+     */
     protected RandomRewards() {
         System.out.println("加载 RandomRewards :::");
         // Gold Box
-        List<Integer> returnArray = new ArrayList<Integer>();
+        List<Integer> returnArray = new ArrayList<>();
 
         processRewards(returnArray, GameConstants.goldrewards);
 
         compiledGold = returnArray;
 
         // Silver Box
-        returnArray = new ArrayList<Integer>();
+        returnArray = new ArrayList<>();
 
         processRewards(returnArray, GameConstants.silverrewards);
 
         compiledSilver = returnArray;
 
         // Fishing Rewards
-        returnArray = new ArrayList<Integer>();
+        returnArray = new ArrayList<>();
 
         processRewards(returnArray, GameConstants.fishingReward);
 
         compiledFishing = returnArray;
 
         // Event Rewards
-        returnArray = new ArrayList<Integer>();
+        returnArray = new ArrayList<>();
 
         processRewards(returnArray, GameConstants.eventCommonReward);
 
         compiledEventC = returnArray;
 
-        returnArray = new ArrayList<Integer>();
+        returnArray = new ArrayList<>();
 
         processRewards(returnArray, GameConstants.eventUncommonReward);
 
         compiledEventB = returnArray;
 
-        returnArray = new ArrayList<Integer>();
+        returnArray = new ArrayList<>();
 
         processRewards(returnArray, GameConstants.eventRareReward);
 
         compiledEventA = returnArray;
 
-        returnArray = new ArrayList<Integer>();
+        returnArray = new ArrayList<>();
 
         processRewards(returnArray, GameConstants.eventSuperReward);
 
@@ -84,18 +94,34 @@ public class RandomRewards {
         Collections.shuffle(returnArray);
     }
 
+    /**
+     *
+     * @return
+     */
     public final int getGoldBoxReward() {
         return compiledGold.get(Randomizer.nextInt(compiledGold.size()));
     }
 
+    /**
+     *
+     * @return
+     */
     public final int getSilverBoxReward() {
         return compiledSilver.get(Randomizer.nextInt(compiledSilver.size()));
     }
 
+    /**
+     *
+     * @return
+     */
     public final int getFishingReward() {
         return compiledFishing.get(Randomizer.nextInt(compiledFishing.size()));
     }
 
+    /**
+     *
+     * @return
+     */
     public final int getEventReward() {
         final int chance = Randomizer.nextInt(100);
         if (chance < 50) {

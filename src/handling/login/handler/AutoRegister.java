@@ -7,12 +7,29 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+/**
+ *
+ * @author zjj
+ */
 public class AutoRegister {
 
     private static final int ACCOUNTS_PER_IP = 1;
+
+    /**
+     *
+     */
     public static boolean autoRegister = true;
+
+    /**
+     *
+     */
     public static boolean success = false;
 
+    /**
+     *
+     * @param login
+     * @return
+     */
     public static boolean getAccountExists(String login) {
         boolean accountExists = false;
         Connection con = DatabaseConnection.getConnection();
@@ -29,6 +46,12 @@ public class AutoRegister {
         return accountExists;
     }
 
+    /**
+     *
+     * @param login
+     * @param pwd
+     * @param eip
+     */
     public static void createAccount(String login, String pwd, String eip) {
         String sockAddr = eip;
         Connection con;
@@ -64,8 +87,12 @@ public class AutoRegister {
             success = true;
         } catch (SQLException ex) {
             System.out.println(ex);
-            return;
         }
+        /*                }
+         }
+         rs.close();
+         } catch (SQLException ex) {
+         System.out.println(ex);
         /*                }
          }
          rs.close();

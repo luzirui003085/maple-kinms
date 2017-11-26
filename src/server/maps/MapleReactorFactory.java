@@ -30,20 +30,29 @@ import provider.MapleDataTool;
 import tools.Pair;
 import tools.StringUtil;
 
+/**
+ *
+ * @author zjj
+ */
 public class MapleReactorFactory {
 
     private static final MapleDataProvider data = MapleDataProviderFactory.getDataProvider(new File(System.getProperty("net.sf.odinms.wzpath") + "/Reactor.wz"));
-    private static Map<Integer, MapleReactorStats> reactorStats = new HashMap<Integer, MapleReactorStats>();
+    private static Map<Integer, MapleReactorStats> reactorStats = new HashMap<>();
 
+    /**
+     *
+     * @param rid
+     * @return
+     */
     public static final MapleReactorStats getReactor(int rid) {
-        MapleReactorStats stats = reactorStats.get(Integer.valueOf(rid));
+        MapleReactorStats stats = reactorStats.get(rid);
         if (stats == null) {
             int infoId = rid;
             MapleData reactorData = data.getData(StringUtil.getLeftPaddedStr(Integer.toString(infoId) + ".img", '0', 11));
             MapleData link = reactorData.getChildByPath("info/link");
             if (link != null) {
                 infoId = MapleDataTool.getIntConvert("info/link", reactorData);
-                stats = reactorStats.get(Integer.valueOf(infoId));
+                stats = reactorStats.get(infoId);
             }
             if (stats == null) {
                 stats = new MapleReactorStats();
@@ -92,7 +101,7 @@ public class MapleReactorFactory {
                         Pair<Integer, Integer> reactItem = null;
                         int type = MapleDataTool.getIntConvert("type", reactorInfoData);
                         if (type == 100) { //reactor waits for item
-                            reactItem = new Pair<Integer, Integer>(MapleDataTool.getIntConvert("0", reactorInfoData), MapleDataTool.getIntConvert("1", reactorInfoData, 1));
+                            reactItem = new Pair<>(MapleDataTool.getIntConvert("0", reactorInfoData), MapleDataTool.getIntConvert("1", reactorInfoData, 1));
                             if (!areaSet) { //only set area of effect for item-triggered reactors once
                                 stats.setTL(MapleDataTool.getPoint("lt", reactorInfoData));
                                 stats.setBR(MapleDataTool.getPoint("rb", reactorInfoData));
@@ -105,12 +114,12 @@ public class MapleReactorFactory {
                         stats.addState(i, 999, null, (byte) (foundState ? -1 : (i + 1)), 0, (byte) 0);
                     }
                 }
-                reactorStats.put(Integer.valueOf(infoId), stats);
+                reactorStats.put(infoId, stats);
                 if (rid != infoId) {
-                    reactorStats.put(Integer.valueOf(rid), stats);
+                    reactorStats.put(rid, stats);
                 }
             } else { // stats exist at infoId but not rid; add to map
-                reactorStats.put(Integer.valueOf(rid), stats);
+                reactorStats.put(rid, stats);
             }
         }
         return stats;

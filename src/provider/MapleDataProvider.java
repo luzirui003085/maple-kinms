@@ -20,9 +20,22 @@
  */
 package provider;
 
+/**
+ *
+ * @author zjj
+ */
 public interface MapleDataProvider {
 
+    /**
+     *
+     * @param path
+     * @return
+     */
     MapleData getData(String path);
 
+    /**
+     *
+     * @return
+     */
     MapleDataDirectoryEntry getRoot();
 }

@@ -26,12 +26,39 @@ package client.inventory;
  */
 public enum MapleInventoryType {
 
+    /**
+     *
+     */
     UNDEFINED(0),
+
+    /**
+     *
+     */
     EQUIP(1),
+
+    /**
+     *
+     */
     USE(2),
+
+    /**
+     *
+     */
     SETUP(3),
+
+    /**
+     *
+     */
     ETC(4),
+
+    /**
+     *
+     */
     CASH(5),
+
+    /**
+     *
+     */
     EQUIPPED(-1);
     final byte type;
 
@@ -39,14 +66,27 @@ public enum MapleInventoryType {
         this.type = (byte) type;
     }
 
+    /**
+     *
+     * @return
+     */
     public byte getType() {
         return type;
     }
 
+    /**
+     *
+     * @return
+     */
     public short getBitfieldEncoding() {
         return (short) (2 << type);
     }
 
+    /**
+     *
+     * @param type
+     * @return
+     */
     public static MapleInventoryType getByType(byte type) {
         for (MapleInventoryType l : MapleInventoryType.values()) {
             if (l.getType() == type) {
@@ -56,17 +96,25 @@ public enum MapleInventoryType {
         return null;
     }
 
+    /**
+     *
+     * @param name
+     * @return
+     */
     public static MapleInventoryType getByWZName(String name) {
-        if (name.equals("Install")) {
-            return SETUP;
-        } else if (name.equals("Consume")) {
-            return USE;
-        } else if (name.equals("Etc")) {
-            return ETC;
-        } else if (name.equals("Cash")) {
-            return CASH;
-        } else if (name.equals("Pet")) {
-            return CASH;
+        switch (name) {
+            case "Install":
+                return SETUP;
+            case "Consume":
+                return USE;
+            case "Etc":
+                return ETC;
+            case "Cash":
+                return CASH;
+            case "Pet":
+                return CASH;
+            default:
+                break;
         }
         return UNDEFINED;
     }

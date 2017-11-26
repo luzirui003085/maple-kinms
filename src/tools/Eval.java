@@ -18,11 +18,26 @@ package tools;
 import java.math.*;
 import java.util.Map;
 
+/**
+ *
+ * @author zjj
+ */
 public final class Eval {
 
+    /**
+     *
+     */
     public static enum Type {
 
-        ARITHMETIC("arithmetic"), BOOLEAN("boolean");
+        /**
+         *
+         */
+        ARITHMETIC("arithmetic"), 
+
+        /**
+         *
+         */
+        BOOLEAN("boolean");
         final String name;
 
         Type(String name) {
@@ -30,9 +45,12 @@ public final class Eval {
         }
     }
 
+    /**
+     *
+     */
     public static final class Tokeniser {
 
-        static final Character START_NEW_EXPRESSION = Character.valueOf('(');
+        static final Character START_NEW_EXPRESSION = '(';
         private final String string;
         private int position;
         private Operator pushedBackOperator = null;
@@ -214,14 +232,17 @@ public final class Eval {
 
                 String name = this.string.substring(start, this.position);
                 /* Is variable name actually a keyword unary operator? */
-                if (name.equals("abs")) {
-                    return Operator.ABS;
-                } else if (name.equals("int")) {
-                    return Operator.INT;
-                } else if (name.equals("ceil")) {
-                    return Operator.CEIL;
-                } else if (name.equals("floor")) {
-                    return Operator.FLOOR;
+                switch (name) {
+                    case "abs":
+                        return Operator.ABS;
+                    case "int":
+                        return Operator.INT;
+                    case "ceil":
+                        return Operator.CEIL;
+                    case "floor":
+                        return Operator.FLOOR;
+                    default:
+                        break;
                 }
                 /* Return variable name */
                 return name;
@@ -257,9 +278,14 @@ public final class Eval {
         }
     }
 
+    /**
+     *
+     */
     public static enum Operator {
 
         /**
+         * End of string reached.
+         *//**
          * End of string reached.
          */
         END(-1, 0, null, null, null) {
@@ -491,6 +517,10 @@ public final class Eval {
                         return new BigDecimal(value1.toBigInteger());
                     }
                 },
+
+        /**
+         *
+         */
         CEIL(4, 1, "ceil ", Type.ARITHMETIC, Type.ARITHMETIC) {
 
                     @Override
@@ -499,6 +529,10 @@ public final class Eval {
                         return new BigDecimal(Math.ceil(value1.doubleValue()));
                     }
                 },
+
+        /**
+         *
+         */
         FLOOR(4, 1, "floor ", Type.ARITHMETIC, Type.ARITHMETIC) {
 
                     @Override
@@ -538,6 +572,9 @@ public final class Eval {
                 BigDecimal value3);
     }
 
+    /**
+     *
+     */
     public static final class Operation {
 
         final Type type;
@@ -663,6 +700,9 @@ public final class Eval {
         }
     }
 
+    /**
+     *
+     */
     public static class Compiler {
 
         private final Tokeniser tokeniser;

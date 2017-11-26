@@ -1,6 +1,5 @@
 package handling.login.handler;
 
-import client.MapleCharacter;
 import client.MapleClient;
 import handling.SendPacketOpcode;
 import tools.FileoutputUtil;

@@ -25,56 +25,100 @@ import server.MapleShopFactory;
 import server.maps.MapleMapObjectType;
 import tools.MaplePacketCreator;
 
+/**
+ *
+ * @author zjj
+ */
 public class MapleNPC extends AbstractLoadedMapleLife {
 
     private String name = "MISSINGNO";
     private boolean custom = false;
 
+    /**
+     *
+     * @param id
+     * @param name
+     */
     public MapleNPC(final int id, final String name) {
         super(id);
         this.name = name;
     }
 
+    /**
+     *
+     * @return
+     */
     public final boolean hasShop() {
         return MapleShopFactory.getInstance().getShopForNPC(getId()) != null;
     }
 
+    /**
+     *
+     * @param c
+     */
     public final void sendShop(final MapleClient c) {
         MapleShopFactory.getInstance().getShopForNPC(getId()).sendShop(c);
     }
 
+    /**
+     *
+     * @param client
+     */
     @Override
     public void sendSpawnData(final MapleClient client) {
         if (getId() >= 9901000) {
-            return;
         } else {
             client.getSession().write(MaplePacketCreator.spawnNPC(this, true));
             client.getSession().write(MaplePacketCreator.spawnNPCRequestController(this, true));
         }
     }
 
+    /**
+     *
+     * @param client
+     */
     @Override
     public final void sendDestroyData(final MapleClient client) {
         client.getSession().write(MaplePacketCreator.removeNPC(getObjectId()));
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public final MapleMapObjectType getType() {
         return MapleMapObjectType.NPC;
     }
 
+    /**
+     *
+     * @return
+     */
     public final String getName() {
         return name;
     }
 
+    /**
+     *
+     * @param n
+     */
     public void setName(String n) {
         this.name = n;
     }
 
+    /**
+     *
+     * @return
+     */
     public final boolean isCustom() {
         return custom;
     }
 
+    /**
+     *
+     * @param custom
+     */
     public final void setCustom(final boolean custom) {
         this.custom = custom;
     }

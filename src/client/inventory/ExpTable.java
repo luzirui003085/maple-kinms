@@ -18,28 +18,58 @@ package client.inventory;
  
    private static int[] mountexp = { 0, 6, 25, 50, 105, 134, 196, 254, 263, 315, 367, 430, 543, 587, 679, 725, 897, 1146, 1394, 1701, 2247, 2543, 2898, 3156, 3313, 3584, 3923, 4150, 4305, 4550 };
  
-   public static final int getReverseItemExpNeededForLevel(int num)
+    /**
+     *
+     * @param num
+     * @return
+     */
+    public static final int getReverseItemExpNeededForLevel(int num)
    {
      return 700 * num * 2000;
    }
  
-   public static final int getTimelessItemExpNeededForLevel(int i) {
+    /**
+     *
+     * @param i
+     * @return
+     */
+    public static final int getTimelessItemExpNeededForLevel(int i) {
      return 700 * i * 2000 ; // 10 +70 80     20+70 90    30+70  100   40+70  110  120  130
    }
  
-   public static final int getBookLevel(int count) {
+    /**
+     *
+     * @param count
+     * @return
+     */
+    public static final int getBookLevel(int count) {
      return 5 * count * (count + 1); 
    }
  
-   public static int getExpNeededForLevel(int level) {
+    /**
+     *
+     * @param level
+     * @return
+     */
+    public static int getExpNeededForLevel(int level) {
      return exp[(level - 1)];
    }
  
-   public static int getClosenessNeededForLevel(int level) {
+    /**
+     *
+     * @param level
+     * @return
+     */
+    public static int getClosenessNeededForLevel(int level) {
      return closeness[(level - 1)];
    }
  
-   public static int getMountExpNeededForLevel(int level) {
+    /**
+     *
+     * @param level
+     * @return
+     */
+    public static int getMountExpNeededForLevel(int level) {
      if ((level > mountexp.length) || (level < 0)) {
        return 4550;
      }

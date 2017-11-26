@@ -21,24 +21,6 @@
 package client;
 
 import constants.GameConstants;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.ScheduledFuture;
-import java.io.Serializable;
-
-import javax.script.ScriptEngine;
-
 import database.DatabaseConnection;
 import database.DatabaseException;
 import handling.MaplePacket;
@@ -51,32 +33,83 @@ import handling.world.PartyOperation;
 import handling.world.World;
 import handling.world.family.MapleFamilyCharacter;
 import handling.world.guild.MapleGuildCharacter;
-import server.maps.MapleMap;
-import server.shops.IMaplePlayerShop;
-import tools.FileoutputUtil;
-import tools.MapleAESOFB;
-import tools.packet.LoginPacket;
-
+import java.io.Serializable;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
-
+import javax.script.ScriptEngine;
 import org.apache.mina.common.IoSession;
 import org.apache.mina.common.WriteFuture;
 import server.Timer.PingTimer;
+import server.maps.MapleMap;
 import server.quest.MapleQuest;
+import server.shops.IMaplePlayerShop;
+import tools.FileoutputUtil;
+import tools.MapleAESOFB;
 import tools.MaplePacketCreator;
+import tools.packet.LoginPacket;
 
+/**
+ *
+ * @author zjj
+ */
 public class MapleClient implements Serializable {
 
     private static final long serialVersionUID = 9179541993413738569L;
     public static final transient byte LOGIN_NOTLOGGEDIN = 0,
-            LOGIN_SERVER_TRANSITION = 1,
-            LOGIN_LOGGEDIN = 2,
-            LOGIN_WAITING = 3,
-            CASH_SHOP_TRANSITION = 4,
-            LOGIN_CS_LOGGEDIN = 5,
-            CHANGE_CHANNEL = 6;
+
+    /**
+     *
+     */
+    LOGIN_SERVER_TRANSITION = 1,
+
+    /**
+     *
+     */
+    LOGIN_LOGGEDIN = 2,
+
+    /**
+     *
+     */
+    LOGIN_WAITING = 3,
+
+    /**
+     *
+     */
+    CASH_SHOP_TRANSITION = 4,
+
+    /**
+     *
+     */
+    LOGIN_CS_LOGGEDIN = 5,
+
+    /**
+     *
+     */
+    CHANGE_CHANNEL = 6;
+
+    /**
+     *
+     */
     public static final int DEFAULT_CHARSLOT = 6;
+
+    /**
+     *
+     */
     public static final String CLIENT_KEY = "CLIENT";
     private transient MapleAESOFB send, receive;
     private transient IoSession session;
@@ -91,10 +124,14 @@ public class MapleClient implements Serializable {
     private boolean gm;
     private byte greason = 1, gender = -1;
     private byte fwn = 0;
+
+    /**
+     *
+     */
     public transient short loginAttempt = 0;
-    private transient List<Integer> allowedChar = new LinkedList<Integer>();
-    private transient Set<String> macs = new HashSet<String>();
-    private transient Map<String, ScriptEngine> engines = new HashMap<String, ScriptEngine>();
+    private transient List<Integer> allowedChar = new LinkedList<>();
+    private transient Set<String> macs = new HashSet<>();
+    private transient Map<String, ScriptEngine> engines = new HashMap<>();
     private transient ScheduledFuture<?> idleTask = null;
     private transient String secondPassword, salt2; // To be used only on login
     private final transient Lock mutex = new ReentrantLock(true);
@@ -103,20 +140,37 @@ public class MapleClient implements Serializable {
     private transient String tempIP = "";
     private DebugWindow debugWindow;
 
+    /**
+     *
+     * @param send
+     * @param receive
+     * @param session
+     */
     public MapleClient(MapleAESOFB send, MapleAESOFB receive, IoSession session) {
         this.send = send;
         this.receive = receive;
         this.session = session;
     }
 
+    /**
+     *
+     * @return
+     */
     public final MapleAESOFB getReceiveCrypto() {
         return receive;
     }
 
+    /**
+     *
+     * @return
+     */
     public final MapleAESOFB getSendCrypto() {
         return send;
     }
 
+    /**
+     *
+     */
     public void StartWindow() {
         if (this.debugWindow != null) {
             this.debugWindow.dispose();
@@ -126,44 +180,86 @@ public class MapleClient implements Serializable {
         this.debugWindow.setC(this);
     }
 
+    /**
+     *
+     * @return
+     */
     public final IoSession getSession() {
         return session;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getTempIP() {
         return this.tempIP;
     }
 
+    /**
+     *
+     * @param s
+     */
     public void setTempIP(String s) {
         this.tempIP = s;
     }
 
+    /**
+     *
+     * @return
+     */
     public final Lock getLock() {
         return mutex;
     }
 
+    /**
+     *
+     * @return
+     */
     public final Lock getNPCLock() {
         return npc_mutex;
     }
 
+    /**
+     *
+     * @return
+     */
     public MapleCharacter getPlayer() {
         return player;
     }
 
+    /**
+     *
+     * @param player
+     */
     public void setPlayer(MapleCharacter player) {
         this.player = player;
     }
 
+    /**
+     *
+     * @param id
+     */
     public void createdChar(final int id) {
         allowedChar.add(id);
     }
 
+    /**
+     *
+     * @param id
+     * @return
+     */
     public final boolean login_Auth(final int id) {
         return allowedChar.contains(id);
     }
 
+    /**
+     *
+     * @param serverId
+     * @return
+     */
     public final List<MapleCharacter> loadCharacters(final int serverId) { // TODO make this less costly zZz
-        final List<MapleCharacter> chars = new LinkedList<MapleCharacter>();
+        final List<MapleCharacter> chars = new LinkedList<>();
 
         for (final CharNameAndId cni : loadCharactersInternal(serverId)) {
             final MapleCharacter chr = MapleCharacter.loadCharFromDB(cni.id, this, false);
@@ -173,8 +269,13 @@ public class MapleClient implements Serializable {
         return chars;
     }
 
+    /**
+     *
+     * @param serverId
+     * @return
+     */
     public List<String> loadCharacterNames(int serverId) {
-        List<String> chars = new LinkedList<String>();
+        List<String> chars = new LinkedList<>();
         for (CharNameAndId cni : loadCharactersInternal(serverId)) {
             chars.add(cni.name);
         }
@@ -182,7 +283,7 @@ public class MapleClient implements Serializable {
     }
 
     private List<CharNameAndId> loadCharactersInternal(int serverId) {
-        List<CharNameAndId> chars = new LinkedList<CharNameAndId>();
+        List<CharNameAndId> chars = new LinkedList<>();
         try {
             Connection con = DatabaseConnection.getConnection();
             PreparedStatement ps = con.prepareStatement("SELECT id, name FROM characters WHERE accountid = ? AND world = ?");
@@ -201,6 +302,10 @@ public class MapleClient implements Serializable {
         return chars;
     }
 
+    /**
+     *
+     * @return
+     */
     public boolean isLoggedIn() {
         return loggedIn;
     }
@@ -221,14 +326,26 @@ public class MapleClient implements Serializable {
         return lTempban;
     }
 
+    /**
+     *
+     * @return
+     */
     public Calendar getTempBanCalendar() {
         return tempban;
     }
 
+    /**
+     *
+     * @return
+     */
     public byte getBanReason() {
         return greason;
     }
 
+    /**
+     *
+     * @return
+     */
     public boolean hasBannedIP() {
         boolean ret = false;
         try {
@@ -248,6 +365,10 @@ public class MapleClient implements Serializable {
         return ret;
     }
 
+    /**
+     *
+     * @return
+     */
     public boolean hasBannedMac() {
         if (macs.isEmpty()) {
             return false;
@@ -293,7 +414,7 @@ public class MapleClient implements Serializable {
                 if (rs.getString("macs") != null) {
                     String[] macData = rs.getString("macs").split(", ");
                     for (String mac : macData) {
-                        if (!mac.equals("")) {
+                        if (!mac.isEmpty()) {
                             macs.add(mac);
                         }
                     }
@@ -308,6 +429,9 @@ public class MapleClient implements Serializable {
         }
     }
 
+    /**
+     *
+     */
     public void banMacs() {
         try {
             loadMacsIfNescessary();
@@ -325,10 +449,14 @@ public class MapleClient implements Serializable {
         }
     }
 
+    /**
+     *
+     * @param macs
+     */
     public static final void banMacs(String[] macs) {
         Connection con = DatabaseConnection.getConnection();
         try {
-            List<String> filtered = new LinkedList<String>();
+            List<String> filtered = new LinkedList<>();
             PreparedStatement ps = con.prepareStatement("SELECT filter FROM macfilters");
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
@@ -383,6 +511,13 @@ public class MapleClient implements Serializable {
         return 0;
     }
 
+    /**
+     *
+     * @param login
+     * @param pwd
+     * @param ipMacBanned
+     * @return
+     */
     public int fblogin(String login, String pwd, boolean ipMacBanned) {
         int loginok = 5;
         try {
@@ -463,6 +598,13 @@ public class MapleClient implements Serializable {
         return loginok;
     }
 
+    /**
+     *
+     * @param login
+     * @param pwd
+     * @param ipMacBanned
+     * @return
+     */
     public int login(String login, String pwd, boolean ipMacBanned) {
         int loginok = 5;
         try {
@@ -553,6 +695,11 @@ public class MapleClient implements Serializable {
         return loginok;
     }
 
+    /**
+     *
+     * @param in
+     * @return
+     */
     public boolean CheckSecondPassword(String in) {
         boolean allow = false;
         boolean updatePasswordHash = false;
@@ -597,6 +744,11 @@ public class MapleClient implements Serializable {
         }
     }
 
+    /**
+     *
+     * @param charname
+     * @return
+     */
     public static final byte unban(String charname) {
         try {
             Connection con = DatabaseConnection.getConnection();
@@ -624,10 +776,12 @@ public class MapleClient implements Serializable {
         return 0;
     }
 
+    /**
+     *
+     * @param macData
+     */
     public void updateMacs(String macData) {
-        for (String mac : macData.split(", ")) {
-            macs.add(mac);
-        }
+        macs.addAll(Arrays.asList(macData.split(", ")));
         StringBuilder newMacData = new StringBuilder();
         Iterator<String> iter = macs.iterator();
         while (iter.hasNext()) {
@@ -648,18 +802,35 @@ public class MapleClient implements Serializable {
         }
     }
 
+    /**
+     *
+     * @param id
+     */
     public void setAccID(int id) {
         this.accId = id;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getAccID() {
         return this.accId;
     }
 
+    /**
+     *
+     * @param newstate
+     */
     public void updateLoginState(int newstate) {
         updateLoginState(newstate, getSessionIPAddress());
     }
 
+    /**
+     *
+     * @param newstate
+     * @param SessionID
+     */
     public final void updateLoginState(final int newstate, final String SessionID) { // TODO hide?
         try {
             Connection con = DatabaseConnection.getConnection();
@@ -681,6 +852,9 @@ public class MapleClient implements Serializable {
         }
     }
 
+    /**
+     *
+     */
     public final void updateSecondPassword() {
         try {
             final Connection con = DatabaseConnection.getConnection();
@@ -698,6 +872,9 @@ public class MapleClient implements Serializable {
         }
     }
 
+    /**
+     *
+     */
     public final void updateGender() {
         try {
             final Connection con = DatabaseConnection.getConnection();
@@ -713,6 +890,10 @@ public class MapleClient implements Serializable {
         }
     }
 
+    /**
+     *
+     * @return
+     */
     public final byte getLoginState() { // TODO hide?
         Connection con = DatabaseConnection.getConnection();
         try {
@@ -735,11 +916,7 @@ public class MapleClient implements Serializable {
             }
             rs.close();
             ps.close();
-            if (state == MapleClient.LOGIN_LOGGEDIN) {
-                loggedIn = true;
-            } else {
-                loggedIn = false;
-            }
+            loggedIn = state == MapleClient.LOGIN_LOGGEDIN;
             return state;
         } catch (SQLException e) {
             loggedIn = false;
@@ -747,10 +924,18 @@ public class MapleClient implements Serializable {
         }
     }
 
+    /**
+     *
+     * @param date
+     * @return
+     */
     public final boolean checkBirthDate(final int date) {
         return birthday == date;
     }
 
+    /**
+     *
+     */
     public final void removalTask() {
         try {
             player.cancelAllBuffs_();
@@ -799,10 +984,21 @@ public class MapleClient implements Serializable {
         }
     }
 
+    /**
+     *
+     * @param RemoveInChannelServer
+     * @param fromCS
+     */
     public final void disconnect(final boolean RemoveInChannelServer, final boolean fromCS) {
         disconnect(RemoveInChannelServer, fromCS, false);
     }
 
+    /**
+     *
+     * @param RemoveInChannelServer
+     * @param fromCS
+     * @param shutdown
+     */
     public final void disconnect(final boolean RemoveInChannelServer, final boolean fromCS, final boolean shutdown) {
         if (player != null && isLoggedIn()) {
             MapleMap map = player.getMap();
@@ -915,10 +1111,18 @@ public class MapleClient implements Serializable {
         }
     }
 
+    /**
+     *
+     * @return
+     */
     public final String getSessionIPAddress() {
         return session.getRemoteAddress().toString().split(":")[0];
     }
 
+    /**
+     *
+     * @return
+     */
     public final boolean CheckIPAddress() {
         try {
             final PreparedStatement ps = DatabaseConnection.getConnection().prepareStatement("SELECT SessionIP FROM accounts WHERE id = ?");
@@ -944,6 +1148,10 @@ public class MapleClient implements Serializable {
         return true;
     }
 
+    /**
+     *
+     * @return
+     */
     public final boolean Fwn() {
         try {
             final PreparedStatement ps = DatabaseConnection.getConnection().prepareStatement("SELECT fwn FROM accounts WHERE id = ?");
@@ -967,6 +1175,10 @@ public class MapleClient implements Serializable {
         return true;
     }
 
+    /**
+     *
+     * @param sb
+     */
     public final void DebugMessage(final StringBuilder sb) {
         sb.append(getSession().getRemoteAddress());
         sb.append("Connected: ");
@@ -981,14 +1193,27 @@ public class MapleClient implements Serializable {
         sb.append(getPlayer() != null);
     }
 
+    /**
+     *
+     * @return
+     */
     public final int getChannel() {
         return channel;
     }
 
+    /**
+     *
+     * @return
+     */
     public final ChannelServer getChannelServer() {
         return ChannelServer.getInstance(channel);
     }
 
+    /**
+     *
+     * @param cid
+     * @return
+     */
     public final int deleteCharacter(final int cid) {
         try {
             final Connection con = DatabaseConnection.getConnection();
@@ -1045,58 +1270,112 @@ public class MapleClient implements Serializable {
         return 1;
     }
 
+    /**
+     *
+     * @return
+     */
     public final byte getGender() {
         return gender;
     }
 
+    /**
+     *
+     * @param gender
+     */
     public final void setGender(final byte gender) {
         this.gender = gender;
     }
 
+    /**
+     *
+     * @return
+     */
     public final String getSecondPassword() {
         return secondPassword;
     }
 
+    /**
+     *
+     * @param secondPassword
+     */
     public final void setSecondPassword(final String secondPassword) {
         this.secondPassword = secondPassword;
     }
 
+    /**
+     *
+     * @return
+     */
     public final String getAccountName() {
         return accountName;
     }
 
+    /**
+     *
+     * @param accountName
+     */
     public final void setAccountName(final String accountName) {
         this.accountName = accountName;
     }
 
+    /**
+     *
+     * @param channel
+     */
     public final void setChannel(final int channel) {
         this.channel = channel;
     }
 
+    /**
+     *
+     * @return
+     */
     public final int getWorld() {
         return world;
     }
 
+    /**
+     *
+     * @param world
+     */
     public final void setWorld(final int world) {
         this.world = world;
     }
 
+    /**
+     *
+     * @return
+     */
     public final int getLatency() {
         return (int) (lastPong - lastPing);
     }
 
+    /**
+     *
+     * @return
+     */
     public final long getLastPong() {
         return lastPong;
     }
 
+    /**
+     *
+     * @return
+     */
     public final long getLastPing() {
         return lastPing;
     }
 
+    /**
+     *
+     */
     public final void pongReceived() {
         lastPong = System.currentTimeMillis();
     }
 
+    /**
+     *
+     */
     public final void sendPing() {
         lastPing = System.currentTimeMillis();
         session.write(LoginPacket.getPing());
@@ -1118,18 +1397,44 @@ public class MapleClient implements Serializable {
         }, 15000); // note: idletime gets added to this too
     }
 
+    /**
+     *
+     * @param cfor
+     * @param message
+     * @return
+     */
     public static final String getLogMessage(final MapleClient cfor, final String message) {
         return getLogMessage(cfor, message, new Object[0]);
     }
 
+    /**
+     *
+     * @param cfor
+     * @param message
+     * @return
+     */
     public static final String getLogMessage(final MapleCharacter cfor, final String message) {
         return getLogMessage(cfor == null ? null : cfor.getClient(), message);
     }
 
+    /**
+     *
+     * @param cfor
+     * @param message
+     * @param parms
+     * @return
+     */
     public static final String getLogMessage(final MapleCharacter cfor, final String message, final Object... parms) {
         return getLogMessage(cfor == null ? null : cfor.getClient(), message, parms);
     }
 
+    /**
+     *
+     * @param cfor
+     * @param message
+     * @param parms
+     * @return
+     */
     public static final String getLogMessage(final MapleClient cfor, final String message, final Object... parms) {
         final StringBuilder builder = new StringBuilder();
         if (cfor != null) {
@@ -1155,6 +1460,11 @@ public class MapleClient implements Serializable {
         return builder.toString();
     }
 
+    /**
+     *
+     * @param charName
+     * @return
+     */
     public static final int findAccIdForCharacterName(final String charName) {
         try {
             Connection con = DatabaseConnection.getConnection();
@@ -1176,43 +1486,93 @@ public class MapleClient implements Serializable {
         return -1;
     }
 
+    /**
+     *
+     * @return
+     */
     public final Set<String> getMacs() {
         return Collections.unmodifiableSet(macs);
     }
 
+    /**
+     *
+     * @return
+     */
     public final boolean isGm() {
         return gm;
     }
 
+    /**
+     *
+     * @param name
+     * @param e
+     */
     public final void setScriptEngine(final String name, final ScriptEngine e) {
         engines.put(name, e);
     }
 
+    /**
+     *
+     * @param name
+     * @return
+     */
     public final ScriptEngine getScriptEngine(final String name) {
         return engines.get(name);
     }
 
+    /**
+     *
+     * @param name
+     */
     public final void removeScriptEngine(final String name) {
         engines.remove(name);
     }
 
+    /**
+     *
+     * @return
+     */
     public final ScheduledFuture<?> getIdleTask() {
         return idleTask;
     }
 
+    /**
+     *
+     * @param idleTask
+     */
     public final void setIdleTask(final ScheduledFuture<?> idleTask) {
         this.idleTask = idleTask;
     }
 
+    /**
+     *
+     * @param packet
+     * @return
+     */
     public WriteFuture sendPacket(MaplePacket packet) {
         return this.getSession().write(packet);
     }
 
+    /**
+     *
+     */
     protected static final class CharNameAndId {
 
+        /**
+         *
+         */
         public final String name;
+
+        /**
+         *
+         */
         public final int id;
 
+        /**
+         *
+         * @param name
+         * @param id
+         */
         public CharNameAndId(final String name, final int id) {
             super();
             this.name = name;
@@ -1220,6 +1580,10 @@ public class MapleClient implements Serializable {
         }
     }
 
+    /**
+     *
+     * @return
+     */
     public int getCharacterSlots() {
         if (isGm()) {
             return 15;
@@ -1252,6 +1616,10 @@ public class MapleClient implements Serializable {
         return charslots;
     }
 
+    /**
+     *
+     * @return
+     */
     public boolean gainCharacterSlot() {
         if (getCharacterSlots() >= 15) {
             return false;
@@ -1273,6 +1641,11 @@ public class MapleClient implements Serializable {
         return true;
     }
 
+    /**
+     *
+     * @param charname
+     * @return
+     */
     public static final byte unbanIPMacs(String charname) {
         try {
             Connection con = DatabaseConnection.getConnection();
@@ -1312,7 +1685,7 @@ public class MapleClient implements Serializable {
             if (macs != null) {
                 String[] macz = macs.split(", ");
                 for (String mac : macz) {
-                    if (!mac.equals("")) {
+                    if (!mac.isEmpty()) {
                         PreparedStatement psa = con.prepareStatement("DELETE FROM macbans WHERE mac = ?");
                         psa.setString(1, mac);
                         psa.execute();
@@ -1328,6 +1701,11 @@ public class MapleClient implements Serializable {
         }
     }
 
+    /**
+     *
+     * @param charname
+     * @return
+     */
     public static final byte unHellban(String charname) {
         try {
             Connection con = DatabaseConnection.getConnection();
@@ -1370,26 +1748,50 @@ public class MapleClient implements Serializable {
         }
     }
 
+    /**
+     *
+     * @return
+     */
     public boolean isMonitored() {
         return monitored;
     }
 
+    /**
+     *
+     * @param m
+     */
     public void setMonitored(boolean m) {
         this.monitored = m;
     }
 
+    /**
+     *
+     * @return
+     */
     public boolean isReceiving() {
         return receiving;
     }
 
+    /**
+     *
+     * @param m
+     */
     public void setReceiving(boolean m) {
         this.receiving = m;
     }
 
+    /**
+     *
+     * @return
+     */
     public byte getfwn() {
         return this.fwn;
     }
 
+    /**
+     *
+     * @param f
+     */
     public void setfwn(byte f) {
         this.fwn = f;
     }

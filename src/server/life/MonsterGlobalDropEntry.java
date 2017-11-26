@@ -20,8 +20,22 @@
  */
 package server.life;
 
+/**
+ *
+ * @author zjj
+ */
 public class MonsterGlobalDropEntry {
 
+    /**
+     *
+     * @param itemId
+     * @param chance
+     * @param continent
+     * @param dropType
+     * @param Minimum
+     * @param Maximum
+     * @param questid
+     */
     public MonsterGlobalDropEntry(int itemId, int chance, int continent, byte dropType, int Minimum, int Maximum, short questid) {
         this.itemId = itemId;
         this.chance = chance;
@@ -32,6 +46,17 @@ public class MonsterGlobalDropEntry {
         this.Maximum = Maximum;
     }
 
+    /**
+     *
+     * @param itemId
+     * @param chance
+     * @param continent
+     * @param dropType
+     * @param Minimum
+     * @param Maximum
+     * @param questid
+     * @param onlySelf
+     */
     public MonsterGlobalDropEntry(int itemId, int chance, int continent, byte dropType, int Minimum, int Maximum, short questid, boolean onlySelf) {
         this.itemId = itemId;
         this.chance = chance;
@@ -42,8 +67,40 @@ public class MonsterGlobalDropEntry {
         this.Maximum = Maximum;
         this.onlySelf = onlySelf;
     }
+
+    /**
+     *
+     */
     public byte dropType;
+
+    /**
+     *
+     */
     public short questid;
-    public int itemId, chance, Minimum, Maximum, continent;
+    public int itemId,
+
+    /**
+     *
+     */
+    chance, 
+
+    /**
+     *
+     */
+    Minimum, 
+
+    /**
+     *
+     */
+    Maximum, 
+
+    /**
+     *
+     */
+    continent;
+
+    /**
+     *
+     */
     public boolean onlySelf = false;
 }

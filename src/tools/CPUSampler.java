@@ -29,26 +29,42 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.Map.Entry;
+import java.util.Set;
 
+/**
+ *
+ * @author zjj
+ */
 public class CPUSampler {
 
-    private List<String> included = new LinkedList<String>();
+    private List<String> included = new LinkedList<>();
     private static CPUSampler instance = new CPUSampler();
     private long interval = 5;
     private SamplerThread sampler = null;
-    private Map<StackTrace, Integer> recorded = new HashMap<StackTrace, Integer>();
+    private Map<StackTrace, Integer> recorded = new HashMap<>();
     private int totalSamples = 0;
 
+    /**
+     *
+     * @return
+     */
     public static CPUSampler getInstance() {
         return instance;
     }
 
+    /**
+     *
+     * @param millis
+     */
     public void setInterval(long millis) {
         interval = millis;
     }
 
+    /**
+     *
+     * @param include
+     */
     public void addIncluded(String include) {
         for (String alreadyIncluded : included) {
             if (include.startsWith(alreadyIncluded)) {
@@ -58,11 +74,17 @@ public class CPUSampler {
         included.add(include);
     }
 
+    /**
+     *
+     */
     public void reset() {
         recorded.clear();
         totalSamples = 0;
     }
 
+    /**
+     *
+     */
     public void start() {
         if (sampler == null) {
             sampler = new SamplerThread();
@@ -70,6 +92,9 @@ public class CPUSampler {
         }
     }
 
+    /**
+     *
+     */
     public void stop() {
         if (sampler != null) {
             sampler.stop();
@@ -77,8 +102,12 @@ public class CPUSampler {
         }
     }
 
+    /**
+     *
+     * @return
+     */
     public SampledStacktraces getTopConsumers() {
-        List<StacktraceWithCount> ret = new ArrayList<StacktraceWithCount>();
+        List<StacktraceWithCount> ret = new ArrayList<>();
         Set<Entry<StackTrace, Integer>> entrySet = recorded.entrySet();
         for (Entry<StackTrace, Integer> entry : entrySet) {
             ret.add(new StacktraceWithCount(entry.getValue(), entry.getKey()));
@@ -87,6 +116,13 @@ public class CPUSampler {
         return new SampledStacktraces(ret, totalSamples);
     }
 
+    /**
+     *
+     * @param writer
+     * @param minInvocations
+     * @param topMethods
+     * @throws IOException
+     */
     public void save(Writer writer, int minInvocations, int topMethods) throws IOException {
         SampledStacktraces topConsumers = getTopConsumers();
         StringBuilder builder = new StringBuilder(); // build our summary :o
@@ -108,9 +144,9 @@ public class CPUSampler {
                 Integer i = recorded.get(st);
                 totalSamples++;
                 if (i == null) {
-                    recorded.put(st, Integer.valueOf(1));
+                    recorded.put(st, 1);
                 } else {
-                    recorded.put(st, Integer.valueOf(i.intValue() + 1));
+                    recorded.put(st, i + 1);
                 }
             }
         }
@@ -119,7 +155,7 @@ public class CPUSampler {
     private int findRelevantElement(StackTraceElement[] trace) {
         if (trace.length == 0) {
             return -1;
-        } else if (included.size() == 0) {
+        } else if (included.isEmpty()) {
             return 0;
         }
         int firstIncluded = -1;
@@ -256,28 +292,44 @@ public class CPUSampler {
         }
     }
 
+    /**
+     *
+     */
     public static class StacktraceWithCount implements Comparable<StacktraceWithCount> {
 
         private int count;
         private StackTrace trace;
 
+        /**
+         *
+         * @param count
+         * @param trace
+         */
         public StacktraceWithCount(int count, StackTrace trace) {
             super();
             this.count = count;
             this.trace = trace;
         }
 
+        /**
+         *
+         * @return
+         */
         public int getCount() {
             return count;
         }
 
+        /**
+         *
+         * @return
+         */
         public StackTraceElement[] getTrace() {
             return trace.getTrace();
         }
 
         @Override
         public int compareTo(StacktraceWithCount o) {
-            return -Integer.valueOf(count).compareTo(Integer.valueOf(o.count));
+            return -Integer.valueOf(count).compareTo(o.count);
         }
 
         @Override
@@ -298,27 +350,49 @@ public class CPUSampler {
             return Math.round((((double) count) / total) * 10000.0) / 100.0;
         }
 
+        /**
+         *
+         * @param totalInvoations
+         * @param traceLength
+         * @return
+         */
         public String toString(int totalInvoations, int traceLength) {
             return count + "/" + totalInvoations + " Sampled Invocations (" + getPercentage(totalInvoations) + "%) "
                     + trace.toString(traceLength);
         }
     }
 
+    /**
+     *
+     */
     public static class SampledStacktraces {
 
         List<StacktraceWithCount> topConsumers;
         int totalInvocations;
 
+        /**
+         *
+         * @param topConsumers
+         * @param totalInvocations
+         */
         public SampledStacktraces(List<StacktraceWithCount> topConsumers, int totalInvocations) {
             super();
             this.topConsumers = topConsumers;
             this.totalInvocations = totalInvocations;
         }
 
+        /**
+         *
+         * @return
+         */
         public List<StacktraceWithCount> getTopConsumers() {
             return topConsumers;
         }
 
+        /**
+         *
+         * @return
+         */
         public int getTotalInvocations() {
             return totalInvocations;
         }
@@ -328,6 +402,11 @@ public class CPUSampler {
             return toString(0);
         }
 
+        /**
+         *
+         * @param minInvocation
+         * @return
+         */
         public String toString(int minInvocation) {
             StringBuilder ret = new StringBuilder();
             for (StacktraceWithCount swc : topConsumers) {

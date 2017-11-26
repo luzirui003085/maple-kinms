@@ -30,44 +30,79 @@ import provider.MapleData;
 import provider.MapleDataEntity;
 import provider.WzXML.MapleDataType;
 
+/**
+ *
+ * @author zjj
+ */
 public class MapleCustomQuestData implements MapleData, Serializable {
 
     private static final long serialVersionUID = -8600005891655365066L;
-    private List<MapleCustomQuestData> children = new LinkedList<MapleCustomQuestData>();
+    private List<MapleCustomQuestData> children = new LinkedList<>();
     private String name;
     private Object data;
     private MapleDataEntity parent;
 
+    /**
+     *
+     * @param name
+     * @param data
+     * @param parent
+     */
     public MapleCustomQuestData(String name, Object data, MapleDataEntity parent) {
         this.name = name;
         this.data = data;
         this.parent = parent;
     }
 
+    /**
+     *
+     * @param child
+     */
     public void addChild(MapleData child) {
         children.add((MapleCustomQuestData) child);
     }
 
+    /**
+     *
+     * @return
+     */
+    @Override
     public String getName() {
         return name;
     }
 
+    /**
+     *
+     * @return
+     */
+    @Override
     public MapleDataType getType() {
         return MapleDataType.UNKNOWN_TYPE;
     }
 
+    /**
+     *
+     * @return
+     */
+    @Override
     public List<MapleData> getChildren() {
         MapleData[] ret = new MapleData[children.size()];
         ret = children.toArray(ret);
-        return new ArrayList<MapleData>(Arrays.asList(ret));
+        return new ArrayList<>(Arrays.asList(ret));
     }
 
+    /**
+     *
+     * @param name
+     * @return
+     */
+    @Override
     public MapleData getChildByPath(String name) {
         if (name.equals(this.name)) {
             return this;
         }
         String lookup, nextName;
-        if (name.indexOf("/") == -1) {
+        if (!name.contains("/")) {
             lookup = name;
             nextName = name;
         } else {
@@ -82,14 +117,25 @@ public class MapleCustomQuestData implements MapleData, Serializable {
         return null;
     }
 
+    /**
+     *
+     * @return
+     */
+    @Override
     public Object getData() {
         return data;
     }
 
+    @Override
     public Iterator<MapleData> iterator() {
         return getChildren().iterator();
     }
 
+    /**
+     *
+     * @return
+     */
+    @Override
     public MapleDataEntity getParent() {
         return parent;
     }

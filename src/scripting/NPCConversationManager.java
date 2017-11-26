@@ -1,23 +1,4 @@
-/*
- This file is part of the OdinMS Maple Story Server
- Copyright (C) 2008 ~ 2010 Patrick Huy <patrick.huy@frz.cc> 
- Matthias Butz <matze@odinms.de>
- Jan Christian Meyer <vimes@odinms.de>
 
- This program is free software: you can redistribute it and/or modify
- it under the terms of the GNU Affero General Public License version 3
- as published by the Free Software Foundation. You may not use, modify
- or distribute this program under any other version of the
- GNU Affero General Public License.
-
- This program is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- GNU Affero General Public License for more details.
-
- You should have received a copy of the GNU Affero General Public License
- along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
 package scripting;
 
 import client.*;
@@ -32,7 +13,6 @@ import constants.GameConstants;
 import database.DatabaseConnection;
 import handling.channel.ChannelServer;
 import handling.channel.MapleGuildRanking;
-import handling.channel.handler.HiredMerchantHandler;
 import handling.world.MapleParty;
 import handling.world.MaplePartyCharacter;
 import handling.world.World;
@@ -58,7 +38,6 @@ import server.MapleInventoryManipulator;
 import server.MapleItemInformationProvider;
 import server.MapleShopFactory;
 import server.MapleSquad;
-import server.MapleSquad.MapleSquadType;
 import server.Randomizer;
 import server.Timer.CloneTimer;
 import server.Timer.MapTimer;
@@ -79,6 +58,10 @@ import tools.Pair;
 import tools.StringUtil;
 import tools.packet.PlayerShopPacket;
 
+/**
+ *
+ * @author zjj
+ */
 public class NPCConversationManager extends AbstractPlayerInteraction {
 
     private MapleClient c;
@@ -86,10 +69,19 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     private String getText;
     private byte type; // -1 = NPC, 0 = start quest, 1 = end quest
     private byte lastMsg = -1;
+
+    /**
+     *
+     */
     public boolean pendingDisposal = false;
     private Invocable iv;
     private int wh = 0;
-    public int hyt = 0, dxs = 0;
+    public int hyt = 0,
+
+    /**
+     *
+     */
+    dxs = 0;
 
 
     /*
@@ -97,6 +89,17 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
      * type, Invocable iv) { super(c); this.c = c; this.npc = npc; this.questid
      * = questid; this.type = type; this.iv = iv; }
      */
+
+    /**
+     *
+     * @param c
+     * @param npc
+     * @param questid
+     * @param type
+     * @param iv
+     * @param wh
+     */
+
     public NPCConversationManager(MapleClient c, int npc, int questid, byte type, Invocable iv, int wh) {
         super(c);
         this.c = c;
@@ -107,38 +110,72 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         this.wh = wh;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getwh() {
         return this.wh;
     }
 
+    /**
+     *
+     * @return
+     */
     public Invocable getIv() {
         return iv;
     }
 
+    /**
+     *
+     * @return
+     */
     public String serverName() {
         return c.getChannelServer().getServerName();
     }
 
+    /**
+     *
+     * @return
+     */
     public int getNpc() {
         return npc;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getQuest() {
         return questid;
     }
 
+    /**
+     *
+     * @return
+     */
     public byte getType() {
         return type;
     }
 
+    /**
+     *
+     */
     public void safeDispose() {
         pendingDisposal = true;
     }
 
+    /**
+     *
+     */
     public void dispose() {
         NPCScriptManager.getInstance().dispose(c);
     }
 
+    /**
+     *
+     * @param sel
+     */
     public void askMapSelection(final String sel) {
         if (lastMsg > -1) {
             return;
@@ -147,6 +184,10 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         lastMsg = 0xD;
     }
 
+    /**
+     *
+     * @param text
+     */
     public void sendNext(String text) {
         if (lastMsg > -1) {
             return;
@@ -159,6 +200,11 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         lastMsg = 0;
     }
 
+    /**
+     *
+     * @param text
+     * @param type
+     */
     public void sendNextS(String text, byte type) {
         if (lastMsg > -1) {
             return;
@@ -171,6 +217,10 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         lastMsg = 0;
     }
 
+    /**
+     *
+     * @param text
+     */
     public void sendPrev(String text) {
         if (lastMsg > -1) {
             return;
@@ -183,6 +233,11 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         lastMsg = 0;
     }
 
+    /**
+     *
+     * @param text
+     * @param type
+     */
     public void sendPrevS(String text, byte type) {
         if (lastMsg > -1) {
             return;
@@ -195,6 +250,10 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         lastMsg = 0;
     }
 
+    /**
+     *
+     * @param text
+     */
     public void sendNextPrev(String text) {
         if (lastMsg > -1) {
             return;
@@ -207,14 +266,27 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         lastMsg = 0;
     }
 
+    /**
+     *
+     * @param text
+     */
     public void PlayerToNpc(String text) {
         sendNextPrevS(text, (byte) 3);
     }
 
+    /**
+     *
+     * @param text
+     */
     public void sendNextPrevS(String text) {
         sendNextPrevS(text, (byte) 3);
     }
 
+    /**
+     *
+     * @param text
+     * @param type
+     */
     public void sendNextPrevS(String text, byte type) {
         if (lastMsg > -1) {
             return;
@@ -227,6 +299,10 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         lastMsg = 0;
     }
 
+    /**
+     *
+     * @param text
+     */
     public void sendOk(String text) {
         if (lastMsg > -1) {
             return;
@@ -239,6 +315,11 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         lastMsg = 0;
     }
 
+    /**
+     *
+     * @param text
+     * @param type
+     */
     public void sendOkS(String text, byte type) {
         if (lastMsg > -1) {
             return;
@@ -251,6 +332,10 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         lastMsg = 0;
     }
 
+    /**
+     *
+     * @param text
+     */
     public void sendYesNo(String text) {
         if (lastMsg > -1) {
             return;
@@ -263,6 +348,11 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         lastMsg = 1;
     }
 
+    /**
+     *
+     * @param text
+     * @param type
+     */
     public void sendYesNoS(String text, byte type) {
         if (lastMsg > -1) {
             return;
@@ -275,14 +365,26 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         lastMsg = 1;
     }
 
+    /**
+     *
+     * @param text
+     */
     public void sendAcceptDecline(String text) {
         askAcceptDecline(text);
     }
 
+    /**
+     *
+     * @param text
+     */
     public void sendAcceptDeclineNoESC(String text) {
         askAcceptDeclineNoESC(text);
     }
 
+    /**
+     *
+     * @param text
+     */
     public void askAcceptDecline(String text) {
         if (lastMsg > -1) {
             return;
@@ -295,6 +397,10 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         lastMsg = 0xB;
     }
 
+    /**
+     *
+     * @param text
+     */
     public void askAcceptDeclineNoESC(String text) {
         if (lastMsg > -1) {
             return;
@@ -307,6 +413,12 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         lastMsg = 0xC;
     }
 
+    /**
+     *
+     * @param text
+     * @param card
+     * @param args
+     */
     public void askAvatar(String text, int card, int... args) {
         if (lastMsg > -1) {
             return;
@@ -315,6 +427,10 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         lastMsg = 7;
     }
 
+    /**
+     *
+     * @param text
+     */
     public void sendSimple(String text) {
         if (lastMsg > -1) {
             return;
@@ -327,6 +443,11 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         lastMsg = 4;
     }
 
+    /**
+     *
+     * @param text
+     * @param type
+     */
     public void sendSimpleS(String text, byte type) {
         if (lastMsg > -1) {
             return;
@@ -339,6 +460,12 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         lastMsg = 4;
     }
 
+    /**
+     *
+     * @param text
+     * @param caid
+     * @param styles
+     */
     public void sendStyle(String text, int caid, int styles[]) {
         if (lastMsg > -1) {
             return;
@@ -347,6 +474,13 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         lastMsg = 7;
     }
 
+    /**
+     *
+     * @param text
+     * @param def
+     * @param min
+     * @param max
+     */
     public void sendGetNumber(String text, int def, int min, int max) {
         if (lastMsg > -1) {
             return;
@@ -359,6 +493,12 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         lastMsg = 3;
     }
 
+    /**
+     *
+     * @param slot
+     * @param lock
+     * @return
+     */
     public IItem lockitem(int slot, boolean lock) {
         byte set = 0;
         byte eqslot = (byte) slot;
@@ -380,6 +520,12 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         return nEquip;
     }
 
+    /**
+     *
+     * @param slot
+     * @param lock
+     * @return
+     */
     public IItem itemqh(int slot, byte lock) {
         byte eqslot = (byte) slot;
         Equip nEquip = (Equip) c.getPlayer().getInventory(MapleInventoryType.EQUIP).getItem(eqslot);
@@ -400,6 +546,10 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         return nEquip;
     }
 
+    /**
+     *
+     * @param text
+     */
     public void sendGetText(String text) {
         if (lastMsg > -1) {
             return;
@@ -416,40 +566,76 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         lastMsg = 2;
     }
 
+    /**
+     *
+     * @param text
+     * @param type
+     */
     public void sendCY1(String text, byte type) {
         getClient().getSession().write(MaplePacketCreator.getCY1(npc, text, type));
     }
 
+    /**
+     *
+     * @param text
+     * @param type
+     */
     public void sendCY2(String text, byte type) {
         getClient().getSession().write(MaplePacketCreator.getCY2(npc, text, type));
     }
 
+    /**
+     *
+     * @param text
+     */
     public void setGetText(String text) {
         this.getText = text;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getText() {
         return getText;
     }
 
+    /**
+     *
+     * @param hair
+     */
     public void setHair(int hair) {
         getPlayer().setHair(hair);
         getPlayer().updateSingleStat(MapleStat.HAIR, hair);
         getPlayer().equipChanged();
     }
 
+    /**
+     *
+     * @param face
+     */
     public void setFace(int face) {
         getPlayer().setFace(face);
         getPlayer().updateSingleStat(MapleStat.FACE, face);
         getPlayer().equipChanged();
     }
 
+    /**
+     *
+     * @param color
+     */
     public void setSkin(int color) {
         getPlayer().setSkinColor((byte) color);
         getPlayer().updateSingleStat(MapleStat.SKIN, color);
         getPlayer().equipChanged();
     }
 
+    /**
+     *
+     * @param ticket
+     * @param args_all
+     * @return
+     */
     public int setRandomAvatar(int ticket, int[] args_all) {
         if (!haveItem(ticket)) {
             return -1;
@@ -472,6 +658,12 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         return 1;
     }
 
+    /**
+     *
+     * @param ticket
+     * @param args
+     * @return
+     */
     public int setAvatar(int ticket, int args) {
         if (!haveItem(ticket)) {
             return -1;
@@ -493,19 +685,39 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         return 1;
     }
 
+    /**
+     *
+     */
     public void sendStorage() {
         c.getPlayer().setConversation(4);
         c.getPlayer().getStorage().sendStorage(c, npc);
     }
 
+    /**
+     *
+     * @param id
+     */
     public void openShop(int id) {
         MapleShopFactory.getInstance().getShop(id).sendShop(c);
     }
 
+    /**
+     *
+     * @param id
+     * @param quantity
+     * @return
+     */
     public int gainGachaponItem(int id, int quantity) {
         return gainGachaponItem(id, quantity, c.getPlayer().getMap().getStreetName() + " - " + c.getPlayer().getMap().getMapName());
     }
 
+    /**
+     *
+     * @param id
+     * @param quantity
+     * @param msg
+     * @return
+     */
     public int gainGachaponItem(int id, int quantity, final String msg) {
         try {
             if (!MapleItemInformationProvider.getInstance().itemExists(id)) {
@@ -527,6 +739,15 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         return -1;
     }
 
+    /**
+     *
+     * @param id
+     * @param quantity
+     * @param msg
+     * @param 概率
+     * @param 时间
+     * @return
+     */
     public int gainGachaponItem(int id, int quantity, final String msg, int 概率, long 时间) {
         try {
             if (!MapleItemInformationProvider.getInstance().itemExists(id)) {
@@ -549,6 +770,14 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         return -1;
     }
 
+    /**
+     *
+     * @param id
+     * @param quantity
+     * @param msg
+     * @param 概率
+     * @return
+     */
     public int gainGachaponItem(int id, int quantity, final String msg, int 概率) {
         try {
             if (!MapleItemInformationProvider.getInstance().itemExists(id)) {
@@ -571,70 +800,135 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         return -1;
     }
 
+    /**
+     *
+     * @param job
+     */
     public void changeJob(int job) {
         c.getPlayer().changeJob(job);
     }
 
+    /**
+     *
+     * @param id
+     */
     public void startQuest(int id) {
         MapleQuest.getInstance(id).start(getPlayer(), npc);
     }
 
+    /**
+     *
+     * @param id
+     */
+    @Override
     public void completeQuest(int id) {
         MapleQuest.getInstance(id).complete(getPlayer(), npc);
     }
 
+    /**
+     *
+     * @param id
+     */
     public void forfeitQuest(int id) {
         MapleQuest.getInstance(id).forfeit(getPlayer());
     }
 
+    /**
+     *
+     */
     public void forceStartQuest() {
         MapleQuest.getInstance(questid).forceStart(getPlayer(), getNpc(), null);
     }
 
+    /**
+     *
+     * @param id
+     */
+    @Override
     public void forceStartQuest(int id) {
         MapleQuest.getInstance(id).forceStart(getPlayer(), getNpc(), null);
     }
 
+    /**
+     *
+     * @param customData
+     */
     public void forceStartQuest(String customData) {
         MapleQuest.getInstance(questid).forceStart(getPlayer(), getNpc(), customData);
     }
 
+    /**
+     *
+     */
     public void forceCompleteQuest() {
         MapleQuest.getInstance(questid).forceComplete(getPlayer(), getNpc());
     }
 
+    /**
+     *
+     * @param id
+     */
+    @Override
     public void forceCompleteQuest(final int id) {
         MapleQuest.getInstance(id).forceComplete(getPlayer(), getNpc());
     }
 
+    /**
+     *
+     * @return
+     */
     public String getQuestCustomData() {
         return c.getPlayer().getQuestNAdd(MapleQuest.getInstance(questid)).getCustomData();
     }
 
+    /**
+     *
+     * @param customData
+     */
     public void setQuestCustomData(String customData) {
         getPlayer().getQuestNAdd(MapleQuest.getInstance(questid)).setCustomData(customData);
     }
 
+    /**
+     *
+     * @return
+     */
     public int getLevel() {
         return getPlayer().getLevel();
     }
 
+    /**
+     *
+     * @return
+     */
     public int getMeso() {
         return getPlayer().getMeso();
     }
 
+    /**
+     *
+     * @param amount
+     */
     public void gainAp(final int amount) {
         c.getPlayer().gainAp((short) amount);
     }
 
+    /**
+     *
+     * @param type
+     * @param amt
+     */
     public void expandInventory(byte type, int amt) {
         c.getPlayer().expandInventory(type, amt);
     }
 
+    /**
+     *
+     */
     public void unequipEverything() {
         MapleInventory equipped = getPlayer().getInventory(MapleInventoryType.EQUIPPED);
         MapleInventory equip = getPlayer().getInventory(MapleInventoryType.EQUIP);
-        List<Short> ids = new LinkedList<Short>();
+        List<Short> ids = new LinkedList<>();
         for (IItem item : equipped.list()) {
             ids.add(item.getPosition());
         }
@@ -643,6 +937,9 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         }
     }
 
+    /**
+     *
+     */
     public final void clearSkills() {
         Map<ISkill, SkillEntry> skills = getPlayer().getSkills();
         for (Entry<ISkill, SkillEntry> skill : skills.entrySet()) {
@@ -650,6 +947,11 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         }
     }
 
+    /**
+     *
+     * @param skillid
+     * @return
+     */
     public boolean hasSkill(int skillid) {
         ISkill theSkill = SkillFactory.getSkill(skillid);
         if (theSkill != null) {
@@ -658,6 +960,11 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         return false;
     }
 
+    /**
+     *
+     * @param broadcast
+     * @param effect
+     */
     public void showEffect(boolean broadcast, String effect) {
         if (broadcast) {
             c.getPlayer().getMap().broadcastMessage(MaplePacketCreator.showEffect(effect));
@@ -666,6 +973,11 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         }
     }
 
+    /**
+     *
+     * @param broadcast
+     * @param sound
+     */
     public void playSound(boolean broadcast, String sound) {
         if (broadcast) {
             c.getPlayer().getMap().broadcastMessage(MaplePacketCreator.playSound(sound));
@@ -674,6 +986,11 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         }
     }
 
+    /**
+     *
+     * @param broadcast
+     * @param env
+     */
     public void environmentChange(boolean broadcast, String env) {//环境变化
         if (broadcast) {
             c.getPlayer().getMap().broadcastMessage(MaplePacketCreator.environmentChange(env, 2));
@@ -682,14 +999,26 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         }
     }
 
+    /**
+     *
+     * @param capacity
+     */
     public void updateBuddyCapacity(int capacity) {
         c.getPlayer().setBuddyCapacity((byte) capacity);
     }
 
+    /**
+     *
+     * @return
+     */
     public int getBuddyCapacity() {
         return c.getPlayer().getBuddyCapacity();
     }
 
+    /**
+     *
+     * @return
+     */
     public int partyMembersInMap() {
         int inMap = 0;
         for (MapleCharacter char2 : getPlayer().getMap().getCharactersThreadsafe()) {
@@ -700,11 +1029,15 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         return inMap;
     }
 
+    /**
+     *
+     * @return
+     */
     public List<MapleCharacter> getPartyMembers() {
         if (getPlayer().getParty() == null) {
             return null;
         }
-        List<MapleCharacter> chars = new LinkedList<MapleCharacter>(); // creates an empty array full of shit..
+        List<MapleCharacter> chars = new LinkedList<>(); // creates an empty array full of shit..
         for (MaplePartyCharacter chr : getPlayer().getParty().getMembers()) {
             for (ChannelServer channel : ChannelServer.getAllInstances()) {
                 MapleCharacter ch = channel.getPlayerStorage().getCharacterById(chr.getId());
@@ -716,6 +1049,11 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         return chars;
     }
 
+    /**
+     *
+     * @param mapId
+     * @param exp
+     */
     public void warpPartyWithExp(int mapId, int exp) {
         MapleMap target = getMap(mapId);
         for (MaplePartyCharacter chr : getPlayer().getParty().getMembers()) {
@@ -727,6 +1065,12 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         }
     }
 
+    /**
+     *
+     * @param mapId
+     * @param exp
+     * @param meso
+     */
     public void warpPartyWithExpMeso(int mapId, int exp, int meso) {
         MapleMap target = getMap(mapId);
         for (MaplePartyCharacter chr : getPlayer().getParty().getMembers()) {
@@ -739,10 +1083,20 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         }
     }
 
+    /**
+     *
+     * @param type
+     * @return
+     */
     public MapleSquad getSquad(String type) {
         return c.getChannelServer().getMapleSquad(type);
     }
 
+    /**
+     *
+     * @param type
+     * @return
+     */
     public int getSquadAvailability(String type) {
         final MapleSquad squad = c.getChannelServer().getMapleSquad(type);
         if (squad == null) {
@@ -751,6 +1105,13 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         return squad.getStatus();
     }
 
+    /**
+     *
+     * @param type
+     * @param minutes
+     * @param startText
+     * @return
+     */
     public boolean registerSquad(String type, int minutes, String startText) {
         if (c.getChannelServer().getMapleSquad(type) == null) {
             final MapleSquad squad = new MapleSquad(c.getChannel(), type, c.getPlayer(), minutes * 60 * 1000, startText);
@@ -768,22 +1129,36 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         return false;
     }
 
+    /**
+     *
+     * @param type
+     * @param type_
+     * @return
+     */
     public boolean getSquadList(String type, byte type_) {
 //        try {
         final MapleSquad squad = c.getChannelServer().getMapleSquad(type);
         if (squad == null) {
             return false;
         }
-        if (type_ == 0 || type_ == 3) { // Normal viewing
-            sendNext(squad.getSquadMemberString(type_));
-        } else if (type_ == 1) { // Squad Leader banning, Check out banned participant
-            sendSimple(squad.getSquadMemberString(type_));
-        } else if (type_ == 2) {
-            if (squad.getBannedMemberSize() > 0) {
-                sendSimple(squad.getSquadMemberString(type_));
-            } else {
+        switch (type_) {
+            case 0:
+            case 3:
+                // Normal viewing
                 sendNext(squad.getSquadMemberString(type_));
-            }
+                break;
+            case 1:
+                // Squad Leader banning, Check out banned participant
+                sendSimple(squad.getSquadMemberString(type_));
+                break;
+            case 2:
+                if (squad.getBannedMemberSize() > 0) {
+                    sendSimple(squad.getSquadMemberString(type_));
+                } else {
+                    sendNext(squad.getSquadMemberString(type_));
+                }   break;
+            default:
+                break;
         }
         return true;
         /*
@@ -793,6 +1168,11 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
          */
     }
 
+    /**
+     *
+     * @param type
+     * @return
+     */
     public byte isSquadLeader(String type) {
         final MapleSquad squad = c.getChannelServer().getMapleSquad(type);
         if (squad == null) {
@@ -804,6 +1184,12 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         }
     }
 
+    /**
+     *
+     * @param eim
+     * @param squad
+     * @return
+     */
     public boolean reAdd(String eim, String squad) {
         EventInstanceManager eimz = getDisconnected(eim);
         MapleSquad squadz = getSquad(squad);
@@ -815,6 +1201,11 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         return false;
     }
 
+    /**
+     *
+     * @param type
+     * @param pos
+     */
     public void banMember(String type, int pos) {
         final MapleSquad squad = c.getChannelServer().getMapleSquad(type);
         if (squad != null) {
@@ -822,6 +1213,11 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         }
     }
 
+    /**
+     *
+     * @param type
+     * @param pos
+     */
     public void acceptMember(String type, int pos) {
         final MapleSquad squad = c.getChannelServer().getMapleSquad(type);
         if (squad != null) {
@@ -829,10 +1225,22 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         }
     }
 
+    /**
+     *
+     * @param startMillis
+     * @param endMillis
+     * @return
+     */
     public String getReadableMillis(long startMillis, long endMillis) {
         return StringUtil.getReadableMillis(startMillis, endMillis);
     }
 
+    /**
+     *
+     * @param type
+     * @param join
+     * @return
+     */
     public int addMember(String type, boolean join) {
         final MapleSquad squad = c.getChannelServer().getMapleSquad(type);
         if (squad != null) {
@@ -841,6 +1249,11 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         return -1;
     }
 
+    /**
+     *
+     * @param type
+     * @return
+     */
     public byte isSquadMember(String type) {
         final MapleSquad squad = c.getChannelServer().getMapleSquad(type);
         if (squad == null) {
@@ -854,14 +1267,24 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         }
     }
 
+    /**
+     *
+     */
     public void resetReactors() {
         getPlayer().getMap().resetReactors();
     }
 
+    /**
+     *
+     * @param code
+     */
     public void genericGuildMessage(int code) {
         c.getSession().write(MaplePacketCreator.genericGuildMessage((byte) code));
     }
 
+    /**
+     *
+     */
     public void disbandGuild() {
         final int gid = c.getPlayer().getGuildId();
         if (gid <= 0 || c.getPlayer().getGuildRank() != 1) {
@@ -870,6 +1293,9 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         World.Guild.disbandGuild(gid);
     }
 
+    /**
+     *
+     */
     public void increaseGuildCapacity() {
         if (c.getPlayer().getMeso() < 2500000) {
             c.getSession().write(MaplePacketCreator.serverNotice(1, "You do not have enough mesos."));
@@ -883,10 +1309,17 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         c.getPlayer().gainMeso(-2500000, true, false, true);
     }
 
+    /**
+     *
+     */
     public void displayGuildRanks() {
         c.getSession().write(MaplePacketCreator.showGuildRanks(npc, MapleGuildRanking.getInstance().getRank()));
     }
 
+    /**
+     *
+     * @return
+     */
     public boolean removePlayerFromInstance() {
         if (c.getPlayer().getEventInstance() != null) {
             c.getPlayer().getEventInstance().removePlayer(c.getPlayer());
@@ -895,13 +1328,20 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         return false;
     }
 
+    /**
+     *
+     * @return
+     */
     public boolean isPlayerInstance() {
-        if (c.getPlayer().getEventInstance() != null) {
-            return true;
-        }
-        return false;
+        return c.getPlayer().getEventInstance() != null;
     }
 
+    /**
+     *
+     * @param slot
+     * @param type
+     * @param amount
+     */
     public void changeStat(byte slot, int type, short amount) {
         Equip sel = (Equip) c.getPlayer().getInventory(MapleInventoryType.EQUIPPED).getItem(slot);
         switch (type) {
@@ -980,6 +1420,9 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         c.getPlayer().equipChanged();
     }
 
+    /**
+     *
+     */
     public void killAllMonsters() {
         MapleMap map = c.getPlayer().getMap();
         double range = Double.POSITIVE_INFINITY;
@@ -997,6 +1440,9 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
          */
     }
 
+    /**
+     *
+     */
     public void giveMerchantMesos() {
         long mesos = 0;
         try {
@@ -1024,13 +1470,20 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         c.getPlayer().gainMeso((int) mesos, true);
     }
 
+    /**
+     *
+     */
     public void dc() {
-        MapleCharacter victim = c.getChannelServer().getPlayerStorage().getCharacterByName(c.getPlayer().getName().toString());
+        MapleCharacter victim = c.getChannelServer().getPlayerStorage().getCharacterByName(c.getPlayer().getName());
         victim.getClient().getSession().close();
         victim.getClient().disconnect(true, false);
 
     }
 
+    /**
+     *
+     * @return
+     */
     public long getMerchantMesos() {
         long mesos = 0;
         try {
@@ -1052,16 +1505,25 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         return mesos;
     }
 
+    /**
+     *
+     */
     public void openDuey() {
         c.getPlayer().setConversation(2);
         c.getSession().write(MaplePacketCreator.sendDuey((byte) 9, null));
     }
 
+    /**
+     *
+     */
     public void openMerchantItemStore() {
         c.getPlayer().setConversation(3);
         c.getSession().write(PlayerShopPacket.merchItemStore((byte) 0x22));
     }
 
+    /**
+     *
+     */
     public void openMerchantItemStore1() {
         final MerchItemPackage pack = loadItemFrom_Database(c.getPlayer().getId(), c.getPlayer().getAccountID());
         //c.getPlayer().setConversation(3);
@@ -1095,7 +1557,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
 
             Map<Integer, Pair<IItem, MapleInventoryType>> items = ItemLoader.HIRED_MERCHANT.loadItems(false, charid);
             if (items != null) {
-                List<IItem> iters = new ArrayList<IItem>();
+                List<IItem> iters = new ArrayList<>();
                 for (Pair<IItem, MapleInventoryType> z : items.values()) {
                     iters.add(z.left);
                 }
@@ -1109,22 +1571,43 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         }
     }
 
+    /**
+     *
+     */
     public void sendRepairWindow() {
         c.getSession().write(MaplePacketCreator.sendRepairWindow(npc));
     }
 
+    /**
+     *
+     * @return
+     */
     public final int getDojoPoints() {
         return c.getPlayer().getDojo();
     }
 
+    /**
+     *
+     * @return
+     */
     public final int getDojoRecord() {
         return c.getPlayer().getDojoRecord();
     }
 
+    /**
+     *
+     * @param reset
+     */
     public void setDojoRecord(final boolean reset) {
         c.getPlayer().setDojoRecord(reset);
     }
 
+    /**
+     *
+     * @param dojo
+     * @param party
+     * @return
+     */
     public boolean start_DojoAgent(final boolean dojo, final boolean party) {
         if (dojo) {
             return Event_DojoAgent.warpStartDojo(c.getPlayer(), party);
@@ -1132,6 +1615,11 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         return Event_DojoAgent.warpStartAgent(c.getPlayer(), party);
     }
 
+    /**
+     *
+     * @param pyramid
+     * @return
+     */
     public boolean start_PyramidSubway(final int pyramid) {
         if (pyramid >= 0) {
             return Event_PyramidSubway.warpStartPyramid(c.getPlayer(), pyramid);
@@ -1139,6 +1627,11 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         return Event_PyramidSubway.warpStartSubway(c.getPlayer());
     }
 
+    /**
+     *
+     * @param pyramid
+     * @return
+     */
     public boolean bonus_PyramidSubway(final int pyramid) {
         if (pyramid >= 0) {
             return Event_PyramidSubway.warpBonusPyramid(c.getPlayer(), pyramid);
@@ -1146,26 +1639,50 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         return Event_PyramidSubway.warpBonusSubway(c.getPlayer());
     }
 
+    /**
+     *
+     * @return
+     */
     public final short getKegs() {
         return AramiaFireWorks.getInstance().getKegsPercentage();
     }
 
+    /**
+     *
+     * @param kegs
+     */
     public void giveKegs(final int kegs) {//未知副本
         AramiaFireWorks.getInstance().giveKegs(c.getPlayer(), kegs);
     }
 
+    /**
+     *
+     * @return
+     */
     public final short getSunshines() {
         return AramiaFireWorks.getInstance().getSunsPercentage();
     }
 
+    /**
+     *
+     * @param kegs
+     */
     public void addSunshines(final int kegs) {
         AramiaFireWorks.getInstance().giveSuns(c.getPlayer(), kegs);
     }
 
+    /**
+     *
+     * @return
+     */
     public final short getDecorations() {
         return AramiaFireWorks.getInstance().getDecsPercentage();
     }
 
+    /**
+     *
+     * @param kegs
+     */
     public void addDecorations(final int kegs) {
         try {
             AramiaFireWorks.getInstance().giveDecs(c.getPlayer(), kegs);
@@ -1174,28 +1691,53 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         }
     }
 
+    /**
+     *
+     * @param type
+     * @return
+     */
     public final MapleInventory getInventory(int type) {
         return c.getPlayer().getInventory(MapleInventoryType.getByType((byte) type));
     }
 
+    /**
+     *
+     * @return
+     */
     public final MapleCarnivalParty getCarnivalParty() {
         return c.getPlayer().getCarnivalParty();
     }
 
+    /**
+     *
+     * @return
+     */
     public final MapleCarnivalChallenge getNextCarnivalRequest() {
         return c.getPlayer().getNextCarnivalRequest();
     }
 
+    /**
+     *
+     * @param chr
+     * @return
+     */
     public final MapleCarnivalChallenge getCarnivalChallenge(MapleCharacter chr) {
         return new MapleCarnivalChallenge(chr);
     }
 
+    /**
+     *
+     * @param hp
+     */
     public void setHP(short hp) {
         c.getPlayer().getStat().setHp(hp);
     }
 
+    /**
+     *
+     */
     public void maxStats() {
-        List<Pair<MapleStat, Integer>> statup = new ArrayList<Pair<MapleStat, Integer>>(2);
+        List<Pair<MapleStat, Integer>> statup = new ArrayList<>(2);
         c.getPlayer().getStat().setStr((short) 32767);
         c.getPlayer().getStat().setDex((short) 32767);
         c.getPlayer().getStat().setInt((short) 32767);
@@ -1206,18 +1748,23 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         c.getPlayer().getStat().setHp((short) 30000);
         c.getPlayer().getStat().setMp((short) 30000);
 
-        statup.add(new Pair<MapleStat, Integer>(MapleStat.STR, Integer.valueOf(32767)));
-        statup.add(new Pair<MapleStat, Integer>(MapleStat.DEX, Integer.valueOf(32767)));
-        statup.add(new Pair<MapleStat, Integer>(MapleStat.LUK, Integer.valueOf(32767)));
-        statup.add(new Pair<MapleStat, Integer>(MapleStat.INT, Integer.valueOf(32767)));
-        statup.add(new Pair<MapleStat, Integer>(MapleStat.HP, Integer.valueOf(30000)));
-        statup.add(new Pair<MapleStat, Integer>(MapleStat.MAXHP, Integer.valueOf(30000)));
-        statup.add(new Pair<MapleStat, Integer>(MapleStat.MP, Integer.valueOf(30000)));
-        statup.add(new Pair<MapleStat, Integer>(MapleStat.MAXMP, Integer.valueOf(30000)));
+        statup.add(new Pair<>(MapleStat.STR, Integer.valueOf(32767)));
+        statup.add(new Pair<>(MapleStat.DEX, Integer.valueOf(32767)));
+        statup.add(new Pair<>(MapleStat.LUK, Integer.valueOf(32767)));
+        statup.add(new Pair<>(MapleStat.INT, Integer.valueOf(32767)));
+        statup.add(new Pair<>(MapleStat.HP, Integer.valueOf(30000)));
+        statup.add(new Pair<>(MapleStat.MAXHP, Integer.valueOf(30000)));
+        statup.add(new Pair<>(MapleStat.MP, Integer.valueOf(30000)));
+        statup.add(new Pair<>(MapleStat.MAXMP, Integer.valueOf(30000)));
 
         c.getSession().write(MaplePacketCreator.updatePlayerStats(statup, c.getPlayer().getJob()));
     }
 
+    /**
+     *
+     * @param typ
+     * @return
+     */
     public Pair<String, Map<Integer, String>> getSpeedRun(String typ) {
         final SpeedRunType type = SpeedRunType.valueOf(typ);
         if (SpeedRunner.getInstance().getSpeedRunData(type) != null) {
@@ -1226,6 +1773,12 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         return new Pair<String, Map<Integer, String>>("", new HashMap<Integer, String>());
     }
 
+    /**
+     *
+     * @param ma
+     * @param sel
+     * @return
+     */
     public boolean getSR(Pair<String, Map<Integer, String>> ma, int sel) {
         if (ma.getRight().get(sel) == null || ma.getRight().get(sel).length() <= 0) {
             dispose();
@@ -1235,16 +1788,30 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         return true;
     }
 
+    /**
+     *
+     * @param itemid
+     * @return
+     */
     public Equip getEquip(int itemid) {
         return (Equip) MapleItemInformationProvider.getInstance().getEquipById(itemid);
     }
 
+    /**
+     *
+     * @param statsSel
+     * @param expire
+     */
     public void setExpiration(Object statsSel, long expire) {
         if (statsSel instanceof Equip) {
             ((Equip) statsSel).setExpiration(System.currentTimeMillis() + (expire * 24 * 60 * 60 * 1000));
         }
     }
 
+    /**
+     *
+     * @param statsSel
+     */
     public void setLock(Object statsSel) {
         if (statsSel instanceof Equip) {
             Equip eq = (Equip) statsSel;
@@ -1256,6 +1823,11 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         }
     }
 
+    /**
+     *
+     * @param statsSel
+     * @return
+     */
     public boolean addFromDrop(Object statsSel) {
         if (statsSel instanceof IItem) {
             final IItem it = (IItem) statsSel;
@@ -1264,10 +1836,29 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         return false;
     }
 
+    /**
+     *
+     * @param slot
+     * @param invType
+     * @param statsSel
+     * @param offset
+     * @param type
+     * @return
+     */
     public boolean replaceItem(int slot, int invType, Object statsSel, int offset, String type) {
         return replaceItem(slot, invType, statsSel, offset, type, false);
     }
 
+    /**
+     *
+     * @param slot
+     * @param invType
+     * @param statsSel
+     * @param offset
+     * @param type
+     * @param takeSlot
+     * @return
+     */
     public boolean replaceItem(int slot, int invType, Object statsSel, int offset, String type, boolean takeSlot) {
         MapleInventoryType inv = MapleInventoryType.getByType((byte) invType);
         if (inv == null) {
@@ -1343,14 +1934,33 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         return MapleInventoryManipulator.addFromDrop(getClient(), item, false);
     }
 
+    /**
+     *
+     * @param slot
+     * @param invType
+     * @param statsSel
+     * @param upgradeSlots
+     * @return
+     */
     public boolean replaceItem(int slot, int invType, Object statsSel, int upgradeSlots) {
         return replaceItem(slot, invType, statsSel, upgradeSlots, "Slots");
     }
 
+    /**
+     *
+     * @param itemId
+     * @return
+     */
     public boolean isCash(final int itemId) {
         return MapleItemInformationProvider.getInstance().isCash(itemId);
     }
 
+    /**
+     *
+     * @param buff
+     * @param duration
+     * @param msg
+     */
     public void buffGuild(final int buff, final int duration, final String msg) {
         MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
         if (ii.getItemEffect(buff) != null && getPlayer().getGuildId() > 0) {
@@ -1366,6 +1976,11 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         }
     }
 
+    /**
+     *
+     * @param alliancename
+     * @return
+     */
     public boolean createAlliance(String alliancename) {
         MapleParty pt = c.getPlayer().getParty();
         MapleCharacter otherChar = c.getChannelServer().getPlayerStorage().getCharacterById(pt.getMemberByIndex(1).getId());
@@ -1380,6 +1995,10 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         }
     }
 
+    /**
+     *
+     * @return
+     */
     public boolean addCapacityToAlliance() {
         try {
             final MapleGuild gs = World.Guild.getGuild(c.getPlayer().getGuildId());
@@ -1395,6 +2014,10 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         return false;
     }
 
+    /**
+     *
+     * @return
+     */
     public boolean disbandAlliance() {
         try {
             final MapleGuild gs = World.Guild.getGuild(c.getPlayer().getGuildId());
@@ -1409,22 +2032,43 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         return false;
     }
 
+    /**
+     *
+     * @return
+     */
     public byte getLastMsg() {
         return lastMsg;
     }
 
+    /**
+     *
+     * @param last
+     */
     public final void setLastMsg(final byte last) {
         this.lastMsg = last;
     }
 
+    /**
+     *
+     * @param bossid
+     * @return
+     */
     public int getBossLog(String bossid) {
         return getPlayer().getBossLog(bossid);
     }
 
+    /**
+     *
+     * @param bossid
+     */
     public void setBossLog(String bossid) {
         getPlayer().setBossLog(bossid);
     }
 
+    /**
+     *
+     * @param bossid
+     */
     public final void givePartyBossLog(String bossid) {
         if (getPlayer().getParty() == null || getPlayer().getParty().getMembers().size() == 1) {
             setBossLog(bossid);
@@ -1438,6 +2082,12 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         }
     }
 
+    /**
+     *
+     * @param bossid
+     * @param b
+     * @return
+     */
     public final boolean getPartyBossLog(String bossid, int b) {
         int a = 0;
         int c = 0;
@@ -1451,12 +2101,12 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
                 a++;
             }
         }
-        if (a == c) {
-            return true;
-        }
-        return false;
+        return a == c;
     }
 
+    /**
+     *
+     */
     public final void maxAllSkills() {
         for (ISkill skil : SkillFactory.getAllSkills()) {
             if (GameConstants.isApplicableSkill(skil.getId())) { //no db/additionals/resistance skills
@@ -1465,10 +2115,24 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         }
     }
 
+    /**
+     *
+     * @param str
+     * @param dex
+     * @param z
+     * @param luk
+     */
     public final void resetStats(int str, int dex, int z, int luk) {
         c.getPlayer().resetStats(str, dex, z, luk);
     }
 
+    /**
+     *
+     * @param slot
+     * @param invType
+     * @param quantity
+     * @return
+     */
     public final boolean dropItem(int slot, int invType, int quantity) {
         MapleInventoryType inv = MapleInventoryType.getByType((byte) invType);
         if (inv == null) {
@@ -1477,10 +2141,19 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         return MapleInventoryManipulator.drop(c, inv, (short) slot, (short) quantity, true);
     }
 
+    /**
+     *
+     * @return
+     */
     public final List<Integer> getAllPotentialInfo() {
-        return new ArrayList<Integer>(MapleItemInformationProvider.getInstance().getAllPotentialInfo().keySet());
+        return new ArrayList<>(MapleItemInformationProvider.getInstance().getAllPotentialInfo().keySet());
     }
 
+    /**
+     *
+     * @param id
+     * @return
+     */
     public final String getPotentialInfo(final int id) {
         final List<StructPotentialItem> potInfo = MapleItemInformationProvider.getInstance().getPotentialInfo(id);
         final StringBuilder builder = new StringBuilder("#b#ePOTENTIAL INFO FOR ID: ");
@@ -1501,19 +2174,33 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         return builder.toString();
     }
 
+    /**
+     *
+     */
     public final void sendRPS() {
         c.getSession().write(MaplePacketCreator.getRPSMode((byte) 8, -1, -1, -1));
     }
 
+    /**
+     *
+     * @param ch
+     * @param questid
+     * @param data
+     */
     public final void setQuestRecord(Object ch, final int questid, final String data) {
         ((MapleCharacter) ch).getQuestNAdd(MapleQuest.getInstance(questid)).setCustomData(data);
     }
 
+    /**
+     *
+     * @param ch
+     */
     public final void doWeddingEffect(final Object ch) {
         final MapleCharacter chr = (MapleCharacter) ch;
         getMap().broadcastMessage(MaplePacketCreator.yellowChat(getPlayer().getName() + ", do you take " + chr.getName() + " as your wife and promise to stay beside her through all downtimes, crashes, and lags?"));
         CloneTimer.getInstance().schedule(new Runnable() {
 
+            @Override
             public void run() {
                 if (chr == null || getPlayer() == null) {
                     warpMap(680000500, 0);
@@ -1524,6 +2211,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         }, 10000);
         CloneTimer.getInstance().schedule(new Runnable() {
 
+            @Override
             public void run() {
                 if (chr == null || getPlayer() == null) {
                     if (getPlayer() != null) {
@@ -1556,56 +2244,113 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         }, 20000); //10 sec 10 sec
     }
 
+    /**
+     *
+     * @param type
+     */
     public void openDD(int type) {
         c.getSession().write(MaplePacketCreator.openBeans(getPlayer().getBeans(), type));
     }
 
+    /**
+     *
+     * @param text
+     */
     public void worldMessage(String text) {
         World.Broadcast.broadcastMessage(MaplePacketCreator.serverNotice(6, text).getBytes());
     }
 
+    /**
+     *
+     * @return
+     */
     public int getBeans() {
         return getClient().getPlayer().getBeans();
     }
 
+    /**
+     *
+     * @param s
+     */
     public void gainBeans(int s) {
         getPlayer().gainBeans(s);
         c.getSession().write(MaplePacketCreator.updateBeans(c.getPlayer().getId(), s));
     }
 
+    /**
+     *
+     * @param type
+     * @return
+     */
     public int getHyPay(int type) {
         return getPlayer().getHyPay(type);
     }
 
+    /**
+     *
+     * @param ss
+     */
     public void szhs(String ss) {
         c.getSession().write(MaplePacketCreator.游戏屏幕中间黄色字体(ss));
     }
 
+    /**
+     *
+     * @param ss
+     * @param id
+     */
     public void szhs(String ss, int id) {
         c.getSession().write(MaplePacketCreator.游戏屏幕中间黄色字体(ss, id));
     }
 
+    /**
+     *
+     * @param hypay
+     * @return
+     */
     public int gainHyPay(int hypay) {
         return getPlayer().gainHyPay(hypay);
     }
 
+    /**
+     *
+     * @param hypay
+     * @return
+     */
     public int addHyPay(int hypay) {
         return getPlayer().addHyPay(hypay);
     }
 
+    /**
+     *
+     * @param pay
+     * @return
+     */
     public int delPayReward(int pay) {
         return getPlayer().delPayReward(pay);
     }
 
+    /**
+     *
+     * @param id
+     * @return
+     */
     public int getItemLevel(int id) {
         MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
         return ii.getReqLevel(id);
     }
 
+    /**
+     *
+     */
     public void alatPQ() {
         //   c.getSession().write(MaplePacketCreator.updateAriantPQRanking(getText, npc, pendingDisposal))
     }
 
+    /**
+     *
+     * @param days
+     */
     public void xlkc(long days) {
         MapleQuestStatus marr = getPlayer().getQuestNoAdd(MapleQuest.getInstance(122700));
         if ((marr != null) && (marr.getCustomData() != null) && (Long.parseLong(marr.getCustomData()) >= System.currentTimeMillis())) {
@@ -1664,6 +2409,10 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         return "没有找到这个怪物的爆率数据。";
     }
 
+    /**
+     *
+     * @return
+     */
     public String checkMapDrop() {
         List ranks = new ArrayList(MapleMonsterInformationProvider.getInstance().getGlobalDrop());
         int mapid = this.c.getPlayer().getMap().getId();
@@ -1702,19 +2451,36 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         return "当前地图没有设置全局爆率。";
     }
 
+    /**
+     *
+     * @param lx
+     */
     public void sendEventWindow(int lx) {
         this.c.getSession().write(MaplePacketCreator.sendEventWindow(0, lx));
     }
 
+    /**
+     *
+     * @param aa
+     * @return
+     */
     public int tylxfk(String aa) {
         int aaa = Integer.parseInt(aa);
         return aaa;
     }
 
+    /**
+     *
+     * @param name
+     */
     public void petName(String name) {
         getPlayer().petName(name);
     }
 
+    /**
+     *
+     * @return
+     */
     public boolean petgm() {
         MaplePet pet = getPlayer().getPet(0);
         if (pet == null) {
@@ -1725,6 +2491,11 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         return true;
     }
 
+    /**
+     *
+     * @param str
+     * @return
+     */
     public static int calculatePlaces(String str) {
         int m = 0;
         char arr[] = str.toCharArray();
@@ -1741,6 +2512,11 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         return m;
     }
 
+    /**
+     *
+     * @param str
+     * @return
+     */
     public static boolean calculate(String str) {
         boolean result = str.matches("[0-9]+");
         if (result == true) {
@@ -1752,6 +2528,11 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         }
     }
 
+    /**
+     *
+     * @param str
+     * @return
+     */
     public static boolean isNumeric(String str) {
         for (int i = str.length(); --i >= 0;) {
             if (!Character.isDigit(str.charAt(i))) {
@@ -1761,80 +2542,149 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         return true;
     }
 
+    /**
+     *
+     * @param name
+     */
     public void setgrname(int name) {
         getPlayer().setgrname(name);
     }
 
+    /**
+     *
+     * @param name
+     */
     public void setjzname(int name) {
         getPlayer().setjzname(name);
     }
 
+    /**
+     *
+     * @return
+     */
     public int getgrname() {
         return getPlayer().getgrname();
     }
 
+    /**
+     *
+     * @return
+     */
     public int getjzname() {
         return getPlayer().getjzname();
     }
 
+    /**
+     *
+     * @param name
+     */
     public void setName(String name) {
         getPlayer().setName(name);
         getClient().getSession().write(MaplePacketCreator.serverNotice(1, "请换下频道就能正常显示名字了！"));
         getClient().getSession().write(MaplePacketCreator.enableActions());
     }
 
+    /**
+     *
+     * @return
+     */
     public boolean Gzz() {
         return getPlayer().getGuild().getLeaderId() == getPlayer().getId();
     }
 
+    /**
+     *
+     * @param name
+     */
     public void setGName(String name) {
         getPlayer().getGuild().setName(name);
         getClient().getSession().write(MaplePacketCreator.serverNotice(1, "请换下频道就能正常显示名字了！"));
         getClient().getSession().write(MaplePacketCreator.enableActions());
     }
 
+    /**
+     *
+     * @return
+     */
     public int getHour() {
         return Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
     }
 
+    /**
+     *
+     * @return
+     */
     public int getMin() {
         return Calendar.getInstance().get(Calendar.MINUTE);
     }
 
+    /**
+     *
+     * @return
+     */
     public int getSec() {
         return Calendar.getInstance().get(Calendar.SECOND);
     }
 
+    /**
+     *
+     * @return
+     */
     public int gethour() {
         Calendar cal = Calendar.getInstance();
         int hour = cal.get(Calendar.HOUR_OF_DAY);
         return hour;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getmin() {
         Calendar cal = Calendar.getInstance();
         int min = cal.get(Calendar.MINUTE);
         return min;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getsec() {
         Calendar cal = Calendar.getInstance();
         int sec = cal.get(Calendar.SECOND);
         return sec;
     }
 
+    /**
+     *
+     * @param s
+     * @return
+     */
     public int getMount(int s) {
         return GameConstants.getMountS(s);
     }
 
+    /**
+     *
+     * @return
+     */
     public int gethyt() {
         return this.hyt;
     }
 
+    /**
+     *
+     * @param a
+     */
     public void sethyt(int a) {
         this.hyt = a;
     }
 
+    /**
+     *
+     * @param a
+     */
     public void gainhyt(int a) {
         this.hyt += a;
         if (gethyt() >= 5000 && getdxs() >= 5000) {
@@ -1854,6 +2704,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
             hyt = 0;
             dxs = 0;
             CloneTimer.getInstance().schedule(new Runnable() {
+                @Override
                 public void run() {
                     for (ChannelServer cserv : ChannelServer.getAllInstances()) {
                         cserv.setZiDongDrop(1);
@@ -1872,14 +2723,26 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         }
     }
 
+    /**
+     *
+     * @return
+     */
     public int getdxs() {
         return this.dxs;
     }
 
+    /**
+     *
+     * @param a
+     */
     public void setdxs(int a) {
         this.dxs = a;
     }
 
+    /**
+     *
+     * @param a
+     */
     public void gaindxs(int a) {
         this.dxs += a;
         if (gethyt() >= 5000 && getdxs() >= 5000) {
@@ -1899,6 +2762,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
             hyt = 0;
             dxs = 0;
             CloneTimer.getInstance().schedule(new Runnable() {
+                @Override
                 public void run() {
                     for (ChannelServer cserv : ChannelServer.getAllInstances()) {
                         cserv.setZiDongDrop(1);
@@ -1917,6 +2781,12 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         }
     }
 
+    /**
+     *
+     * @param lx
+     * @param msg
+     * @throws RemoteException
+     */
     public void 喇叭(int lx, String msg) throws RemoteException {
         switch (lx) {
             case 1:
@@ -1933,26 +2803,46 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         }
     }
 
+    /**
+     *
+     */
     public void displayGuildRankss() {
         MapleGuild.displayGuildRanks(getClient(), this.npc);
     }
 
+    /**
+     *
+     */
     public void displayRewnu2Ranks() {
         MapleGuild.displayRenwu2Ranks(getClient(), this.npc);
     }
 
+    /**
+     *
+     */
     public void displayLevelRanks() {
         MapleGuild.displayLevelRanks(getClient(), this.npc);
     }
 
+    /**
+     *
+     */
     public void 金币排行() {
         MapleGuild.meso(getClient(), this.npc);
     }
 
+    /**
+     *
+     */
     public void 人气排行榜() {
         MapleGuild.人气排行(getClient(), this.npc);
     }
 
+    /**
+     *
+     * @throws InterruptedException
+     * @throws SQLException
+     */
     public void Startqmdb() throws InterruptedException, SQLException {
         for (int ii = 0; ii <= 20; ii++) {
             Thread.sleep(700);
@@ -1977,6 +2867,9 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         }
     }
 
+    /**
+     *
+     */
     public void 谁是卧底() {
         if (getPlayer().getParty() == null || getPlayer().getParty().getMembers().size() < 6) {
             //人数不达标无法执行

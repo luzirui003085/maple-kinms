@@ -29,8 +29,17 @@ import handling.world.World;
 import tools.MaplePacketCreator;
 import tools.data.input.SeekableLittleEndianAccessor;
 
+/**
+ *
+ * @author zjj
+ */
 public class PartyHandler {
 
+    /**
+     *
+     * @param slea
+     * @param c
+     */
     public static final void DenyPartyRequest(final SeekableLittleEndianAccessor slea, final MapleClient c) {
         final int action = slea.readByte();
         final int partyid = slea.readInt();
@@ -64,6 +73,11 @@ public class PartyHandler {
 
     }
 
+    /**
+     *
+     * @param slea
+     * @param c
+     */
     public static final void PartyOperatopn(final SeekableLittleEndianAccessor slea, final MapleClient c) {
         final int operation = slea.readByte();
         MapleParty party = c.getPlayer().getParty();

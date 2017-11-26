@@ -21,36 +21,54 @@
  */
 package server.events;
 
-import java.util.HashMap;
-import java.util.Map;
+import database.DatabaseConnection;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
-import database.DatabaseConnection;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Map.Entry;
 import server.Randomizer;
 import tools.Pair;
 
+/**
+ *
+ * @author zjj
+ */
 public class MapleOxQuizFactory {
 
     private boolean initialized = false;
     private Map<Pair<Integer, Integer>, MapleOxQuizEntry> questionCache;
     private static MapleOxQuizFactory instance = new MapleOxQuizFactory();
 
+    /**
+     *
+     */
     public MapleOxQuizFactory() {
-        questionCache = new HashMap<Pair<Integer, Integer>, MapleOxQuizEntry>();
+        questionCache = new HashMap<>();
     }
 
+    /**
+     *
+     * @return
+     */
     public static MapleOxQuizFactory getInstance() {
         return instance;
     }
 
+    /**
+     *
+     * @return
+     */
     public boolean hasInitialized() {
         return initialized;
     }
 
+    /**
+     *
+     * @return
+     */
     public Entry<Pair<Integer, Integer>, MapleOxQuizEntry> grabRandomQuestion() {
         final int size = questionCache.size();
         while (true) {
@@ -62,6 +80,9 @@ public class MapleOxQuizFactory {
         }
     }
 
+    /**
+     *
+     */
     public void initialize() {
         if (initialized) {
             return;
@@ -72,7 +93,7 @@ public class MapleOxQuizFactory {
             PreparedStatement ps = con.prepareStatement("SELECT * FROM wz_oxdata");
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                questionCache.put(new Pair<Integer, Integer>(rs.getInt("questionset"), rs.getInt("questionid")), get(rs));
+                questionCache.put(new Pair<>(rs.getInt("questionset"), rs.getInt("questionid")), get(rs));
             }
             rs.close();
             ps.close();
@@ -83,6 +104,11 @@ public class MapleOxQuizFactory {
         initialized = true;
     }
 
+    /**
+     *
+     * @param sql
+     * @return
+     */
     public MapleOxQuizEntry getFromSQL(String sql) {
         MapleOxQuizEntry ret = null;
         try {
@@ -100,14 +126,30 @@ public class MapleOxQuizFactory {
         return ret;
     }
 
+    /**
+     *
+     * @param questionSet
+     * @param questionId
+     * @return
+     */
     public static MapleOxQuizEntry getOxEntry(int questionSet, int questionId) {
-        return getInstance().getOxQuizEntry(new Pair<Integer, Integer>(questionSet, questionId));
+        return getInstance().getOxQuizEntry(new Pair<>(questionSet, questionId));
     }
 
+    /**
+     *
+     * @param pair
+     * @return
+     */
     public static MapleOxQuizEntry getOxEntry(Pair<Integer, Integer> pair) {
         return getInstance().getOxQuizEntry(pair);
     }
 
+    /**
+     *
+     * @param pair
+     * @return
+     */
     public MapleOxQuizEntry getOxQuizEntry(Pair<Integer, Integer> pair) {
         MapleOxQuizEntry mooe = questionCache.get(pair);
         if (mooe == null) {
@@ -134,11 +176,22 @@ public class MapleOxQuizFactory {
         }
     }
 
+    /**
+     *
+     */
     public static class MapleOxQuizEntry {
 
         private String question, answerText;
         private int answer, questionset, questionid;
 
+        /**
+         *
+         * @param question
+         * @param answerText
+         * @param answer
+         * @param questionset
+         * @param questionid
+         */
         public MapleOxQuizEntry(String question, String answerText, int answer, int questionset, int questionid) {
             this.question = question;
             this.answerText = answerText;
@@ -147,22 +200,42 @@ public class MapleOxQuizFactory {
             this.questionid = questionid;
         }
 
+        /**
+         *
+         * @return
+         */
         public String getQuestion() {
             return question;
         }
 
+        /**
+         *
+         * @return
+         */
         public String getAnswerText() {
             return answerText;
         }
 
+        /**
+         *
+         * @return
+         */
         public int getAnswer() {
             return answer;
         }
 
+        /**
+         *
+         * @return
+         */
         public int getQuestionSet() {
             return questionset;
         }
 
+        /**
+         *
+         * @return
+         */
         public int getQuestionId() {
             return questionid;
         }

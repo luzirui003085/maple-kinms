@@ -110,6 +110,11 @@ public class RandomAccessByteStream implements SeekableInputStreamBytestream {
         }
     }
 
+    /**
+     *
+     * @param b
+     * @return
+     */
     @Override
     public final String toString(final boolean b) { //?
         return toString();

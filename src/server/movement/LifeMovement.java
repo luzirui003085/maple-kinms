@@ -22,14 +22,34 @@ package server.movement;
 
 import java.awt.Point;
 
+/**
+ *
+ * @author zjj
+ */
 public interface LifeMovement extends LifeMovementFragment {
 
+    /**
+     *
+     * @return
+     */
     @Override
     Point getPosition();
 
+    /**
+     *
+     * @return
+     */
     int getNewstate();
 
+    /**
+     *
+     * @return
+     */
     int getDuration();
 
+    /**
+     *
+     * @return
+     */
     int getType();
 }

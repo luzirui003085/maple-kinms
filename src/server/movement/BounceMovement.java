@@ -23,31 +23,62 @@ package server.movement;
 import java.awt.Point;
 import tools.data.output.LittleEndianWriter;
 
+/**
+ *
+ * @author zjj
+ */
 public class BounceMovement extends AbstractLifeMovement {
 
     private int unk;
     private int fh;
 
+    /**
+     *
+     * @param type
+     * @param position
+     * @param duration
+     * @param newstate
+     */
     public BounceMovement(int type, Point position, int duration, int newstate) {
         super(type, position, duration, newstate);
     }
 
+    /**
+     *
+     * @return
+     */
     public int getUnk() {
         return unk;
     }
 
+    /**
+     *
+     * @param unk
+     */
     public void setUnk(int unk) {
         this.unk = unk;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getFH() {
         return fh;
     }
 
+    /**
+     *
+     * @param fh
+     */
     public void setFH(int fh) {
         this.fh = fh;
     }
 
+    /**
+     *
+     * @param lew
+     */
     @Override
     public void serialize(LittleEndianWriter lew) {
         lew.write(getType());

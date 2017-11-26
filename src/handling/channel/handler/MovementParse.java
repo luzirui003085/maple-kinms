@@ -1,23 +1,4 @@
-/*
- This file is part of the OdinMS Maple Story Server
- Copyright (C) 2008 ~ 2010 Patrick Huy <patrick.huy@frz.cc>
- Matthias Butz <matze@odinms.de>
- Jan Christian Meyer <vimes@odinms.de>
 
- This program is free software: you can redistribute it and/or modify
- it under the terms of the GNU Affero General Public License version 3
- as published by the Free Software Foundation. You may not use, modify
- or distribute this program under any other version of the
- GNU Affero General Public License.
-
- This program is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- GNU Affero General Public License for more details.
-
- You should have received a copy of the GNU Affero General Public License
- along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
 package handling.channel.handler;
 
 import client.MapleCharacter;
@@ -27,26 +8,45 @@ import java.util.List;
 import server.maps.AnimatedMapleMapObject;
 import server.maps.FakeCharacter;
 import server.movement.*;
-import tools.data.input.LittleEndianAccessor;
 import tools.data.input.SeekableLittleEndianAccessor;
 
+/**
+ *
+ * @author zjj
+ */
 public class MovementParse {
 
     //1 = player, 2 = mob, 3 = pet, 4 = summon, 5 = dragon
+
+    /**
+     *
+     * @param lea
+     * @param kind
+     * @param chr
+     * @return
+     */
     public static final List<LifeMovementFragment> parseMovement(final SeekableLittleEndianAccessor lea, int kind, MapleCharacter chr) {
-        final List<LifeMovementFragment> res = new ArrayList<LifeMovementFragment>();
+        final List<LifeMovementFragment> res = new ArrayList<>();
         final byte numCommands = lea.readByte();
         String 类型 = "";
-        if(kind == 1){
-            类型 = "角色移动";
-        }else if(kind == 2){
-            类型 = "怪物移动";
-        }else if(kind == 3){
-            类型 = "宠物移动";
-        }else if(kind == 4){
-            类型 = "召唤兽移动";
-        }else if(kind == 5){
-            类型 = "龙移动";
+        switch (kind) {
+            case 1:
+                类型 = "角色移动";
+                break;
+            case 2:
+                类型 = "怪物移动";
+                break;
+            case 3:
+                类型 = "宠物移动";
+                break;
+            case 4:
+                类型 = "召唤兽移动";
+                break;
+            case 5:
+                类型 = "龙移动";
+                break;
+            default:
+                break;
         }
         for (byte i = 0; i < numCommands; i++) {
             final byte command = lea.readByte();
@@ -189,6 +189,12 @@ public class MovementParse {
         return res;
     }
 
+    /**
+     *
+     * @param movement
+     * @param target
+     * @param yoffset
+     */
     public static final void updatePosition(final List<LifeMovementFragment> movement, final AnimatedMapleMapObject target, final int yoffset) {
         for (final LifeMovementFragment move : movement) {
             if (move instanceof LifeMovement) {

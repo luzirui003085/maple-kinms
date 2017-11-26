@@ -1,5 +1,14 @@
 package server;
 
+import client.MapleClient;
+import client.SkillFactory;
+import client.inventory.IItem;
+import client.inventory.Item;
+import client.inventory.MapleInventoryIdentifier;
+import client.inventory.MapleInventoryType;
+import client.inventory.MaplePet;
+import constants.GameConstants;
+import database.DatabaseConnection;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -9,21 +18,15 @@ import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
-
-import client.inventory.IItem;
-import client.inventory.Item;
-import client.SkillFactory;
-import constants.GameConstants;
-import client.inventory.MapleInventoryIdentifier;
-import client.MapleClient;
-import client.inventory.MapleInventoryType;
-import client.inventory.MaplePet;
-import database.DatabaseConnection;
 import tools.MaplePacketCreator;
 
+/**
+ *
+ * @author zjj
+ */
 public class MapleShop {
 
-    private static final Set<Integer> rechargeableItems = new LinkedHashSet<Integer>();
+    private static final Set<Integer> rechargeableItems = new LinkedHashSet<>();
     private int id;
     private int npcId;
     private List<MapleShopItem> items;
@@ -137,18 +140,32 @@ public class MapleShop {
     private MapleShop(int id, int npcId) {
         this.id = id;
         this.npcId = npcId;
-        items = new LinkedList<MapleShopItem>();
+        items = new LinkedList<>();
     }
 
+    /**
+     *
+     * @param item
+     */
     public void addItem(MapleShopItem item) {
         items.add(item);
     }
 
+    /**
+     *
+     * @param c
+     */
     public void sendShop(MapleClient c) {
         c.getPlayer().setShop(this);
         c.getSession().write(MaplePacketCreator.getNPCShop(c, getNpcId(), items));
     }
 
+    /**
+     *
+     * @param c
+     * @param itemId
+     * @param quantity
+     */
     public void buy(MapleClient c, int itemId, short quantity) {
         if (quantity <= 0) {
             AutobanManager.getInstance().addPoints(c, 1000, 0, "购买道具数量 " + quantity + " 道具: " + itemId);
@@ -260,6 +277,13 @@ public class MapleShop {
         }*/
     }
 
+    /**
+     *
+     * @param c
+     * @param type
+     * @param slot
+     * @param quantity
+     */
     public void sell(MapleClient c, MapleInventoryType type, byte slot, short quantity) {
         if (quantity == 0xFFFF || quantity == 0) {
             quantity = 1;
@@ -300,6 +324,11 @@ public class MapleShop {
         }
     }
 
+    /**
+     *
+     * @param c
+     * @param slot
+     */
     public void recharge(final MapleClient c, final byte slot) {
         final IItem item = c.getPlayer().getInventory(MapleInventoryType.USE).getItem(slot);
 
@@ -324,6 +353,11 @@ public class MapleShop {
         }
     }
 
+    /**
+     *
+     * @param itemId
+     * @return
+     */
     protected MapleShopItem findById(int itemId) {
         for (MapleShopItem item : items) {
             if (item.getItemId() == itemId) {
@@ -333,6 +367,12 @@ public class MapleShop {
         return null;
     }
 
+    /**
+     *
+     * @param id
+     * @param isShopId
+     * @return
+     */
     public static MapleShop createFromDB(int id, boolean isShopId) {
         MapleShop ret = null;
         int shopId;
@@ -356,7 +396,7 @@ public class MapleShop {
             ps = con.prepareStatement("SELECT * FROM shopitems WHERE shopid = ? ORDER BY position ASC");
             ps.setInt(1, shopId);
             rs = ps.executeQuery();
-            List<Integer> recharges = new ArrayList<Integer>(rechargeableItems);
+            List<Integer> recharges = new ArrayList<>(rechargeableItems);
             while (rs.next()) {
                 if (GameConstants.isThrowingStar(rs.getInt("itemid")) || GameConstants.isBullet(rs.getInt("itemid"))) {
                     MapleShopItem starItem = new MapleShopItem((short) 1, rs.getInt("itemid"), rs.getInt("price"));
@@ -369,7 +409,7 @@ public class MapleShop {
                 }
             }
             for (Integer recharge : recharges) {
-                ret.addItem(new MapleShopItem((short) 1000, recharge.intValue(), 0));
+                ret.addItem(new MapleShopItem((short) 1000, recharge, 0));
             }
             rs.close();
             ps.close();
@@ -379,10 +419,18 @@ public class MapleShop {
         return ret;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getNpcId() {
         return npcId;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getId() {
         return id;
     }

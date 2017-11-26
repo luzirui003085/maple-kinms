@@ -20,23 +20,33 @@
  */
 package tools.packet;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import client.MapleClient;
 import client.MapleCharacter;
+import client.MapleClient;
 import constants.GameConstants;
 import constants.ServerConstants;
 import handling.MaplePacket;
 import handling.SendPacketOpcode;
 import handling.login.Balloon;
 import handling.login.LoginServer;
-import tools.data.output.MaplePacketLittleEndianWriter;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import tools.HexTool;
+import tools.data.output.MaplePacketLittleEndianWriter;
 
+/**
+ *
+ * @author zjj
+ */
 public class LoginPacket {
 
+    /**
+     *
+     * @param mapleVersion
+     * @param sendIv
+     * @param recvIv
+     * @return
+     */
     public static final MaplePacket getHello(final short mapleVersion, final byte[] sendIv, final byte[] recvIv) {
         final MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter(16);
 
@@ -61,6 +71,10 @@ public class LoginPacket {
         return mplew.getPacket();
     }
 
+    /**
+     *
+     * @return
+     */
     public static final MaplePacket getPing() {
         final MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter(16);
 
@@ -76,6 +90,10 @@ public class LoginPacket {
         return mplew.getPacket();
     }
 
+    /**
+     *
+     * @return
+     */
     public static final MaplePacket StrangeDATA() {
         final MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter(16);
 
@@ -94,6 +112,11 @@ public class LoginPacket {
         return mplew.getPacket();
     }
 
+    /**
+     *
+     * @param c
+     * @return
+     */
     public static MaplePacket genderNeeded(MapleClient c) {
         MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter(3);
 
@@ -110,6 +133,11 @@ public class LoginPacket {
         return mplew.getPacket();
     }
 
+    /**
+     *
+     * @param reason
+     * @return
+     */
     public static final MaplePacket getLoginFailed(final int reason) {
         final MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter(16);
 
@@ -135,6 +163,11 @@ public class LoginPacket {
         return mplew.getPacket();
     }
 
+    /**
+     *
+     * @param reason
+     * @return
+     */
     public static final MaplePacket getPermBan(final byte reason) {
         final MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter(16);
 
@@ -154,6 +187,12 @@ public class LoginPacket {
         return mplew.getPacket();
     }
 
+    /**
+     *
+     * @param timestampTill
+     * @param reason
+     * @return
+     */
     public static final MaplePacket getTempBan(final long timestampTill, final byte reason) {
         final MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter(17);
 
@@ -173,6 +212,11 @@ public class LoginPacket {
         return mplew.getPacket();
     }
 
+    /**
+     *
+     * @param client
+     * @return
+     */
     public static final MaplePacket getGenderChanged(final MapleClient client) {
         final MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter();
 
@@ -191,6 +235,11 @@ public class LoginPacket {
         return mplew.getPacket();
     }
 
+    /**
+     *
+     * @param client
+     * @return
+     */
     public static final MaplePacket getGenderNeeded(final MapleClient client) {
         final MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter();
 
@@ -207,6 +256,11 @@ public class LoginPacket {
         return mplew.getPacket();
     }
 
+    /**
+     *
+     * @param client
+     * @return
+     */
     public static final MaplePacket getAuthSuccessRequest(final MapleClient client) {
         final MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter();
 
@@ -237,6 +291,12 @@ public class LoginPacket {
         return mplew.getPacket();
     }
 
+    /**
+     *
+     * @param cid
+     * @param state
+     * @return
+     */
     public static final MaplePacket deleteCharResponse(final int cid, final int state) {
         final MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter();
 
@@ -254,6 +314,11 @@ public class LoginPacket {
         return mplew.getPacket();
     }
 
+    /**
+     *
+     * @param mode
+     * @return
+     */
     public static final MaplePacket secondPwError(final byte mode) {
         final MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter(3);
 
@@ -274,6 +339,13 @@ public class LoginPacket {
         return mplew.getPacket();
     }
 
+    /**
+     *
+     * @param serverId
+     * @param serverName
+     * @param channelLoad
+     * @return
+     */
     public static final MaplePacket getServerList(final int serverId, final String serverName, final Map<Integer, Integer> channelLoad) {
         final MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter();
 
@@ -327,6 +399,10 @@ public class LoginPacket {
         return mplew.getPacket();
     }
 
+    /**
+     *
+     * @return
+     */
     public static final MaplePacket getEndOfServerList() {
         final MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter();
 
@@ -343,6 +419,11 @@ public class LoginPacket {
         return mplew.getPacket();
     }
 
+    /**
+     *
+     * @param status
+     * @return
+     */
     public static final MaplePacket getServerStatus(final int status) {
         final MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter();
 
@@ -362,6 +443,13 @@ public class LoginPacket {
         return mplew.getPacket();
     }
 
+    /**
+     *
+     * @param secondpw
+     * @param chars
+     * @param charslots
+     * @return
+     */
     public static final MaplePacket getCharList(final boolean secondpw, final List<MapleCharacter> chars, int charslots) {
         final MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter();
 
@@ -386,6 +474,12 @@ public class LoginPacket {
         return mplew.getPacket();
     }
 
+    /**
+     *
+     * @param chr
+     * @param worked
+     * @return
+     */
     public static final MaplePacket addNewCharEntry(final MapleCharacter chr, final boolean worked) {
         final MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter();
 
@@ -403,6 +497,12 @@ public class LoginPacket {
         return mplew.getPacket();
     }
 
+    /**
+     *
+     * @param charname
+     * @param nameUsed
+     * @return
+     */
     public static final MaplePacket charNameResponse(final String charname, final boolean nameUsed) {
         final MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter();
 
@@ -429,7 +529,6 @@ public class LoginPacket {
         mplew.write(0); //<-- who knows
         if (chr.getJob() == 900) {
             mplew.write(2);
-            return;
         }
         /* mplew.write(ranking ? 1 : 0);
          if (ranking) {

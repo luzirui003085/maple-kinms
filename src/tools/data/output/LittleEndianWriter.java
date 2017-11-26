@@ -53,6 +53,10 @@ public interface LittleEndianWriter {
      */
     public void write(final byte b);
 
+    /**
+     *
+     * @param b
+     */
     public void write(final int b);
 
     /**
@@ -69,6 +73,10 @@ public interface LittleEndianWriter {
      */
     public void writeShort(final short s);
 
+    /**
+     *
+     * @param i
+     */
     public void writeShort(final int i);
 
     /**
@@ -85,6 +93,11 @@ public interface LittleEndianWriter {
      */
     void writeAsciiString(final String s);
 
+    /**
+     *
+     * @param s
+     * @param max
+     */
     void writeAsciiString(String s, final int max);
 
     /**

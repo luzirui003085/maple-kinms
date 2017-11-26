@@ -20,6 +20,10 @@
  */
 package client;
 
+/**
+ *
+ * @author zjj
+ */
 public class BuddylistEntry {
 
     private String name, group;
@@ -52,46 +56,89 @@ public class BuddylistEntry {
         return channel;
     }
 
+    /**
+     *
+     * @param channel
+     */
     public void setChannel(int channel) {
         this.channel = channel;
     }
 
+    /**
+     *
+     * @return
+     */
     public boolean isOnline() {
         return channel >= 0;
     }
 
+    /**
+     *
+     */
     public void setOffline() {
         channel = -1;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getCharacterId() {
         return cid;
     }
 
+    /**
+     *
+     * @param visible
+     */
     public void setVisible(boolean visible) {
         this.visible = visible;
     }
 
+    /**
+     *
+     * @return
+     */
     public boolean isVisible() {
         return visible;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getGroup() {
         return group;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getLevel() {
         return level;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getJob() {
         return job;
     }
 
+    /**
+     *
+     * @param g
+     */
     public void setGroup(String g) {
         this.group = g;
     }
@@ -116,9 +163,6 @@ public class BuddylistEntry {
             return false;
         }
         final BuddylistEntry other = (BuddylistEntry) obj;
-        if (cid != other.cid) {
-            return false;
-        }
-        return true;
+        return cid == other.cid;
     }
 }

@@ -20,6 +20,10 @@
  */
 package client.anticheat;
 
+/**
+ *
+ * @author zjj
+ */
 public class CheatingOffenseEntry {
 
     private CheatingOffense offense;
@@ -30,6 +34,11 @@ public class CheatingOffenseEntry {
     private String param;
     private int dbid = -1;
 
+    /**
+     *
+     * @param offense
+     * @param characterid
+     */
     public CheatingOffenseEntry(CheatingOffense offense, int characterid) {
         super();
         this.offense = offense;
@@ -37,47 +46,90 @@ public class CheatingOffenseEntry {
         firstOffense = System.currentTimeMillis();
     }
 
+    /**
+     *
+     * @return
+     */
     public CheatingOffense getOffense() {
         return offense;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getCount() {
         return count;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getChrfor() {
         return characterid;
     }
 
+    /**
+     *
+     */
     public void incrementCount() {
         this.count++;
         lastOffense = System.currentTimeMillis();
     }
 
+    /**
+     *
+     * @return
+     */
     public boolean isExpired() {
         return lastOffense < (System.currentTimeMillis() - offense.getValidityDuration());
     }
 
+    /**
+     *
+     * @return
+     */
     public int getPoints() {
         return count * offense.getPoints();
     }
 
+    /**
+     *
+     * @return
+     */
     public String getParam() {
         return param;
     }
 
+    /**
+     *
+     * @param param
+     */
     public void setParam(String param) {
         this.param = param;
     }
 
+    /**
+     *
+     * @return
+     */
     public long getLastOffenseTime() {
         return lastOffense;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getDbId() {
         return dbid;
     }
 
+    /**
+     *
+     * @param dbid
+     */
     public void setDbId(int dbid) {
         this.dbid = dbid;
     }

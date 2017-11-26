@@ -30,11 +30,19 @@ import client.MapleCharacter;
 import client.MapleClient;
 import tools.MaplePacketCreator;
 
+/**
+ *
+ * @author zjj
+ */
 public class MapleDragon extends AbstractAnimatedMapleMapObject {
 
     private int owner;
     private int jobid;
 
+    /**
+     *
+     * @param owner
+     */
     public MapleDragon(MapleCharacter owner) {
         super();
         this.owner = owner.getId();
@@ -46,24 +54,44 @@ public class MapleDragon extends AbstractAnimatedMapleMapObject {
         setStance(4);
     }
 
+    /**
+     *
+     * @param client
+     */
     @Override
     public void sendSpawnData(MapleClient client) {
        // client.getSession().write(MaplePacketCreator.spawnDragon(this));
     }
 
+    /**
+     *
+     * @param client
+     */
     @Override
     public void sendDestroyData(MapleClient client) {
         client.getSession().write(MaplePacketCreator.removeDragon(this.owner));
     }
 
+    /**
+     *
+     * @return
+     */
     public int getOwner() {
         return this.owner;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getJobId() {
         return this.jobid;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public MapleMapObjectType getType() {
         return MapleMapObjectType.SUMMON;

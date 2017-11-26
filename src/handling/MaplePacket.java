@@ -20,11 +20,27 @@
  */
 package handling;
 
+/**
+ *
+ * @author zjj
+ */
 public interface MaplePacket extends java.io.Serializable {
 
+    /**
+     *
+     * @return
+     */
     public byte[] getBytes();
 
+    /**
+     *
+     * @return
+     */
     public Runnable getOnSend();
 
+    /**
+     *
+     * @param onSend
+     */
     public void setOnSend(final Runnable onSend);
 }

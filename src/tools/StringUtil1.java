@@ -3,8 +3,19 @@ package tools;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
+/**
+ *
+ * @author zjj
+ */
 public class StringUtil1 {
 
+    /**
+     *
+     * @param in
+     * @param padchar
+     * @param length
+     * @return
+     */
     public static String getLeftPaddedStr(String in, char padchar, int length) {
         StringBuilder builder = new StringBuilder(length);
         for (int x = in.getBytes().length; x < length; x++) {
@@ -14,6 +25,13 @@ public class StringUtil1 {
         return builder.toString();
     }
 
+    /**
+     *
+     * @param in
+     * @param padchar
+     * @param length
+     * @return
+     */
     public static String getRightPaddedStr(String in, char padchar, int length) {
         StringBuilder builder = new StringBuilder(in);
         for (int x = in.getBytes().length; x < length; x++) {
@@ -22,10 +40,23 @@ public class StringUtil1 {
         return builder.toString();
     }
 
+    /**
+     *
+     * @param arr
+     * @param start
+     * @return
+     */
     public static String joinStringFrom(String[] arr, int start) {
         return joinStringFrom(arr, start, " ");
     }
 
+    /**
+     *
+     * @param arr
+     * @param start
+     * @param sep
+     * @return
+     */
     public static String joinStringFrom(String[] arr, int start, String sep) {
         StringBuilder builder = new StringBuilder();
         for (int i = start; i < arr.length; i++) {
@@ -37,6 +68,11 @@ public class StringUtil1 {
         return builder.toString();
     }
 
+    /**
+     *
+     * @param enumName
+     * @return
+     */
     public static String makeEnumHumanReadable(String enumName) {
         StringBuilder builder = new StringBuilder(enumName.length() + 1);
         String[] words = enumName.split("_");
@@ -52,6 +88,12 @@ public class StringUtil1 {
         return builder.substring(0, enumName.length());
     }
 
+    /**
+     *
+     * @param str
+     * @param chr
+     * @return
+     */
     public static int countCharacters(String str, char chr) {
         int ret = 0;
         for (int i = 0; i < str.length(); i++) {
@@ -62,6 +104,11 @@ public class StringUtil1 {
         return ret;
     }
 
+    /**
+     *
+     * @param t
+     * @return
+     */
     public static String getStackTrace(Throwable t) {
         StringWriter sw = new StringWriter();
         PrintWriter ps = new PrintWriter(sw);

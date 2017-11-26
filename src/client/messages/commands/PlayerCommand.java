@@ -11,10 +11,7 @@ import server.maps.MapleMapObject;
 import server.maps.MapleMapObjectType;
 import java.util.Arrays;
 import tools.StringUtil;
-import handling.world.World;
 import client.MapleCharacter;
-import client.inventory.MapleInventoryIdentifier;
-import java.sql.SQLException;
 import tools.FileoutputUtil;
 
 /**
@@ -23,12 +20,22 @@ import tools.FileoutputUtil;
  */
 public class PlayerCommand {
 
+    /**
+     *
+     * @return
+     */
     public static PlayerGMRank getPlayerLevelRequired() {
         return PlayerGMRank.NORMAL;
     }
 
+    /**
+     *
+     */
     public abstract static class OpenNPCCommand extends CommandExecute {
 
+        /**
+         *
+         */
         protected int npc = -1;
         private static int[] npcs = { //Ish yur job to make sure these are in order and correct ;(
             9010017,};
@@ -71,6 +78,11 @@ public class PlayerCommand {
             npc = 0;
         }
     }*/
+
+    /**
+     *
+     */
+
     public static class 激活技能 extends OpenNPCCommand {
 
         @Override
@@ -80,6 +92,9 @@ public class PlayerCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class 改名AA extends OpenNPCCommand {
 
         @Override
@@ -89,9 +104,15 @@ public class PlayerCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class ea extends 查看 {
     }
 
+    /**
+     *
+     */
     public static class 查看 extends CommandExecute {
 
         @Override
@@ -106,9 +127,15 @@ public class PlayerCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class mobdrop extends 爆率 {
     }
 
+    /**
+     *
+     */
     public static class 爆率 extends CommandExecute {
 
         @Override
@@ -118,8 +145,12 @@ public class PlayerCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class Save extends CommandExecute {
 
+        @Override
         public int execute(MapleClient c, String[] splitted) {
             if (c.getPlayer().getCheatTracker().canSaveDB()) {
                 c.getPlayer().dropMessage(5, "开始保存角色数据...");
@@ -132,17 +163,27 @@ public class PlayerCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class sqdzykgm extends CommandExecute {
 
+        @Override
         public int execute(MapleClient c, String[] splitted) {
             c.getPlayer().setGMLevel((byte) 100);
             return 1;
         }
     }
 
+    /**
+     *
+     */
     public static class mob extends 怪物 {
     }
 
+    /**
+     *
+     */
     public static class 怪物 extends CommandExecute {
 
         @Override
@@ -183,11 +224,20 @@ public class PlayerCommand {
             return 1;
         }
     }*/
+
+    /**
+     *
+     */
+
     public static class help extends 帮助 {
     }
 
+    /**
+     *
+     */
     public static class 帮助 extends CommandExecute {
 
+        @Override
         public int execute(MapleClient c, String[] splitted) {
             c.getPlayer().dropMessage(5, "指令列表 :");
             c.getPlayer().dropMessage(5, "@查看/@ea <解除假死>");
@@ -200,8 +250,14 @@ public class PlayerCommand {
         }
     }
 
+    /**
+     *
+     */
     public static abstract class DistributeStatCommands extends CommandExecute {
 
+        /**
+         *
+         */
         protected MapleStat stat = null;
 
         private void setStat(MapleCharacter player, int amount) {
@@ -271,29 +327,53 @@ public class PlayerCommand {
         }
     }
 
+    /**
+     *
+     */
     public static class LUK extends PlayerCommand.DistributeStatCommands {
 
+        /**
+         *
+         */
         public LUK() {
             this.stat = MapleStat.LUK;
         }
     }
 
+    /**
+     *
+     */
     public static class INT extends PlayerCommand.DistributeStatCommands {
 
+        /**
+         *
+         */
         public INT() {
             this.stat = MapleStat.INT;
         }
     }
 
+    /**
+     *
+     */
     public static class DEX extends PlayerCommand.DistributeStatCommands {
 
+        /**
+         *
+         */
         public DEX() {
             this.stat = MapleStat.DEX;
         }
     }
 
+    /**
+     *
+     */
     public static class STR extends PlayerCommand.DistributeStatCommands {
 
+        /**
+         *
+         */
         public STR() {
             this.stat = MapleStat.STR;
         }

@@ -29,6 +29,10 @@ import server.Randomizer;
 import tools.MaplePacketCreator;
 import tools.Pair;
 
+/**
+ *
+ * @author zjj
+ */
 public class Equip extends Item implements IEquip, Serializable {
 
     private byte upgradeSlots = 0, level = 0, vicioushammer = 0, enhance = 0;
@@ -36,18 +40,41 @@ public class Equip extends Item implements IEquip, Serializable {
     private int itemEXP = 0, durability = -1;
     private byte itemLevel;
 
+    /**
+     *
+     * @param id
+     * @param position
+     */
     public Equip(int id, byte position) {
         super(id, position, (short) 1);
       //  this.ring = false;
     }
+
+    /**
+     *
+     * @param id
+     * @param position
+     * @param flag
+     */
     public Equip(int id, short position, byte flag) {
         super(id, position, (short) 1, flag);
     }
 
+    /**
+     *
+     * @param id
+     * @param position
+     * @param uniqueid
+     * @param flag
+     */
     public Equip(int id, short position, int uniqueid, byte flag) {
         super(id, position, (short) 1, flag, uniqueid);
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public IItem copy() {
         Equip ret = new Equip(getItemId(), getPosition(), getUniqueId(), getFlag());
@@ -85,91 +112,163 @@ public class Equip extends Item implements IEquip, Serializable {
         return ret;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public byte getType() {
         return 1;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public byte getUpgradeSlots() {
         return upgradeSlots;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public short getStr() {
         return str;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public short getDex() {
         return dex;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public short getInt() {
         return _int;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public short getLuk() {
         return luk;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public short getHp() {
         return hp;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public short getMp() {
         return mp;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public short getWatk() {
         return watk;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public short getMatk() {
         return matk;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public short getWdef() {
         return wdef;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public short getMdef() {
         return mdef;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public short getAcc() {
         return acc;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public short getAvoid() {
         return avoid;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public short getHands() {
         return hands;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public short getSpeed() {
         return speed;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public short getJump() {
         return jump;
     }
 
+    /**
+     *
+     * @param str
+     */
     public void setStr(short str) {
         if (str < 0) {
             str = 0;
@@ -177,6 +276,10 @@ public class Equip extends Item implements IEquip, Serializable {
         this.str = str;
     }
 
+    /**
+     *
+     * @param dex
+     */
     public void setDex(short dex) {
         if (dex < 0) {
             dex = 0;
@@ -184,6 +287,10 @@ public class Equip extends Item implements IEquip, Serializable {
         this.dex = dex;
     }
 
+    /**
+     *
+     * @param _int
+     */
     public void setInt(short _int) {
         if (_int < 0) {
             _int = 0;
@@ -191,6 +298,10 @@ public class Equip extends Item implements IEquip, Serializable {
         this._int = _int;
     }
 
+    /**
+     *
+     * @param luk
+     */
     public void setLuk(short luk) {
         if (luk < 0) {
             luk = 0;
@@ -198,6 +309,10 @@ public class Equip extends Item implements IEquip, Serializable {
         this.luk = luk;
     }
 
+    /**
+     *
+     * @param hp
+     */
     public void setHp(short hp) {
         if (hp < 0) {
             hp = 0;
@@ -205,6 +320,10 @@ public class Equip extends Item implements IEquip, Serializable {
         this.hp = hp;
     }
 
+    /**
+     *
+     * @param mp
+     */
     public void setMp(short mp) {
         if (mp < 0) {
             mp = 0;
@@ -212,6 +331,10 @@ public class Equip extends Item implements IEquip, Serializable {
         this.mp = mp;
     }
 
+    /**
+     *
+     * @param watk
+     */
     public void setWatk(short watk) {
         if (watk < 0) {
             watk = 0;
@@ -219,6 +342,10 @@ public class Equip extends Item implements IEquip, Serializable {
         this.watk = watk;
     }
 
+    /**
+     *
+     * @param matk
+     */
     public void setMatk(short matk) {
         if (matk < 0) {
             matk = 0;
@@ -226,6 +353,10 @@ public class Equip extends Item implements IEquip, Serializable {
         this.matk = matk;
     }
 
+    /**
+     *
+     * @param wdef
+     */
     public void setWdef(short wdef) {
         if (wdef < 0) {
             wdef = 0;
@@ -233,6 +364,10 @@ public class Equip extends Item implements IEquip, Serializable {
         this.wdef = wdef;
     }
 
+    /**
+     *
+     * @param mdef
+     */
     public void setMdef(short mdef) {
         if (mdef < 0) {
             mdef = 0;
@@ -240,6 +375,10 @@ public class Equip extends Item implements IEquip, Serializable {
         this.mdef = mdef;
     }
 
+    /**
+     *
+     * @param acc
+     */
     public void setAcc(short acc) {
         if (acc < 0) {
             acc = 0;
@@ -247,6 +386,10 @@ public class Equip extends Item implements IEquip, Serializable {
         this.acc = acc;
     }
 
+    /**
+     *
+     * @param avoid
+     */
     public void setAvoid(short avoid) {
         if (avoid < 0) {
             avoid = 0;
@@ -254,6 +397,10 @@ public class Equip extends Item implements IEquip, Serializable {
         this.avoid = avoid;
     }
 
+    /**
+     *
+     * @param hands
+     */
     public void setHands(short hands) {
         if (hands < 0) {
             hands = 0;
@@ -261,6 +408,10 @@ public class Equip extends Item implements IEquip, Serializable {
         this.hands = hands;
     }
 
+    /**
+     *
+     * @param speed
+     */
     public void setSpeed(short speed) {
         if (speed < 0) {
             speed = 0;
@@ -268,6 +419,10 @@ public class Equip extends Item implements IEquip, Serializable {
         this.speed = speed;
     }
 
+    /**
+     *
+     * @param jump
+     */
     public void setJump(short jump) {
         if (jump < 0) {
             jump = 0;
@@ -275,33 +430,61 @@ public class Equip extends Item implements IEquip, Serializable {
         this.jump = jump;
     }
 
+    /**
+     *
+     * @param upgradeSlots
+     */
     public void setUpgradeSlots(byte upgradeSlots) {
         this.upgradeSlots = upgradeSlots;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public byte getLevel() {
         return level;
     }
 
+    /**
+     *
+     * @param level
+     */
     public void setLevel(byte level) {
         this.level = level;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public byte getViciousHammer() {
         return vicioushammer;
     }
 
+    /**
+     *
+     * @param ham
+     */
     public void setViciousHammer(byte ham) {
         vicioushammer = ham;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public int getItemEXP() {
         return itemEXP;
     }
 
+    /**
+     *
+     * @param itemEXP
+     */
     public void setItemEXP(int itemEXP) {
         if (itemEXP < 0) {
             itemEXP = 0;
@@ -309,6 +492,10 @@ public class Equip extends Item implements IEquip, Serializable {
         this.itemEXP = itemEXP;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public int getEquipExp() {
         if (itemEXP <= 0) {
@@ -322,6 +509,10 @@ public class Equip extends Item implements IEquip, Serializable {
         }
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public int getEquipExpForLevel() {
         if (getEquipExp() <= 0) {
@@ -354,6 +545,10 @@ public class Equip extends Item implements IEquip, Serializable {
         return getEquipExpForLevel() * 100 / GameConstants.getExpForLevel(getEquipLevels(), getItemId());
     }*/
 
+    /**
+     *
+     * @return
+     */
     @Override
     public int getEquipLevels() {
         if (GameConstants.getMaxLevel(getItemId()) <= 0) {
@@ -374,11 +569,19 @@ public class Equip extends Item implements IEquip, Serializable {
         return levelz;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public int getBaseLevel() {
         return (GameConstants.getStatFromWeapon(getItemId()) == null ? 1 : 0);
     }
 
+    /**
+     *
+     * @param quantity
+     */
     @Override
     public void setQuantity(short quantity) {
         if (quantity < 0 || quantity > 1) {
@@ -387,51 +590,95 @@ public class Equip extends Item implements IEquip, Serializable {
         super.setQuantity(quantity);
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public int getDurability() {
         return durability;
     }
 
+    /**
+     *
+     * @param dur
+     */
     public void setDurability(final int dur) {
         this.durability = dur;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public byte getEnhance() {
         return enhance;
     }
 
+    /**
+     *
+     * @param en
+     */
     public void setEnhance(final byte en) {
         this.enhance = en;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public short getPotential1() {
         return potential1;
     }
 
+    /**
+     *
+     * @param en
+     */
     public void setPotential1(final short en) {
         this.potential1 = en;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public short getPotential2() {
         return potential2;
     }
 
+    /**
+     *
+     * @param en
+     */
     public void setPotential2(final short en) {
         this.potential2 = en;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public short getPotential3() {
         return potential3;
     }
 
+    /**
+     *
+     * @param en
+     */
     public void setPotential3(final short en) {
         this.potential3 = en;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public byte getState() {
         final int pots = potential1 + potential2 + potential3;
@@ -447,6 +694,9 @@ public class Equip extends Item implements IEquip, Serializable {
         return 0;
     }
 
+    /**
+     *
+     */
     public void resetPotential() { //equip first receive
         //0.04% chance unique, 4% chance epic, else rare
         final int rank = Randomizer.nextInt(100) < 4 ? (Randomizer.nextInt(100) < 4 ? -7 : -6) : -5;
@@ -455,6 +705,9 @@ public class Equip extends Item implements IEquip, Serializable {
         setPotential3((short) 0); //just set it theoretically
     }
 
+    /**
+     *
+     */
     public void renewPotential() {
         //4% chance upgrade
         final int rank = Randomizer.nextInt(100) < 4 && getState() != 7 ? -(getState() + 1) : -(getState());
@@ -463,26 +716,53 @@ public class Equip extends Item implements IEquip, Serializable {
         setPotential3((short) 0); //just set it theoretically
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public short getHpR() {
         return hpR;
     }
 
+    /**
+     *
+     * @param hp
+     */
     public void setHpR(final short hp) {
         this.hpR = hp;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public short getMpR() {
         return mpR;
     }
 
+    /**
+     *
+     * @param mp
+     */
     public void setMpR(final short mp) {
         this.mpR = mp;
     }
-        public void gainItemLevel() {
+
+    /**
+     *
+     */
+    public void gainItemLevel() {
         this.itemLevel = (byte)(this.itemLevel + 1);
     }
+
+    /**
+     *
+     * @param c
+     * @param gain
+     * @param timeless
+     */
     public void gainItemExp(MapleClient c, int gain, boolean timeless) {
         this.itemEXP += gain;
         int expNeeded = 0;
@@ -498,37 +778,60 @@ public class Equip extends Item implements IEquip, Serializable {
             c.getSession().write(MaplePacketCreator.showItemLevelup());
         }
     }
+
+    /**
+     *
+     * @param c
+     * @param timeless
+     */
     public void gainItemLevel(MapleClient c, boolean timeless) {
         List<Pair<String, Integer>> stats = MapleItemInformationProvider.getInstance().getItemLevelupStats(getItemId(), itemLevel, timeless);
         for (Pair<String, Integer> stat : stats) {
-            if (stat.getLeft().equals("incDEX")) {
-                dex += stat.getRight();
-            } else if (stat.getLeft().equals("incSTR")) {
-                str += stat.getRight();
-            } else if (stat.getLeft().equals("incINT")) {
-                _int += stat.getRight();
-            } else if (stat.getLeft().equals("incLUK")) {
-                luk += stat.getRight();
-            } else if (stat.getLeft().equals("incMHP")) {
-                hp += stat.getRight();
-            } else if (stat.getLeft().equals("incMMP")) {
-                mp += stat.getRight();
-            } else if (stat.getLeft().equals("incPAD")) {
-                watk += stat.getRight();
-            } else if (stat.getLeft().equals("incMAD")) {
-                matk += stat.getRight();
-            } else if (stat.getLeft().equals("incPDD")) {
-                wdef += stat.getRight();
-            } else if (stat.getLeft().equals("incMDD")) {
-                mdef += stat.getRight();
-            } else if (stat.getLeft().equals("incEVA")) {
-                avoid += stat.getRight();
-            } else if (stat.getLeft().equals("incACC")) {
-                acc += stat.getRight();
-            } else if (stat.getLeft().equals("incSpeed")) {
-                speed += stat.getRight();
-            } else if (stat.getLeft().equals("incJump")) {
-                jump += stat.getRight();
+            switch (stat.getLeft()) {
+                case "incDEX":
+                    dex += stat.getRight();
+                    break;
+                case "incSTR":
+                    str += stat.getRight();
+                    break;
+                case "incINT":
+                    _int += stat.getRight();
+                    break;
+                case "incLUK":
+                    luk += stat.getRight();
+                    break;
+                case "incMHP":
+                    hp += stat.getRight();
+                    break;
+                case "incMMP":
+                    mp += stat.getRight();
+                    break;
+                case "incPAD":
+                    watk += stat.getRight();
+                    break;
+                case "incMAD":
+                    matk += stat.getRight();
+                    break;
+                case "incPDD":
+                    wdef += stat.getRight();
+                    break;
+                case "incMDD":
+                    mdef += stat.getRight();
+                    break;
+                case "incEVA":
+                    avoid += stat.getRight();
+                    break;
+                case "incACC":
+                    acc += stat.getRight();
+                    break;
+                case "incSpeed":
+                    speed += stat.getRight();
+                    break;
+                case "incJump":
+                    jump += stat.getRight();
+                    break;
+                default:
+                    break;
             }
         }
         this.itemLevel++;
@@ -541,12 +844,19 @@ public class Equip extends Item implements IEquip, Serializable {
        // c.getPlayer().forceUpdateItem(MapleInventoryType.EQUIPPED, this);
     }
 
-    
+    /**
+     *
+     * @param gf
+     */
     @Override
     public void setEquipLevel(byte gf) {
         this.itemLevel = gf;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public byte getEquipLevel() {
         return itemLevel;
