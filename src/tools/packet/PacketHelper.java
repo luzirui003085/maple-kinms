@@ -61,8 +61,8 @@ public class PacketHelper {
     public static long PERMANENT = 150841440000000000L;
     public static final byte unk1[] = new byte[]{(byte) 0x00, (byte) 0x40, (byte) 0xE0, (byte) 0xFD};
     public static final byte unk2[] = new byte[]{(byte) 0x3B, (byte) 0x37, (byte) 0x4F, (byte) 0x01};
-    
-   public static long getTime(long realTimestamp) {
+
+    public static long getTime(long realTimestamp) {
         if (realTimestamp == -1) {
             return MAX_TIME;
         }
@@ -74,7 +74,7 @@ public class PacketHelper {
         }
         return realTimestamp * 10000 + FT_UT_OFFSET;
     }
-   
+
     public static final long getKoreanTimestamp(final long realTimestamp) {
         if (realTimestamp == -1) {
             return MAX_TIME;
@@ -111,7 +111,7 @@ public class PacketHelper {
         for (final MapleQuestStatus q : completed) {
             mplew.writeShort(q.getQuest().getId());
             time = KoreanDateUtil.getQuestTimestamp(q.getCompletionTime());
-          //  mplew.writeInt(time); // maybe start time? no effect.
+            //  mplew.writeInt(time); // maybe start time? no effect.
             //    mplew.writeInt(time); // completion time
             mplew.writeLong(time);
         }
@@ -159,32 +159,25 @@ public class PacketHelper {
 
     public static final void addRingInfo(final MaplePacketLittleEndianWriter mplew, final MapleCharacter chr) {
         mplew.writeShort(0);
-        //01 00 = size
-        //01 00 00 00 = gametype?
-        //03 00 00 00 = win
-        //00 00 00 00 = tie/loss
-        //01 00 00 00 = tie/loss
-        //16 08 00 00 = points
         Pair<List<MapleRing>, List<MapleRing>> aRing = chr.getRings(true);
         List<MapleRing> cRing = aRing.getLeft();
         mplew.writeShort(cRing.size());
         for (MapleRing ring : cRing) {
             mplew.writeInt(ring.getPartnerChrId());
-            mplew.writeAsciiString(ring.getPartnerName(), 15);
+            mplew.writeAsciiString(ring.getPartnerName(), 13);
             mplew.writeLong(ring.getRingId());
             mplew.writeLong(ring.getPartnerRingId());
         }
-        Pair<List<MapleRing>, List<MapleRing>> zRing = chr.getRingsz(true);
-        List<MapleRing> fRing = zRing.getLeft();
+        List<MapleRing> fRing = aRing.getRight();
         mplew.writeShort(fRing.size());
         for (MapleRing ring : fRing) {
             mplew.writeInt(ring.getPartnerChrId());
-            mplew.writeAsciiString(ring.getPartnerName(), 15);
+            mplew.writeAsciiString(ring.getPartnerName(), 13);
             mplew.writeLong(ring.getRingId());
             mplew.writeLong(ring.getPartnerRingId());
             mplew.writeInt(ring.getItemId());
         }
-        mplew.writeShort(0); //engagement ring?
+        mplew.writeShort(0);
     }
 
     public static void addInventoryInfo(MaplePacketLittleEndianWriter mplew, MapleCharacter chr) {
@@ -215,7 +208,7 @@ public class PacketHelper {
             System.out.println("-------背包现金格子数据输出：" + chr.getInventory(MapleInventoryType.CASH).getSlotLimit());
         }
 
-     //   mplew.write(unk1);
+        //   mplew.write(unk1);
         //  mplew.write(unk2); 
         mplew.writeLong(PacketHelper.getTime(System.currentTimeMillis()));
         MapleInventory iv = chr.getInventory(MapleInventoryType.EQUIPPED);
@@ -375,8 +368,8 @@ public class PacketHelper {
     }
 
     public static final void addExpirationTime(final MaplePacketLittleEndianWriter mplew, final long time) {
-       // mplew.writeLong(getTime(time));
-        long sc = 1000*60*60*7L;
+        // mplew.writeLong(getTime(time));
+        long sc = 1000 * 60 * 60 * 7L;
         mplew.write(0);
         mplew.writeShort(1408); // 80 05
         if (time != -1) {
@@ -551,7 +544,7 @@ public class PacketHelper {
                 }
 
                 mplew.writeInt(-1);
-               // mplew.write(unk1);
+                // mplew.write(unk1);
                 //  mplew.write(unk2);
             } else {
                 mplew.writeShort(item.getQuantity());
@@ -644,10 +637,10 @@ public class PacketHelper {
         mplew.writeInt(pet.getPetItemId() == 5000054 && pet.getSecondsLeft() > 0 ? pet.getSecondsLeft() : 0); //in seconds, 3600 = 1 hr.
         mplew.write(0);
         mplew.write(active ? pet.getSummoned() ? pet.getSummonedValue() : 0 : 0);//显示装备栏上宠物的位置
-       /*for (int i = 0; i < 4; i++) {
+        /*for (int i = 0; i < 4; i++) {
          mplew.write(0); //0x40 before, changed to 0?
          }*/
-        /*        if (pet.getPetItemId() == 5000054) {
+ /*        if (pet.getPetItemId() == 5000054) {
          mplew.writeInt(0);
          mplew.writeInt(pet.getSecondsLeft() > 0 ? pet.getSecondsLeft() : 0); //in seconds, 3600 = 1 hr.
          mplew.writeShort(0);

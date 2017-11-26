@@ -5258,22 +5258,9 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
                 equipChanged();
             }
         }
-        /*
-         * if (type == MapleInventoryType.EQUIP) { //check equipped type =
-         * MapleInventoryType.EQUIPPED; possessed =
-         * getInventory(type).countById(id);
-         *
-         * if (possessed > 0) {
-         * MapleInventoryManipulator.removeById(getClient(), type, id,
-         * possessed, true, false);
-         * getClient().getSession().write(MaplePacketCreator.getShowItemGain(id,
-         * (short)-possessed, true)); }
-         }
-         */
     }
 
-    //TODO: more than one crush/friendship ring at a time
-    /* public Pair<List<MapleRing>, List<MapleRing>> getRings(boolean equip) {
+    public Pair<List<MapleRing>, List<MapleRing>> getRings(boolean equip) {
         MapleInventory iv = getInventory(MapleInventoryType.EQUIPPED);
         Collection<IItem> equippedC = iv.list();
         List<Item> equipped = new ArrayList<>(equippedC.size());
@@ -5295,21 +5282,19 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
                         } else if (GameConstants.isFriendshipRing(item.getItemId())) {
                             frings.add(ring);
                         }
-                    } else {
-                        if (crings.size() == 0 && GameConstants.isCrushRing(item.getItemId())) {
-                            crings.add(ring);
-                        } else if (frings.size() == 0 && GameConstants.isFriendshipRing(item.getItemId())) {
-                            frings.add(ring);
-                        } //for 3rd person the actual slot doesnt matter, so we'll use this to have both shirt/ring same?
-                        //however there seems to be something else behind this, will have to sniff someone with shirt and ring, or more conveniently 3-4 of those
-                    }
+                    } else if (crings.isEmpty() && GameConstants.isCrushRing(item.getItemId())) {
+                        crings.add(ring);
+                    } else if (frings.isEmpty() && GameConstants.isFriendshipRing(item.getItemId())) {
+                        frings.add(ring);
+                    } //for 3rd person the actual slot doesnt matter, so we'll use this to have both shirt/ring same?
+                    //however there seems to be something else behind this, will have to sniff someone with shirt and ring, or more conveniently 3-4 of those
                 }
             }
         }
         if (equip) {
             iv = getInventory(MapleInventoryType.EQUIP);
             for (IItem item : iv.list()) {
-                if (item.getRing() != null && GameConstants.isCrushRing(item.getItemId())) {
+                if (item.getRing() != null && GameConstants.isEffectRing(item.getItemId())) {
                     ring = item.getRing();
                     ring.setEquipped(false);
                     if (GameConstants.isFriendshipRing(item.getItemId())) {
@@ -5322,92 +5307,8 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
         }
         Collections.sort(frings, new MapleRing.RingComparator());
         Collections.sort(crings, new MapleRing.RingComparator());
-        return new Pair<List<MapleRing>, List<MapleRing>>(crings, frings);
-    }*/
-    public Pair<List<MapleRing>, List<MapleRing>> getRings(boolean equip) {
-        MapleInventory iv = getInventory(MapleInventoryType.EQUIPPED);
-        Collection<IItem> equippedC = iv.list();
-        List<Item> equipped = new ArrayList<>(equippedC.size());
-        for (IItem item : equippedC) {
-            equipped.add((Item) item);
-        }
-        Collections.sort(equipped);
-        List<MapleRing> crings = new ArrayList<>();
-        MapleRing ring;
-        for (Item item : equipped) {
-            if (item.getRing() != null) {
-                ring = item.getRing();
-                ring.setEquipped(true);
-                if (GameConstants.isCrushRing(item.getItemId())) {
-                    if (equip) {
-                        if (GameConstants.isCrushRing(item.getItemId())) {
-                            crings.add(ring);
-                        }
-                    } else if (crings.size() == 0 && GameConstants.isCrushRing(item.getItemId())) {
-                        crings.add(ring);
-                    } //for 3rd person the actual slot doesnt matter, so we'll use this to have both shirt/ring same?
-                    //however there seems to be something else behind this, will have to sniff someone with shirt and ring, or more conveniently 3-4 of those
-                }
-            }
-        }
-        if (equip) {
-            iv = getInventory(MapleInventoryType.EQUIP);
-            for (IItem item : iv.list()) {
-                if (item.getRing() != null && GameConstants.isCrushRing(item.getItemId())) {
-                    ring = item.getRing();
-                    ring.setEquipped(false);
-                    if (GameConstants.isCrushRing(item.getItemId())) {
-                        crings.add(ring);
-                    }
-                }
-            }
-        }
-        Collections.sort(crings, new MapleRing.RingComparator());
-        return new Pair<List<MapleRing>, List<MapleRing>>(crings, crings);
+        return new Pair<>(crings, frings);
     }
-
-    public Pair<List<MapleRing>, List<MapleRing>> getRingsz(boolean equip) {
-        MapleInventory iv = getInventory(MapleInventoryType.EQUIPPED);
-        Collection<IItem> equippedC = iv.list();
-        List<Item> equipped = new ArrayList<>(equippedC.size());
-        for (IItem item : equippedC) {
-            equipped.add((Item) item);
-        }
-        Collections.sort(equipped);
-        List<MapleRing> frings = new ArrayList<>();
-        MapleRing ring;
-        for (Item item : equipped) {
-            if (item.getRing() != null) {
-                ring = item.getRing();
-                ring.setEquipped(true);
-                if (GameConstants.isFriendshipRing(item.getItemId())) {
-                    if (equip) {
-                        if (GameConstants.isFriendshipRing(item.getItemId())) {
-                            frings.add(ring);
-                        }
-                    } else if (frings.size() == 0 && GameConstants.isFriendshipRing(item.getItemId())) {
-                        frings.add(ring);
-                    } //for 3rd person the actual slot doesnt matter, so we'll use this to have both shirt/ring same?
-                    //however there seems to be something else behind this, will have to sniff someone with shirt and ring, or more conveniently 3-4 of those
-                }
-            }
-        }
-        if (equip) {
-            iv = getInventory(MapleInventoryType.EQUIP);
-            for (IItem item : iv.list()) {
-                if (item.getRing() != null && GameConstants.isCrushRing(item.getItemId())) {
-                    ring = item.getRing();
-                    ring.setEquipped(false);
-                    if (GameConstants.isFriendshipRing(item.getItemId())) {
-                        frings.add(ring);
-                    }
-                }
-            }
-        }
-        Collections.sort(frings, new MapleRing.RingComparator());
-        return new Pair<List<MapleRing>, List<MapleRing>>(frings, frings);
-    }
-
     public int getFH() {
         MapleFoothold fh = getMap().getFootholds().findBelow(getPosition());
         if (fh != null) {
@@ -7867,5 +7768,40 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
         } catch (SQLException ex) {
             System.err.println("参加全民夺宝发生了错误: " + ex);
         }
+    }
+
+    /**
+     *
+     * @param incluedEquip
+     * @return
+     */
+    public MapleRing getMarriageRing(boolean incluedEquip) {
+        MapleInventory iv = getInventory(MapleInventoryType.EQUIPPED);
+        Collection<IItem> equippedC = iv.list();
+        List<Item> equipped = new ArrayList<>(equippedC.size());
+        MapleRing ring;
+        for (IItem item : equippedC) {
+            equipped.add((Item) item);
+        }
+        for (Item item : equipped) {
+            if (item.getRing() != null) {
+                ring = item.getRing();
+                ring.setEquipped(true);
+                if (GameConstants.isMarriageRing(item.getItemId())) {
+                    return ring;
+                }
+            }
+        }
+        if (incluedEquip) {
+            iv = getInventory(MapleInventoryType.EQUIP);
+            for (IItem item : iv.list()) {
+                if (item.getRing() != null && GameConstants.isMarriageRing(item.getItemId())) {
+                    ring = item.getRing();
+                    ring.setEquipped(false);
+                    return ring;
+                }
+            }
+        }
+        return null;
     }
 }

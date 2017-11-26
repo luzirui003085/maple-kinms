@@ -1189,19 +1189,24 @@ public class GameConstants {
 
     //if only there was a way to find in wz files -.-
     public static boolean isEffectRing(int itemid) {
-        return isFriendshipRing(itemid) || isCrushRing(itemid);
-    }
 
+        return isFriendshipRing(itemid) || isCrushRing(itemid) || isMarriageRing(itemid);
+    }
+    
     public static boolean isFriendshipRing(int itemId) {
         switch (itemId) {
-            case 1112800:
-            case 1112801:
-            case 1112802:
-            case 1112810: //new
-            case 1112811: //new, doesnt work in friendship?
-            case 1112812: //new, im ASSUMING it's friendship cuz of itemID, not sure.
+            case 1_112_800:
+            case 1_112_801:
+            case 1_112_802:
+            //  case 1112804:
+            case 1_112_810: //new
+            case 1_112_811: //new, doesnt work in friendship?
+            case 1_112_812: //new, im ASSUMING it's friendship cuz of itemID, not sure.
+            case 1_112_015:
+            case 1_049_000:
 
-            case 1049000:
+            case 1_112_816:
+            case 1_112_817:
                 return true;
         }
         return false;
@@ -1209,18 +1214,18 @@ public class GameConstants {
 
     public static boolean isCrushRing(int itemId) {
         switch (itemId) {
-            case 1112001:
-            case 1112002:
-            case 1112003:
-            case 1112005: //new
-            case 1112006: //new
-            case 1112007:
-            case 1112012:
-            case 1112015: //new
-
-            case 1048000:
-            case 1048001:
-            case 1048002:
+            case 1_112_001:
+            case 1_112_002:
+            case 1_112_003:
+            case 1_112_005:
+            case 1_112_006:
+            case 1_112_007:
+            case 1_112_012:
+            case 1_112_015:
+            //case 1112804:
+            case 1_048_000:
+            case 1_048_001:
+            case 1_048_002:
                 return true;
         }
         return false;
@@ -3381,5 +3386,42 @@ public class GameConstants {
             lBalloon.add(new Balloon(ServerProperties.getProperty("KinMS.CommandMessage")+ "冒险岛\r\n【就是牛就是屌】!", 496, 293));*/
         }
         return lBalloon;
+    }
+
+    /**
+     *
+     * @param itemId
+     * @return
+     */
+    public static boolean isMarriageRing(int itemId) {
+        switch (itemId) {
+            case 1_112_300:
+            case 1_112_301:
+            case 1_112_302:
+            case 1_112_303:
+            case 1_112_304:
+            case 1_112_305:
+            case 1_112_306:
+            case 1_112_307:
+            case 1_112_308:
+            case 1_112_309:
+            case 1_112_310:
+            case 1_112_311:
+            case 1_112_315:
+            case 1_112_316:
+            case 1_112_317:
+            case 1_112_318:
+            case 1_112_319:
+            case 1_112_320:
+            case 1_112_803:
+            // case 1112804:
+            case 1_112_806:
+            case 1_112_807:
+            case 1_112_808:
+            case 1_112_809:
+            case 1_112_013:
+                return true;
+        }
+        return false;
     }
 }

@@ -322,10 +322,10 @@ public class MapleStatEffect implements Serializable {
                 case 35001003: //TEMP.BOOSTER
                     statups.add(new Pair<MapleBuffStat, Integer>(MapleBuffStat.BOOSTER, ret.x));
                     break;
-                case 5121009:
-                case 15111005:
-                    statups.add(new Pair<MapleBuffStat, Integer>(MapleBuffStat.SPEED_INFUSION, ret.x));
-                    break;
+//                case 5121009:
+//                case 15111005:
+//                    statups.add(new Pair<MapleBuffStat, Integer>(MapleBuffStat.SPEED_INFUSION, ret.x));
+//                    break;
                 case 4321000: //tornado spin uses same buffstats
                     ret.duration = 1000;
                     statups.add(new Pair<MapleBuffStat, Integer>(MapleBuffStat.DASH_SPEED, 100 + ret.x));
@@ -1224,7 +1224,7 @@ public class MapleStatEffect implements Serializable {
         List<Pair<MapleBuffStat, Integer>> localstatups = statups;
         boolean normal = true;
         switch (sourceid) {
-//            case 5121009: // Speed Infusion
+            case 5121009: // Speed Infusion
             case 15111005:
 //            case 5001005: // Dash
 //            case 4321000: //tornado spin

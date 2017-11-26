@@ -102,7 +102,7 @@ public class MapleRing implements Serializable {
         try {
             if (partner1 == null) {
                 return -2;
-            } 
+            }
             if (id2 <= 0) {
                 return -1;
             }
@@ -115,7 +115,7 @@ public class MapleRing implements Serializable {
 
     public static int makeRing(int itemid, MapleCharacter partner1, String partner2, int id2, String msg, int sn) throws Exception { //return partner1 the id
         int[] ringID = {
-            MapleInventoryIdentifier.getInstance(), 
+            MapleInventoryIdentifier.getInstance(),
             MapleInventoryIdentifier.getInstance()};
         //[1] = partner1, [0] = partner2
         try {
