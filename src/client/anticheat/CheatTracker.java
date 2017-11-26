@@ -317,16 +317,14 @@ public void checkSameDamage(int dmg, double expected) {
             wL.unlock();
         }
         switch (offense) {
-//            case HIGH_DAMAGE_MAGIC:
-            case HIGH_DAMAGE_MAGIC_2:
-//            case HIGH_DAMAGE:
-            case MOVE_MONSTERS:
-            case HIGH_DAMAGE_2:
-            case ATTACK_FARAWAY_MONSTER:
-            case ATTACK_FARAWAY_MONSTER_SUMMON:
+            // case HIGH_DAMAGE_MAGIC_2:
+            // case MOVE_MONSTERS:
+            // case HIGH_DAMAGE_2:
+            // case ATTACK_FARAWAY_MONSTER:
+            // case ATTACK_FARAWAY_MONSTER_SUMMON:
             case SAME_DAMAGE:
-            case FASTATTACK:
-            case FASTATTACK2:
+            // case FASTATTACK:
+            // case FASTATTACK2:
                 gm_message--;
                 if (gm_message == 0) {
                     System.out.println(MapleCharacterUtil.makeMapleReadable(chrhardref.getName()) + "疑似使用外掛");
