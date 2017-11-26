@@ -2772,7 +2772,7 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
                 map.updateMapObjectVisibility(this, dragon);
             }
         } catch (Exception e) {
-            FileoutputUtil.outputFileError(FileoutputUtil.ScriptEx_Log, e); //all jobs throw errors :(
+            // FileoutputUtil.outputFileError(FileoutputUtil.ScriptEx_Log, e); //all jobs throw errors :(
         }
     }
 
@@ -3116,7 +3116,7 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
                 updateSingleStat(MapleStat.EXP, getExp());
             }
         } catch (Exception e) {
-            FileoutputUtil.outputFileError(FileoutputUtil.ScriptEx_Log, e); //all jobs throw errors :(
+            // FileoutputUtil.outputFileError(FileoutputUtil.ScriptEx_Log, e); //all jobs throw errors :(
         }
     }
 

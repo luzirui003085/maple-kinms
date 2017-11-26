@@ -39,8 +39,8 @@ public class FileoutputUtil {
             Zakum_Log = "Logs/Log_Zakum.rtf",
             Horntail_Log = "Logs/Log_Horntail.rtf",
             Pinkbean_Log = "Logs/Log_Pinkbean.rtf",
-            ScriptEx_Log = "Logs/Log_Script_Except.rtf",
-            ScriptEx_LogAAA = "Logs/ScriptEx_LogAAA.rtf",
+            // ScriptEx_Log = "Logs/Log_Script_Except.rtf",
+            // ScriptEx_LogAAA = "Logs/ScriptEx_LogAAA.rtf",
             PacketEx_Log = "Logs/Log_Packet_Except.rtf" // I cba looking for every error, adding this back in.
             + "";
     // End

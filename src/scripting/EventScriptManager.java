@@ -82,7 +82,7 @@ public class EventScriptManager extends AbstractScriptManager {
                
             } catch (final Exception ex) {
                 System.out.println("Error initiating event: " + entry.script + ":" + ex);
-                FileoutputUtil.log(FileoutputUtil.ScriptEx_Log, "Error initiating event: " + entry.script + ":" + ex);
+                // FileoutputUtil.log(FileoutputUtil.ScriptEx_Log, "Error initiating event: " + entry.script + ":" + ex);
             }
         }
     }

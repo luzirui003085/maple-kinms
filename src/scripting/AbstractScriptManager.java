@@ -92,7 +92,7 @@ public abstract class AbstractScriptManager {
             return (Invocable) engine;
         } catch (IOException | ScriptException e) {
             System.err.println("Error executing script. Path: " + path + "\nException " + e);
-            FileoutputUtil.log(FileoutputUtil.ScriptEx_Log, "Error executing script. Path: " + path + "\nException " + e);
+            // FileoutputUtil.log(FileoutputUtil.ScriptEx_Log, "Error executing script. Path: " + path + "\nException " + e);
             return null;
         } finally {
             try {

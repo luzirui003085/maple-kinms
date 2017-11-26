@@ -183,8 +183,8 @@ public class MapleQuest implements Serializable {
                 quests.put(id, ret);
             } catch (Exception ex) {
                 ex.printStackTrace();
-                FileoutputUtil.outputFileError(FileoutputUtil.ScriptEx_Log, ex);
-                FileoutputUtil.log(FileoutputUtil.ScriptEx_Log, "Caused by questID " + id);
+                // FileoutputUtil.outputFileError(FileoutputUtil.ScriptEx_Log, ex);
+                // FileoutputUtil.log(FileoutputUtil.ScriptEx_Log, "Caused by questID " + id);
                 System.out.println("Caused by questID " + id);
                 return new MapleCustomQuest(id);
             }

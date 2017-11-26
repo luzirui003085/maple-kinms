@@ -76,7 +76,7 @@ public class EventManager {
             iv.invokeFunction("cancelSchedule", (Object) null);
         } catch (Exception ex) {
             System.out.println("Event name : " + name + ", method Name : cancelSchedule:\n" + ex);
-            FileoutputUtil.log(FileoutputUtil.ScriptEx_Log, "Event name : " + name + ", method Name : cancelSchedule:\n" + ex);
+            // FileoutputUtil.log(FileoutputUtil.ScriptEx_Log, "Event name : " + name + ", method Name : cancelSchedule:\n" + ex);
         }
     }
 
@@ -88,7 +88,7 @@ public class EventManager {
                     iv.invokeFunction(methodName, (Object) null);
                 } catch (Exception ex) {
                     System.out.println("Event name : " + name + ", method Name : " + methodName + ":\n" + ex);
-                    FileoutputUtil.log(FileoutputUtil.ScriptEx_Log, "Event name : " + name + ", method Name : " + methodName + ":\n" + ex);
+                    // FileoutputUtil.log(FileoutputUtil.ScriptEx_Log, "Event name : " + name + ", method Name : " + methodName + ":\n" + ex);
                 }
             }
         }, delay);
@@ -102,7 +102,7 @@ public class EventManager {
                     iv.invokeFunction(methodName, eim);
                 } catch (Exception ex) {
                     System.out.println("Event name : " + name + ", method Name : " + methodName + ":\n" + ex);
-                    FileoutputUtil.log(FileoutputUtil.ScriptEx_Log, "Event name : " + name + ", method Name : " + methodName + ":\n" + ex);
+                    // FileoutputUtil.log(FileoutputUtil.ScriptEx_Log, "Event name : " + name + ", method Name : " + methodName + ":\n" + ex);
                 }
             }
         }, delay);
@@ -116,7 +116,7 @@ public class EventManager {
                     iv.invokeFunction(methodName, eim);
                 } catch (Exception ex) {
                     System.out.println("Event name : " + name + ", method Name : " + methodName + ":\n" + ex);
-                    FileoutputUtil.log(FileoutputUtil.ScriptEx_Log, "Event name : " + name + ", method Name : " + methodName + ":\n" + ex);
+                    // FileoutputUtil.log(FileoutputUtil.ScriptEx_Log, "Event name : " + name + ", method Name : " + methodName + ":\n" + ex);
                 }
             }
         }, delay);
@@ -199,7 +199,7 @@ public class EventManager {
             iv.invokeFunction("setup", (Object) null);
         } catch (Exception ex) {
             ex.printStackTrace();
-            FileoutputUtil.log(FileoutputUtil.ScriptEx_Log, "Event name : " + name + ", method Name : setup:\n" + ex);
+            // FileoutputUtil.log(FileoutputUtil.ScriptEx_Log, "Event name : " + name + ", method Name : setup:\n" + ex);
         }
     }
 
@@ -209,7 +209,7 @@ public class EventManager {
             eim.registerCarnivalParty(chr, chr.getMap(), (byte) 0);
         } catch (Exception ex) {
             ex.printStackTrace();
-            FileoutputUtil.log(FileoutputUtil.ScriptEx_Log, "Event name : " + name + ", method Name : setup:\n" + ex);
+            // FileoutputUtil.log(FileoutputUtil.ScriptEx_Log, "Event name : " + name + ", method Name : setup:\n" + ex);
         }
     }
 
@@ -219,7 +219,7 @@ public class EventManager {
             eim.registerParty(chr.getParty(), chr.getMap());
         } catch (Exception ex) {
             ex.printStackTrace();
-            FileoutputUtil.log(FileoutputUtil.ScriptEx_Log, "Event name : " + name + ", method Name : setup:\n" + ex);
+            // FileoutputUtil.log(FileoutputUtil.ScriptEx_Log, "Event name : " + name + ", method Name : setup:\n" + ex);
         }
     }
 
@@ -233,7 +233,7 @@ public class EventManager {
             setProperty("guildid", String.valueOf(character.getGuildId()));
         } catch (Exception ex) {
             System.out.println("Event name : " + name + ", method Name : setup-Guild:\n" + ex);
-            FileoutputUtil.log(FileoutputUtil.ScriptEx_Log, "Event name : " + name + ", method Name : setup-Guild:\n" + ex);
+            // FileoutputUtil.log(FileoutputUtil.ScriptEx_Log, "Event name : " + name + ", method Name : setup-Guild:\n" + ex);
         }
     }
 
@@ -243,7 +243,7 @@ public class EventManager {
             eim.registerPlayer(character);
         } catch (Exception ex) {
             System.out.println("Event name : " + name + ", method Name : setup-CharID:\n" + ex);
-            FileoutputUtil.log(FileoutputUtil.ScriptEx_Log, "Event name : " + name + ", method Name : setup-CharID:\n" + ex);
+            // FileoutputUtil.log(FileoutputUtil.ScriptEx_Log, "Event name : " + name + ", method Name : setup-CharID:\n" + ex);
         }
     }
 
@@ -253,7 +253,7 @@ public class EventManager {
             eim.registerPlayer(character);
         } catch (Exception ex) {
             System.out.println("Event name : " + name + ", method Name : setup-character:\n" + ex);
-            FileoutputUtil.log(FileoutputUtil.ScriptEx_Log, "Event name : " + name + ", method Name : setup-character:\n" + ex);
+            // FileoutputUtil.log(FileoutputUtil.ScriptEx_Log, "Event name : " + name + ", method Name : setup-character:\n" + ex);
         }
     }
 
@@ -264,7 +264,7 @@ public class EventManager {
             eim.registerParty(party, map);
         } catch (ScriptException ex) {
             System.out.println("Event name : " + name + ", method Name : setup-partyid:\n" + ex);
-            FileoutputUtil.log(FileoutputUtil.ScriptEx_Log, "Event name : " + name + ", method Name : setup-partyid:\n" + ex);
+            // FileoutputUtil.log(FileoutputUtil.ScriptEx_Log, "Event name : " + name + ", method Name : setup-partyid:\n" + ex);
         } catch (Exception ex) {
             //ignore
             startInstance_NoID(party, map, ex);
@@ -281,7 +281,7 @@ public class EventManager {
             eim.registerParty(party, map);
         } catch (Exception ex) {
             System.out.println("Event name : " + name + ", method Name : setup-party:\n" + ex);
-            FileoutputUtil.log(FileoutputUtil.ScriptEx_Log, "Event name : " + name + ", method Name : setup-party:\n" + ex + "\n" + (old == null ? "no old exception" : old));
+            // FileoutputUtil.log(FileoutputUtil.ScriptEx_Log, "Event name : " + name + ", method Name : setup-party:\n" + ex + "\n" + (old == null ? "no old exception" : old));
         }
     }
 
@@ -292,7 +292,7 @@ public class EventManager {
             eim.setProperty("leader", leader);
         } catch (Exception ex) {
             System.out.println("Event name : " + name + ", method Name : setup-leader:\n" + ex);
-            FileoutputUtil.log(FileoutputUtil.ScriptEx_Log, "Event name : " + name + ", method Name : setup-leader:\n" + ex);
+            // FileoutputUtil.log(FileoutputUtil.ScriptEx_Log, "Event name : " + name + ", method Name : setup-leader:\n" + ex);
         }
     }
 
@@ -319,7 +319,7 @@ public class EventManager {
             eim.registerSquad(squad, map, questID);
         } catch (Exception ex) {
             System.out.println("Event name : " + name + ", method Name : setup-squad:\n" + ex);
-            FileoutputUtil.log(FileoutputUtil.ScriptEx_Log, "Event name : " + name + ", method Name : setup-squad:\n" + ex);
+            // FileoutputUtil.log(FileoutputUtil.ScriptEx_Log, "Event name : " + name + ", method Name : setup-squad:\n" + ex);
         }
     }
 

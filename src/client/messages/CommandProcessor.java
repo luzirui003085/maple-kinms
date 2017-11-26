@@ -155,14 +155,14 @@ public class CommandProcessor {
                         }
                     } catch (Exception ex) {
                         ex.printStackTrace();
-                        FileoutputUtil.outputFileError(FileoutputUtil.ScriptEx_Log, ex);
+                        // FileoutputUtil.outputFileError(FileoutputUtil.ScriptEx_Log, ex);
                     }
                 }
                 Collections.sort(cL);
                 commandList.put(rankNeeded.getLevel(), cL);
             } catch (Exception ex) {
                 ex.printStackTrace();
-                FileoutputUtil.outputFileError(FileoutputUtil.ScriptEx_Log, ex);
+                // FileoutputUtil.outputFileError(FileoutputUtil.ScriptEx_Log, ex);
             }
         }
     }
