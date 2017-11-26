@@ -225,14 +225,15 @@ public class MapleServerHandler extends IoHandlerAdapter {
                             return;
                         }
                     }
-                    if (c.getPlayer() != null && c.isMonitored()) {
-                        if (!blocked.contains(recv)) {
-                            try (FileWriter fw = new FileWriter(new File("Logs/MonitorLogs/" + c.getPlayer().getName() + "_log.txt"), true)) {
-                                fw.write(String.valueOf(recv) + " (" + Integer.toHexString(header_num) + ") Handled: \r\n" + slea.toString() + "\r\n");
-                                fw.flush();
-                            }
-                        }
-                    }
+                    // 封号记录
+                    // if (c.getPlayer() != null && c.isMonitored()) {
+                    //  if (!blocked.contains(recv)) {
+                    //  try (FileWriter fw = new FileWriter(new File("Logs/MonitorLogs/" + c.getPlayer().getName() + "_log.txt"), true)) {
+                    //   fw.write(String.valueOf(recv) + " (" + Integer.toHexString(header_num) + ") Handled: \r\n" + slea.toString() + "\r\n");
+                    //     fw.flush();
+                    //  }
+                    //  }
+                    // }
                     handlePacket(recv, slea, c, cs);
                     return;
                 }
