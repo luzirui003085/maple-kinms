@@ -1,4 +1,3 @@
-
 package handling.channel.handler;
 
 import client.ISkill;
@@ -103,8 +102,9 @@ public class DamageParse {
         }
         int totDamage = 0;
         final MapleMap map = player.getMap();
-
-        // MaplePvp.doPvP(player, map, attack, effect);
+        if (map.getId() == 910000007) {
+            MaplePvp.doPvP(player, map, attack, effect);
+        }
         if (attack.skill == 4211006) { // meso explosion
             for (AttackPair oned : attack.allDamage) {
                 if (oned.attack != null) {
@@ -544,8 +544,10 @@ public class DamageParse {
 
         final MapleMap map = player.getMap();
 
-        // MaplePvp.doPvP(player, map, attack, effect);
-        
+        if (map.getId() == 910000007) {
+            MaplePvp.doPvP(player, map, attack, effect);
+        }
+
         for (final AttackPair oned : attack.allDamage) {
             final MapleMonster monster = map.getMonsterByOid(oned.objectid);
 

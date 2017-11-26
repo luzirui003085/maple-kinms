@@ -23,31 +23,42 @@ import tools.MaplePacketCreator;
  */
 public class MaplePvp {
 
+    /**
+     * 计算攻击
+     *
+     * @param attack
+     * @param player
+     * @param effect
+     * @return
+     */
     private static PvpAttackInfo parsePvpAttack(AttackInfo attack, MapleCharacter player, MapleStatEffect effect) {
         PvpAttackInfo ret = new PvpAttackInfo();
-        double maxdamage = player.getLevel() + 100.0D;
+        double maxdamage = player.getLevel() + 100.0D; // 最大攻击是等级*100
         int skillId = attack.skill;
         ret.skillId = skillId;
-        ret.critRate = 5;
-        ret.ignoreDef = 0;
-        ret.skillDamage = 100;
-        ret.mobCount = 1;
-        ret.attackCount = 1;
-        int pvpRange = 70;
-        ret.facingLeft = (attack.animation < 0);
+        ret.critRate = 5; // 暴击率
+        if (player.getJob() / 100 == 4 || player.getJob() / 100 == 3) { // 弓箭手或者飞侠的暴击率是50
+            ret.critRate = 50;
+        }
+        ret.ignoreDef = 0; // 忽略防御力
+        ret.mobCount = 1; // 攻击怪物个数
+        ret.attackCount = 1; // 攻击次数
+        int pvpRange = 70; // 攻击范围
+        ret.facingLeft = (attack.animation < 0); // 攻击方向
         if ((skillId != 0) && (effect != null)) {
             ret.skillDamage = (effect.getDamage());
             ret.mobCount = Math.max(1, effect.getMobCount());
             ret.attackCount = Math.max(effect.getBulletCount(), effect.getAttackCount());
             ret.box = effect.calculateBoundingBox(player.getTruePosition(), ret.facingLeft, pvpRange);
         } else {
+            ret.skillDamage = (int) player.getStat().getCurrentMaxBaseDamage(); // 攻击伤害
             ret.box = calculateBoundingBox(player.getTruePosition(), ret.facingLeft, pvpRange);
         }
         boolean mirror = (player.getBuffedValue(MapleBuffStat.SHADOWPARTNER) != null);
         ret.attackCount *= (mirror ? 2 : 1);
         maxdamage *= ret.skillDamage / 100.0D;
         ret.maxDamage = (maxdamage * ret.attackCount);
-        player.dropMessage(6, "Pvp伤害解析 - 最大攻击: " + maxdamage + " 数量: " + ret.mobCount + " 次数: " + ret.attackCount + " 爆击: " + ret.critRate + " 无视: " + ret.ignoreDef + " 技能伤害: " + ret.skillDamage);
+        // player.dropMessage(6, "Pvp伤害解析 - 最大攻击: " + maxdamage + " 攻击数量: " + ret.mobCount + " 攻击次数: " + ret.attackCount + " 爆击率: " + ret.critRate + " 无视防御: " + ret.ignoreDef + " 技能伤害: " + ret.skillDamage);
         return ret;
     }
 
@@ -73,27 +84,14 @@ public class MaplePvp {
         double maxDamage = attack.maxDamage;
         boolean isCritDamage = false;
 
-        if (player.getLevel() > attacked.getLevel() + 10) {
-            maxDamage *= 1.05D;
-        } else if (player.getLevel() < attacked.getLevel() - 10) {
-            maxDamage /= 1.05D;
-        } else if (player.getLevel() > attacked.getLevel() + 20) {
-            maxDamage *= 1.1D;
-        } else if (player.getLevel() < attacked.getLevel() - 20) {
-            maxDamage /= 1.1D;
-        } else if (player.getLevel() > attacked.getLevel() + 30) {
-            maxDamage *= 1.15D;
-        } else if (player.getLevel() < attacked.getLevel() - 30) {
-            maxDamage /= 1.15D;
-        }
-
+        // 暴击
         if (Randomizer.nextInt(100) < attack.critRate) {
             maxDamage *= 1.5D;
             isCritDamage = true;
         }
         int attackedDamage = (int) Math.floor(Math.random() * ((int) maxDamage * 0.35D) + (int) maxDamage * 0.65D);
         int MAX_PVP_DAMAGE = (int) (player.getStat().getLimitBreak(player) / 100.0D);
-        int MIN_PVP_DAMAGE = 100;
+        int MIN_PVP_DAMAGE = 1;
         if (attackedDamage > MAX_PVP_DAMAGE) {
             attackedDamage = MAX_PVP_DAMAGE;
         }

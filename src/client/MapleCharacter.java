@@ -2334,13 +2334,11 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
             }
         }
     }*/
-
     /**
      *
      * @param skillid
      * @param targets
      */
-
     public final void handleEnergyCharge1(final int skillid, final int targets) {
         final ISkill echskill = SkillFactory.getSkill(skillid);
         final byte skilllevel = getSkillLevel(echskill);
@@ -3459,7 +3457,7 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
                 skills.remove(skill);
             } else {
                 //nothing happen
-                
+
             }
         } else {
             skills.put(skill, new SkillEntry(newLevel, newMasterlevel, -1L));
@@ -5049,12 +5047,10 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
      * pets[1] = pets[0]; pets[0] = null; }
      }
      */
-
     /**
      *
      * @return
      */
-
     public final long getLastFameTime() {
         return lastfametime;
     }
@@ -5684,13 +5680,11 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
         /**
          *
          */
-        OK, 
-
+        OK,
         /**
          *
          */
-        NOT_TODAY, 
-
+        NOT_TODAY,
         /**
          *
          */
@@ -6727,12 +6721,10 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
      * quantity; break; }
      }
      */
-
     /**
      *
      * @return
      */
-
     public boolean getCanTalk() {
         return this.canTalk;
     }
@@ -7720,7 +7712,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     // TODO: gvup, vic, lose, draw, VR
-
     /**
      *
      * @param questid
@@ -8233,12 +8224,10 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
      * System.err.println("CharMessage(set)"); charmessage += s;
      }
      */
-
     /**
      *
      * @return
      */
-
     public String getcharmessage() {
         //System.err.println("CharMessage(get)");
         return charmessage;
@@ -9219,7 +9208,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     //--------------------------------------------赏金任务
-
     /**
      *
      * @return
@@ -9303,7 +9291,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     //--------------------------------------------每日副本任务
-
     /**
      *
      * @return
@@ -9469,7 +9456,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     //--------------------------------------------每日杀怪任务
-
     /**
      *
      * @return
@@ -9635,7 +9621,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     //--------------------------------------------每日杀BOSS任务
-
     /**
      *
      * @return
@@ -9801,7 +9786,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     //-------------七天礼包判断日期函数
-
     /**
      *
      * @return
@@ -10158,8 +10142,7 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
 
     /**
      *
-     * @return
-     * @throws SQLException
+     * @return @throws SQLException
      */
     public int 获取全民夺宝总数() throws SQLException {
         Connection con = DatabaseConnection.getConnection();
@@ -10222,7 +10205,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     //全民夺宝名单
-
     /**
      *
      * @param id
@@ -10296,7 +10278,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     //如果玩家获得了 那么我们将玩家的ID写入数据库玩家可以凭据领取该物品 //CURRENT_TIMESTAMP()
-
     /**
      *
      * @param id
@@ -10368,7 +10349,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     //参加全民夺宝
-
     /**
      *
      */
