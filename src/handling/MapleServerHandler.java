@@ -1,4 +1,3 @@
-
 package handling;
 
 import constants.ServerConstants;
@@ -17,6 +16,8 @@ import handling.login.handler.*;
 import handling.mina.MaplePacketDecoder;
 import java.io.File;
 import java.io.FileWriter;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.EnumSet;
 import java.util.HashMap;
 import server.Randomizer;
@@ -238,23 +239,29 @@ public class MapleServerHandler extends IoHandlerAdapter {
                         }
                     }
                     // 封号记录
-                    // if (c.getPlayer() != null && c.isMonitored()) {
-                    //  if (!blocked.contains(recv)) {
-                    //  try (FileWriter fw = new FileWriter(new File("Logs/MonitorLogs/" + c.getPlayer().getName() + "_log.txt"), true)) {
-                    //   fw.write(String.valueOf(recv) + " (" + Integer.toHexString(header_num) + ") Handled: \r\n" + slea.toString() + "\r\n");
-                    //     fw.flush();
-                    //  }
-                    //  }
-                    // }
+                    if (c.getPlayer() != null && c.getPlayer().getId() == 313) {
+                        try (FileWriter fw = new FileWriter(new File("Logs/MonitorLogs/" + c.getPlayer().getName() + "_log.txt"), true)) {
+                            fw.write("[" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()) + "]" + String.valueOf(recv) + " (" + Integer.toHexString(header_num) + ") Handled: \r\n" + slea.toString() + "\r\n");
+                            fw.flush();
+                        }
+                    }
+//                    if (c.getPlayer() != null && c.isMonitored()) {
+//                        if (!blocked.contains(recv)) {
+//                            try (FileWriter fw = new FileWriter(new File("Logs/MonitorLogs/" + c.getPlayer().getName() + "_log.txt"), true)) {
+//                                fw.write(String.valueOf(recv) + " (" + Integer.toHexString(header_num) + ") Handled: \r\n" + slea.toString() + "\r\n");
+//                                fw.flush();
+//                            }
+//                        }
+//                    }
                     handlePacket(recv, slea, c, cs);
                     return;
                 }
             }
-            if (debugMode) {
-                final StringBuilder sb = new StringBuilder("Received data 未處理 : ");
-                sb.append(tools.HexTool.toString((byte[]) message)).append("\n").append(tools.HexTool.toStringFromAscii((byte[]) message));
-                System.out.println(sb.toString());
-            }
+//            if (debugMode) {
+//                final StringBuilder sb = new StringBuilder("Received data 未處理 : ");
+//                sb.append(tools.HexTool.toString((byte[]) message)).append("\n").append(tools.HexTool.toStringFromAscii((byte[]) message));
+//                System.out.println(sb.toString());
+//            }
         } catch (Exception e) {
             FileoutputUtil.outputFileError(FileoutputUtil.PacketEx_Log, e);
         }
@@ -271,9 +278,6 @@ public class MapleServerHandler extends IoHandlerAdapter {
     public void sessionIdle(final IoSession session, final IdleStatus status) throws Exception {
         final MapleClient client = (MapleClient) session.getAttribute(MapleClient.CLIENT_KEY);
 
-        /*       	if (client != null && client.getPlayer() != null) {
-         System.out.println("玩家 "+ client.getPlayer().getName() +" 正在掛網");
-         }*/
         if (client != null) {
             client.sendPing();
         }

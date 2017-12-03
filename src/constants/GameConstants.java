@@ -1,4 +1,3 @@
-
 package constants;
 
 import client.MapleCharacter;
@@ -20,6 +19,10 @@ import server.maps.MapleMapObjectType;
  * @author zjj
  */
 public class GameConstants {
+
+    public static final int PVP_MAP = 910000007;
+
+    public static final int PVP_CHANEL = 4;
 
     /**
      *
@@ -1438,7 +1441,6 @@ public class GameConstants {
     }
 
     // 重生
-
     /**
      *
      * @param itemId
@@ -1493,7 +1495,6 @@ public class GameConstants {
     }
 
     // 永恒
-
     /**
      *
      * @param itemId
@@ -1564,7 +1565,6 @@ public class GameConstants {
     }// 112xxxx - pendants, 113xxxx - belts
 
     //if only there was a way to find in wz files -.-
-
     /**
      *
      * @param itemid
@@ -1663,7 +1663,6 @@ public class GameConstants {
     }
 
     // 永恒
-
     /**
      *
      * @param itemId
@@ -4034,7 +4033,6 @@ public class GameConstants {
 //        }
 //        return false;
 //    }
-
     /**
      *
      * @param skill
@@ -4204,7 +4202,6 @@ public class GameConstants {
     }
 
     // Custom Balloon Tips on the Login Screen
-
     /**
      *
      */

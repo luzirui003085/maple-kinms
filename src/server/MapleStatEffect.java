@@ -789,10 +789,12 @@ public class MapleStatEffect implements Serializable {
      * @return
      */
     public final boolean applyTo(final MapleCharacter applyfrom, final MapleCharacter applyto, final boolean primary, final Point pos, int newDuration) {
+        if (isHeal() && applyto.getMapId() == GameConstants.PVP_MAP && applyto.getClient().getChannel() == GameConstants.PVP_CHANEL) {
+            applyfrom.dropMessage("pk地图禁止使用回血技能");
+            return false;
+        }
         if (isHeal() && (applyfrom.getMapId() == 749040100 || applyto.getMapId() == 749040100)) {
-            return false; //z
-            //} else if (isSoaring() && !applyfrom.getMap().canSoar()) {
-            //	return false;
+            return false;
         } else if (sourceid == 4341006 && applyfrom.getBuffedValue(MapleBuffStat.MIRROR_IMAGE) == null) {
             applyfrom.getClient().getSession().write(MaplePacketCreator.enableActions());
             return false; //not working
@@ -831,22 +833,27 @@ public class MapleStatEffect implements Serializable {
             }
         }
         final List<Pair<MapleStat, Integer>> hpmpupdate = new ArrayList<>(2);
-        if (hpchange != 0) {
-            if (hpchange < 0 && (-hpchange) > stat.getHp() && !applyto.hasDisease(MapleDisease.ZOMBIFY)) {
-                return false;
-            }
-            stat.setHp(stat.getHp() + hpchange);
-        }
-        if (mpchange != 0) {
-            if (mpchange < 0 && (-mpchange) > stat.getMp()) {
-                return false;
-            }
-            //short converting needs math.min cuz of overflow
-            stat.setMp(stat.getMp() + mpchange);
 
-            hpmpupdate.add(new Pair<>(MapleStat.MP, Integer.valueOf(stat.getMp())));
+        if (!(applyto.getMapId() == GameConstants.PVP_MAP && applyto.getClient().getChannel() == GameConstants.PVP_CHANEL)) {
+            if (hpchange != 0) {
+                if (hpchange < 0 && (-hpchange) > stat.getHp() && !applyto.hasDisease(MapleDisease.ZOMBIFY)) {
+                    return false;
+                }
+                stat.setHp(stat.getHp() + hpchange);
+            }
+            if (mpchange != 0) {
+                if (mpchange < 0 && (-mpchange) > stat.getMp()) {
+                    return false;
+                }
+                //short converting needs math.min cuz of overflow
+                stat.setMp(stat.getMp() + mpchange);
+
+                hpmpupdate.add(new Pair<>(MapleStat.MP, Integer.valueOf(stat.getMp())));
+            }
+            hpmpupdate.add(new Pair<>(MapleStat.HP, Integer.valueOf(stat.getHp())));
+        } else {
+            applyto.dropMessage("PK地图不能加血加蓝!!!");
         }
-        hpmpupdate.add(new Pair<>(MapleStat.HP, Integer.valueOf(stat.getHp())));
 
         applyto.getClient().getSession().write(MaplePacketCreator.updatePlayerStats(hpmpupdate, true, applyto.getJob()));
 

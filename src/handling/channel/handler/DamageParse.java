@@ -102,7 +102,7 @@ public class DamageParse {
         }
         int totDamage = 0;
         final MapleMap map = player.getMap();
-        if (map.getId() == 910000007) {
+        if (map.getId() == GameConstants.PVP_MAP && player.getClient().getChannel() == GameConstants.PVP_CHANEL) {
             MaplePvp.doPvP(player, map, attack, effect);
         }
         if (attack.skill == 4211006) { // meso explosion
@@ -544,7 +544,7 @@ public class DamageParse {
 
         final MapleMap map = player.getMap();
 
-        if (map.getId() == 910000007) {
+        if (map.getId() == GameConstants.PVP_MAP && player.getClient().getChannel() == GameConstants.PVP_CHANEL) {
             MaplePvp.doPvP(player, map, attack, effect);
         }
 

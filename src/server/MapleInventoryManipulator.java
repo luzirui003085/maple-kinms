@@ -969,4 +969,112 @@ public class MapleInventoryManipulator {
         }
         return true;
     }
+
+    public static boolean pet_addFromDrop(final MapleClient c, IItem item, final boolean show, final boolean enhance) {
+        final MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
+
+        if (ii.isPickupRestricted(item.getItemId()) && c.getPlayer().haveItem(item.getItemId(), 1, true, false)) {
+            c.getSession().write(MaplePacketCreator.getInventoryFull());
+            c.getSession().write(MaplePacketCreator.showItemUnavailable());
+            return false;
+        }
+        final int before = c.getPlayer().itemQuantity(item.getItemId());
+        short quantity = item.getQuantity();
+        final MapleInventoryType type = GameConstants.getInventoryType(item.getItemId());
+
+        if (!type.equals(MapleInventoryType.EQUIP)) {
+            final short slotMax = ii.getSlotMax(c, item.getItemId());
+            final List<IItem> existing = c.getPlayer().getInventory(type).listById(item.getItemId());
+            if (!GameConstants.isRechargable(item.getItemId())) {
+                if (quantity <= 0) { //wth
+                    c.getSession().write(MaplePacketCreator.getInventoryFull());
+                    c.getSession().write(MaplePacketCreator.showItemUnavailable());
+                    return false;
+                }
+                if (existing.size() > 0) { // first update all existing slots to slotMax
+                    Iterator<IItem> i = existing.iterator();
+                    while (quantity > 0) {
+                        if (i.hasNext()) {
+                            final Item eItem = (Item) i.next();
+                            final short oldQ = eItem.getQuantity();
+                            if (oldQ < slotMax && item.getOwner().equals(eItem.getOwner()) && item.getExpiration() == eItem.getExpiration()) {
+                                final short newQ = (short) Math.min(oldQ + quantity, slotMax);
+                                quantity -= (newQ - oldQ);
+                                eItem.setQuantity(newQ);
+                                c.getSession().write(MaplePacketCreator.updateInventorySlot(type, eItem, false));
+                            }
+                        } else {
+                            break;
+                        }
+                    }
+                }
+                // add new slots if there is still something left
+                while (quantity > 0) {
+                    final short newQ = (short) Math.min(quantity, slotMax);
+                    quantity -= newQ;
+                    final Item nItem = new Item(item.getItemId(), (byte) 0, newQ, item.getFlag());
+                    nItem.setExpiration(item.getExpiration());
+                    nItem.setOwner(item.getOwner());
+                    nItem.setPet(item.getPet());
+                    short newSlot = c.getPlayer().getInventory(type).addItem(nItem);
+                    if (newSlot == -1) {
+                        c.getSession().write(MaplePacketCreator.getInventoryFull());
+                        c.getSession().write(MaplePacketCreator.getShowInventoryFull());
+                        item.setQuantity((short) (quantity + newQ));
+                        return false;
+                    }
+                    c.getSession().write(MaplePacketCreator.addInventorySlot(type, nItem, false));
+                }
+            } else {
+                // Throwing Stars and Bullets - Add all into one slot regardless of quantity.
+                final Item nItem = new Item(item.getItemId(), (byte) 0, quantity, item.getFlag());
+                nItem.setExpiration(item.getExpiration());
+                nItem.setOwner(item.getOwner());
+                nItem.setPet(item.getPet());
+                final short newSlot = c.getPlayer().getInventory(type).addItem(nItem);
+                if (newSlot == -1) {
+                    c.getSession().write(MaplePacketCreator.getInventoryFull());
+                    c.getSession().write(MaplePacketCreator.getShowInventoryFull());
+                    return false;
+                }
+                c.getSession().write(MaplePacketCreator.addInventorySlot(type, nItem));
+                c.getSession().write(MaplePacketCreator.enableActions());
+            }
+        } else if (quantity == 1) {
+            if (enhance) {
+                item = checkEnhanced(item, c.getPlayer());
+            }
+            final short newSlot = c.getPlayer().getInventory(type).addItem(item);
+
+            if (newSlot == -1) {
+                c.getSession().write(MaplePacketCreator.getInventoryFull());
+                c.getSession().write(MaplePacketCreator.getShowInventoryFull());
+                return false;
+            }
+            c.getSession().write(MaplePacketCreator.addInventorySlot(type, item, false));
+        } else {
+            throw new RuntimeException("Trying to create equip with non-one quantity");
+        }
+        if (item.getQuantity() >= 50 && GameConstants.isUpgradeScroll(item.getItemId())) {
+            c.setMonitored(true);
+        }
+        if (before == 0) {
+            switch (item.getItemId()) {
+                case AramiaFireWorks.KEG_ID:
+                    c.getPlayer().dropMessage(5, "You have gained a Powder Keg, you can give this in to Aramia of Henesys.");
+                    break;
+                case AramiaFireWorks.SUN_ID:
+                    c.getPlayer().dropMessage(5, "You have gained a Warm Sun, you can give this in to Maple Tree Hill through @joyce.");
+                    break;
+                case AramiaFireWorks.DEC_ID:
+                    c.getPlayer().dropMessage(5, "You have gained a Tree Decoration, you can give this in to White Christmas Hill through @joyce.");
+                    break;
+            }
+        }
+        c.getPlayer().havePartyQuest(item.getItemId());
+        if (show) {
+            c.getSession().write(MaplePacketCreator.getShowItemGain(item.getItemId(), item.getQuantity()));
+        }
+        return true;
+    }
 }

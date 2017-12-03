@@ -2438,9 +2438,24 @@ public class InventoryHandler {
             return;
         }
         final MapleMapItem mapitem = (MapleMapItem) ob;
-        final Lock lock = mapitem.getLock();
-        lock.lock();
+        // final Lock lock = mapitem.getLock();
+        // lock.lock();
         try {
+//            if (mapitem.isPickedUp()) {
+//                c.getSession().write(MaplePacketCreator.getInventoryFull());
+//                return;
+//            }
+//            if (mapitem.getOwner() != chr.getId() && mapitem.isPlayerDrop()) {
+//                return;
+//            }
+//            if (mapitem.getOwner() != chr.getId() && ((!mapitem.isPlayerDrop() && mapitem.getDropType() == 0) || (mapitem.isPlayerDrop() && chr.getMap().getEverlast()))) {
+//                c.getSession().write(MaplePacketCreator.enableActions());
+//                return;
+//            }
+//            if (!mapitem.isPlayerDrop() && mapitem.getDropType() == 1 && mapitem.getOwner() != chr.getId() && (chr.getParty() == null || chr.getParty().getMemberById(mapitem.getOwner()) == null)) {
+//                c.getSession().write(MaplePacketCreator.enableActions());
+//                return;
+//            }
             if (mapitem.isPickedUp()) {
                 c.getSession().write(MaplePacketCreator.getInventoryFull());
                 return;
@@ -2456,12 +2471,19 @@ public class InventoryHandler {
                 c.getSession().write(MaplePacketCreator.enableActions());
                 return;
             }
+            if (mapitem.isPlayerDrop() && mapitem.getDropType() == 2 && mapitem.getOwner() == chr.getId()) {
+                c.getSession().write(MaplePacketCreator.enableActions());
+                return;
+            }
+            if (mapitem.isPlayerDrop() && mapitem.getDropType() == 0 && mapitem.getOwner() == chr.getId() && mapitem.getMeso() != 0) {
+                c.getSession().write(MaplePacketCreator.enableActions());
+                return;
+            }
             final double Distance = Client_Reportedpos.distanceSq(mapitem.getPosition());
             if (Distance > 10000 && (mapitem.getMeso() > 0 || mapitem.getItemId() != 4001025)) {
                 chr.getCheatTracker().registerOffense(CheatingOffense.PET_ITEMVAC_CLIENT, String.valueOf(Distance));
             } else if (pet.getPos().distanceSq(mapitem.getPosition()) > 640000.0) {
                 chr.getCheatTracker().registerOffense(CheatingOffense.PET_ITEMVAC_SERVER);
-
             }
 
             if (mapitem.getMeso() > 0) {
@@ -2490,11 +2512,12 @@ public class InventoryHandler {
                 if (mapitem.getItem().getQuantity() >= 50 && mapitem.getItemId() == 2340000) {
                     c.setMonitored(true); //hack check
                 }
-                MapleInventoryManipulator.addFromDrop(c, mapitem.getItem(), true, mapitem.getDropper() instanceof MapleMonster);
+                MapleInventoryManipulator.pet_addFromDrop(c, mapitem.getItem(), true, mapitem.getDropper() instanceof MapleMonster);
+                // MapleInventoryManipulator.addFromDrop(c, mapitem.getItem(), true, mapitem.getDropper() instanceof MapleMonster);
                 removeItem_Pet(chr, mapitem, petz);
             }
         } finally {
-            lock.unlock();
+            //   lock.unlock();
         }
     }
 

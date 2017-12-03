@@ -1,4 +1,3 @@
-
 package handling.channel.handler;
 
 import client.MapleCharacter;
@@ -19,6 +18,7 @@ import java.util.List;
 import java.util.Map;
 import server.MapleInventoryManipulator;
 import server.MerchItemPackage;
+import tools.MaplePacketCreator;
 import tools.Pair;
 import tools.data.input.SeekableLittleEndianAccessor;
 import tools.packet.PlayerShopPacket;
@@ -125,11 +125,19 @@ public class HiredMerchantHandler {
                             return;
                         }
                         if (deletePackage(c.getPlayer().getId(), c.getPlayer().getAccountID(), pack.getPackageid())) {
+//                            c.getPlayer().gainMeso(pack.getMesos(), false);
+//                            c.getSession().write(PlayerShopPacket.merchItem_Message((byte) 0x1d));
                             c.getPlayer().gainMeso(pack.getMesos(), false);
-                            c.getSession().write(PlayerShopPacket.merchItem_Message((byte) 0x1d));
+                            c.getPlayer().setConversation(0);
+                            c.getPlayer().dropMessage("领取金币" + pack.getMesos());
+                            
+                            
+                            
                         } else {
                             c.getPlayer().dropMessage(1, "发生未知错误。");
                         }
+                        c.getPlayer().setConversation(0);
+                        c.getSession().write(MaplePacketCreator.enableActions());
                     } else {
                         c.getSession().write(PlayerShopPacket.merchItemStore_ItemData(pack));
                     }
@@ -145,6 +153,8 @@ public class HiredMerchantHandler {
             }
             case 26: { // 取出物品
                 if (c.getPlayer().getConversation() != 3) {
+                    c.getPlayer().dropMessage(1, "发生未知错误1.");
+                    c.getSession().write(MaplePacketCreator.enableActions());
                     return;
                 }
                 final MerchItemPackage pack = loadItemFrom_Database(c.getPlayer().getId(), c.getPlayer().getAccountID());
@@ -195,11 +205,12 @@ public class HiredMerchantHandler {
                 MapleInventoryManipulator.addFromDrop(c, item, false);
             }
             c.getPlayer().dropMessage(5, "领取成功。");
-          //  c.getSession().write(PlayerShopPacket.merchItem_Message((byte) 0x1d));
+            //  c.getSession().write(PlayerShopPacket.merchItem_Message((byte) 0x1d));
         } else {
             c.getPlayer().dropMessage(1, "发生未知错误。");
         }
     }
+
     private static final boolean check(final MapleCharacter chr, final MerchItemPackage pack) {
         if (chr.getMeso() + pack.getMesos() < 0) {
             return false;
@@ -207,37 +218,39 @@ public class HiredMerchantHandler {
         byte eq = 0, use = 0, setup = 0, etc = 0, cash = 0;
         for (IItem item : pack.getItems()) {
             final MapleInventoryType invtype = GameConstants.getInventoryType(item.getItemId());
-            if (null != invtype) switch (invtype) {
-                case EQUIP:
-                    eq++;
-                    break;
-            /* if (MapleItemInformationProvider.getInstance().isPickupRestricted(item.getItemId()) && chr.haveItem(item.getItemId(), 1)) {
+            if (null != invtype) {
+                switch (invtype) {
+                    case EQUIP:
+                        eq++;
+                        break;
+                    /* if (MapleItemInformationProvider.getInstance().isPickupRestricted(item.getItemId()) && chr.haveItem(item.getItemId(), 1)) {
             return false;
             }*/
-                case USE:
-                    use++;
-                    break;
-                case SETUP:
-                    setup++;
-                    break;
-                case ETC:
-                    etc++;
-                    break;
-                case CASH:
-                    cash++;
-                    break;
-                default:
-                    break;
+                    case USE:
+                        use++;
+                        break;
+                    case SETUP:
+                        setup++;
+                        break;
+                    case ETC:
+                        etc++;
+                        break;
+                    case CASH:
+                        cash++;
+                        break;
+                    default:
+                        break;
+                }
             }
 
         }
         /* if (chr.getInventory(MapleInventoryType.EQUIP).getNumFreeSlot() < eq || chr.getInventory(MapleInventoryType.USE).getNumFreeSlot() < use || chr.getInventory(MapleInventoryType.SETUP).getNumFreeSlot() < setup || chr.getInventory(MapleInventoryType.ETC).getNumFreeSlot() < etc || chr.getInventory(MapleInventoryType.CASH).getNumFreeSlot() < cash) {
          return false;
-         }*/        return !(chr.getInventory(MapleInventoryType.EQUIP).getNumFreeSlot() <= eq
-                 || chr.getInventory(MapleInventoryType.USE).getNumFreeSlot() <= use
-                 || chr.getInventory(MapleInventoryType.SETUP).getNumFreeSlot() <= setup
-                 || chr.getInventory(MapleInventoryType.ETC).getNumFreeSlot() <= etc
-                 || chr.getInventory(MapleInventoryType.CASH).getNumFreeSlot() <= cash);
+         }*/ return !(chr.getInventory(MapleInventoryType.EQUIP).getNumFreeSlot() <= eq
+                || chr.getInventory(MapleInventoryType.USE).getNumFreeSlot() <= use
+                || chr.getInventory(MapleInventoryType.SETUP).getNumFreeSlot() <= setup
+                || chr.getInventory(MapleInventoryType.ETC).getNumFreeSlot() <= etc
+                || chr.getInventory(MapleInventoryType.CASH).getNumFreeSlot() <= cash);
     }
 
     private static final boolean deletePackage(final int charid, final int accid, final int packageid) {
@@ -282,7 +295,7 @@ public class HiredMerchantHandler {
             ps.close();
             rs.close();
 
-            Map<Integer, Pair<IItem, MapleInventoryType>> items = ItemLoader.HIRED_MERCHANT.loadItems(false, packageid, accountid, charid);
+            Map<Integer, Pair<IItem, MapleInventoryType>> items = ItemLoader.HIRED_MERCHANT.loadItems_hm(packageid, accountid);
             if (items != null) {
                 List<IItem> iters = new ArrayList<>();
                 for (Pair<IItem, MapleInventoryType> z : items.values()) {
