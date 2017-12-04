@@ -1,4 +1,3 @@
-
 package handling.channel;
 
 import client.MapleCharacter;
@@ -237,7 +236,6 @@ public class ChannelServer implements Serializable {
 //    public static final ChannelServer newInstance(final String key, final int channel) {
 //        return new ChannelServer(key, channel);
 //    }
-
     /**
      *
      * @param channel
@@ -597,12 +595,10 @@ public class ChannelServer implements Serializable {
             newInstance(i + 1).run_startup_configurations();
         }
     }*/
-
     /**
      *
      * @return
      */
-
     public int getStatLimit() {
         return this.statLimit;
     }
@@ -1108,8 +1104,16 @@ public class ChannelServer implements Serializable {
      *
      * @param dy
      */
+    public void AutoNx(int mapid, int dy, int exprate) {
+        mapFactory.getMap(mapid).AutoNx(dy, exprate);
+    }
+
+    /**
+     *
+     * @param dy
+     */
     public void AutoNx(int dy) {
-        mapFactory.getMap(Integer.parseInt(ServerProperties.getProperty("KinMS.PDMap"))).AutoNx(dy);
+        mapFactory.getMap(101000000).AutoNx(dy);
     }
 
     /**
@@ -1265,8 +1269,7 @@ public class ChannelServer implements Serializable {
 
     /**
      *
-     * @return
-     * @throws SQLException
+     * @return @throws SQLException
      */
     public int 获取全民夺宝总数() throws SQLException {
         java.sql.Connection con = DatabaseConnection.getConnection();

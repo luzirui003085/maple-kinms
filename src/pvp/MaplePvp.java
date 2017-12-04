@@ -51,8 +51,8 @@ public class MaplePvp {
             ret.attackCount = Math.max(effect.getBulletCount(), effect.getAttackCount());
             ret.box = effect.calculateBoundingBox(player.getTruePosition(), ret.facingLeft, pvpRange);
         } else {
-            ret.skillDamage = (int) player.getStat().getCurrentMaxBaseDamage(); // 攻击伤害
-            ret.box = calculateBoundingBox(player.getTruePosition(), ret.facingLeft, pvpRange);
+            ret.skillDamage = Math.max(player.getLevel() * 20, (int) (player.getStat().getCurrentMaxBaseDamage() * 0.01)); // (int) player.getStat().getCurrentMaxBaseDamage(); // 攻击伤害 1->20
+            ret.box = calculateBoundingBox(player.getTruePosition(), ret.facingLeft, pvpRange - 20);
         }
         boolean mirror = (player.getBuffedValue(MapleBuffStat.SHADOWPARTNER) != null);
         ret.attackCount *= (mirror ? 2 : 1);

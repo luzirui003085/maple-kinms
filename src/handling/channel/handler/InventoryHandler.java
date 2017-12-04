@@ -152,12 +152,16 @@ public class InventoryHandler {
             itemMap.add(item.copy()); // clone all  items T___T.
         }
         for (IItem itemStats : itemMap) {
-            MapleInventoryManipulator.removeById(c, invType, itemStats.getItemId(), itemStats.getQuantity(), true, false);
+            if (itemStats.getItemId() != 5110000) {
+                MapleInventoryManipulator.removeById(c, invType, itemStats.getItemId(), itemStats.getQuantity(), true, false);
+            }
         }
 
         final List<IItem> sortedItems = sortItems(itemMap);
         for (IItem item : sortedItems) {
-            MapleInventoryManipulator.addFromDrop(c, item, false);
+            if (item.getItemId() != 5110000) {
+                MapleInventoryManipulator.addFromDrop(c, item, false);
+            }
         }
         c.getSession().write(MaplePacketCreator.finishedGather(mode));
         c.getSession().write(MaplePacketCreator.enableActions());

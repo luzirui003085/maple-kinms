@@ -1,4 +1,3 @@
-
 package server.maps;
 
 import java.awt.Point;
@@ -1271,11 +1270,9 @@ public final class MapleMap {
      * command to reset all item-reactors in a map to state 0 for GM/NPC use - not tested (broken reactors get removed
      * from mapobjects when destroyed) Should create instances for multiple copies of non-respawning reactors...
      */
-
     /**
      *
      */
-
     public final void resetReactors() {
         setReactorState((byte) 0);
     }
@@ -1305,11 +1302,9 @@ public final class MapleMap {
     /*
      * command to shuffle the positions of all reactors in a map for PQ purposes (such as ZPQ/LMPQ)
      */
-
     /**
      *
      */
-
     public final void shuffleReactors() {
         shuffleReactors(0, 9999999); //all
     }
@@ -3139,13 +3134,11 @@ public final class MapleMap {
     /*	public void broadcastMessage(MapleCharacter source, MaplePacket packet, boolean repeatToSource, boolean ranged) {
      broadcastMessage(repeatToSource ? null : source, packet, ranged ? MapleCharacter.MAX_VIEW_RANGE_SQ : Double.POSITIVE_INFINITY, source.getPosition());
      }*/
-
     /**
      *
      * @param packet
      * @param rangedFrom
      */
-
     public final void broadcastMessage(final MaplePacket packet, final Point rangedFrom) {
         broadcastMessage(null, packet, GameConstants.maxViewRangeSq(), rangedFrom);
     }
@@ -3543,10 +3536,12 @@ public final class MapleMap {
                 mo.sendSpawnData(chr.getClient());
             }
         } else // monster left view range
-         if (mo.getType() != MapleMapObjectType.SUMMON && mo.getPosition().distanceSq(chr.getPosition()) > GameConstants.maxViewRangeSq()) {
+        {
+            if (mo.getType() != MapleMapObjectType.SUMMON && mo.getPosition().distanceSq(chr.getPosition()) > GameConstants.maxViewRangeSq()) {
                 chr.removeVisibleMapObject(mo);
                 mo.sendDestroyData(chr.getClient());
             }
+        }
     }
 
     /**
@@ -3708,16 +3703,25 @@ public final class MapleMap {
         }, 1000 * 60 * 60);
     }
 
+    public void AutoNx(int dy) {
+        AutoNx(dy, 15);
+    }
+
     /**
      *
      * @param dy
+     * @param exprate
      */
-    public void AutoNx(int dy) {
+    public void AutoNx(int dy, int exprate) {
         for (MapleCharacter chr : characters) {
-            chr.gainExp(chr.getLevel() * 15, true, false, true);
+            chr.gainExp(chr.getLevel() * exprate, true, false, true);
             chr.modifyCSPoints(1, dy);
-            chr.getClient().getSession().write(MaplePacketCreator.serverNotice(5, "[系统奖励] 挂机获得[" + dy + "] 点卷!"));
-            chr.getClient().getSession().write(MaplePacketCreator.serverNotice(5, "[系统奖励] 挂机获得[" + chr.getLevel() * 15 + "] 经验!"));
+            if (dy > 0) {
+                chr.getClient().getSession().write(MaplePacketCreator.serverNotice(5, "[系统奖励] 挂机获得[" + dy + "] 点卷!"));
+            }
+            if (chr.getLevel() * exprate > 0) {
+                chr.getClient().getSession().write(MaplePacketCreator.serverNotice(5, "[系统奖励] 挂机获得[" + chr.getLevel() * exprate + "] 经验!"));
+            }
         }
     }
 
@@ -3794,13 +3798,11 @@ public final class MapleMap {
                     }
                 }
             }, 1000 * 60 * time);*/
-
     /**
      *
      * @param map
      * @param mobid
      */
-
     public void spawnMonsterBOSSKillall(int map, int mobid) {
         int hour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);//小时
         int minute = Calendar.getInstance().get(Calendar.MINUTE);//分钟

@@ -834,12 +834,16 @@ public class MapleStatEffect implements Serializable {
         }
         final List<Pair<MapleStat, Integer>> hpmpupdate = new ArrayList<>(2);
 
-        if (!(applyto.getMapId() == GameConstants.PVP_MAP && applyto.getClient().getChannel() == GameConstants.PVP_CHANEL)) {
+        if (skill == false && hpchange > 0 && mpchange > 0 && applyto.getMapId() == GameConstants.PVP_MAP && applyto.getClient().getChannel() == GameConstants.PVP_CHANEL) {
+            applyto.dropMessage("PK地图不能加血加蓝!!!");
+        } else {
             if (hpchange != 0) {
                 if (hpchange < 0 && (-hpchange) > stat.getHp() && !applyto.hasDisease(MapleDisease.ZOMBIFY)) {
                     return false;
                 }
+
                 stat.setHp(stat.getHp() + hpchange);
+                hpmpupdate.add(new Pair<>(MapleStat.HP, Integer.valueOf(stat.getHp())));
             }
             if (mpchange != 0) {
                 if (mpchange < 0 && (-mpchange) > stat.getMp()) {
@@ -847,19 +851,14 @@ public class MapleStatEffect implements Serializable {
                 }
                 //short converting needs math.min cuz of overflow
                 stat.setMp(stat.getMp() + mpchange);
-
                 hpmpupdate.add(new Pair<>(MapleStat.MP, Integer.valueOf(stat.getMp())));
             }
-            hpmpupdate.add(new Pair<>(MapleStat.HP, Integer.valueOf(stat.getHp())));
-        } else {
-            applyto.dropMessage("PK地图不能加血加蓝!!!");
         }
 
         applyto.getClient().getSession().write(MaplePacketCreator.updatePlayerStats(hpmpupdate, true, applyto.getJob()));
 
         if (expinc != 0) {
             applyto.gainExp(expinc, true, true, false);
-//            applyto.getClient().getSession().write(MaplePacketCreator.showSpecialEffect(19));
         } else if (GameConstants.isMonsterCard(sourceid)) {
             applyto.getMonsterBook().addCard(applyto.getClient(), sourceid);
         } else if (isSpiritClaw() && !applyto.isClone()) {
@@ -953,15 +952,6 @@ public class MapleStatEffect implements Serializable {
             final Rectangle bounds = calculateBoundingBox(pos != null ? pos : new Point(applyfrom.getPosition()), applyfrom.isFacingLeft());
             final MapleMist mist = new MapleMist(bounds, applyfrom, this);
             applyfrom.getMap().spawnMist(mist, getDuration(), false);
-            /*
-             * } else if (isMist()) { Rectangle bounds =
-             * calculateBoundingBox(applyfrom.getPosition(),
-             * applyfrom.isFacingLeft()); MapleMist mist = new MapleMist(bounds,
-             * applyfrom, this); //applyfrom.getMap().spawnMist(mist,
-             * getDuration(), sourceid == 2111003, false);
-             * applyfrom.getMap().spawnMist(mist, getDuration(), false);
-             */
-
         } else if (isTimeLeap()) { // Time Leap
             for (MapleCoolDownValueHolder i : applyto.getCooldowns()) {
                 if (i.skillId != 5121010) {
