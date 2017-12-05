@@ -41,6 +41,7 @@ import server.MapleItemInformationProvider;
 import server.MapleShop;
 import server.MapleStorage;
 import server.life.MapleNPC;
+import server.maps.MapleMap;
 import server.quest.MapleQuest;
 import tools.ArrayMap;
 import tools.MaplePacketCreator;
@@ -60,20 +61,71 @@ public class NPCHandler {
      * @param c
      */
     public static final void NPCAnimation(final SeekableLittleEndianAccessor slea, final MapleClient c) {
-        MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter();
-        mplew.writeShort(SendPacketOpcode.NPC_ACTION.getValue());
+//        MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter();
+//        mplew.writeShort(SendPacketOpcode.NPC_ACTION.getValue());
+//        final int length = (int) slea.available();
+//
+//        if (length == 6) { // NPC Talk
+//            mplew.writeInt(slea.readInt());
+//            mplew.writeShort(slea.readShort());
+//        } else if (length > 6) { // NPC Move
+//            mplew.writeShort(SendPacketOpcode.NPC_ACTION.getValue());
+//            mplew.write(slea.read(length - 9));
+//        } else {
+//            return;
+//        }
+//        c.getSession().write(mplew.getPacket());
         final int length = (int) slea.available();
-
-        if (length == 6) { // NPC Talk
-            mplew.writeInt(slea.readInt());
-            mplew.writeShort(slea.readShort());
-        } else if (length > 6) { // NPC Move
-            mplew.writeShort(SendPacketOpcode.NPC_ACTION.getValue());
-            mplew.write(slea.read(length - 9));
-        } else {
+        if (length < 4) {
             return;
         }
-        c.getSession().write(mplew.getPacket());
+
+        MapleMap map = c.getPlayer().getMap();
+        if (map == null) {
+            return;
+        }
+
+        int oid = slea.readInt();
+        MapleNPC npc = map.getNPCByOid(oid);
+        if (npc == null) {
+            if (c.getPlayer().isAdmin()) {
+                c.getPlayer().dropMessage("NPC OID =" + oid);
+            }
+            return;
+        }
+
+        switch (npc.getId()) {
+            case 1010100:
+            case 1012003:
+            case 1012106:
+            case 1052103:
+            case 1061100:
+            case 1032004:
+            case 2103:
+            case 10000:
+                return;
+        }
+
+        if (!c.getPlayer().isMapObjectVisible(npc)) {
+            return;
+        }
+
+        MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter();
+        mplew.writeShort(SendPacketOpcode.NPC_ACTION.getValue());
+
+        mplew.writeInt(oid);
+        if (length == 6) { // NPC Talk
+            mplew.writeShort(slea.readShort());
+        } else if (length > 9) { // NPC Move
+            mplew.write(slea.read(length - 13));
+        } else {
+            if (c.getPlayer().isAdmin()) {
+                c.getPlayer().dropMessage("NPC, Packet:" + slea.toString());
+            }
+            return;
+        }
+
+        c.sendPacket(mplew.getPacket());
     }
 
     /**
@@ -268,7 +320,7 @@ public class NPCHandler {
                     }
                     storage.sendTakenOut(c, GameConstants.getInventoryType(item.getItemId()));
                 } else {
-                //AutobanManager.getInstance().autoban(c, "Trying to take out item from storage which does not exist.");
+                    //AutobanManager.getInstance().autoban(c, "Trying to take out item from storage which does not exist.");
 
                 }
                 break;
