@@ -3806,35 +3806,12 @@ public class MaplePacketCreator {
      * @return
      */
     public static MaplePacket givePirate(List<Pair<MapleBuffStat, Integer>> statups, int duration, int skillid) {
-        final boolean infusion = skillid == 5121009 || skillid == 15111005;
         MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter();
 
         if (ServerConstants.调试输出封包) {
             System.out.println("givePirate--------------------");
         }
         mplew.writeShort(SendPacketOpcode.GIVE_BUFF.getValue());
-//        writeLongMask(mplew, statups);
-//
-//        mplew.writeShort(0);
-//        for (Pair<MapleBuffStat, Integer> stat : statups) {
-//            if (infusion) {
-//                mplew.writeInt(0);
-//            } else {
-//                mplew.writeInt(stat.getRight().intValue());
-//            }
-//            mplew.writeLong(skillid);
-//            mplew.writeZeroBytes(infusion ? 6 : 1);
-//            mplew.writeShort(duration);
-//        }
-//        mplew.writeShort(infusion ? 600 : 0);
-//        if (!infusion) {
-//            mplew.write(1); //does this only come in dash?
-//        }
-//        if (ServerConstants.PACKET_ERROR_OFF) {
-//            ServerConstants ERROR = new ServerConstants();
-//            ERROR.setPACKET_ERROR("givePirate-3285" + "：\r\n" + mplew.getPacket() + "\r\n\r\n");
-//        }
-//        return mplew.getPacket();
 
         mplew.writeLong(0L);
         mplew.writeLong(MapleBuffStat.MORPH.getValue());

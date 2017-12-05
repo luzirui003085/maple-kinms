@@ -230,9 +230,6 @@ public class DamageParse {
                             eachd = (int) (maxDamagePerHit);
                         }
                     }
-                    /*if (player == null) { // o_O
-                        return;
-                    }*/
                     if (player.getClient().getChannelServer().isAdminOnly()) {
                         player.dropMessage(5, "Damage: " + eachd);
                     }
@@ -244,10 +241,6 @@ public class DamageParse {
                 }
                 totDamage += totDamageToOneMonster;
                 player.checkMonsterAggro(monster);
-                /*if ((GameConstants.getAttackDelay(attack.skill, theSkill) >= 100) && (!GameConstants.isNoDelaySkill(attack.skill)) && (!GameConstants.is不检测范围(attack.skill)) && (!monster.getStats().isBoss()) && (player.getTruePosition().distanceSq(monster.getTruePosition()) > GameConstants.getAttackRange(effect, player.getStat().defRange))) {
-                    World.Broadcast.broadcastGMMessage(MaplePacketCreator.serverNotice(6, new StringBuilder().append("[GM Message] ").append(player.getName()).append(" (等级 ").append(player.getLevel()).append(") 攻击范围异常。 地图ID: ").append(player.getMapId()).append(" 职业: ").append(player.getJob()).toString()));
-                    player.getCheatTracker().registerOffense(CheatingOffense.ATTACK_FARAWAY_MONSTER, new StringBuilder().append("[范围: ").append(player.getTruePosition().distanceSq(monster.getTruePosition())).append(", 预期范围: ").append(GameConstants.getAttackRange(effect, player.getStat().defRange)).append(" 职业: ").append(player.getJob()).append("]").toString());
-                }*/
                 if (player.getPosition().distanceSq(monster.getPosition()) > 700000.0) { // 815^2 <-- the most ranged attack in the game is Flame Wheel at 815 range
                     player.getCheatTracker().registerOffense(CheatingOffense.ATTACK_FARAWAY_MONSTER); // , Double.toString(Math.sqrt(distance))
                 }
@@ -296,7 +289,7 @@ public class DamageParse {
                     }
                     // effects
                     switch (attack.skill) {
-                        case 4101005: //drain
+                        case 4101005: // 生命吸收
                         case 5111004: { // Energy Drain
                             stats.setHp((stats.getHp() + ((int) Math.min(monster.getMobMaxHp(), Math.min(((int) ((double) totDamage * theSkill.getEffect(player.getSkillLevel(theSkill)).getX() / 100.0)), stats.getMaxHp() / 2)))), true);
                             break;

@@ -57,220 +57,180 @@ public class PlayerStats implements Serializable {
     private List<Equip> durabilityHandling = new ArrayList<>(), equipLevelHandling = new ArrayList<>();
     private transient float shouldHealHP, shouldHealMP;
     public short str,
-
-    /**
-     *
-     */
-    dex, 
-
-    /**
-     *
-     */
-    luk, 
-
-    /**
-     *
-     */
-    int_, 
-
-    /**
-     *
-     */
-    hp, 
-
-    /**
-     *
-     */
-    maxhp, 
-
-    /**
-     *
-     */
-    mp, 
-
-    /**
-     *
-     */
-    maxmp;
+            /**
+             *
+             */
+            dex,
+            /**
+             *
+             */
+            luk,
+            /**
+             *
+             */
+            int_,
+            /**
+             *
+             */
+            hp,
+            /**
+             *
+             */
+            maxhp,
+            /**
+             *
+             */
+            mp,
+            /**
+             *
+             */
+            maxmp;
     private transient short passive_sharpeye_percent, localmaxhp, localmaxmp;
     private transient byte passive_mastery, passive_sharpeye_rate;
     private transient int localstr, localdex, localluk, localint_;
     private transient int magic, watk, hands, accuracy;
-    public transient boolean equippedWelcomeBackRing, 
-
-    /**
-     *
-     */
-    equippedFairy, 
-
-    /**
-     *
-     */
-    hasMeso, 
-
-    /**
-     *
-     */
-    hasItem, 
-
-    /**
-     *
-     */
-    hasVac, 
-
-    /**
-     *
-     */
-    hasClone, 
-
-    /**
-     *
-     */
-    hasPartyBonus, 
-
-    /**
-     *
-     */
-    Berserk = false, 
-
-    /**
-     *
-     */
-    isRecalc = false;
-    public transient int equipmentBonusExp, 
-
-    /**
-     *
-     */
-    expMod, 
-
-    /**
-     *
-     */
-    dropMod, 
-
-    /**
-     *
-     */
-    cashMod, 
-
-    /**
-     *
-     */
-    levelBonus;
-    public transient double expBuff, 
-
-    /**
-     *
-     */
-    dropBuff, 
-
-    /**
-     *
-     */
-    mesoBuff, 
-
-    /**
-     *
-     */
-    cashBuff;
+    public transient boolean equippedWelcomeBackRing,
+            /**
+             *
+             */
+            equippedFairy,
+            /**
+             *
+             */
+            hasMeso,
+            /**
+             *
+             */
+            hasItem,
+            /**
+             *
+             */
+            hasVac,
+            /**
+             *
+             */
+            hasClone,
+            /**
+             *
+             */
+            hasPartyBonus,
+            /**
+             *
+             */
+            Berserk = false,
+            /**
+             *
+             */
+            isRecalc = false;
+    public transient int equipmentBonusExp,
+            /**
+             *
+             */
+            expMod,
+            /**
+             *
+             */
+            dropMod,
+            /**
+             *
+             */
+            cashMod,
+            /**
+             *
+             */
+            levelBonus;
+    public transient double expBuff,
+            /**
+             *
+             */
+            dropBuff,
+            /**
+             *
+             */
+            mesoBuff,
+            /**
+             *
+             */
+            cashBuff;
     //restore/recovery are separate variables because i dont know jack shit what it even does
     //same with incMesoProp/incRewardProp for now
-    public transient double dam_r, 
-
-    /**
-     *
-     */
-    bossdam_r;
-    public transient int recoverHP, 
-
-    /**
-     *
-     */
-    recoverMP, 
-
-    /**
-     *
-     */
-    mpconReduce, 
-
-    /**
-     *
-     */
-    incMesoProp, 
-
-    /**
-     *
-     */
-    incRewardProp, 
-
-    /**
-     *
-     */
-    DAMreflect, 
-
-    /**
-     *
-     */
-    DAMreflect_rate, 
-
-    /**
-     *
-     */
-    mpRestore,
-
-    /**
-     *
-     */
-    hpRecover, 
-
-    /**
-     *
-     */
-    hpRecoverProp, 
-
-    /**
-     *
-     */
-    mpRecover, 
-
-    /**
-     *
-     */
-    mpRecoverProp, 
-
-    /**
-     *
-     */
-    RecoveryUP, 
-
-    /**
-     *
-     */
-    incAllskill;
+    public transient double dam_r,
+            /**
+             *
+             */
+            bossdam_r;
+    public transient int recoverHP,
+            /**
+             *
+             */
+            recoverMP,
+            /**
+             *
+             */
+            mpconReduce,
+            /**
+             *
+             */
+            incMesoProp,
+            /**
+             *
+             */
+            incRewardProp,
+            /**
+             *
+             */
+            DAMreflect,
+            /**
+             *
+             */
+            DAMreflect_rate,
+            /**
+             *
+             */
+            mpRestore,
+            /**
+             *
+             */
+            hpRecover,
+            /**
+             *
+             */
+            hpRecoverProp,
+            /**
+             *
+             */
+            mpRecover,
+            /**
+             *
+             */
+            mpRecoverProp,
+            /**
+             *
+             */
+            RecoveryUP,
+            /**
+             *
+             */
+            incAllskill;
     private transient float speedMod, jumpMod, localmaxbasedamage;
     // Elemental properties
     public transient int def,
-
-    /**
-     *
-     */
-    element_ice, 
-
-    /**
-     *
-     */
-    element_fire, 
-
-    /**
-     *
-     */
-    element_light, 
-
-    /**
-     *
-     */
-    element_psn;
+            /**
+             *
+             */
+            element_ice,
+            /**
+             *
+             */
+            element_fire,
+            /**
+             *
+             */
+            element_light,
+            /**
+             *
+             */
+            element_psn;
 
     /**
      *
@@ -288,7 +248,6 @@ public class PlayerStats implements Serializable {
 
     //POTENTIALS:
     //incMesoProp, incRewardProp
-
     /**
      *
      */

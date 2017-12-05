@@ -789,7 +789,10 @@ public class MapleStatEffect implements Serializable {
      * @return
      */
     public final boolean applyTo(final MapleCharacter applyfrom, final MapleCharacter applyto, final boolean primary, final Point pos, int newDuration) {
-        if (isHeal() && applyto.getMapId() == GameConstants.PVP_MAP && applyto.getClient().getChannel() == GameConstants.PVP_CHANEL) {
+        int mapid = applyto.getMapId();
+        int channelid = applyto.getClient().getChannel();
+        boolean inPVPmode = mapid == GameConstants.PVP_MAP && channelid == GameConstants.PVP_CHANEL;
+        if (inPVPmode && isHeal()) {
             applyfrom.dropMessage("pk地图禁止使用回血技能");
             return false;
         }
@@ -834,8 +837,8 @@ public class MapleStatEffect implements Serializable {
         }
         final List<Pair<MapleStat, Integer>> hpmpupdate = new ArrayList<>(2);
 
-        if (skill == false && hpchange > 0 && mpchange > 0 && applyto.getMapId() == GameConstants.PVP_MAP && applyto.getClient().getChannel() == GameConstants.PVP_CHANEL) {
-            applyto.dropMessage("PK地图不能加血加蓝!!!");
+        if (inPVPmode && skill == false && hpchange > 0 && mpchange > 0) {
+            applyfrom.dropMessage("PK地图不能加血加蓝!!!");
         } else {
             if (hpchange != 0) {
                 if (hpchange < 0 && (-hpchange) > stat.getHp() && !applyto.hasDisease(MapleDisease.ZOMBIFY)) {
@@ -843,7 +846,6 @@ public class MapleStatEffect implements Serializable {
                 }
 
                 stat.setHp(stat.getHp() + hpchange);
-                hpmpupdate.add(new Pair<>(MapleStat.HP, Integer.valueOf(stat.getHp())));
             }
             if (mpchange != 0) {
                 if (mpchange < 0 && (-mpchange) > stat.getMp()) {
@@ -851,9 +853,10 @@ public class MapleStatEffect implements Serializable {
                 }
                 //short converting needs math.min cuz of overflow
                 stat.setMp(stat.getMp() + mpchange);
-                hpmpupdate.add(new Pair<>(MapleStat.MP, Integer.valueOf(stat.getMp())));
             }
         }
+        hpmpupdate.add(new Pair<>(MapleStat.HP, Integer.valueOf(stat.getHp())));
+        hpmpupdate.add(new Pair<>(MapleStat.MP, Integer.valueOf(stat.getMp())));
 
         applyto.getClient().getSession().write(MaplePacketCreator.updatePlayerStats(hpmpupdate, true, applyto.getJob()));
 
@@ -1295,13 +1298,12 @@ public class MapleStatEffect implements Serializable {
         List<Pair<MapleBuffStat, Integer>> localstatups = statups;
         boolean normal = true;
         switch (sourceid) {
-            case 5121009: // Speed Infusion
-            case 15111005:
-//            case 5001005: // Dash
-//            case 4321000: //tornado spin
-            case 15001003: {
+            case 5121009: // 极速领域
+            case 15111005: // case 5001005: // Dash 修复疾驰
+            //            case 15001003: // 骑士团 疾驰
+            {
                 applyto.getClient().getSession().write(MaplePacketCreator.givePirate(statups, localDuration / 1000, sourceid));
-                applyto.getMap().broadcastMessage(applyto, MaplePacketCreator.giveForeignPirate(statups, localDuration / 1000, applyto.getId(), sourceid), false);
+//                applyto.getMap().broadcastMessage(applyto, MaplePacketCreator.giveForeignPirate(statups, localDuration / 1000, applyto.getId(), sourceid), false);
                 normal = false;
                 break;
             }

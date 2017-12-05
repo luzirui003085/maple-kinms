@@ -377,18 +377,6 @@ public class PlayerHandler {
                     }
                 }
             }
-            /*final MapleStatEffect bouncedam_A = chr.getStatForBuff(MapleBuffStat.BODY_PRESSURE);
-            if (attacker != null && bouncedam_A != null && damage > 0) {
-                ISkill 抗压 = SkillFactory.getSkill(21101003); //抗压
-                int 抗压伤害 = (int) ((抗压.getEffect(chr.getSkillLevel(21101003)).getDamage() / 100.0) * damage);
-                // long bouncedamage = (long) (damage * bouncedam_ / 100);
-                //bouncedamage = Math.min(bouncedamage, attacker.getMobMaxHp() / 10);
-                attacker.damage(chr, 抗压伤害, true);
-                damage -= 抗压伤害;
-                chr.getMap().broadcastMessage(chr, MobPacket.damageMonster(oid, 抗压伤害), chr.getPosition());
-                chr.checkMonsterAggro(attacker);
-                chr.setHp(chr.getHp() - damage);
-            }*/
             final MapleStatEffect magicShield = chr.getStatForBuff(MapleBuffStat.MAGIC_SHIELD);
             if (magicShield != null) {
                 damage -= (int) ((magicShield.getX() / 100.0) * damage);
@@ -419,8 +407,6 @@ public class PlayerHandler {
                         mploss = 0;
                     }
                     chr.addMPHP(-hploss, -mploss);
-                    //} else if (mpattack > 0) {
-                    //    chr.addMPHP(-damage, -mpattack);
                 } else {
                     mploss = (int) (damage * (chr.getBuffedValue(MapleBuffStat.MAGIC_GUARD).doubleValue() / 100.0)) + mpattack;
                     hploss = damage - mploss;
@@ -1000,17 +986,17 @@ public class PlayerHandler {
         chr.checkFollow();
         chr.getMap().broadcastMessage(chr, MaplePacketCreator.magicAttack(chr.getId(), attack.tbyte, attack.skill, skillLevel, attack.display, attack.animation, attack.speed, attack.allDamage, attack.charge, chr.getLevel(), attack.unk), chr.getPosition());
         DamageParse.applyAttackMagic(attack, skill, c.getPlayer(), effect);
-        if ((chr.getMp() - beforeMp < effect.getMpCon()) && (c.getPlayer().getBuffedValue(MapleBuffStat.INFINITY) == null)) { //魔法攻击MP消耗处理类
-            int remainingMp = beforeMp - effect.getMpCon();
-            c.getPlayer().setMp(remainingMp);
-            c.getPlayer().updateSingleStat(MapleStat.MP, remainingMp);
-        }
+//        if ((chr.getMp() - beforeMp < effect.getMpCon()) && (c.getPlayer().getBuffedValue(MapleBuffStat.INFINITY) == null)) { //魔法攻击MP消耗处理类
+//            int remainingMp = beforeMp - effect.getMpCon();
+//            c.getPlayer().setMp(remainingMp);
+//            c.getPlayer().updateSingleStat(MapleStat.MP, remainingMp);
+//        }
         /*冰雷 消耗类处理*/
-        if (c.getPlayer().getJob() >= 220 && c.getPlayer().getJob() <= 222) {
-            int remainingMp = beforeMp - effect.getMpCon();
-            c.getPlayer().setMp(remainingMp);
-            c.getPlayer().updateSingleStat(MapleStat.MP, remainingMp);
-        }
+//        if (c.getPlayer().getJob() >= 220 && c.getPlayer().getJob() <= 222) {
+//            int remainingMp = beforeMp - effect.getMpCon();
+//            c.getPlayer().setMp(remainingMp);
+//            c.getPlayer().updateSingleStat(MapleStat.MP, remainingMp);
+//        }
         WeakReference<MapleCharacter>[] clones = chr.getClones();
         for (int i = 0; i < clones.length; i++) {
             if (clones[i].get() != null) {
