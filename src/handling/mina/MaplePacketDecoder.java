@@ -50,7 +50,7 @@ public class MaplePacketDecoder extends CumulativeProtocolDecoder {
     @Override
     protected boolean doDecode(IoSession session, ByteBuffer in, ProtocolDecoderOutput out) throws Exception {
         DecoderState decoderState = (DecoderState) session.getAttribute(DECODER_STATE_KEY);
-        
+
         if (decoderState == null) {
             decoderState = new DecoderState();
             session.setAttribute(DECODER_STATE_KEY, decoderState);
@@ -62,9 +62,10 @@ public class MaplePacketDecoder extends CumulativeProtocolDecoder {
             if (in.remaining() >= 4) {
                 final int packetHeader = in.getInt();
                 if (!client.getReceiveCrypto().checkPacket(packetHeader)) {
-                    session.close(); 
+                    session.close();
                     String note = "时间：" + FileoutputUtil.CurrentReadable_Time() + " "
-                            + "|| 玩家名字：" + client.getPlayer().getName()+ ""
+                            + "|| packetHeader：" + packetHeader + ""
+                            + "|| 玩家名字：" + client.getPlayer().getName() + ""
                             + "|| 玩家地图：" + client.getPlayer().getMapId() + "\r\n";
                     FileoutputUtil.packetLog("logs\\客户端包掉线.log", note);
                     return false;
@@ -83,28 +84,9 @@ public class MaplePacketDecoder extends CumulativeProtocolDecoder {
             client.getReceiveCrypto().crypt(decryptedPacket);
             MapleCustomEncryption.decryptData(decryptedPacket);
             out.write(decryptedPacket);
-            if (ServerConstants.封包显示) {
-                int packetLen = decryptedPacket.length;
-                int pHeader = readFirstShort(decryptedPacket);
-                String pHeaderStr = Integer.toHexString(pHeader).toUpperCase();
-                String op = lookupSend(pHeader);
-                String Send = "客户端发送 " + op + " [" + pHeaderStr + "] (" + packetLen + ")\r\n";
-                if (packetLen <= 3000) {
-                    String SendTo = Send + HexTool.toString(decryptedPacket) + "\r\n" + HexTool.toStringFromAscii(decryptedPacket);
-                    //log.info(HexTool.toString(decryptedPacket) + "客户端发送");
-                    FileoutputUtil.packetLog("log\\客户端封包.log", SendTo);
-                    System.out.println(SendTo);
-                    String SendTos = "\r\n时间：" + FileoutputUtil.CurrentReadable_Time() + "  ";
-                    if (op.equals("UNKNOWN")) {
-                        FileoutputUtil.packetLog("log\\未知客服端封包.log", SendTos + SendTo);
-                    }
-                } else {
-                    log.info(HexTool.toString(new byte[]{decryptedPacket[0], decryptedPacket[1]}) + "...");
-                }
-            }
             return true;
         }
-       /* if (in.remaining() >= decoderState.packetlength) {
+        /* if (in.remaining() >= decoderState.packetlength) {
             final byte decryptedPacket[] = new byte[decoderState.packetlength];
             in.get(decryptedPacket, 0, decoderState.packetlength);
             decoderState.packetlength = -1;
@@ -115,7 +97,8 @@ public class MaplePacketDecoder extends CumulativeProtocolDecoder {
             return true;
         }*/
         return false;
-    } 
+    }
+
     private String lookupSend(int val) {
         for (RecvPacketOpcode op : RecvPacketOpcode.values()) {
             if (op.getValue() == val) {
@@ -124,6 +107,7 @@ public class MaplePacketDecoder extends CumulativeProtocolDecoder {
         }
         return "UNKNOWN";
     }
+
     private int readFirstShort(byte[] arr) {
         return new GenericLittleEndianAccessor(new ByteArrayByteStream(arr)).readShort();
     }

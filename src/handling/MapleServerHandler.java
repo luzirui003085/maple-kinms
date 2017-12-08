@@ -91,9 +91,6 @@ public class MapleServerHandler extends IoHandlerAdapter {
      */
     @Override
     public void exceptionCaught(final IoSession session, final Throwable cause) throws Exception {
-        /*	MapleClient client = (MapleClient) session.getAttribute(MapleClient.CLIENT_KEY);
-         log.error(MapleClient.getLogMessage(client, cause.getMessage()), cause);*/
-//	cause.printStackTrace();
     }
 
     /**
@@ -238,13 +235,12 @@ public class MapleServerHandler extends IoHandlerAdapter {
                             return;
                         }
                     }
-                    // 封号记录
-                    if (c.getPlayer() != null && (c.getPlayer().getId() == 313 || c.getPlayer().getId() == 1517)) {
-                        try (FileWriter fw = new FileWriter(new File("Logs/MonitorLogs/" + c.getPlayer().getName() + "_log.txt"), true)) {
-                            fw.write("[" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()) + "]" + String.valueOf(recv) + " (" + Integer.toHexString(header_num) + ") Handled: \r\n" + slea.toString() + "\r\n");
-                            fw.flush();
-                        }
-                    }
+//                    if (c.getPlayer() != null && (c.getPlayer().getId() == 313 || c.getPlayer().getId() == 1517)) {
+//                        try (FileWriter fw = new FileWriter(new File("Logs/MonitorLogs/" + c.getPlayer().getName() + "_log.txt"), true)) {
+//                            fw.write("[" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()) + "]" + String.valueOf(recv) + " (" + Integer.toHexString(header_num) + ") Handled: \r\n" + slea.toString() + "\r\n");
+//                            fw.flush();
+//                        }
+//                    }
 //                    if (c.getPlayer() != null && c.isMonitored()) {
 //                        if (!blocked.contains(recv)) {
 //                            try (FileWriter fw = new FileWriter(new File("Logs/MonitorLogs/" + c.getPlayer().getName() + "_log.txt"), true)) {
