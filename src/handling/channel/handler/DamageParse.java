@@ -750,10 +750,6 @@ public class DamageParse {
                     maximumDamageToMonster = 1;
                     defined = true;
                     break;
-//                case 4331003: //Owl Spirit
-//                    maximumDamageToMonster = (monster.getStats().isBoss() ? 199999 : monster.getHp());
-//                    defined = true;
-//                    break;
                 case 3221007: // 一击要害箭
                     maximumDamageToMonster = (monster.getStats().isBoss() ? 199999 : monster.getMobMaxHp());
                     defined = true;

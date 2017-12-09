@@ -332,6 +332,9 @@ public class MapleStatEffect implements Serializable {
                 case 35001003: //TEMP.BOOSTER
                     statups.add(new Pair<>(MapleBuffStat.BOOSTER, ret.x));
                     break;
+                case 5121009:
+                case 15111005:
+                    statups.add(new Pair<>(MapleBuffStat.SPEED_INFUSION, ret.x));
 //                case 5121009:
 //                case 15111005:
 //                    statups.add(new Pair<MapleBuffStat, Integer>(MapleBuffStat.SPEED_INFUSION, ret.x));

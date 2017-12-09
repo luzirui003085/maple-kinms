@@ -174,8 +174,8 @@ public class Skill implements ISkill {
                 case 5220011: //bullseye
                 case 5110001: //energy charge
                 case 15100004:
-//                case 5121009: //speed infusion
-//                case 15111005:
+                case 5121009: //speed infusion
+                case 15111005:
 
                 case 22121001: //element reset
                 case 22131001: //magic shield
