@@ -197,6 +197,13 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     private boolean isfake = false;
     private List<FakeCharacter> fakes = new ArrayList<>();
 
+    private MapleUnlimitSlots unlimitSlots;
+
+    // 无限背包
+    public MapleUnlimitSlots getUnlimitSlots() {
+        return unlimitSlots;
+    }
+
     /**
      *
      * @param ChannelServer
