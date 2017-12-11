@@ -501,6 +501,7 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
         final MapleCharacter ret = new MapleCharacter(channelserver);
         ret.client = client;
         ret.id = charid;
+        ret.unlimitSlots = new MapleUnlimitSlots(charid);
 
         Connection con = DatabaseConnection.getConnection();
         PreparedStatement ps = null;
