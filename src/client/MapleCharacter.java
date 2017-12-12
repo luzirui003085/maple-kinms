@@ -201,6 +201,9 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
 
     // 无限背包
     public MapleUnlimitSlots getUnlimitSlots() {
+        if (unlimitSlots == null) {
+            unlimitSlots = new MapleUnlimitSlots(id);
+        }
         return unlimitSlots;
     }
 
