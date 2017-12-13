@@ -20,32 +20,26 @@
  */
 package tools;
 
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.text.SimpleDateFormat;
+import client.MapleCharacter;
+import java.io.*;
 import java.util.Calendar;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class FileoutputUtil {
 
     // Logging output file
     public static final String Acc_Stuck = "Logs/Log_AccountStuck.rtf",
             Login_Error = "Logs/Log_Login_Error.rtf",
-            //Timer_Log = "Log_Timer_Except.rtf",
-            //MapTimer_Log = "Log_MapTimer_Except.rtf",
             IP_Log = "Logs/Log_AccountIP.rtf",
-            //GMCommand_Log = "Log_GMCommand.rtf",
             Zakum_Log = "Logs/Log_Zakum.rtf",
             Horntail_Log = "Logs/Log_Horntail.rtf",
             Pinkbean_Log = "Logs/Log_Pinkbean.rtf",
-            // ScriptEx_Log = "Logs/Log_Script_Except.rtf",
-            // ScriptEx_LogAAA = "Logs/ScriptEx_LogAAA.rtf",
-            PacketEx_Log = "Logs/Log_Packet_Except.rtf" // I cba looking for every error, adding this back in.
-            + "";
+            PacketEx_Log = "Logs/Log_Packet_Except.rtf"; // I cba looking for every error, adding this back in.
     // End
     private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     private static final SimpleDateFormat sdf_ = new SimpleDateFormat("yyyy-MM-dd");
+    private static final SimpleDateFormat sdfT = new SimpleDateFormat("yyyy年MM月dd日HH时mm分ss秒");
 
     public static void packetLog(String file, String msg) {
         FileOutputStream out = null;
@@ -127,5 +121,45 @@ public class FileoutputUtil {
             }
         }
         return retValue;
+    }
+
+    public static String NowTime() {
+        return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
+    }
+
+    public static void logToFile_chr(MapleCharacter chr, final String file, final String msg) {
+        logToFile(file, "\r\n" + FileoutputUtil.CurrentReadable_Time() + " 账号：" + chr.getClient().getAccountName() + " 角色：" + chr.getName() + " (" + chr.getId() + ") 等级：" + chr.getLevel() + " 地图：" + chr.getMapId() + " " + msg, false);
+    }
+
+    public static void logToFile(final String file, final String msg) {
+        logToFile(file, msg, false);
+    }
+
+    public static void logToFile(final String file, final String msg, boolean notExists) {
+        FileOutputStream out = null;
+        try {
+            File outputFile = new File(file);
+            if (outputFile.exists() && outputFile.isFile() && outputFile.length() >= 10 * 1024 * 1000) {
+                outputFile.renameTo(new File(file.substring(0, file.length() - 4) + "_" + sdfT.format(Calendar.getInstance().getTime()) + file.substring(file.length() - 4, file.length())));
+                outputFile = new File(file);
+            }
+            if (outputFile.getParentFile() != null) {
+                outputFile.getParentFile().mkdirs();
+            }
+            out = new FileOutputStream(file, true);
+            if (!out.toString().contains(msg) || !notExists) {
+                OutputStreamWriter osw = new OutputStreamWriter(out, "UTF-8");
+                osw.write(msg);
+                osw.flush();
+            }
+        } catch (IOException ess) {
+        } finally {
+            try {
+                if (out != null) {
+                    out.close();
+                }
+            } catch (IOException ignore) {
+            }
+        }
     }
 }

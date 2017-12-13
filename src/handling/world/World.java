@@ -40,6 +40,7 @@ import server.Timer.WorldTimer;
 import server.maps.MapleMap;
 import server.maps.MapleMapItem;
 import tools.CollectionUtil;
+import tools.FileoutputUtil;
 import tools.MaplePacketCreator;
 import tools.packet.PetPacket;
 
@@ -69,8 +70,7 @@ public class World {
 
     /**
      *
-     * @return
-     * @throws RemoteException
+     * @return @throws RemoteException
      */
     public static String getStatus() throws RemoteException {
         StringBuilder ret = new StringBuilder();
@@ -265,7 +265,7 @@ public class World {
                     party.updateMember(target);
                     break;
                 case CHANGE_LEADER:
-               // case CHANGE_LEADER_DC:
+                    // case CHANGE_LEADER_DC:
                     party.setLeader(target);
                     break;
                 default:
@@ -435,10 +435,8 @@ public class World {
                     }
                     if (!buddylist.contains(cidFrom)) {
                         buddylist.addBuddyRequest(addChar.getClient(), cidFrom, nameFrom, channelFrom, levelFrom, jobFrom);
-                    } else {
-                        if (buddylist.containsVisible(cidFrom)) {
-                            return BuddyAddResult.ALREADY_ON_LIST;
-                        }
+                    } else if (buddylist.containsVisible(cidFrom)) {
+                        return BuddyAddResult.ALREADY_ON_LIST;
                     }
                 }
             }
@@ -1960,10 +1958,9 @@ public class World {
      *
      */
     public static void registerRespawn() {
-        WorldTimer.getInstance().register(new Respawn(), 3000); //divisible by 9000 if possible.
+        WorldTimer.getInstance().register(new Respawn(), 10000); //divisible by 9000 if possible.
         //3000 good or bad? ive no idea >_>
         //buffs can also be done, but eh
-       
     }
 
     /**
@@ -2010,6 +2007,18 @@ public class World {
             boolean hurt = map.canHurt();
             for (MapleCharacter chr : map.getCharactersThreadsafe()) {
                 handleCooldowns(chr, numTimes, hurt);
+            }
+        }
+        if (map.playerCount() == 0) {
+            // 定时清怪，以释放服务器压力
+            if (numTimes % 360 == 0 && map.getMobsSize() > 0) {
+                FileoutputUtil.logToFile("log\\定时清怪记录\\" + map.getMapName() + ".log", FileoutputUtil.NowTime() + " 地图[" + map.getMapName() + "][" + map.getId() + "]清理[" + map.getMobsSize() + "]了个怪物。\r\n");
+                map.killAllMonsters(false);
+            }
+
+            // 时间塔的本源
+            if (numTimes % 10 == 0 && map.getId() == 220080001) {
+                ChannelServer.getInstance(map.getChannel()).getMapFactory().getMap(220080000).resetReactors();
             }
         }
     }

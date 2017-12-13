@@ -3536,12 +3536,10 @@ public final class MapleMap {
                 mo.sendSpawnData(chr.getClient());
             }
         } else // monster left view range
-        {
-            if (mo.getType() != MapleMapObjectType.SUMMON && mo.getPosition().distanceSq(chr.getPosition()) > GameConstants.maxViewRangeSq()) {
+         if (mo.getType() != MapleMapObjectType.SUMMON && mo.getPosition().distanceSq(chr.getPosition()) > GameConstants.maxViewRangeSq()) {
                 chr.removeVisibleMapObject(mo);
                 mo.sendDestroyData(chr.getClient());
             }
-        }
     }
 
     /**
@@ -4764,5 +4762,10 @@ public final class MapleMap {
             this.charactersLock.readLock().unlock();
         }
         return ret;
+    }
+
+    public final int playerCount() {
+        List<MapleMapObject> players = getMapObjectsInRange(new Point(0, 0), Double.POSITIVE_INFINITY, Arrays.asList(MapleMapObjectType.PLAYER));
+        return players.size();
     }
 }

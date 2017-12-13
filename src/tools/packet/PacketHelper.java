@@ -589,7 +589,6 @@ public class PacketHelper {
      * @param trade
      */
     public static final void addItemInfo(final MaplePacketLittleEndianWriter mplew, final IItem item, final boolean zeroPosition, final boolean leaveOut, final boolean trade) {
-
         boolean isPet = item.getPet() != null && item.getPet().getUniqueId() > -1;
         boolean isRing = false;
         Equip equip_ = null;

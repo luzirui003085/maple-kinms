@@ -322,50 +322,65 @@ public class DamageParse {
                         case 4111005: // Avenger
                         case 4001344: { // Lucky Seven
                             // Venom
-                            final ISkill skill = SkillFactory.getSkill(4120005);
-                            final ISkill skill2 = SkillFactory.getSkill(4220005);
-                            final ISkill skill3 = SkillFactory.getSkill(4340001);
-                            if (player.getSkillLevel(skill) > 0) {
-                                // 屏蔽武器用毒液
-//                                final MapleStatEffect venomEffect = skill.getEffect(player.getSkillLevel(skill));
+//                            int[] armsPoisons = {4120005, 4220005, 14110004};
+//                            for (int i : armsPoisons) {
+//                                ISkill skill = SkillFactory.getSkill(i);
+//                                if (player.getSkillLevel(skill) > 0) {//判断其技能等级大于0
+//                                    MapleStatEffect armsPoisonsBUFF = skill.getEffect(player.getSkillLevel(skill));//获取技能BUFF
+//                                    if (armsPoisonsBUFF.makeChanceResult()) {
+//                                        if (monster.getPoisonCount() <= 3) {//获取毒次数，判断小于等于三次才可以毒
+//                                            monster.setPoisonCount((monster.getPoisonCount() + 1));//记录毒次数+1
+//                                            monster.applyStatus(player, new MonsterStatusEffect(MonsterStatus.中毒, 1, i, null, false), true, armsPoisonsBUFF.getDuration(), true, effect);
+//                                        }
+//                                    }
+//                                    break;
+//                                }
+//                            }
+
+//                            final ISkill skill = SkillFactory.getSkill(4120005);
+//                            final ISkill skill2 = SkillFactory.getSkill(4220005);
+//                            final ISkill skill3 = SkillFactory.getSkill(4340001);
+//                            if (player.getSkillLevel(skill) > 0) {
+//                                // 屏蔽武器用毒液
+////                                final MapleStatEffect venomEffect = skill.getEffect(player.getSkillLevel(skill));
+////                                MonsterStatusEffect monsterStatusEffect;
+////
+////                                for (int i = 0; i < attackCount; i++) {
+////                                    if (venomEffect.makeChanceResult()) {
+////                                        if (monster.getVenomMulti() < 3) {
+////                                            monster.setVenomMulti((byte) (monster.getVenomMulti() + 1));
+////                                            monsterStatusEffect = new MonsterStatusEffect(MonsterStatus.POISON, 1, 4120005, null, false);
+////                                            monster.applyStatus(player, monsterStatusEffect, false, venomEffect.getDuration(), true);
+////                                        }
+////                                    }
+////                                }
+//                            } else if (player.getSkillLevel(skill2) > 0) {
+//                                final MapleStatEffect venomEffect = skill2.getEffect(player.getSkillLevel(skill2));
 //                                MonsterStatusEffect monsterStatusEffect;
 //
 //                                for (int i = 0; i < attackCount; i++) {
 //                                    if (venomEffect.makeChanceResult()) {
 //                                        if (monster.getVenomMulti() < 3) {
 //                                            monster.setVenomMulti((byte) (monster.getVenomMulti() + 1));
-//                                            monsterStatusEffect = new MonsterStatusEffect(MonsterStatus.POISON, 1, 4120005, null, false);
+//                                            monsterStatusEffect = new MonsterStatusEffect(MonsterStatus.POISON, 1, 4220005, null, false);
 //                                            monster.applyStatus(player, monsterStatusEffect, false, venomEffect.getDuration(), true);
 //                                        }
 //                                    }
 //                                }
-                            } else if (player.getSkillLevel(skill2) > 0) {
-                                final MapleStatEffect venomEffect = skill2.getEffect(player.getSkillLevel(skill2));
-                                MonsterStatusEffect monsterStatusEffect;
-
-                                for (int i = 0; i < attackCount; i++) {
-                                    if (venomEffect.makeChanceResult()) {
-                                        if (monster.getVenomMulti() < 3) {
-                                            monster.setVenomMulti((byte) (monster.getVenomMulti() + 1));
-                                            monsterStatusEffect = new MonsterStatusEffect(MonsterStatus.POISON, 1, 4220005, null, false);
-                                            monster.applyStatus(player, monsterStatusEffect, false, venomEffect.getDuration(), true);
-                                        }
-                                    }
-                                }
-                            } else if (player.getSkillLevel(skill3) > 0) {
-                                final MapleStatEffect venomEffect = skill3.getEffect(player.getSkillLevel(skill3));
-                                MonsterStatusEffect monsterStatusEffect;
-
-                                for (int i = 0; i < attackCount; i++) {
-                                    if (venomEffect.makeChanceResult()) {
-                                        if (monster.getVenomMulti() < 3) {
-                                            monster.setVenomMulti((byte) (monster.getVenomMulti() + 1));
-                                            monsterStatusEffect = new MonsterStatusEffect(MonsterStatus.POISON, 1, 4340001, null, false);
-                                            monster.applyStatus(player, monsterStatusEffect, false, venomEffect.getDuration(), true);
-                                        }
-                                    }
-                                }
-                            }
+//                            } else if (player.getSkillLevel(skill3) > 0) {
+//                                final MapleStatEffect venomEffect = skill3.getEffect(player.getSkillLevel(skill3));
+//                                MonsterStatusEffect monsterStatusEffect;
+//
+//                                for (int i = 0; i < attackCount; i++) {
+//                                    if (venomEffect.makeChanceResult()) {
+//                                        if (monster.getVenomMulti() < 3) {
+//                                            monster.setVenomMulti((byte) (monster.getVenomMulti() + 1));
+//                                            monsterStatusEffect = new MonsterStatusEffect(MonsterStatus.POISON, 1, 4340001, null, false);
+//                                            monster.applyStatus(player, monsterStatusEffect, false, venomEffect.getDuration(), true);
+//                                        }
+//                                    }
+//                                }
+//                            }
                             break;
                         }
                         case 4201004: { //steal
