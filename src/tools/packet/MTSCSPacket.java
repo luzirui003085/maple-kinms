@@ -1072,7 +1072,7 @@ public class MTSCSPacket {
             try {
                 sn = CashItemFactory.getInstance().getSnFromId(itemId);
             } catch (NullPointerException e) {
-                System.out.println("#getSnFromId@" + itemId);
+                // System.out.println("#getSnFromId@" + itemId);
                 sn = 0;
             }
 
@@ -1261,13 +1261,13 @@ public class MTSCSPacket {
             System.out.println("confirmToCSInventory--------------------");
         }
         mplew.writeShort(SendPacketOpcode.CS_OPERATION.getValue());
-        mplew.write(76);//0x5F
+        mplew.write(0x5F);//0x5F
         mplew.writeLong(item.getUniqueId());
         mplew.writeLong(accId);
         mplew.writeInt(item.getItemId());
         mplew.writeInt(sn);
         mplew.writeShort(item.getQuantity());
-        mplew.writeAsciiString(item.getGiftFrom(), 15);
+        mplew.writeAsciiString(item.getGiftFrom(), 13);
         //. mplew.writeAsciiString(item.getGiftFrom());
         // for (int i = item.getGiftFrom().getBytes().length; i < 13; i++) {
         //   mplew.write(0);

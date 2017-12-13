@@ -166,8 +166,8 @@ public class MaplePet implements Serializable {
     public static final MaplePet createPet(int itemid, String name, int level, int closeness, int fullness, int uniqueid, int secondsLeft) {
         if (uniqueid <= -1) { //wah
             uniqueid = MapleInventoryIdentifier.getInstance();
-        } 
-        short ret1 = MapleItemInformationProvider.getInstance().getPetFlagInfo(itemid);    
+        }
+        short ret1 = MapleItemInformationProvider.getInstance().getPetFlagInfo(itemid);
         try { // Commit to db first
             PreparedStatement pse = DatabaseConnection.getConnection().prepareStatement("INSERT INTO pets (petid, name, level, closeness, fullness, seconds, flags) VALUES (?, ?, ?, ?, ?, ?, ?)");
             pse.setInt(1, uniqueid);
@@ -231,7 +231,10 @@ public class MaplePet implements Serializable {
         return closeness;
     }
 
-    public final void setCloseness(final int closeness) {
+    public final void setCloseness(int closeness) {
+        if (closeness > 30000) {
+            closeness = 30000;
+        }
         this.closeness = (short) closeness;
         this.changed = true;
     }
