@@ -221,7 +221,7 @@ public class DamageParse {
                                 }
                                 if (eachd > maxDamagePerHit * 3.0D) {
                                     eachd = (int) (maxDamagePerHit * 2.0D);
-                                    if (eachd >= 199999) {
+                                    if (GameConstants.LIMIT_DAMAGE && eachd >= GameConstants.MAX_DAMAGE) {
                                         return;
                                     }
                                 }
@@ -269,7 +269,7 @@ public class DamageParse {
                     if (attack.skill != 1221011) {// 圣域
                         monster.damage(player, totDamageToOneMonster, true, attack.skill);
                     } else {
-                        monster.damage(player, (monster.getStats().isBoss() ? 199999 : (monster.getHp() - 1)), true, attack.skill);
+                        monster.damage(player, (monster.getStats().isBoss() ? (GameConstants.LIMIT_DAMAGE ? GameConstants.MAX_DAMAGE : totDamageToOneMonster) : (monster.getHp() - 1)), true, attack.skill);
                     }
                     if (monster.isBuffed(MonsterStatus.WEAPON_DAMAGE_REFLECT)) { //test
                         player.addHP(-(7000 + Randomizer.nextInt(8000))); //this is what it seems to be?
@@ -697,8 +697,8 @@ public class DamageParse {
                 elemMaxDamagePerMob = 1;
                 break;
         }
-        if (elemMaxDamagePerMob > 199999) {
-            elemMaxDamagePerMob = 199999;
+        if (GameConstants.LIMIT_DAMAGE && elemMaxDamagePerMob >= GameConstants.MAX_DAMAGE) {
+            elemMaxDamagePerMob = GameConstants.MAX_DAMAGE;
         } else if (elemMaxDamagePerMob < 0) {
             elemMaxDamagePerMob = 1;
         }
@@ -741,53 +741,42 @@ public class DamageParse {
     }
 
     private static double CalculateMaxWeaponDamagePerHit(final MapleCharacter player, final MapleMonster monster, final AttackInfo attack, final ISkill theSkill, final MapleStatEffect attackEffect, double maximumDamageToMonster, final Integer CriticalDamagePercent) {
-        if (player.getMapId() / 1000000 == 914) { //aran
-            return 199999;
+        if (player.getMapId() / 1000000 == 914) { // 战神地图
+            return GameConstants.MAX_DAMAGE;
         }
         List<Element> elements = new ArrayList<>();
-        boolean defined = false; // 是否能超过 199999
         if (theSkill != null) {
             elements.add(theSkill.getElement());
 
             switch (theSkill.getId()) {
                 case 3001004: // 断魂箭
-                    defined = true; //can go past 199999
                     break;
                 case 1000: // 蜗牛投掷术
                 case 10001000: // 蜗牛投掷术
                 case 20001000: // 蜗牛投掷术
                     maximumDamageToMonster = 40;
-                    defined = true;
                     break;
                 case 1020: // 法老王的愤怒
                 case 10001020: // 法老王的愤怒
                 case 20001020: // 法老王的愤怒
                     maximumDamageToMonster = 1;
-                    defined = true;
                     break;
                 case 3221007: // 一击要害箭
-                    maximumDamageToMonster = (monster.getStats().isBoss() ? 199999 : monster.getMobMaxHp());
-                    defined = true;
+                    maximumDamageToMonster = monster.getMobMaxHp();
                     break;
                 case 1221011:// 圣域
-                    maximumDamageToMonster = (monster.getStats().isBoss() ? 199999 : monster.getHp() - 1);
-                    defined = true;
+                    maximumDamageToMonster = monster.getHp() - 1;
                     break;
                 case 4211006: // 金钱炸弹
-                    maximumDamageToMonster = 750000;
-                    defined = true;
+                    maximumDamageToMonster = monster.getMobMaxHp();
                     break;
                 case 1009: // 流星竹雨
                 case 10001009: // 流星竹雨
                 case 20001009: // 流星竹雨
-                    defined = true;
-                    maximumDamageToMonster = (monster.getStats().isBoss() ? monster.getMobMaxHp() / 30 * 100 : monster.getMobMaxHp());
+                    maximumDamageToMonster = monster.getMobMaxHp();
                     break;
                 case 3211006: // 箭扫射
-                    if (monster.getStatusSourceID(MonsterStatus.FREEZE) == 3211003) { //blizzard in effect
-                        defined = true;
-                        maximumDamageToMonster = monster.getHp();
-                    }
+                    maximumDamageToMonster = monster.getMobMaxHp();
                     break;
             }
         }
@@ -867,10 +856,8 @@ public class DamageParse {
         final PlayerStats stat = player.getStat();
         elementalMaxDamagePerMonster += (elementalMaxDamagePerMonster * (monster.getStats().isBoss() ? stat.bossdam_r : stat.dam_r)) / 100.0;
 
-        if (elementalMaxDamagePerMonster > 199999) {
-            if (!defined) {
-                elementalMaxDamagePerMonster = 199999;
-            }
+        if (GameConstants.LIMIT_DAMAGE && elementalMaxDamagePerMonster > GameConstants.MAX_DAMAGE) {
+            elementalMaxDamagePerMonster = GameConstants.MAX_DAMAGE;
         } else if (elementalMaxDamagePerMonster < 0) {
             elementalMaxDamagePerMonster = 1;
         }
@@ -917,9 +904,10 @@ public class DamageParse {
                     for (Pair<Integer, Boolean> eachd : p.attack) {
                         hit++;
                         if (!eachd.right) {
+                            // 计算暴击
                             if (attack.skill == 4221001) { // 暗杀 assassinate never crit first 3, always crit last
                                 eachd.right = (hit == 4 && Randomizer.nextInt(100) < 90);
-                            } else if (attack.skill == 3221007 || eachd.left > 199999) { // 这个技能总是暴击
+                            } else if (attack.skill == 3221007) { // 这个技能总是暴击 一击要害箭
                                 eachd.right = true;
                             } else if (shadow && hit > mid_att) { //影分身复制主体的暴击
                                 eachd.right = eachd_copy.get(hit - 1 - mid_att).right;
@@ -1369,21 +1357,21 @@ public class DamageParse {
      */
     public static final int Damage_PG(MapleCharacter c, int damage, AttackInfo ret) {
 
-        if (ret.skill != 14101006) { // 吸血
-            if (damage >= 199999) {
-                int sj = Randomizer.nextInt(80000);
-                damage = 199999 + (c.getStat().getTotalLuk() + c.getStat().getTotalDex() + c.getStat().getTotalStr() + c.getStat().getTotalInt()) * 3 + (c.getStat().getTotalWatk() + c.getStat().getTotalMagic()) * 6;
-                if (damage > sj) {
-                    damage = damage + sj;
-                }
-                if (damage >= 19999999) {
-                    damage = 19999999;
-                }
-                DamageParse.pvpMob = MapleLifeFactory.getMonster(9400711);
-                c.getClient().getSession().write(MaplePacketCreator.damagePlayer(ret.skill, DamageParse.pvpMob.getId(), c.getId(), damage));
-                c.getClient().getSession().write(MaplePacketCreator.sendHint("#r破功伤害#k:" + damage, 200, 5));
-            }
-        }
+//        if (ret.skill != 14101006) { // 吸血
+//            if (damage >= 199999) {
+//                int sj = Randomizer.nextInt(80000);
+//                damage = 199999 + (c.getStat().getTotalLuk() + c.getStat().getTotalDex() + c.getStat().getTotalStr() + c.getStat().getTotalInt()) * 3 + (c.getStat().getTotalWatk() + c.getStat().getTotalMagic()) * 6;
+//                if (damage > sj) {
+//                    damage = damage + sj;
+//                }
+//                if (damage >= 19999999) {
+//                    damage = 19999999;
+//                }
+//                DamageParse.pvpMob = MapleLifeFactory.getMonster(9400711);
+//                c.getClient().getSession().write(MaplePacketCreator.damagePlayer(ret.skill, DamageParse.pvpMob.getId(), c.getId(), damage));
+//                c.getClient().getSession().write(MaplePacketCreator.sendHint("#r破功伤害#k:" + damage, 200, 5));
+//            }
+//        }
         return damage;
     }
 

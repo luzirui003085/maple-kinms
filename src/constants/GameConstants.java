@@ -20,6 +20,10 @@ import server.maps.MapleMapObjectType;
  */
 public class GameConstants {
 
+    public static final boolean LIMIT_DAMAGE = false;
+
+    public static final int MAX_DAMAGE = 199999;
+
     public static final int PVP_MAP = 910000007;
 
     public static final int PVP_CHANEL = 4;

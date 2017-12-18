@@ -212,7 +212,6 @@ public class Start {
     }
 
     // 自动检测物品和金币
-
     /**
      *
      * @param interval
@@ -231,27 +230,37 @@ public class Start {
                         if (unCheckList.contains(chr.getId())) {
                             continue;
                         }
+                        if ((chr.getLevel() < 100 && chr.getMeso() >= 300000000) && (chr.getLevel() < 70 && chr.getMeso() >= 200000000)) {
+                            System.out.println("[自动检测]玩家：" + chr.getName() + "拥有超过2|3e金币被封号");
+                            unCheckList.add(chr.getId());
+                            chr.ban("用户非法拥有超过额度的金币", false, true, false);
+                            continue;
+                        }
                         // 判断物品
                         if (chr.haveItem(2340000, 200) || chr.haveItem(2040805, 200)) {
                             System.out.println("[自动检测]玩家：" + chr.getName() + "拥有超过数量的物品被封号");
                             unCheckList.add(chr.getId());
                             chr.ban("拥有超过数量的物品(手套攻击卷和祝福卷)", false, true, false);
+                            continue;
                         }
                         // 判断金币
                         if (chr.getMeso() >= 1000000000) {
                             System.out.println("[自动检测]玩家：" + chr.getName() + "拥有超过10e金币被封号");
                             unCheckList.add(chr.getId());
                             chr.ban("用户非法拥有超过额度的金币", false, true, false);
+                            continue;
                         }
                         if (chr.getStorage().getMeso() >= 1000000000) {
                             System.out.println("[自动检测]玩家：" + chr.getName() + "仓库拥有超过10e金币被封号");
                             unCheckList.add(chr.getId());
                             chr.ban("用户仓库非法拥有超过额度的金币", false, true, false);
+                            continue;
                         }
                         if (chr.getLevel() <= 50 && chr.getMeso() >= 100000000) {
                             System.out.println("[自动检测]玩家：" + chr.getName() + "低于50级，拥有超过1e金币被封号");
                             unCheckList.add(chr.getId());
                             chr.ban("用户非法拥有超过额度的1e金币", false, true, false);
+                            continue;
                         }
                         Map<Integer, Integer> banitems = new HashMap<>();
                         banitems.put(2340000, 20);
@@ -260,6 +269,7 @@ public class Start {
                         for (Map.Entry<Integer, Integer> entry : banitems.entrySet()) {
                             if (chr.getLevel() <= 50 && chr.haveItem(entry.getKey(), entry.getValue())) {
                                 chr.ban("用户非法拥有物品" + entry.getKey() + "数量" + entry.getValue() + "被封号", false, true, false);
+                                continue;
                             }
                         }
                     }

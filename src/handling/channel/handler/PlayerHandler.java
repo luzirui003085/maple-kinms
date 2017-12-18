@@ -1,4 +1,3 @@
-
 package handling.channel.handler;
 
 import client.*;
@@ -779,7 +778,9 @@ public class PlayerHandler {
                 if (numFinisherOrbs == 0) {
                     return;
                 }
-                maxdamage = 199999; // FIXME reenable damage calculation for finishers
+                if (GameConstants.LIMIT_DAMAGE) {
+                    maxdamage = GameConstants.MAX_DAMAGE;
+                }
             }
         }
         chr.checkFollow();
