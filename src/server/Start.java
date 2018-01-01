@@ -8,6 +8,7 @@ import handling.channel.ChannelServer;
 import handling.channel.MapleGuildRanking;
 import handling.login.LoginInformationProvider;
 import handling.login.LoginServer;
+import handling.world.Lottery;
 import handling.world.World;
 import handling.world.family.MapleFamilyBuff;
 import java.net.ServerSocket;
@@ -112,6 +113,8 @@ public class Start {
         开启双倍(1);
         回收内存(360);
         刷新地图(480);
+        
+        Lottery.init();
         // 防万能(3);
 //        if (Boolean.parseBoolean(ServerProperties.getProperty("KinMS.RandDrop"))) {
 //            ChannelServer.getInstance(1).getMapFactory().getMap(910000000).spawnRandDrop();
@@ -189,6 +192,8 @@ public class Start {
         //自动存档(30);
         回收内存(360);
         在线时间(1);
+        
+        Lottery.init();
         //   防万能(3);
 //        if (Boolean.parseBoolean(ServerProperties.getProperty("KinMS.RandDrop"))) {
 //            ChannelServer.getInstance(1).getMapFactory().getMap(910000000).spawnRandDrop();

@@ -13,6 +13,7 @@ import constants.GameConstants;
 import database.DatabaseConnection;
 import handling.channel.ChannelServer;
 import handling.channel.MapleGuildRanking;
+import handling.world.Lottery;
 import handling.world.MapleParty;
 import handling.world.MaplePartyCharacter;
 import handling.world.World;
@@ -2903,5 +2904,21 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
                 }
             }
         }
+    }
+    
+    public boolean createLottery(String number, int rate) {
+        return Lottery.createLottery(getPlayer().getId(), Lottery.formatNumber(number), rate);
+    }
+
+    public ArrayList<Map<String, Object>> getLotteries() {
+        return Lottery.getLotteries(getPlayer().getId());
+    }
+
+    public Map<String, Object> getLottery(int id) {
+        return Lottery.getLottery(id);
+    }
+
+    public boolean updateLottery(int id) {
+        return Lottery.updateLottery(id);
     }
 }
