@@ -296,23 +296,6 @@ public class Lottery {
         return formatNumber(l);
     }
 
-    public static boolean validNumber(String number) {
-        boolean f1 = number.matches("^[0-9]{1,2} [0-9]{1,2} [0-9]{1,2} [0-9]{1,2} [0-9]{1,2} [0-9]{1,2} [0-9]{1,2}$");
-        if (f1) {
-            Set<Integer> set = new HashSet<>();
-            List<String> l3 = Arrays.asList(number.split(" "));
-            for (String s : l3) {
-                int i = Integer.parseInt(s);
-                if (i >= 1 && i <= MAX) {
-                    set.add(i);
-                }
-            }
-            boolean f2 = set.size() == NUM;
-            return f2;
-        }
-        return f1;
-    }
-
     public static String formatNumber(String number) {
         List<String> l3 = Arrays.asList(number.split(" "));
         List<Integer> l2 = new ArrayList<>();
