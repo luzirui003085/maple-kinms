@@ -36,7 +36,7 @@ import tools.MaplePacketCreator;
 public class Lottery {
 
     public final static int MAX = 10; // 10 选
-    public final static int NUM = 7; // 7
+    public final static int NUM = 9; // 7
     public final static float RATING = 0.5f; // 倍率
 
     public static AtomicInteger poolMoney = new AtomicInteger(0); // 目前为止的累计奖池
@@ -320,11 +320,11 @@ public class Lottery {
             int i = Integer.parseInt(s);
             l2.add(i);
         }
-        Collections.sort(l2);
         return formatNumber(l2);
     }
 
     public static String formatNumber(List<Integer> arr) {
+        Collections.sort(arr);
         StringBuilder sb = new StringBuilder();
         for (Object o : arr) {
             sb.append(o).append(" ");
