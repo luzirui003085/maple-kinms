@@ -36,7 +36,7 @@ import tools.MaplePacketCreator;
 public class Lottery {
 
     public final static int MAX = 10; // 10 选
-    public final static int NUM = 9; // 7
+    public final static int NUM = 5; // 7
     public final static float RATING = 0.5f; // 倍率
 
     public static AtomicInteger poolMoney = new AtomicInteger(0); // 目前为止的累计奖池
@@ -96,12 +96,13 @@ public class Lottery {
                 System.out.println("[彩票]开奖" + c + " 中奖号码" + n);
                 checkLottery(c, n);
             }
-        }, next - current, next - now); // 五分钟
+        }, next - current, next - now); // 1小时
     }
 
     // 下一期
     public static Calendar nextStage(Calendar c) {
-        c.set(Calendar.MINUTE, c.get(Calendar.MINUTE) + 5);
+        c.set(Calendar.HOUR_OF_DAY, c.get(Calendar.HOUR_OF_DAY) + 1);
+        c.set(Calendar.MINUTE, 0);
         c.set(Calendar.SECOND, 0);
         return c;
     }
@@ -109,8 +110,7 @@ public class Lottery {
     // 当前期：yymmdd+当前小时
     public static Calendar currentStage() {
         Calendar c = Calendar.getInstance();
-        int m = c.get(Calendar.MINUTE);
-        c.set(Calendar.MINUTE, m - m % 5);
+        c.set(Calendar.MINUTE, 0);
         c.set(Calendar.SECOND, 0);
         return c;
     }
