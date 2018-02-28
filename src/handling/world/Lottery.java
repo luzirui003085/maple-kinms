@@ -45,8 +45,8 @@ public class Lottery {
     public final static SimpleDateFormat fmt = new SimpleDateFormat("MMddHHmm");
 
     public static void init() {
-        loadPool();
-        initTimer(); // 初始化开奖计时器
+        // loadPool();
+        // initTimer(); // 初始化开奖计时器
     }
 
     // 初始化上一次的累计奖池和本次的累计奖池   
