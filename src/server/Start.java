@@ -11,6 +11,7 @@ import handling.login.LoginServer;
 import handling.world.Lottery;
 import handling.world.World;
 import handling.world.family.MapleFamilyBuff;
+
 import java.net.ServerSocket;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -20,6 +21,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.Map;
+
 import server.Timer.BuffTimer;
 import server.Timer.CheatTimer;
 import server.Timer.CloneTimer;
@@ -37,7 +39,6 @@ import tools.FileoutputUtil;
 import tools.StringUtil;
 
 /**
- *
  * @author zjj
  */
 public class Start {
@@ -58,7 +59,6 @@ public class Start {
     public static ArrayList<Integer> unCheckList = new ArrayList<>();
 
     /**
-     *
      * @param args
      */
     public static void main(final String args[]) {
@@ -113,7 +113,7 @@ public class Start {
         开启双倍(1);
         回收内存(360);
         刷新地图(480);
-        
+
         Lottery.init();
         // 防万能(3);
 //        if (Boolean.parseBoolean(ServerProperties.getProperty("KinMS.RandDrop"))) {
@@ -139,7 +139,6 @@ public class Start {
     }
 
     /**
-     *
      * @throws InterruptedException
      */
     public void startServer() throws InterruptedException {
@@ -192,7 +191,7 @@ public class Start {
         //自动存档(30);
         回收内存(360);
         在线时间(1);
-        
+
         Lottery.init();
         //   防万能(3);
 //        if (Boolean.parseBoolean(ServerProperties.getProperty("KinMS.RandDrop"))) {
@@ -217,8 +216,8 @@ public class Start {
     }
 
     // 自动检测物品和金币
+
     /**
-     *
      * @param interval
      */
     public static void 自动检测(int interval) {
@@ -235,12 +234,31 @@ public class Start {
                         if (unCheckList.contains(chr.getId())) {
                             continue;
                         }
-                        if ((chr.getLevel() < 100 && chr.getMeso() >= 300000000) && (chr.getLevel() < 70 && chr.getMeso() >= 200000000)) {
-                            System.out.println("[自动检测]玩家：" + chr.getName() + "拥有超过2|3e金币被封号");
+                        if ((chr.getLevel() < 120 && chr.getMeso() >= 200000000)) {
+                            System.out.println("[自动检测]玩家：" + chr.getName() + "拥有超过2e金币被封号");
                             unCheckList.add(chr.getId());
                             chr.ban("用户非法拥有超过额度的金币", false, true, false);
                             continue;
                         }
+                        if ((chr.getLevel() < 100 && chr.getMeso() >= 100000000)) {
+                            System.out.println("[自动检测]玩家：" + chr.getName() + "拥有超过1e金币被封号");
+                            unCheckList.add(chr.getId());
+                            chr.ban("用户非法拥有超过额度的金币", false, true, false);
+                            continue;
+                        }
+                        if ((chr.getLevel() < 80 && chr.getMeso() >= 50000000)) {
+                            System.out.println("[自动检测]玩家：" + chr.getName() + "拥有超过5000we金币被封号");
+                            unCheckList.add(chr.getId());
+                            chr.ban("用户非法拥有超过额度的金币", false, true, false);
+                            continue;
+                        }
+                        if ((chr.getLevel() < 50 && chr.getMeso() >= 10000000)) {
+                            System.out.println("[自动检测]玩家：" + chr.getName() + "拥有超过1000w金币被封号");
+                            unCheckList.add(chr.getId());
+                            chr.ban("用户非法拥有超过额度的金币", false, true, false);
+                            continue;
+                        }
+
                         // 判断物品
                         if (chr.haveItem(2340000, 200) || chr.haveItem(2040805, 200)) {
                             System.out.println("[自动检测]玩家：" + chr.getName() + "拥有超过数量的物品被封号");
@@ -249,24 +267,24 @@ public class Start {
                             continue;
                         }
                         // 判断金币
-                        if (chr.getMeso() >= 1000000000) {
+                        if (chr.getMeso() >= 500000000) {
                             System.out.println("[自动检测]玩家：" + chr.getName() + "拥有超过10e金币被封号");
                             unCheckList.add(chr.getId());
                             chr.ban("用户非法拥有超过额度的金币", false, true, false);
                             continue;
                         }
-                        if (chr.getStorage().getMeso() >= 1000000000) {
+                        if (chr.getStorage().getMeso() >= 500000000) {
                             System.out.println("[自动检测]玩家：" + chr.getName() + "仓库拥有超过10e金币被封号");
                             unCheckList.add(chr.getId());
                             chr.ban("用户仓库非法拥有超过额度的金币", false, true, false);
                             continue;
                         }
-                        if (chr.getLevel() <= 50 && chr.getMeso() >= 100000000) {
-                            System.out.println("[自动检测]玩家：" + chr.getName() + "低于50级，拥有超过1e金币被封号");
-                            unCheckList.add(chr.getId());
-                            chr.ban("用户非法拥有超过额度的1e金币", false, true, false);
-                            continue;
-                        }
+//                        if (chr.getLevel() <= 50 && chr.getMeso() >= 100000000) {
+//                            System.out.println("[自动检测]玩家：" + chr.getName() + "低于50级，拥有超过1e金币被封号");
+//                            unCheckList.add(chr.getId());
+//                            chr.ban("用户非法拥有超过额度的1e金币", false, true, false);
+//                            continue;
+//                        }
                         Map<Integer, Integer> banitems = new HashMap<>();
                         banitems.put(2340000, 20);
                         banitems.put(2040805, 20);
@@ -284,7 +302,6 @@ public class Start {
     }
 
     /**
-     *
      * @param time
      */
     public static void 自动存档(int time) {
@@ -310,7 +327,6 @@ public class Start {
     }
 
     /**
-     *
      * @param time
      */
     public static void 开启双倍(int time) {
@@ -349,7 +365,6 @@ public class Start {
     }
 
     /**
-     *
      * @param time
      */
     public static void 刷新地图(int time) {
@@ -389,7 +404,6 @@ public class Start {
     }
 
     /**
-     *
      * @param time
      */
     public static void 防万能(int time) {
@@ -409,7 +423,6 @@ public class Start {
     }
 
     /**
-     *
      * @param time
      */
     public static void 在线统计(int time) {
@@ -420,7 +433,7 @@ public class Start {
             public void run() {
                 Map connected = World.getConnected();
                 StringBuilder conStr = new StringBuilder(new StringBuilder().append(FileoutputUtil.CurrentReadable_Time()).append(" 在线人数: ").toString());
-                for (Iterator i$ = connected.keySet().iterator(); i$.hasNext();) {
+                for (Iterator i$ = connected.keySet().iterator(); i$.hasNext(); ) {
                     int i = ((Integer) i$.next());
                     if (i == 0) {
                         int users = ((Integer) connected.get(i));
@@ -442,7 +455,6 @@ public class Start {
     }
 
     /**
-     *
      * @param time
      */
     public static void 在线时间(int time) {
@@ -496,7 +508,6 @@ public class Start {
     }
 
     /**
-     *
      * @param property
      */
     public static void 设置白名单(String property) {
@@ -524,7 +535,6 @@ public class Start {
     }
 
     /**
-     *
      * @param time
      */
     public static void 回收内存(int time) {
