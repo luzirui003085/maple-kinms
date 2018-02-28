@@ -30,9 +30,11 @@ import client.inventory.ItemFlag;
 import client.inventory.MapleInventoryType;
 import constants.GameConstants;
 import handling.SendPacketOpcode;
+
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+
 import scripting.NPCConversationManager;
 import scripting.NPCScriptManager;
 import server.AutobanManager;
@@ -50,13 +52,11 @@ import tools.data.input.SeekableLittleEndianAccessor;
 import tools.data.output.MaplePacketLittleEndianWriter;
 
 /**
- *
  * @author zjj
  */
 public class NPCHandler {
 
     /**
-     *
      * @param slea
      * @param c
      */
@@ -129,7 +129,6 @@ public class NPCHandler {
     }
 
     /**
-     *
      * @param slea
      * @param c
      * @param chr
@@ -179,7 +178,6 @@ public class NPCHandler {
     }
 
     /**
-     *
      * @param slea
      * @param c
      * @param chr
@@ -195,7 +193,7 @@ public class NPCHandler {
             return;
         }
         if (chr.getConversation() != 0) {
-            chr.dropMessage(5, "你現在不能攻擊或不能跟npc對話,請在對話框打 @解卡/@ea 來解除異常狀態");
+            chr.dropMessage(5, "你现在处于卡号状态，请在聊天框输入 @解卡 或者 @ea  来解除卡号状态。按商城旁边的【聊天】按钮也可以解除卡号状态。");
             return;
         }
 
@@ -213,7 +211,6 @@ public class NPCHandler {
     }
 
     /**
-     *
      * @param slea
      * @param c
      * @param chr
@@ -284,7 +281,6 @@ public class NPCHandler {
     }
 
     /**
-     *
      * @param slea
      * @param c
      * @param chr
@@ -425,7 +421,6 @@ public class NPCHandler {
     }
 
     /**
-     *
      * @param slea
      * @param c
      */
@@ -486,7 +481,6 @@ public class NPCHandler {
     }
 
     /**
-     *
      * @param c
      */
     public static final void repairAll(final MapleClient c) {
@@ -528,7 +522,6 @@ public class NPCHandler {
     }
 
     /**
-     *
      * @param slea
      * @param c
      */
@@ -562,7 +555,6 @@ public class NPCHandler {
     }
 
     /**
-     *
      * @param slea
      * @param c
      */
@@ -574,7 +566,6 @@ public class NPCHandler {
     }
 
     /**
-     *
      * @param slea
      * @param c
      */
@@ -609,7 +600,6 @@ public class NPCHandler {
     }
 
     /**
-     *
      * @param slea
      * @param c
      */

@@ -8,10 +8,12 @@ import client.inventory.MapleInventoryType;
 import constants.GameConstants;
 import constants.MapConstants;
 import handling.channel.ChannelServer;
+
 import java.awt.Point;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
+
 import server.AutobanManager;
 import server.MapleInventoryManipulator;
 import server.MapleItemInformationProvider;
@@ -36,7 +38,6 @@ import tools.packet.MTSCSPacket;
 import tools.packet.MobPacket;
 
 /**
- *
  * @author zjj
  */
 public class PlayerHandler {
@@ -55,7 +56,6 @@ public class PlayerHandler {
     }
 
     /**
-     *
      * @param bookid
      * @param c
      * @param chr
@@ -68,7 +68,6 @@ public class PlayerHandler {
     }
 
     /**
-     *
      * @param slea
      * @param chr
      */
@@ -91,7 +90,6 @@ public class PlayerHandler {
     }
 
     /**
-     *
      * @param slea
      * @param chr
      */
@@ -132,7 +130,6 @@ public class PlayerHandler {
     }
 
     /**
-     *
      * @param itemId
      * @param c
      * @param chr
@@ -175,7 +172,6 @@ public class PlayerHandler {
     }
 
     /**
-     *
      * @param id
      * @param c
      * @param chr
@@ -207,7 +203,6 @@ public class PlayerHandler {
     }
 
     /**
-     *
      * @param slea
      * @param c
      * @param chr
@@ -239,7 +234,6 @@ public class PlayerHandler {
     }
 
     /**
-     *
      * @param objectid
      * @param c
      * @param chr
@@ -258,7 +252,6 @@ public class PlayerHandler {
     }
 
     /**
-     *
      * @param slea
      * @param c
      * @param chr
@@ -445,7 +438,6 @@ public class PlayerHandler {
     }
 
     /**
-     *
      * @param c
      * @param chr
      */
@@ -488,7 +480,6 @@ public class PlayerHandler {
     }
 
     /**
-     *
      * @param itemId
      * @param c
      * @param chr
@@ -520,7 +511,6 @@ public class PlayerHandler {
     }
 
     /**
-     *
      * @param id
      * @param chr
      */
@@ -534,7 +524,6 @@ public class PlayerHandler {
     }
 
     /**
-     *
      * @param sourceid
      * @param chr
      */
@@ -552,7 +541,6 @@ public class PlayerHandler {
     }
 
     /**
-     *
      * @param slea
      * @param chr
      */
@@ -576,7 +564,6 @@ public class PlayerHandler {
     }
 
     /**
-     *
      * @param slea
      * @param c
      * @param chr
@@ -664,7 +651,6 @@ public class PlayerHandler {
     }
 
     /**
-     *
      * @param slea
      * @param c
      * @param chr
@@ -809,7 +795,6 @@ public class PlayerHandler {
     }
 
     /**
-     *
      * @param slea
      * @param c
      * @param chr
@@ -955,7 +940,6 @@ public class PlayerHandler {
     }
 
     /**
-     *
      * @param slea
      * @param c
      * @param chr
@@ -1021,7 +1005,6 @@ public class PlayerHandler {
     }
 
     /**
-     *
      * @param meso
      * @param chr
      */
@@ -1036,7 +1019,6 @@ public class PlayerHandler {
     }
 
     /**
-     *
      * @param emote
      * @param chr
      */
@@ -1068,7 +1050,6 @@ public class PlayerHandler {
     }
 
     /**
-     *
      * @param slea
      * @param chr
      */
@@ -1104,7 +1085,6 @@ public class PlayerHandler {
     }
 
     /**
-     *
      * @param slea
      * @param c
      * @param chr
@@ -1240,7 +1220,6 @@ public class PlayerHandler {
     }
 
     /**
-     *
      * @param slea
      * @param c
      * @param chr
@@ -1250,7 +1229,6 @@ public class PlayerHandler {
     }
 
     /**
-     *
      * @param slea
      * @param portal_name
      * @param c
@@ -1269,14 +1247,13 @@ public class PlayerHandler {
     }
 
     /**
-     *
      * @param slea
      * @param c
      * @param chr
      */
     public static final void ChangeMap(final SeekableLittleEndianAccessor slea, final MapleClient c, final MapleCharacter chr) {
         if (chr == null) {
-            chr.dropMessage(5, "你現在不能攻擊或不能跟npc對話,請在對話框打 @解卡/@ea 來解除異常狀態");
+            chr.dropMessage(5, "你现在处于卡号状态，请在聊天框输入 @解卡 或者 @ea  来解除卡号状态。按商城旁边的【聊天】按钮也可以解除卡号状态。");
             return;
         }
         if (slea.available() == 0L) {
@@ -1414,7 +1391,6 @@ public class PlayerHandler {
     }
 
     /**
-     *
      * @param slea
      * @param c
      * @param chr
@@ -1440,7 +1416,6 @@ public class PlayerHandler {
     }
 
     /**
-     *
      * @param slea
      * @param c
      */
@@ -1455,7 +1430,6 @@ public class PlayerHandler {
     }
 
     /**
-     *
      * @param slea
      * @param c
      */
