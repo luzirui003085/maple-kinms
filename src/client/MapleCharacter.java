@@ -54,6 +54,7 @@ import handling.world.family.MapleFamilyBuff.MapleFamilyBuffEntry;
 import handling.world.family.MapleFamilyCharacter;
 import handling.world.guild.MapleGuild;
 import handling.world.guild.MapleGuildCharacter;
+
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.io.File;
@@ -82,6 +83,7 @@ import java.util.Set;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
+
 import provider.MapleData;
 import provider.MapleDataProvider;
 import provider.MapleDataProviderFactory;
@@ -111,7 +113,6 @@ import tools.packet.PlayerShopPacket;
 import tools.packet.UIPacket;
 
 /**
- *
  * @author zjj
  */
 public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Serializable {
@@ -208,7 +209,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param ChannelServer
      */
     public MapleCharacter(final boolean ChannelServer) {
@@ -262,7 +262,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param client
      * @param type
      * @return
@@ -315,7 +314,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param ct
      * @param client
      * @param isChannel
@@ -494,7 +492,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param charid
      * @param client
      * @param channelserver
@@ -909,7 +906,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param chr
      * @param type
      * @param db
@@ -924,7 +920,7 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
             con.setTransactionIsolation(Connection.TRANSACTION_READ_UNCOMMITTED);
             con.setAutoCommit(false);
 
-            ps = con.prepareStatement("INSERT INTO characters (level, fame, str, dex, luk, `int`, exp, hp, mp, maxhp, maxmp, sp, ap, gm, skincolor, gender, job, hair, face, map, meso, hpApUsed, spawnpoint, party, buddyCapacity, monsterbookcover, dojo_pts, dojoRecord, pets, subcategory, marriageId, currentrep, totalrep, prefix, accountid, name, world) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", DatabaseConnection.RETURN_GENERATED_KEYS);
+            ps = con.prepareStatement("INSERT INTO characters (level, fame, str, dex, luk, `int`, exp, hp, mp, maxhp, maxmp, sp, ap, gm, skincolor, gender, job, hair, face, map, meso, hpApUsed, spawnpoint, party, buddyCapacity, monsterbookcover, dojo_pts, dojoRecord, pets, subcategory, marriageId, currentrep, totalrep, prefix, accountid, name, world) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", DatabaseConnection.RETURN_GENERATED_KEYS);
 
             ps.setInt(1, 1); // Level
             ps.setShort(2, (short) 0); // Fame
@@ -957,8 +953,8 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
             ps.setInt(28, 0); // Dojo record
             ps.setString(29, "-1,-1,-1");
             ps.setInt(30, /*
-                     * db ? 1 :
-                     */ 0); //for now
+             * db ? 1 :
+             */ 0); //for now
             ps.setInt(31, 0); //marriage ID
             ps.setInt(32, 0); //current reps
             ps.setInt(33, 0); //total reps
@@ -966,6 +962,7 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
             ps.setInt(35, chr.getAccountID());
             ps.setString(36, chr.name);
             ps.setByte(37, chr.world);
+            ps.setInt(38, chr.mount_id);
             ps.executeUpdate();
 
             rs = ps.getGeneratedKeys();
@@ -1086,7 +1083,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param dc
      * @param fromcs
      */
@@ -1104,7 +1100,7 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
             con.setTransactionIsolation(Connection.TRANSACTION_READ_UNCOMMITTED);
             con.setAutoCommit(false);
 
-            ps = con.prepareStatement("UPDATE characters SET level = ?, fame = ?, str = ?, dex = ?, luk = ?, `int` = ?, exp = ?, hp = ?, mp = ?, maxhp = ?, maxmp = ?, sp = ?, ap = ?, gm = ?, skincolor = ?, gender = ?, job = ?, hair = ?, face = ?, map = ?, meso = ?, hpApUsed = ?, spawnpoint = ?, party = ?, buddyCapacity = ?, monsterbookcover = ?, dojo_pts = ?, dojoRecord = ?, pets = ?, subcategory = ?, marriageId = ?, currentrep = ?, totalrep = ?, charmessage = ?, expression = ?, constellation = ?, blood = ?, month = ?, day = ?, beans = ?, prefix = ?, skillzq = ?, bosslog = ?, grname = ?, jzname = ?, mrfbrw = ?, mrsjrw = ?, mrsgrw = ?, mrsbossrw = ?, hythd = ?, mrsgrwa = ?, mrfbrwa = ?, mrsbossrwa = ?, mrsgrws = ?,  mrsbossrws = ?, mrfbrws = ?, mrsgrwas = ?,  mrsbossrwas = ?, mrfbrwas = ?, ddj = ?, vip = ?, name = ? WHERE id = ?", DatabaseConnection.RETURN_GENERATED_KEYS);
+            ps = con.prepareStatement("UPDATE characters SET level = ?, fame = ?, str = ?, dex = ?, luk = ?, `int` = ?, exp = ?, hp = ?, mp = ?, maxhp = ?, maxmp = ?, sp = ?, ap = ?, gm = ?, skincolor = ?, gender = ?, job = ?, hair = ?, face = ?, map = ?, meso = ?, hpApUsed = ?, spawnpoint = ?, party = ?, buddyCapacity = ?, monsterbookcover = ?, dojo_pts = ?, dojoRecord = ?, pets = ?, subcategory = ?, marriageId = ?, currentrep = ?, totalrep = ?, charmessage = ?, expression = ?, constellation = ?, blood = ?, month = ?, day = ?, beans = ?, prefix = ?, skillzq = ?, bosslog = ?, grname = ?, jzname = ?, mrfbrw = ?, mrsjrw = ?, mrsgrw = ?, mrsbossrw = ?, hythd = ?, mrsgrwa = ?, mrfbrwa = ?, mrsbossrwa = ?, mrsgrws = ?,  mrsbossrws = ?, mrfbrws = ?, mrsgrwas = ?,  mrsbossrwas = ?, mrfbrwas = ?, ddj = ?, vip = ?, name = ?, mountid = ? WHERE id = ?", DatabaseConnection.RETURN_GENERATED_KEYS);
             ps.setInt(1, level);
             ps.setShort(2, fame);
             ps.setShort(3, stats.getStr());
@@ -1202,7 +1198,8 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
             ps.setInt(60, ddj);
             ps.setInt(61, vip);
             ps.setString(62, name);
-            ps.setInt(63, id);
+            ps.setInt(63, mount_id);
+            ps.setInt(64, id);
 
             if (ps.executeUpdate() < 1) {
                 ps.close();
@@ -1440,7 +1437,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param con
      * @param sql
      * @param id
@@ -1454,7 +1450,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param con
      * @throws SQLException
      */
@@ -1473,7 +1468,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public final PlayerStats getStat() {
@@ -1481,7 +1475,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public final PlayerRandomStream CRand() {
@@ -1489,7 +1482,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param mplew
      */
     public final void QuestInfoPacket(final tools.data.output.MaplePacketLittleEndianWriter mplew) {
@@ -1502,7 +1494,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param questid
      * @param data
      */
@@ -1512,7 +1503,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param questid
      * @return
      */
@@ -1524,7 +1514,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public final int getNumQuest() {
@@ -1538,7 +1527,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param quest
      * @return
      */
@@ -1547,7 +1535,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param quest
      * @return
      */
@@ -1559,7 +1546,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param quest
      */
     public void setQuestAdd(int quest) {
@@ -1567,7 +1553,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param quest
      * @param status
      * @param customData
@@ -1581,7 +1566,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param quest
      * @param status
      * @param customData
@@ -1595,7 +1579,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param quest
      * @return
      */
@@ -1609,7 +1592,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param quest
      * @return
      */
@@ -1618,7 +1600,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param quest
      * @return
      */
@@ -1627,7 +1608,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param quest
      */
     public final void updateQuest(final MapleQuestStatus quest) {
@@ -1635,7 +1615,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param quest
      * @param update
      */
@@ -1650,7 +1629,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public final Map<Integer, String> getInfoQuest_Map() {
@@ -1658,7 +1636,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public final Map<MapleQuest, MapleQuestStatus> getQuest_Map() {
@@ -1666,7 +1643,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param skillid
      * @return
      */
@@ -1681,7 +1657,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param effect
      * @return
      */
@@ -1691,7 +1666,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param effect
      * @return
      */
@@ -1704,7 +1678,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param effect
      * @return
      */
@@ -1717,7 +1690,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param stat
      * @param skill
      * @return
@@ -1731,7 +1703,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param stat
      * @return
      */
@@ -1741,7 +1712,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param itemid
      * @param checkEquipped
      * @return
@@ -1755,7 +1725,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param effect
      * @param value
      */
@@ -1768,7 +1737,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param effect
      * @return
      */
@@ -1778,7 +1746,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param effect
      * @return
      */
@@ -1807,7 +1774,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param time
      * @param to
      */
@@ -1825,7 +1791,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param VIP
      */
     public void startFishingTask(final boolean VIP) {
@@ -1893,7 +1858,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param effect
      * @param starttime
      * @param schedule
@@ -1903,7 +1867,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param effect
      * @param starttime
      * @param schedule
@@ -1948,7 +1911,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param effect
      * @param startTime
      * @return
@@ -2023,7 +1985,7 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     /**
      * @param effect
      * @param overwrite when overwrite is set no data is sent and all the
-     * Buffstats in the StatEffect are deregistered
+     *                  Buffstats in the StatEffect are deregistered
      * @param startTime
      */
     public void cancelEffect(final MapleStatEffect effect, final boolean overwrite, final long startTime) {
@@ -2031,7 +1993,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param effect
      * @param overwrite
      * @param startTime
@@ -2068,7 +2029,7 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
                 removeDoor();
                 silentPartyUpdate();
             }
-        } else if (effect.isMonsterRiding_()) {
+        } else if (effect.isMonsterRiding_() || getMountId() == effect.getSourceId()) {
             getMount().cancelSchedule();
         } else if (effect.isMonsterRiding()) {
             cancelEffectFromBuffStat(MapleBuffStat.MECH_CHANGE);
@@ -2111,7 +2072,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param stat
      */
     public void cancelBuffStats(MapleBuffStat... stat) {
@@ -2121,7 +2081,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param stat
      */
     public void cancelEffectFromBuffStat(MapleBuffStat stat) {
@@ -2179,7 +2138,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param skillid
      */
     public void dispelSkill(int skillid) {
@@ -2199,7 +2157,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param skillid
      */
     public void dispelBuff(int skillid) {
@@ -2253,7 +2210,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public int getMorphState() {
@@ -2267,7 +2223,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param buffs
      */
     public void silentGiveBuffs(List<PlayerBuffValueHolder> buffs) {
@@ -2280,7 +2235,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public List<PlayerBuffValueHolder> getAllBuffs() {
@@ -2307,7 +2261,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param skillid
      * @return
      */
@@ -2345,8 +2298,8 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
             }
         }
     }*/
+
     /**
-     *
      * @param skillid
      * @param targets
      */
@@ -2449,7 +2402,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param skillid
      * @param targets
      */
@@ -2533,7 +2485,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param damage
      */
     public final void handleBattleshipHP(int damage) {
@@ -2655,7 +2606,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public MapleMap getMap() {
@@ -2663,7 +2613,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public MonsterBook getMonsterBook() {
@@ -2671,7 +2620,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param newmap
      */
     public void setMap(MapleMap newmap) {
@@ -2679,7 +2627,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param PmapId
      */
     public void setMap(int PmapId) {
@@ -2687,7 +2634,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public int getMapId() {
@@ -2698,7 +2644,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public byte getInitialSpawnpoint() {
@@ -2706,7 +2651,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public int getId() {
@@ -2714,7 +2658,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public String getName() {
@@ -2722,7 +2665,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public final String getBlessOfFairyOrigin() {
@@ -2730,7 +2672,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public final short getLevel() {
@@ -2738,7 +2679,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public final short getFame() {
@@ -2746,7 +2686,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public final int getDojo() {
@@ -2754,7 +2693,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public final int getDojoRecord() {
@@ -2762,7 +2700,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public final int getFallCounter() {
@@ -2770,7 +2707,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public final MapleClient getClient() {
@@ -2778,7 +2714,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param client
      */
     public final void setClient(final MapleClient client) {
@@ -2786,7 +2721,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public int getExp() {
@@ -2794,7 +2728,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public short getRemainingAp() {
@@ -2802,7 +2735,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public int getRemainingSp() {
@@ -2810,7 +2742,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param skillbook
      * @return
      */
@@ -2819,7 +2750,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public int[] getRemainingSps() {
@@ -2827,7 +2757,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public int getRemainingSpSize() {
@@ -2841,7 +2770,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public short getHpApUsed() {
@@ -2849,7 +2777,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public boolean isHidden() {
@@ -2857,7 +2784,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param hpApUsed
      */
     public void setHpApUsed(short hpApUsed) {
@@ -2865,7 +2791,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public byte getSkinColor() {
@@ -2873,7 +2798,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param skinColor
      */
     public void setSkinColor(byte skinColor) {
@@ -2881,7 +2805,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public short getJob() {
@@ -2889,7 +2812,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public byte getGender() {
@@ -2897,7 +2819,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public int getHair() {
@@ -2905,7 +2826,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public int getFace() {
@@ -2913,7 +2833,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param name
      */
     public void setName(String name) {
@@ -2921,7 +2840,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param exp
      */
     public void setExp(int exp) {
@@ -2929,7 +2847,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param hair
      */
     public void setHair(int hair) {
@@ -2937,7 +2854,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param face
      */
     public void setFace(int face) {
@@ -2945,7 +2861,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param fame
      */
     public void setFame(short fame) {
@@ -2953,7 +2868,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param dojo
      */
     public void setDojo(final int dojo) {
@@ -2961,7 +2875,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param reset
      */
     public void setDojoRecord(final boolean reset) {
@@ -2974,7 +2887,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param fallcounter
      */
     public void setFallCounter(int fallcounter) {
@@ -2982,7 +2894,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public Point getOldPosition() {
@@ -2990,7 +2901,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param x
      */
     public void setOldPosition(Point x) {
@@ -2998,7 +2908,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param remainingAp
      */
     public void setRemainingAp(short remainingAp) {
@@ -3006,7 +2915,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param remainingSp
      */
     public void setRemainingSp(int remainingSp) {
@@ -3014,7 +2922,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param remainingSp
      * @param skillbook
      */
@@ -3023,7 +2930,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param gender
      */
     public void setGender(byte gender) {
@@ -3031,7 +2937,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param invinc
      */
     public void setInvincible(boolean invinc) {
@@ -3039,7 +2944,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public boolean isInvincible() {
@@ -3047,7 +2951,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public CheatTracker getCheatTracker() {
@@ -3055,7 +2958,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public BuddyList getBuddylist() {
@@ -3063,7 +2965,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param famechange
      */
     public void addFame(int famechange) {
@@ -3075,7 +2976,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param mapid
      * @param portal
      * @param msg
@@ -3087,7 +2987,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param to
      * @param pos
      */
@@ -3096,7 +2995,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param to
      * @param pto
      */
@@ -3105,7 +3003,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param to
      * @param pto
      */
@@ -3169,7 +3066,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param newJob
      */
     public void changeJob(int newJob) {
@@ -3336,7 +3232,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public MapleDragon getDragon() {
@@ -3344,7 +3239,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param ap
      */
     public void gainAp(short ap) {
@@ -3353,7 +3247,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param sp
      */
     public void gainSP(int sp) {
@@ -3363,7 +3256,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param sp
      * @param skillbook
      */
@@ -3374,7 +3266,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param sp
      */
     public void resetSP(int sp) {
@@ -3397,7 +3288,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public int getAllSkillLevels() {
@@ -3411,7 +3301,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param skill
      * @param newLevel
      * @param newMasterlevel
@@ -3424,7 +3313,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param skill
      * @param newLevel
      * @param newMasterlevel
@@ -3453,7 +3341,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param skill
      * @param newLevel
      * @param newMasterlevel
@@ -3593,7 +3480,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param delta
      */
     public void healHP(int delta) {
@@ -3603,7 +3489,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param delta
      */
     public void healMP(int delta) {
@@ -3616,8 +3501,8 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
      * Convenience function which adds the supplied parameter to the current hp
      * then directly does a updateSingleStat.
      *
-     * @see MapleCharacter#setHp(int)
      * @param delta
+     * @see MapleCharacter#setHp(int)
      */
     public void addHP(int delta) {
         if (stats.setHp(stats.getHp() + delta)) {
@@ -3629,8 +3514,8 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
      * Convenience function which adds the supplied parameter to the current mp
      * then directly does a updateSingleStat.
      *
-     * @see MapleCharacter#setMp(int)
      * @param delta
+     * @see MapleCharacter#setMp(int)
      */
     public void addMP(int delta) {
         if (stats.setMp(stats.getMp() + delta)) {
@@ -3639,7 +3524,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param hpDiff
      * @param mpDiff
      */
@@ -3658,7 +3542,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param stat
      * @param newval
      */
@@ -3687,7 +3570,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param total
      * @param show
      * @param inChat
@@ -3744,7 +3626,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param prevexp
      * @param needed
      * @param leveled
@@ -3766,7 +3647,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param gain
      * @param show
      * @param white
@@ -3841,7 +3721,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param item
      * @param type
      */
@@ -3851,7 +3730,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param item
      * @param type
      */
@@ -3863,7 +3741,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param item
      * @param type
      */
@@ -3884,7 +3761,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public boolean isGM() {
@@ -3892,7 +3768,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public boolean isAdmin() {
@@ -3900,7 +3775,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public int getGMLevel() {
@@ -3908,7 +3782,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param g
      */
     public void setGMLevel(byte g) {
@@ -3916,7 +3789,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public boolean isPlayer() {
@@ -3924,7 +3796,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param level
      * @return
      */
@@ -3933,7 +3804,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param type
      * @return
      */
@@ -3942,7 +3812,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public final MapleInventory[] getInventorys() {
@@ -3957,7 +3826,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param pending
      */
     public final void expirationTask(boolean pending) {
@@ -4025,7 +3893,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public MapleShop getShop() {
@@ -4033,7 +3900,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param shop
      */
     public void setShop(MapleShop shop) {
@@ -4041,7 +3907,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public int getMeso() {
@@ -4049,7 +3914,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public final int[] getSavedLocations() {
@@ -4057,7 +3921,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param type
      * @return
      */
@@ -4066,7 +3929,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param type
      */
     public void saveLocation(SavedLocationType type) {
@@ -4074,7 +3936,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param type
      * @param mapz
      */
@@ -4083,7 +3944,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param type
      */
     public void clearSavedLocation(SavedLocationType type) {
@@ -4091,7 +3951,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public int getDY() {
@@ -4099,7 +3958,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param set
      */
     public void setDY(int set) {
@@ -4107,7 +3965,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param gain
      */
     public void gainDY(int gain) {
@@ -4116,7 +3973,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param gain
      * @param show
      */
@@ -4125,7 +3981,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param gain
      * @param show
      * @param enableActions
@@ -4135,7 +3990,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param gain
      * @param show
      * @param enableActions
@@ -4161,7 +4015,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param monster
      * @param aggro
      */
@@ -4175,7 +4028,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param monster
      */
     public void stopControllingMonster(MapleMonster monster) {
@@ -4188,7 +4040,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param monster
      */
     public void checkMonsterAggro(MapleMonster monster) {
@@ -4203,7 +4054,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public Set<MapleMonster> getControlled() {
@@ -4211,7 +4061,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public int getControlledSize() {
@@ -4219,7 +4068,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public int getAccountID() {
@@ -4227,7 +4075,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param id
      * @param skillID
      */
@@ -4246,7 +4093,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public final List<MapleQuestStatus> getStartedQuests() {
@@ -4260,7 +4106,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public final List<MapleQuestStatus> getCompletedQuests() {
@@ -4274,7 +4119,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public Map<ISkill, SkillEntry> getSkills() {
@@ -4282,7 +4126,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param skill
      * @return
      */
@@ -4295,7 +4138,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param skill
      * @return
      */
@@ -4304,7 +4146,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param skill
      * @return
      */
@@ -4521,7 +4362,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param key
      * @param type
      * @param action
@@ -4547,7 +4387,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param position
      * @param updateMacro
      */
@@ -4556,7 +4395,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public final SkillMacro[] getMacros() {
@@ -4564,7 +4402,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param reason
      * @param duration
      * @param greason
@@ -4599,7 +4436,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param reason
      * @param IPMac
      * @param autoban
@@ -4652,7 +4488,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param id
      * @param reason
      * @param accountId
@@ -4748,7 +4583,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public MapleStorage getStorage() {
@@ -4756,7 +4590,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param mo
      */
     public void addVisibleMapObject(MapleMapObject mo) {
@@ -4772,7 +4605,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param mo
      */
     public void removeVisibleMapObject(MapleMapObject mo) {
@@ -4788,7 +4620,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param mo
      * @return
      */
@@ -4802,7 +4633,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public Collection<MapleMapObject> getAndWriteLockVisibleMapObjects() {
@@ -4818,7 +4648,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public boolean isAlive() {
@@ -4826,7 +4655,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param client
      */
     @Override
@@ -4840,7 +4668,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param client
      */
     @Override
@@ -4881,7 +4708,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param index
      * @return
      */
@@ -4899,7 +4725,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param pet
      */
     public void removePetCS(MaplePet pet) {
@@ -4907,7 +4732,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param pet
      */
     public void addPet(final MaplePet pet) {
@@ -4920,7 +4744,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param pet
      * @param shiftLeft
      */
@@ -4942,7 +4765,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param pet
      */
     public void removePet(MaplePet pet) {
@@ -4951,7 +4773,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param petz
      * @return
      */
@@ -4969,7 +4790,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param petId
      * @return
      */
@@ -4987,7 +4807,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param petId
      * @return
      */
@@ -5005,7 +4824,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public final List<MaplePet> getPets() {
@@ -5013,7 +4831,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public int getNoPets() {
@@ -5032,7 +4849,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param pet
      * @param shiftLeft
      * @param hunger
@@ -5058,8 +4874,8 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
      * pets[1] = pets[0]; pets[0] = null; }
      }
      */
+
     /**
-     *
      * @return
      */
     public final long getLastFameTime() {
@@ -5067,7 +4883,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public final List<Integer> getFamedCharacters() {
@@ -5075,7 +4890,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param from
      * @return
      */
@@ -5089,7 +4903,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param to
      */
     public void hasGivenFame(MapleCharacter to) {
@@ -5108,7 +4921,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public final MapleKeyLayout getKeyLayout() {
@@ -5116,7 +4928,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public MapleParty getParty() {
@@ -5124,7 +4935,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public int getPartyId() {
@@ -5132,7 +4942,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public byte getWorld() {
@@ -5140,7 +4949,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param world
      */
     public void setWorld(byte world) {
@@ -5148,7 +4956,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param party
      */
     public void setParty(MapleParty party) {
@@ -5156,7 +4963,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public MapleTrade getTrade() {
@@ -5164,7 +4970,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param trade
      */
     public void setTrade(MapleTrade trade) {
@@ -5172,7 +4977,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public EventInstanceManager getEventInstance() {
@@ -5180,7 +4984,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param eventInstance
      */
     public void setEventInstance(EventInstanceManager eventInstance) {
@@ -5188,7 +4991,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param door
      */
     public void addDoor(MapleDoor door) {
@@ -5203,7 +5005,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public List<MapleDoor> getDoors() {
@@ -5224,7 +5025,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public boolean getSmega() {
@@ -5232,7 +5032,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public Map<Integer, MapleSummon> getSummons() {
@@ -5240,7 +5039,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public int getChair() {
@@ -5248,7 +5046,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public int getItemEffect() {
@@ -5256,7 +5053,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param chair
      */
     public void setChair(int chair) {
@@ -5265,7 +5061,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param itemEffect
      */
     public void setItemEffect(int itemEffect) {
@@ -5273,7 +5068,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     @Override
@@ -5282,7 +5076,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public int getFamilyId() {
@@ -5293,7 +5086,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public int getSeniorId() {
@@ -5304,7 +5096,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public int getJunior1() {
@@ -5315,7 +5106,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public int getJunior2() {
@@ -5326,7 +5116,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public int getCurrentRep() {
@@ -5334,7 +5123,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public int getTotalRep() {
@@ -5342,7 +5130,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param _rank
      */
     public void setCurrentRep(int _rank) {
@@ -5353,7 +5140,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param _rank
      */
     public void setTotalRep(int _rank) {
@@ -5364,7 +5150,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public int getGuildId() {
@@ -5372,7 +5157,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public byte getGuildRank() {
@@ -5380,7 +5164,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param _id
      */
     public void setGuildId(int _id) {
@@ -5398,7 +5181,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param _rank
      */
     public void setGuildRank(byte _rank) {
@@ -5409,7 +5191,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public MapleGuildCharacter getMGC() {
@@ -5417,7 +5198,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param rank
      */
     public void setAllianceRank(byte rank) {
@@ -5428,7 +5208,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public byte getAllianceRank() {
@@ -5436,7 +5215,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public MapleGuild getGuild() {
@@ -5504,7 +5282,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param type
      * @param quantity
      */
@@ -5513,7 +5290,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param message
      */
     public void dropMessage(String message) {
@@ -5521,7 +5297,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param type
      * @param quantity
      * @param show
@@ -5557,7 +5332,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param type
      * @return
      */
@@ -5573,7 +5347,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param itemid
      * @return
      */
@@ -5582,7 +5355,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param itemid
      * @param quantity
      * @param checkEquipped
@@ -5603,7 +5375,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param itemid
      * @param quantity
      * @return
@@ -5613,7 +5384,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param itemid
      * @return
      */
@@ -5636,7 +5406,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param score
      */
     public void setAPQScore(int score) {
@@ -5644,7 +5413,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public int getAPQScore() {
@@ -5652,7 +5420,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public long getLasttime() {
@@ -5660,7 +5427,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param lasttime
      */
     public void setLasttime(long lasttime) {
@@ -5668,7 +5434,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public long getCurrenttime() {
@@ -5676,7 +5441,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param currenttime
      */
     public void setCurrenttime(long currenttime) {
@@ -5703,7 +5467,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public byte getBuddyCapacity() {
@@ -5711,7 +5474,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param capacity
      */
     public void setBuddyCapacity(byte capacity) {
@@ -5720,7 +5482,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public MapleMessenger getMessenger() {
@@ -5728,7 +5489,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param messenger
      */
     public void setMessenger(MapleMessenger messenger) {
@@ -5736,7 +5496,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param skillId
      * @param startTime
      * @param length
@@ -5746,7 +5505,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param skillId
      */
     public void removeCooldown(int skillId) {
@@ -5756,7 +5514,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param skillId
      * @return
      */
@@ -5765,7 +5522,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param skillid
      * @param starttime
      * @param length
@@ -5775,7 +5531,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param cooldowns
      */
     public void giveCoolDowns(final List<MapleCoolDownValueHolder> cooldowns) {
@@ -5807,7 +5562,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public List<MapleCoolDownValueHolder> getCooldowns() {
@@ -5815,7 +5569,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public final List<MapleDiseaseValueHolder> getAllDiseases() {
@@ -5823,7 +5576,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param dis
      * @return
      */
@@ -5832,7 +5584,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param disease
      * @param skill
      */
@@ -5841,7 +5592,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param disease
      * @param x
      * @param duration
@@ -5865,7 +5615,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param ld
      */
     public final void giveSilentDebuff(final List<MapleDiseaseValueHolder> ld) {
@@ -5877,7 +5626,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param debuff
      */
     public void dispelDebuff(MapleDisease debuff) {
@@ -5910,7 +5658,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param level
      */
     public void setLevel(final short level) {
@@ -5918,7 +5665,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param to
      * @param msg
      */
@@ -5927,7 +5673,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param to
      * @param msg
      * @param fame
@@ -5957,7 +5702,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param id
      * @param fame
      */
@@ -5986,7 +5730,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param inc
      */
     public void mulung_EnergyModify(boolean inc) {
@@ -6010,7 +5753,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param type
      * @param inc
      */
@@ -6019,7 +5761,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param type
      * @param inc
      */
@@ -6028,7 +5769,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param type
      * @param inc
      */
@@ -6037,7 +5777,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public final short getCombo() {
@@ -6045,7 +5784,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param combo
      */
     public void setCombo(final short combo) {
@@ -6053,7 +5791,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public final long getLastCombo() {
@@ -6061,7 +5798,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param combo
      */
     public void setLastCombo(final long combo) {
@@ -6069,7 +5805,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public final long getKeyDownSkill_Time() {
@@ -6077,7 +5812,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param keydown_skill
      */
     public void setKeyDownSkill_Time(final long keydown_skill) {
@@ -6158,7 +5892,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param text
      */
     public void setChalkboard(String text) {
@@ -6167,7 +5900,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public String getChalkboard() {
@@ -6175,7 +5907,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public MapleMount getMount() {
@@ -6183,7 +5914,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public int[] getWishlist() {
@@ -6200,7 +5930,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public int getWishlistSize() {
@@ -6214,7 +5943,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param wl
      */
     public void setWishlist(int[] wl) {
@@ -6222,7 +5950,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public int[] getRocks() {
@@ -6230,7 +5957,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public int getRockSize() {
@@ -6244,7 +5970,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param map
      */
     public void deleteFromRocks(int map) {
@@ -6267,7 +5992,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param id
      * @return
      */
@@ -6281,7 +6005,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public int[] getRegRocks() {
@@ -6289,7 +6012,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public int getRegRockSize() {
@@ -6303,7 +6025,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param map
      */
     public void deleteFromRegRocks(int map) {
@@ -6326,7 +6047,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param id
      * @return
      */
@@ -6340,7 +6060,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public List<LifeMovementFragment> getLastRes() {
@@ -6348,7 +6067,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param lastres
      */
     public void setLastRes(List<LifeMovementFragment> lastres) {
@@ -6356,7 +6074,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param bookCover
      */
     public void setMonsterBookCover(int bookCover) {
@@ -6364,7 +6081,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public int getMonsterBookCover() {
@@ -6372,7 +6088,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param boss
      * @return
      */
@@ -6381,7 +6096,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param boss
      * @param type
      * @return
@@ -6438,7 +6152,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param boss
      */
     public void setBossLog2(String boss) {
@@ -6446,7 +6159,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param boss
      * @param type
      */
@@ -6455,7 +6167,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param boss
      * @param type
      * @param count
@@ -6477,7 +6188,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param boss
      */
     public void resetBossLog2(String boss) {
@@ -6485,7 +6195,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param boss
      * @param type
      */
@@ -6506,7 +6215,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param bossid
      * @return
      */
@@ -6534,7 +6242,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param bossid
      */
     public void setBossLog(String bossid) {
@@ -6552,7 +6259,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param type
      * @param message
      */
@@ -6571,7 +6277,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public IMaplePlayerShop getPlayerShop() {
@@ -6579,7 +6284,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param playerShop
      */
     public void setPlayerShop(IMaplePlayerShop playerShop) {
@@ -6587,7 +6291,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public int getConversation() {
@@ -6595,7 +6298,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param inst
      */
     public void setConversation(int inst) {
@@ -6603,7 +6305,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public MapleCarnivalParty getCarnivalParty() {
@@ -6611,7 +6312,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param party
      */
     public void setCarnivalParty(MapleCarnivalParty party) {
@@ -6619,7 +6319,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param ammount
      */
     public void addCP(int ammount) {
@@ -6628,7 +6327,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param ammount
      */
     public void useCP(int ammount) {
@@ -6636,7 +6334,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public int getAvailableCP() {
@@ -6644,7 +6341,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public int getTotalCP() {
@@ -6660,7 +6356,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param request
      */
     public void addCarnivalRequest(MapleCarnivalChallenge request) {
@@ -6668,7 +6363,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public final MapleCarnivalChallenge getNextCarnivalRequest() {
@@ -6683,7 +6377,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param enemyavailable
      * @param enemytotal
      */
@@ -6692,7 +6385,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param party
      * @param available
      * @param total
@@ -6703,7 +6395,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param name
      * @param lostCP
      * @param team
@@ -6732,8 +6423,8 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
      * quantity; break; }
      }
      */
+
     /**
-     *
      * @return
      */
     public boolean getCanTalk() {
@@ -6741,7 +6432,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param talk
      */
     public void canTalk(boolean talk) {
@@ -6749,7 +6439,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public int getHp() {
@@ -6757,7 +6446,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param hp
      */
     public void setHp(int hp) {
@@ -6765,7 +6453,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public int getMp() {
@@ -6773,7 +6460,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param mp
      */
     public void setMp(int mp) {
@@ -6781,7 +6467,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public int getStr() {
@@ -6789,7 +6474,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public int getDex() {
@@ -6797,7 +6481,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public int getLuk() {
@@ -6805,7 +6488,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public int getInt() {
@@ -6813,7 +6495,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public int getEXPMod() {
@@ -6821,7 +6502,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public int getDropMod() {
@@ -6829,7 +6509,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public int getCashMod() {
@@ -6837,7 +6516,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param p
      */
     public void setPoints(int p) {
@@ -6849,7 +6527,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public int getPoints() {
@@ -6857,7 +6534,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param p
      */
     public void setVPoints(int p) {
@@ -6865,7 +6541,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public int getVPoints() {
@@ -6873,7 +6548,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public CashShop getCashInventory() {
@@ -6881,7 +6555,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param id
      */
     public void removeAll(int id) {
@@ -6889,7 +6562,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param id
      * @param show
      * @param checkEquipped
@@ -6918,7 +6590,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param equip
      * @return
      */
@@ -6973,7 +6644,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public int getFH() {
@@ -6985,7 +6655,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param exp
      */
     public void startFairySchedule(boolean exp) {
@@ -6993,7 +6662,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param exp
      * @param equipped
      */
@@ -7022,7 +6690,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param exp
      */
     public void cancelFairySchedule(boolean exp) {
@@ -7036,7 +6703,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public byte getFairyExp() {
@@ -7044,7 +6710,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public int getCoconutTeam() {
@@ -7052,7 +6717,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param team
      */
     public void setCoconutTeam(int team) {
@@ -7060,7 +6724,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param slot
      */
     public void spawnPet(byte slot) {
@@ -7068,7 +6731,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param slot
      * @param lead
      */
@@ -7077,7 +6739,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param slot
      * @param lead
      * @param broadcast
@@ -7147,7 +6808,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param mobid
      */
     public void addMoveMob(int mobid) {
@@ -7167,7 +6827,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public Map<Integer, Integer> getMoveMobs() {
@@ -7175,7 +6834,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public int getLinkMid() {
@@ -7183,7 +6841,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param lm
      */
     public void setLinkMid(int lm) {
@@ -7191,7 +6848,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public boolean isClone() {
@@ -7202,7 +6858,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param c
      */
     public void setClone(boolean c) {
@@ -7210,7 +6865,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public WeakReference<MapleCharacter>[] getClones() {
@@ -7218,7 +6872,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public MapleCharacter cloneLooks() {
@@ -7364,7 +7017,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public final int getCloneSize() {
@@ -7391,7 +7043,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public byte getNumClones() {
@@ -7399,7 +7050,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param d
      */
     public void setDragon(MapleDragon d) {
@@ -7420,7 +7070,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public final byte[] getPetStores() {
@@ -7428,7 +7077,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param str
      * @param dex
      * @param int_
@@ -7461,7 +7109,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public Event_PyramidSubway getPyramidSubway() {
@@ -7469,7 +7116,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param ps
      */
     public void setPyramidSubway(Event_PyramidSubway ps) {
@@ -7477,7 +7123,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public byte getSubcategory() {
@@ -7488,7 +7133,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param itemid
      * @return
      */
@@ -7497,7 +7141,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param rps
      */
     public void setRPS(RockPaperScissors rps) {
@@ -7505,7 +7148,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public RockPaperScissors getRPS() {
@@ -7513,7 +7155,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public long getNextConsume() {
@@ -7521,7 +7162,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param nc
      */
     public void setNextConsume(long nc) {
@@ -7529,7 +7169,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public int getRank() {
@@ -7537,7 +7176,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public int getRankMove() {
@@ -7545,7 +7183,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public int getJobRank() {
@@ -7553,7 +7190,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public int getJobRankMove() {
@@ -7561,7 +7197,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param channel
      */
     public void changeChannel(final int channel) {
@@ -7594,7 +7229,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param type
      * @param amount
      */
@@ -7605,7 +7239,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param other
      * @return
      */
@@ -7614,7 +7247,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public int getFollowId() {
@@ -7622,7 +7254,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param fi
      */
     public void setFollowId(int fi) {
@@ -7634,7 +7265,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param fi
      */
     public void setFollowInitiator(boolean fi) {
@@ -7642,7 +7272,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param fi
      */
     public void setFollowOn(boolean fi) {
@@ -7650,7 +7279,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public boolean isFollowOn() {
@@ -7658,7 +7286,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public boolean isFollowInitiator() {
@@ -7683,7 +7310,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public int getMarriageId() {
@@ -7691,7 +7317,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param mi
      */
     public void setMarriageId(final int mi) {
@@ -7699,7 +7324,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public int getMarriageItemId() {
@@ -7707,7 +7331,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param mi
      */
     public void setMarriageItemId(final int mi) {
@@ -7715,7 +7338,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public boolean isStaff() {
@@ -7723,8 +7345,8 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     // TODO: gvup, vic, lose, draw, VR
+
     /**
-     *
      * @param questid
      * @return
      */
@@ -7756,7 +7378,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param questid
      * @param key
      * @return
@@ -7776,7 +7397,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param questid
      * @param key
      * @param value
@@ -7806,7 +7426,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param questid
      */
     public void recalcPartyQuestRank(final int questid) {
@@ -7872,7 +7491,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param questid
      */
     public void tryPartyQuest(final int questid) {
@@ -7887,7 +7505,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param questid
      */
     public void endPartyQuest(final int questid) {
@@ -7916,7 +7533,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param itemId
      */
     public void havePartyQuest(final int itemId) {
@@ -7966,7 +7582,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param beginnerJob
      */
     public void resetStatsByJob(boolean beginnerJob) {
@@ -7992,7 +7607,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public boolean hasSummon() {
@@ -8000,7 +7614,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param summ
      */
     public void setHasSummon(boolean summ) {
@@ -8033,7 +7646,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param dc
      */
     public void changeRemoval(boolean dc) {
@@ -8066,7 +7678,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param newTick
      */
     public void updateTick(int newTick) {
@@ -8074,7 +7685,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param buff
      * @return
      */
@@ -8087,7 +7697,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param buff
      */
     public void useFamilyBuff(MapleFamilyBuffEntry buff) {
@@ -8096,7 +7705,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public List<Pair<Integer, Integer>> usedBuffs() {
@@ -8111,7 +7719,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public String getTeleportName() {
@@ -8119,7 +7726,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param tname
      */
     public void setTeleportName(final String tname) {
@@ -8127,7 +7733,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public int getNoJuniors() {
@@ -8138,7 +7743,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public MapleFamilyCharacter getMFC() {
@@ -8146,7 +7750,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param familyid
      * @param seniorid
      * @param junior1
@@ -8178,7 +7781,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param newf
      * @param news
      * @param newj1
@@ -8191,7 +7793,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param skillid
      * @return
      */
@@ -8200,7 +7801,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public int currentBattleshipHP() {
@@ -8208,7 +7808,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param msg
      */
     public void sendEnglishQuiz(String msg) {
@@ -8235,8 +7834,8 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
      * System.err.println("CharMessage(set)"); charmessage += s;
      }
      */
+
     /**
-     *
      * @return
      */
     public String getcharmessage() {
@@ -8245,7 +7844,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param s
      */
     public void setcharmessage(String s) {
@@ -8254,7 +7852,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public int getexpression() {
@@ -8262,7 +7859,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param s
      */
     public void setexpression(int s) {
@@ -8270,7 +7866,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public int getconstellation() {
@@ -8278,7 +7873,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param s
      */
     public void setconstellation(int s) {
@@ -8286,7 +7880,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public int getskillzq() {
@@ -8294,7 +7887,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param s
      */
     public void setskillzq(int s) {
@@ -8302,7 +7894,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public int getbosslog() {
@@ -8310,7 +7901,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param s
      */
     public void setbosslog(int s) {
@@ -8318,7 +7908,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public int getgrname() {
@@ -8326,7 +7915,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param s
      */
     public void setgrname(int s) {
@@ -8334,7 +7922,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public int getjzname() {
@@ -8342,7 +7929,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param s
      */
     public void setjzname(int s) {
@@ -8350,7 +7936,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public int getblood() {
@@ -8358,7 +7943,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param s
      */
     public void setblood(int s) {
@@ -8366,7 +7950,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public int getmonth() {
@@ -8374,7 +7957,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param s
      */
     public void setmonth(int s) {
@@ -8382,7 +7964,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public int getday() {
@@ -8390,7 +7971,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param s
      */
     public void setday(int s) {
@@ -8398,7 +7978,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public int getTeam() {
@@ -8406,7 +7985,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public int getBeans() {
@@ -8414,7 +7992,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param s
      */
     public void gainBeans(int s) {
@@ -8422,7 +7999,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param s
      */
     public void setBeans(int s) {
@@ -8430,7 +8006,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public int getBeansNum() {
@@ -8473,7 +8048,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public boolean haveGM() {
@@ -8481,7 +8055,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param prefix
      */
     public void setprefix(int prefix) {
@@ -8489,7 +8062,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public int getPrefix() {
@@ -8497,7 +8069,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param msg
      * @param itemId
      */
@@ -8506,7 +8077,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param msg
      * @param itemId
      */
@@ -8515,7 +8085,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param msg
      * @param itemId
      * @param duration
@@ -8533,7 +8102,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param type
      * @return
      */
@@ -8577,7 +8145,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param hypay
      * @return
      */
@@ -8605,7 +8172,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param hypay
      * @return
      */
@@ -8633,7 +8199,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param type
      * @return
      */
@@ -8680,7 +8245,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param hypay
      * @return
      */
@@ -8708,7 +8272,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param hypay
      * @return
      */
@@ -8736,7 +8299,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param pay
      * @return
      */
@@ -8763,7 +8325,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public int getGamePoints() {
@@ -8810,7 +8371,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public int getGamePointsPD() {
@@ -8857,7 +8417,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param amount
      */
     public void gainGamePoints(int amount) {
@@ -8866,7 +8425,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param amount
      */
     public void gainGamePointsPD(int amount) {
@@ -8882,7 +8440,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param amount
      */
     public void updateGamePointsPD(int amount) {
@@ -8908,7 +8465,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param amount
      */
     public void updateGamePoints(int amount) {
@@ -8927,7 +8483,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public int getGamePointsRQ() {
@@ -8974,7 +8529,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param amount
      */
     public void gainGamePointsRQ(int amount) {
@@ -8990,7 +8544,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param amount
      */
     public void updateGamePointsRQ(int amount) {
@@ -9009,7 +8562,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public int getGamePointsPS() {
@@ -9056,7 +8608,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param amount
      */
     public void gainGamePointsPS(int amount) {
@@ -9072,7 +8623,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param amount
      */
     public void updateGamePointsPS(int amount) {
@@ -9091,7 +8641,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public long getDeadtime() {
@@ -9099,7 +8648,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param deadtime
      */
     public void setDeadtime(long deadtime) {
@@ -9107,7 +8655,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param mobexp
      */
     public void increaseEquipExp(int mobexp) { //道具经验
@@ -9128,7 +8675,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param name
      */
     public void petName(String name) { //声明变量值
@@ -9153,7 +8699,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public boolean isFake() {
@@ -9161,7 +8706,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param name
      * @param changeName
      */
@@ -9187,7 +8731,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param id
      */
     public void setID(int id) {
@@ -9195,7 +8738,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public boolean hasFakeChar() {
@@ -9203,7 +8745,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public List<FakeCharacter> getFakeChars() {
@@ -9211,7 +8752,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param job
      */
     public void setJob(short job) {
@@ -9219,8 +8759,8 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     //--------------------------------------------赏金任务
+
     /**
-     *
      * @return
      */
     public int getSJRW() {
@@ -9267,7 +8807,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param amount
      */
     public void gainSJRW(int amount) {
@@ -9283,7 +8822,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param amount
      */
     public void updateSJRW(int amount) {
@@ -9302,8 +8840,8 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     //--------------------------------------------每日副本任务
+
     /**
-     *
      * @return
      */
     public int getFBRW() {
@@ -9350,7 +8888,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param amount
      */
     public void gainFBRW(int amount) {
@@ -9366,7 +8903,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param amount
      */
     public void updateFBRW(int amount) {
@@ -9385,7 +8921,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public int getFBRWA() {
@@ -9432,7 +8967,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param amount
      */
     public void gainFBRWA(int amount) {
@@ -9448,7 +8982,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param amount
      */
     public void updateFBRWA(int amount) {
@@ -9467,8 +9000,8 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     //--------------------------------------------每日杀怪任务
+
     /**
-     *
      * @return
      */
     public int getSGRW() {
@@ -9515,7 +9048,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param amount
      */
     public void gainSGRW(int amount) {
@@ -9531,7 +9063,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param amount
      */
     public void updateSGRW(int amount) {
@@ -9550,7 +9081,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public int getSGRWA() {
@@ -9597,7 +9127,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param amount
      */
     public void gainSGRWA(int amount) {
@@ -9613,7 +9142,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param amount
      */
     public void updateSGRWA(int amount) {
@@ -9632,8 +9160,8 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     //--------------------------------------------每日杀BOSS任务
+
     /**
-     *
      * @return
      */
     public int getSBOSSRW() {
@@ -9680,7 +9208,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param amount
      */
     public void gainSBOSSRW(int amount) {
@@ -9696,7 +9223,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param amount
      */
     public void updateSBOSSRW(int amount) {
@@ -9715,7 +9241,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public int getSBOSSRWA() {
@@ -9762,7 +9287,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param amount
      */
     public void gainSBOSSRWA(int amount) {
@@ -9778,7 +9302,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param amount
      */
     public void updateSBOSSRWA(int amount) {
@@ -9797,8 +9320,8 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     //-------------七天礼包判断日期函数
+
     /**
-     *
      * @return
      */
     public int getlb() {
@@ -9845,7 +9368,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param amount
      */
     public void gainlb(int amount) {
@@ -9861,7 +9383,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param amount
      */
     public void updatelb(int amount) {
@@ -9880,7 +9401,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public int getmrsgrw() {
@@ -9888,7 +9408,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param s
      */
     public void setmrsgrw(int s) {
@@ -9896,7 +9415,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public int getmrsgrwa() {
@@ -9904,7 +9422,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param s
      */
     public void setmrsgrwa(int s) {
@@ -9912,7 +9429,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public int getmrsgrwas() {
@@ -9920,7 +9436,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param s
      */
     public void setmrsgrwas(int s) {
@@ -9928,7 +9443,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public int getmrsgrws() {
@@ -9936,7 +9450,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param s
      */
     public void setmrsgrws(int s) {
@@ -9944,7 +9457,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public int gethythd() {
@@ -9952,7 +9464,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param s
      */
     public void sethythd(int s) {
@@ -9960,7 +9471,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public int getmrsjrw() {
@@ -9968,7 +9478,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param s
      */
     public void setmrsjrw(int s) {
@@ -9976,7 +9485,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public int getmrfbrw() {
@@ -9984,7 +9492,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param s
      */
     public void setmrfbrw(int s) {
@@ -9992,7 +9499,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public int getmrsbossrw() {
@@ -10000,7 +9506,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param s
      */
     public void setmrsbossrw(int s) {
@@ -10008,7 +9513,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public int getmrfbrws() {
@@ -10016,7 +9520,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param s
      */
     public void setmrfbrws(int s) {
@@ -10024,7 +9527,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public int getmrsbossrws() {
@@ -10032,7 +9534,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param s
      */
     public void setmrsbossrws(int s) {
@@ -10040,7 +9541,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public int getmrfbrwa() {
@@ -10048,7 +9548,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param s
      */
     public void setmrfbrwa(int s) {
@@ -10056,7 +9555,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public int getmrsbossrwa() {
@@ -10064,7 +9562,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param s
      */
     public void setmrsbossrwa(int s) {
@@ -10072,7 +9569,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public int getmrfbrwas() {
@@ -10080,7 +9576,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param s
      */
     public void setmrfbrwas(int s) {
@@ -10088,7 +9583,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public int getvip() {
@@ -10096,7 +9590,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param s
      */
     public void setvip(int s) {
@@ -10104,7 +9597,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param s
      */
     public void gainvip(int s) {
@@ -10112,7 +9604,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public int getddj() {
@@ -10120,7 +9611,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param s
      */
     public void setddj(int s) {
@@ -10128,7 +9618,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param s
      */
     public void gainddj(int s) {
@@ -10136,7 +9625,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public int getmrsbossrwas() {
@@ -10144,7 +9632,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param s
      */
     public void setmrsbossrwas(int s) {
@@ -10152,7 +9639,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return @throws SQLException
      */
     public int 获取全民夺宝总数() throws SQLException {
@@ -10171,7 +9657,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     //查询全民夺宝信息
 
     /**
-     *
      * @param type
      * @return
      */
@@ -10216,8 +9701,8 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     //全民夺宝名单
+
     /**
-     *
      * @param id
      * @return
      */
@@ -10242,7 +9727,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param id
      * @return
      */
@@ -10268,7 +9752,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     //查看日志
 
     /**
-     *
      * @return
      */
     public String 领取日志() {
@@ -10289,8 +9772,8 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     //如果玩家获得了 那么我们将玩家的ID写入数据库玩家可以凭据领取该物品 //CURRENT_TIMESTAMP()
+
     /**
-     *
      * @param id
      * @param name
      * @return
@@ -10314,7 +9797,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     //这是第二个查询方法 玩家获得后使用该方法进行查询可领取。
 
     /**
-     *
      * @param lx
      * @return
      */
@@ -10360,6 +9842,7 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     //参加全民夺宝
+
     /**
      *
      */
@@ -10377,7 +9860,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @param incluedEquip
      * @return
      */
@@ -10412,10 +9894,21 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     /**
-     *
      * @return
      */
     public Rectangle getBounds() {
         return new Rectangle(getTruePosition().x - 25, getTruePosition().y - 75, 50, 75);
     }
+
+
+    private int mount_id = 0;
+
+    public int getMountId() {
+        return mount_id;
+    }
+
+    public void setMountId(int id) {
+        mount_id = id;
+    }
+
 }

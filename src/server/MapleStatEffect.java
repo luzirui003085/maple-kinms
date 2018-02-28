@@ -15,6 +15,7 @@ import client.status.MonsterStatus;
 import client.status.MonsterStatusEffect;
 import constants.GameConstants;
 import handling.channel.ChannelServer;
+
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.io.Serializable;
@@ -26,6 +27,7 @@ import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ScheduledFuture;
+
 import provider.MapleData;
 import provider.MapleDataTool;
 import server.MapleCarnivalFactory.MCSkill;
@@ -42,7 +44,6 @@ import tools.MaplePacketCreator;
 import tools.Pair;
 
 /**
- *
  * @author zjj
  */
 public class MapleStatEffect implements Serializable {
@@ -58,11 +59,10 @@ public class MapleStatEffect implements Serializable {
     private Point lt, rb;
     private int expBuff, itemup, mesoup, cashup, berserk, illusion, booster, berserk2, cp, nuffSkill;
     private byte level;
-//    private List<Pair<Integer, Integer>> randomMorph;
+    //    private List<Pair<Integer, Integer>> randomMorph;
     private List<MapleDisease> cureDebuffs;
 
     /**
-     *
      * @param source
      * @param skillid
      * @param overtime
@@ -74,7 +74,6 @@ public class MapleStatEffect implements Serializable {
     }
 
     /**
-     *
      * @param source
      * @param itemid
      * @return
@@ -598,9 +597,9 @@ public class MapleStatEffect implements Serializable {
                 case 35111009:
                 case 35111005: //TEMP
                 case 35111004: //TEMP
-                //case 35111011: //TEMP
+                    //case 35111011: //TEMP
                 case 35121009:
-                //case 35121010: //TEMP
+                    //case 35121010: //TEMP
                 case 35121011:
                     statups.add(new Pair<>(MapleBuffStat.SUMMON, 1));
                     break;
@@ -704,7 +703,7 @@ public class MapleStatEffect implements Serializable {
                     statups.add(new Pair<>(MapleBuffStat.MECH_CHANGE, (int) level)); //ya wtf
                     break;
                 case 35121013:
-                //case 35111004: //siege
+                    //case 35111004: //siege
                 case 35101002: //TEMP
                     ret.duration = 5000;
                     statups.add(new Pair<>(MapleBuffStat.MECH_CHANGE, (int) level)); //ya wtf
@@ -733,7 +732,6 @@ public class MapleStatEffect implements Serializable {
     /**
      * @param applyto
      * @param obj
-     * @param attack damage done by the skill
      */
     public final void applyPassive(final MapleCharacter applyto, final MapleMapObject obj) {
         if (makeChanceResult()) {
@@ -760,7 +758,6 @@ public class MapleStatEffect implements Serializable {
     }
 
     /**
-     *
      * @param chr
      * @return
      */
@@ -769,7 +766,6 @@ public class MapleStatEffect implements Serializable {
     }
 
     /**
-     *
      * @param chr
      * @param pos
      * @return
@@ -783,7 +779,6 @@ public class MapleStatEffect implements Serializable {
     }
 
     /**
-     *
      * @param applyfrom
      * @param applyto
      * @param primary
@@ -976,7 +971,6 @@ public class MapleStatEffect implements Serializable {
     }
 
     /**
-     *
      * @param applyto
      * @return
      */
@@ -1134,7 +1128,6 @@ public class MapleStatEffect implements Serializable {
     }
 
     /**
-     *
      * @param d
      */
     public final void setDuration(int d) {
@@ -1142,7 +1135,6 @@ public class MapleStatEffect implements Serializable {
     }
 
     /**
-     *
      * @param chr
      * @param starttime
      */
@@ -1167,7 +1159,6 @@ public class MapleStatEffect implements Serializable {
     }
 
     /**
-     *
      * @param applyto
      * @param combo
      */
@@ -1188,7 +1179,6 @@ public class MapleStatEffect implements Serializable {
     }
 
     /**
-     *
      * @param applyto
      * @param combo
      */
@@ -1209,7 +1199,6 @@ public class MapleStatEffect implements Serializable {
     }
 
     /**
-     *
      * @param chr
      * @param combo
      */
@@ -1228,7 +1217,6 @@ public class MapleStatEffect implements Serializable {
     }
 
     /**
-     *
      * @param chr
      * @param combo
      */
@@ -1245,7 +1233,6 @@ public class MapleStatEffect implements Serializable {
     }
 
     /**
-     *
      * @param applyto
      * @param combo
      */
@@ -1264,7 +1251,6 @@ public class MapleStatEffect implements Serializable {
     }
 
     /**
-     *
      * @param applyto
      * @param infinity
      */
@@ -1303,7 +1289,7 @@ public class MapleStatEffect implements Serializable {
         switch (sourceid) {
             case 5121009: // 极速领域
             case 15111005: // case 5001005: // Dash 修复疾驰
-            //            case 15001003: // 骑士团 疾驰
+                //            case 15001003: // 骑士团 疾驰
             {
                 applyto.getClient().getSession().write(MaplePacketCreator.givePirate(statups, localDuration / 1000, sourceid));
 //                applyto.getMap().broadcastMessage(applyto, MaplePacketCreator.giveForeignPirate(statups, localDuration / 1000, applyto.getId(), sourceid), false);
@@ -1383,7 +1369,7 @@ public class MapleStatEffect implements Serializable {
             case 35111007: //TEMP
             case 35101002: //TEMP
             case 35121013:
-            //  case 35111004: siege
+                //  case 35111004: siege
             case 35121005: { //missile
                 final List<Pair<MapleBuffStat, Integer>> stat = Collections.singletonList(new Pair<>(MapleBuffStat.MECH_CHANGE, 1));
                 applyto.getMap().broadcastMessage(applyto, MaplePacketCreator.giveForeignBuff(applyto, applyto.getId(), stat, this), false);
@@ -1439,8 +1425,12 @@ public class MapleStatEffect implements Serializable {
                     final List<Pair<MapleBuffStat, Integer>> stat = Collections.singletonList(new Pair<>(MapleBuffStat.MORPH, Integer.valueOf(getMorph(applyto))));
                     applyto.getMap().broadcastMessage(applyto, MaplePacketCreator.giveForeignBuff(applyto, applyto.getId(), stat, this), false);
                 } else if (isMonsterRiding()) {
-                    final int mountid = parseMountInfo(applyto, sourceid);
-                    final int mountid2 = parseMountInfo_Pure(applyto, sourceid);
+                    int mountid = parseMountInfo(applyto, sourceid);
+                    int mountid2 = parseMountInfo_Pure(applyto, sourceid);
+                    if (sourceid == 1013 && applyto.getMountId() != 0) {
+                        mountid = applyto.getMountId();
+                        mountid2 = applyto.getMountId();
+                    }
                     if (mountid != 0 && mountid2 != 0) {
                         final List<Pair<MapleBuffStat, Integer>> stat = Collections.singletonList(new Pair<>(MapleBuffStat.MONSTER_RIDING, 0));
                         //applyto.getClient().getSession().write(MaplePacketCreator.cancelBuff(null));
@@ -1504,7 +1494,6 @@ public class MapleStatEffect implements Serializable {
     }
 
     /**
-     *
      * @param player
      * @param skillid
      * @param s
@@ -1522,7 +1511,6 @@ public class MapleStatEffect implements Serializable {
     }
 
     /**
-     *
      * @param player
      * @param skillid
      * @return
@@ -1544,7 +1532,6 @@ public class MapleStatEffect implements Serializable {
     }
 
     /**
-     *
      * @param player
      * @param skillid
      * @return
@@ -1711,7 +1698,6 @@ public class MapleStatEffect implements Serializable {
     }
 
     /**
-     *
      * @param newid
      */
     public final void setSourceId(final int newid) {
@@ -1766,7 +1752,6 @@ public class MapleStatEffect implements Serializable {
     }
 
     /**
-     *
      * @param pb
      */
     public final void setPartyBuff(boolean pb) {
@@ -1795,7 +1780,6 @@ public class MapleStatEffect implements Serializable {
     }
 
     /**
-     *
      * @return
      */
     public final boolean isHeal() {
@@ -1803,7 +1787,6 @@ public class MapleStatEffect implements Serializable {
     }
 
     /**
-     *
      * @return
      */
     public final boolean isResurrection() {
@@ -1811,7 +1794,6 @@ public class MapleStatEffect implements Serializable {
     }
 
     /**
-     *
      * @return
      */
     public final boolean isTimeLeap() {
@@ -1819,7 +1801,6 @@ public class MapleStatEffect implements Serializable {
     }
 
     /**
-     *
      * @return
      */
     public final short getHp() {
@@ -1827,7 +1808,6 @@ public class MapleStatEffect implements Serializable {
     }
 
     /**
-     *
      * @return
      */
     public final short getMp() {
@@ -1835,7 +1815,6 @@ public class MapleStatEffect implements Serializable {
     }
 
     /**
-     *
      * @return
      */
     public final byte getMastery() {
@@ -1843,7 +1822,6 @@ public class MapleStatEffect implements Serializable {
     }
 
     /**
-     *
      * @return
      */
     public final short getWatk() {
@@ -1851,7 +1829,6 @@ public class MapleStatEffect implements Serializable {
     }
 
     /**
-     *
      * @return
      */
     public final short getMatk() {
@@ -1859,7 +1836,6 @@ public class MapleStatEffect implements Serializable {
     }
 
     /**
-     *
      * @return
      */
     public final short getWdef() {
@@ -1867,7 +1843,6 @@ public class MapleStatEffect implements Serializable {
     }
 
     /**
-     *
      * @return
      */
     public final short getMdef() {
@@ -1875,7 +1850,6 @@ public class MapleStatEffect implements Serializable {
     }
 
     /**
-     *
      * @return
      */
     public final short getAcc() {
@@ -1883,7 +1857,6 @@ public class MapleStatEffect implements Serializable {
     }
 
     /**
-     *
      * @return
      */
     public final short getAvoid() {
@@ -1891,7 +1864,6 @@ public class MapleStatEffect implements Serializable {
     }
 
     /**
-     *
      * @return
      */
     public final short getHands() {
@@ -1899,7 +1871,6 @@ public class MapleStatEffect implements Serializable {
     }
 
     /**
-     *
      * @return
      */
     public final short getSpeed() {
@@ -1907,7 +1878,6 @@ public class MapleStatEffect implements Serializable {
     }
 
     /**
-     *
      * @return
      */
     public final short getJump() {
@@ -1915,7 +1885,6 @@ public class MapleStatEffect implements Serializable {
     }
 
     /**
-     *
      * @return
      */
     public final int getDuration() {
@@ -1923,7 +1892,6 @@ public class MapleStatEffect implements Serializable {
     }
 
     /**
-     *
      * @return
      */
     public final boolean isOverTime() {
@@ -1931,7 +1899,6 @@ public class MapleStatEffect implements Serializable {
     }
 
     /**
-     *
      * @return
      */
     public final List<Pair<MapleBuffStat, Integer>> getStatups() {
@@ -1939,7 +1906,6 @@ public class MapleStatEffect implements Serializable {
     }
 
     /**
-     *
      * @param effect
      * @return
      */
@@ -1948,7 +1914,6 @@ public class MapleStatEffect implements Serializable {
     }
 
     /**
-     *
      * @return
      */
     public final int getX() {
@@ -1956,7 +1921,6 @@ public class MapleStatEffect implements Serializable {
     }
 
     /**
-     *
      * @return
      */
     public final int getY() {
@@ -1964,7 +1928,6 @@ public class MapleStatEffect implements Serializable {
     }
 
     /**
-     *
      * @return
      */
     public final int getZ() {
@@ -1972,7 +1935,6 @@ public class MapleStatEffect implements Serializable {
     }
 
     /**
-     *
      * @return
      */
     public final short getDamage() {
@@ -1980,7 +1942,6 @@ public class MapleStatEffect implements Serializable {
     }
 
     /**
-     *
      * @return
      */
     public final byte getAttackCount() {
@@ -1988,7 +1949,6 @@ public class MapleStatEffect implements Serializable {
     }
 
     /**
-     *
      * @return
      */
     public final byte getBulletCount() {
@@ -1996,7 +1956,6 @@ public class MapleStatEffect implements Serializable {
     }
 
     /**
-     *
      * @return
      */
     public final int getBulletConsume() {
@@ -2004,7 +1963,6 @@ public class MapleStatEffect implements Serializable {
     }
 
     /**
-     *
      * @return
      */
     public final byte getMobCount() {
@@ -2012,7 +1970,6 @@ public class MapleStatEffect implements Serializable {
     }
 
     /**
-     *
      * @return
      */
     public final int getMoneyCon() {
@@ -2020,7 +1977,6 @@ public class MapleStatEffect implements Serializable {
     }
 
     /**
-     *
      * @return
      */
     public final int getCooldown() {
@@ -2028,7 +1984,6 @@ public class MapleStatEffect implements Serializable {
     }
 
     /**
-     *
      * @return
      */
     public final Map<MonsterStatus, Integer> getMonsterStati() {
@@ -2036,7 +1991,6 @@ public class MapleStatEffect implements Serializable {
     }
 
     /**
-     *
      * @return
      */
     public final int getBerserk() {
@@ -2044,7 +1998,6 @@ public class MapleStatEffect implements Serializable {
     }
 
     /**
-     *
      * @return
      */
     public final boolean isHide() {
@@ -2052,7 +2005,6 @@ public class MapleStatEffect implements Serializable {
     }
 
     /**
-     *
      * @return
      */
     public final boolean isDragonBlood() {
@@ -2060,7 +2012,6 @@ public class MapleStatEffect implements Serializable {
     }
 
     /**
-     *
      * @return
      */
     public final boolean isBerserk() {
@@ -2068,7 +2019,6 @@ public class MapleStatEffect implements Serializable {
     }
 
     /**
-     *
      * @return
      */
     public final boolean isBeholder() {
@@ -2076,7 +2026,6 @@ public class MapleStatEffect implements Serializable {
     }
 
     /**
-     *
      * @return
      */
     public final boolean isMPRecovery() {
@@ -2084,7 +2033,6 @@ public class MapleStatEffect implements Serializable {
     }
 
     /**
-     *
      * @return
      */
     public final boolean isMonsterRiding_() {
@@ -2092,7 +2040,6 @@ public class MapleStatEffect implements Serializable {
     }
 
     /**
-     *
      * @return
      */
     public final boolean isMonsterRiding() {
@@ -2100,7 +2047,6 @@ public class MapleStatEffect implements Serializable {
     }
 
     /**
-     *
      * @return
      */
     public final boolean isMonsterS() {
@@ -2108,7 +2054,6 @@ public class MapleStatEffect implements Serializable {
     }
 
     /**
-     *
      * @return
      */
     public final boolean isMagicDoor() {
@@ -2116,7 +2061,6 @@ public class MapleStatEffect implements Serializable {
     }
 
     /**
-     *
      * @return
      */
     public final boolean isMesoGuard() {
@@ -2124,7 +2068,6 @@ public class MapleStatEffect implements Serializable {
     }
 
     /**
-     *
      * @return
      */
     public final boolean isCharge() {
@@ -2141,7 +2084,6 @@ public class MapleStatEffect implements Serializable {
     }
 
     /**
-     *
      * @return
      */
     public final boolean isPoison() {
@@ -2205,7 +2147,6 @@ public class MapleStatEffect implements Serializable {
     }
 
     /**
-     *
      * @return
      */
     public final boolean isAranCombo() {
@@ -2213,7 +2154,6 @@ public class MapleStatEffect implements Serializable {
     }
 
     /**
-     *
      * @return
      */
     public final boolean isCombo() {
@@ -2226,7 +2166,6 @@ public class MapleStatEffect implements Serializable {
     }
 
     /**
-     *
      * @return
      */
     public final boolean isPirateMorph() {
@@ -2240,7 +2179,6 @@ public class MapleStatEffect implements Serializable {
     }
 
     /**
-     *
      * @return
      */
     public final boolean isMorph() {
@@ -2248,7 +2186,6 @@ public class MapleStatEffect implements Serializable {
     }
 
     /**
-     *
      * @return
      */
     public final int getMorph() {
@@ -2267,7 +2204,6 @@ public class MapleStatEffect implements Serializable {
     }
 
     /**
-     *
      * @return
      */
     public final boolean isDivineBody() {
@@ -2283,7 +2219,6 @@ public class MapleStatEffect implements Serializable {
     }
 
     /**
-     *
      * @return
      */
     public final boolean isBerserkFury() {
@@ -2299,7 +2234,6 @@ public class MapleStatEffect implements Serializable {
     }
 
     /**
-     *
      * @param chr
      * @return
      */
@@ -2315,7 +2249,6 @@ public class MapleStatEffect implements Serializable {
     }
 
     /**
-     *
      * @return
      */
     public final byte getLevel() {
@@ -2323,7 +2256,6 @@ public class MapleStatEffect implements Serializable {
     }
 
     /**
-     *
      * @return
      */
     public final SummonMovementType getSummonMovementType() {
@@ -2364,7 +2296,6 @@ public class MapleStatEffect implements Serializable {
     }
 
     /**
-     *
      * @return
      */
     public final boolean isSkill() {
@@ -2372,7 +2303,6 @@ public class MapleStatEffect implements Serializable {
     }
 
     /**
-     *
      * @return
      */
     public final int getSourceId() {
@@ -2380,7 +2310,6 @@ public class MapleStatEffect implements Serializable {
     }
 
     /**
-     *
      * @return
      */
     public final boolean isSoaring() {
@@ -2396,7 +2325,6 @@ public class MapleStatEffect implements Serializable {
     }
 
     /**
-     *
      * @return
      */
     public final boolean isFinalAttack() {
@@ -2409,7 +2337,6 @@ public class MapleStatEffect implements Serializable {
     }
 
     /**
-     *
      * @return
      */
     public int getMpCon() {
@@ -2417,7 +2344,6 @@ public class MapleStatEffect implements Serializable {
     }
 
     /**
-     *
      * @return true if the effect should happen based on it's probablity, false
      * otherwise
      */
@@ -2426,7 +2352,6 @@ public class MapleStatEffect implements Serializable {
     }
 
     /**
-     *
      * @return
      */
     public final short getProb() {
@@ -2447,7 +2372,6 @@ public class MapleStatEffect implements Serializable {
         private final long startTime;
 
         /**
-         *
          * @param target
          * @param effect
          * @param startTime
@@ -2468,7 +2392,6 @@ public class MapleStatEffect implements Serializable {
     }
 
     /**
-     *
      * @param posFrom
      * @param facingLeft
      * @param addedRange

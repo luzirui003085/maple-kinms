@@ -28,6 +28,7 @@ import client.MapleQuestStatus;
 import client.SkillEntry;
 import client.inventory.MapleMount;
 import client.inventory.MaplePet;
+
 import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
@@ -36,21 +37,21 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+
 import server.quest.MapleQuest;
 import tools.Pair;
 
 /**
- *
  * @author zjj
  */
 public class CharacterTransfer implements Externalizable {
 
-    public int characterid, 
+    public int characterid,
 
     /**
      *
      */
-    accountid, 
+    accountid,
 
     /**
      *
@@ -60,27 +61,27 @@ public class CharacterTransfer implements Externalizable {
     /**
      *
      */
-    beans, 
+    beans,
 
     /**
      *
      */
-    meso, 
+    meso,
 
     /**
      *
      */
-    hair, 
+    hair,
 
     /**
      *
      */
-    face, 
+    face,
 
     /**
      *
      */
-    mapid, 
+    mapid,
 
     /**
      *
@@ -90,27 +91,27 @@ public class CharacterTransfer implements Externalizable {
     /**
      *
      */
-    partyid, 
+    partyid,
 
     /**
      *
      */
-    messengerid, 
+    messengerid,
 
     /**
      *
      */
-    mBookCover, 
+    mBookCover,
 
     /**
      *
      */
-    dojo, 
+    dojo,
 
     /**
      *
      */
-    ACash, 
+    ACash,
 
     /**
      *
@@ -120,22 +121,23 @@ public class CharacterTransfer implements Externalizable {
     /**
      *
      */
-    mount_itemid, 
+    mount_itemid,
+    mount_id,
 
     /**
      *
      */
-    mount_exp, 
+    mount_exp,
 
     /**
      *
      */
-    points, 
+    points,
 
     /**
      *
      */
-    vpoints, 
+    vpoints,
 
     /**
      *
@@ -145,57 +147,57 @@ public class CharacterTransfer implements Externalizable {
     /**
      *
      */
-    familyid, 
+    familyid,
 
     /**
      *
      */
-    seniorid, 
+    seniorid,
 
     /**
      *
      */
-    junior1, 
+    junior1,
 
     /**
      *
      */
-    junior2, 
+    junior2,
 
     /**
      *
      */
-    currentrep, 
+    currentrep,
 
     /**
      *
      */
-    totalrep, 
+    totalrep,
 
     /**
      *
      */
-    expression, 
+    expression,
 
     /**
      *
      */
-    constellation, 
+    constellation,
 
     /**
      *
      */
-    blood, 
+    blood,
 
     /**
      *
      */
-    month, 
+    month,
 
     /**
      *
      */
-    day, 
+    day,
 
     /**
      *
@@ -225,72 +227,72 @@ public class CharacterTransfer implements Externalizable {
     /**
      *
      */
-    jzname, 
+    jzname,
 
     /**
      *
      */
-    mrsjrw, 
+    mrsjrw,
 
     /**
      *
      */
-    mrsgrw, 
+    mrsgrw,
 
     /**
      *
      */
-    mrsbossrw, 
+    mrsbossrw,
 
     /**
      *
      */
-    mrfbrw, 
+    mrfbrw,
 
     /**
      *
      */
-    hythd, 
+    hythd,
 
     /**
      *
      */
-    mrsgrwa, 
+    mrsgrwa,
 
     /**
      *
      */
-    mrsbossrwa, 
+    mrsbossrwa,
 
     /**
      *
      */
-    mrfbrwa, 
+    mrfbrwa,
 
     /**
      *
      */
-    mrsgrws, 
+    mrsgrws,
 
     /**
      *
      */
-    mrsbossrws, 
+    mrsbossrws,
 
     /**
      *
      */
-    mrfbrws, 
+    mrfbrws,
 
     /**
      *
      */
-    mrsgrwas, 
+    mrsgrwas,
 
     /**
      *
      */
-    mrsbossrwas, 
+    mrsbossrwas,
 
     /**
      *
@@ -306,78 +308,78 @@ public class CharacterTransfer implements Externalizable {
      *
      */
     vip;
-    public byte channel, 
+    public byte channel,
 
     /**
      *
      */
-    dojoRecord, 
+    dojoRecord,
 
     /**
      *
      */
-    gender, 
+    gender,
 
     /**
      *
      */
-    gmLevel, 
+    gmLevel,
 
     /**
      *
      */
-    guildrank, 
+    guildrank,
 
     /**
      *
      */
-    alliancerank, 
+    alliancerank,
 
     /**
      *
      */
-    clonez, 
+    clonez,
 
     /**
      *
      */
-    fairyExp, 
+    fairyExp,
 
     /**
      *
      */
-    buddysize, 
+    buddysize,
 
     /**
      *
      */
-    world, 
+    world,
 
     /**
      *
      */
-    initialSpawnPoint, 
+    initialSpawnPoint,
 
     /**
      *
      */
-    skinColor, 
+    skinColor,
 
     /**
      *
      */
-    mount_level, 
+    mount_level,
 
     /**
      *
      */
-    mount_Fatigue, 
+    mount_Fatigue,
 
     /**
      *
      */
     subcategory;
-    public long lastfametime, 
+    public long lastfametime,
 
     /**
      *
@@ -388,120 +390,120 @@ public class CharacterTransfer implements Externalizable {
      *
      */
     public String tempIP;
-    public String name, 
+    public String name,
 
     /**
      *
      */
-    accountname, 
+    accountname,
 
     /**
      *
      */
-    BlessOfFairy, 
+    BlessOfFairy,
 
     /**
      *
      */
-    chalkboard, 
+    chalkboard,
 
     /**
      *
      */
     charmessage;
-    public short level, 
+    public short level,
 
     /**
      *
      */
-    fame, 
+    fame,
 
     /**
      *
      */
-    str, 
+    str,
 
     /**
      *
      */
-    dex, 
+    dex,
 
     /**
      *
      */
-    int_, 
+    int_,
 
     /**
      *
      */
-    luk, 
+    luk,
 
     /**
      *
      */
-    maxhp, 
+    maxhp,
 
     /**
      *
      */
-    maxmp, 
+    maxmp,
 
     /**
      *
      */
-    hp, 
+    hp,
 
     /**
      *
      */
-    mp, 
+    mp,
 
     /**
      *
      */
-    remainingAp, 
+    remainingAp,
 
     /**
      *
      */
-    hpApUsed, 
+    hpApUsed,
 
     /**
      *
      */
     job;
-    public Object inventorys, 
+    public Object inventorys,
 
     /**
      *
      */
-    skillmacro, 
+    skillmacro,
 
     /**
      *
      */
-    storage, 
+    storage,
 
     /**
      *
      */
     cs;
-    public int[] savedlocation, 
+    public int[] savedlocation,
 
     /**
      *
      */
-    wishlist, 
+    wishlist,
 
     /**
      *
      */
-    rocks, 
+    rocks,
 
     /**
      *
      */
-    remainingSp, 
+    remainingSp,
 
     /**
      *
@@ -522,7 +524,7 @@ public class CharacterTransfer implements Externalizable {
      *
      */
     public Map<Integer, Pair<Byte, Integer>> keymap = new LinkedHashMap<>();
-    public final List<Integer> finishedAchievements = new ArrayList<>(), 
+    public final List<Integer> finishedAchievements = new ArrayList<>(),
 
     /**
      *
@@ -556,11 +558,11 @@ public class CharacterTransfer implements Externalizable {
     }
 
     /**
-     *
      * @param chr
      */
     public CharacterTransfer(final MapleCharacter chr) {
         this.characterid = chr.getId();
+        this.mount_id = chr.getMountId();
         this.accountid = chr.getAccountID();
         this.accountname = chr.getClient().getAccountName();
         this.channel = (byte) chr.getClient().getChannel();
@@ -710,6 +712,7 @@ public class CharacterTransfer implements Externalizable {
 
     @Override
     public void readExternal(final ObjectInput in) throws IOException, ClassNotFoundException {
+        this.mount_id = in.readInt();
         this.characterid = in.readInt();
         this.accountid = in.readInt();
         this.accountname = in.readUTF();
@@ -887,6 +890,7 @@ public class CharacterTransfer implements Externalizable {
 
     @Override
     public void writeExternal(final ObjectOutput out) throws IOException {
+        out.writeInt(this.mount_id);
         out.writeInt(this.characterid);
         out.writeInt(this.accountid);
         out.writeUTF(this.accountname);
