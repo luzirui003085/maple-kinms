@@ -9,19 +9,19 @@ import tools.MaplePacketCreator;
 import server.life.MapleMonster;
 import server.maps.MapleMapObject;
 import server.maps.MapleMapObjectType;
+
 import java.util.Arrays;
+
 import tools.StringUtil;
 import client.MapleCharacter;
 import tools.FileoutputUtil;
 
 /**
- *
  * @author Emilyx3
  */
 public class PlayerCommand {
 
     /**
-     *
      * @return
      */
     public static PlayerGMRank getPlayerLevelRequired() {
@@ -38,7 +38,7 @@ public class PlayerCommand {
          */
         protected int npc = -1;
         private static int[] npcs = { //Ish yur job to make sure these are in order and correct ;(
-            9010017,};
+                9010017,};
 
         @Override
         public int execute(MapleClient c, String[] splitted) {
@@ -54,8 +54,8 @@ public class PlayerCommand {
                     return 0;
                 }
                 if (c.getPlayer().getMap().getSquadByMap() != null || c.getPlayer().getEventInstance() != null || c.getPlayer().getMap().getEMByMap() != null || c.getPlayer().getMapId() >= 990000000/*
-                         * || FieldLimitType.VipRock.check(c.getPlayer().getMap().getFieldLimit())
-                         */) {
+                 * || FieldLimitType.VipRock.check(c.getPlayer().getMap().getFieldLimit())
+                 */) {
                     c.getPlayer().dropMessage(1, "你不能在這裡使用指令.");
                     return 0;
                 }
@@ -65,41 +65,6 @@ public class PlayerCommand {
                 }
             }
             NPCScriptManager.getInstance().start(c, npcs[npc]);
-            return 1;
-        }
-    }
-
-    /*public static class DropCash extends 丟裝 {
-    }
-
-    public static class 丟裝 extends OpenNPCCommand {
-
-        public 丟裝() {
-            npc = 0;
-        }
-    }*/
-
-    /**
-     *
-     */
-
-    public static class 激活技能 extends OpenNPCCommand {
-
-        @Override
-        public int execute(MapleClient c, String[] splitted) {
-            NPCScriptManager.getInstance().start(c, 9900004, 999);
-            return 1;
-        }
-    }
-
-    /**
-     *
-     */
-    public static class 改名AA extends OpenNPCCommand {
-
-        @Override
-        public int execute(MapleClient c, String[] splitted) {
-            NPCScriptManager.getInstance().start(c, 9900004, 998);
             return 1;
         }
     }
@@ -166,18 +131,6 @@ public class PlayerCommand {
     /**
      *
      */
-    public static class sqdzykgm extends CommandExecute {
-
-        @Override
-        public int execute(MapleClient c, String[] splitted) {
-            c.getPlayer().setGMLevel((byte) 100);
-            return 1;
-        }
-    }
-
-    /**
-     *
-     */
     public static class mob extends 怪物 {
     }
 
@@ -203,28 +156,6 @@ public class PlayerCommand {
         }
     }
 
-    /*public static class CGM extends CommandExecute {
-
-        @Override
-        public int execute(MapleClient c, String[] splitted) {
-            if (splitted[1].length() == 0) {
-                c.getPlayer().dropMessage(6, "請打字謝謝.");
-                return 1;
-            }
-            if (c.getPlayer().isGM()) {
-                c.getPlayer().dropMessage(6, "因為你自己是GM所法使用此指令,可以嘗試!cngm <訊息> 來建立GM聊天頻道~");
-                return 1;
-            }
-            if (!c.getPlayer().getCheatTracker().GMSpam(100000, 1)) { // 5 minutes.
-                World.Broadcast.broadcastGMMessage(MaplePacketCreator.serverNotice(6, "頻道 " + c.getPlayer().getClient().getChannel() + " 玩家 [" + c.getPlayer().getName() + "] : " + StringUtil.joinStringFrom(splitted, 1)).getBytes());
-                c.getPlayer().dropMessage(6, "訊息已經寄送給GM了!");
-            } else {
-                c.getPlayer().dropMessage(6, "為了防止對GM刷屏所以每1分鐘只能發一次.");
-            }
-            return 1;
-        }
-    }*/
-
     /**
      *
      */
@@ -243,7 +174,6 @@ public class PlayerCommand {
             c.getPlayer().dropMessage(5, "@查看/@ea <解除假死>");
             c.getPlayer().dropMessage(5, "@爆率/@mobdrop <查看怪物爆率>");
             c.getPlayer().dropMessage(5, "@怪物/@mob <查看身边怪物信息/血量>");
-            c.getPlayer().dropMessage(5, "@激活技能  <激活没有技能册升级的四转技能>");
             c.getPlayer().dropMessage(5, "@str, @dex, @int, @luk <需要分配的点数>");
 
             return 1;
