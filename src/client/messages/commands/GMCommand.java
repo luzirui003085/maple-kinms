@@ -17,6 +17,7 @@ import handling.SendPacketOpcode;
 import handling.channel.ChannelServer;
 import handling.world.CheaterData;
 import handling.world.World;
+
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.*;
@@ -25,6 +26,7 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.concurrent.ScheduledFuture;
+
 import scripting.EventManager;
 import scripting.PortalScriptManager;
 import scripting.ReactorScriptManager;
@@ -53,17 +55,66 @@ import tools.StringUtil;
 import tools.data.output.MaplePacketLittleEndianWriter;
 
 /**
- *
  * @author Emilyx3
  */
 public class GMCommand {
 
     /**
-     *
      * @return
      */
     public static PlayerGMRank getPlayerLevelRequired() {
         return PlayerGMRank.GM;
+    }
+
+    public static class 超级拉所有玩家 extends CommandExecute {
+
+        @Override
+        public int execute(MapleClient c, String[] splitted) {
+            if (!c.getPlayer().isAdmin()) {
+                return 0;
+            }
+            for (ChannelServer cs : ChannelServer.getAllInstances()) {
+                for (MapleCharacter chr : cs.getPlayerStorage().getAllCharacters()) {
+                    if (chr.getMapId() != c.getPlayer().getMapId()) {
+                        chr.changeMap(c.getPlayer().getMap(), c.getPlayer().getPosition());
+                    }
+                    if (chr.getClient().getChannel() != c.getChannel()) {
+                        chr.changeChannel(c.getChannel());
+                    }
+                }
+            }
+            return 0;
+        }
+    }
+
+    public static class 拉 extends WarpHere {
+    }
+
+    public static class WarpHere extends CommandExecute {
+
+        public int execute(MapleClient c, String splitted[]) {
+            MapleCharacter victim = c.getChannelServer().getPlayerStorage().getCharacterByName(splitted[1]);
+            if (victim != null) {
+                victim.changeMap(c.getPlayer().getMap(), c.getPlayer().getMap().findClosestSpawnpoint(c.getPlayer().getPosition()));
+            } else {
+                int ch = World.Find.findChannel(splitted[1]);
+                if (ch < 0) {
+                    c.getPlayer().dropMessage(5, "角色不在线");
+                    return 1;
+                } else {
+                    victim = ChannelServer.getInstance(ch).getPlayerStorage().getCharacterByName(splitted[1]);
+                    c.getPlayer().dropMessage(5, "正在传送玩家到身边");
+                    victim.dropMessage(5, "GM正在传送你");
+                    if (victim.getMapId() != c.getPlayer().getMapId()) {
+                        final MapleMap mapp = victim.getClient().getChannelServer().getMapFactory().getMap(c.getPlayer().getMapId());
+                        victim.changeMap(mapp, mapp.getPortal(0));
+                    }
+                    victim.changeChannel(c.getChannel());
+                }
+            }
+            return 1;
+        }
+
     }
 
     /**
@@ -195,13 +246,13 @@ public class GMCommand {
                 if (this.change == 0) {
                     for (ChannelServer cserv1 : ChannelServer.getAllInstances()) {
                         for (MapleCharacter mch : cserv1.getPlayerStorage().getAllCharacters()) {
-                                mch.startMapEffect(ServerProperties.getProperty("KinMS.CommandMessage")+"管理员关闭【双倍经验】活动！快感谢管理员吧！", 5120000);
+                            mch.startMapEffect(ServerProperties.getProperty("KinMS.CommandMessage") + "管理员关闭【双倍经验】活动！快感谢管理员吧！", 5120000);
                         }
                     }
                 } else if (this.change == 1) {
                     for (ChannelServer cserv1 : ChannelServer.getAllInstances()) {
                         for (MapleCharacter mch : cserv1.getPlayerStorage().getAllCharacters()) {
-                                mch.startMapEffect(ServerProperties.getProperty("KinMS.CommandMessage")+"管理员开启【双倍经验】活动！快感谢管理员吧！", 5120000);
+                            mch.startMapEffect(ServerProperties.getProperty("KinMS.CommandMessage") + "管理员开启【双倍经验】活动！快感谢管理员吧！", 5120000);
                         }
                     }
                 }
@@ -231,7 +282,7 @@ public class GMCommand {
                     if (chr == null) {
                         continue;
                     }
-                    chr.startMapEffect(ServerProperties.getProperty("KinMS.CommandMessage")+"管理员开启【双倍经验】活动！", 5120000);
+                    chr.startMapEffect(ServerProperties.getProperty("KinMS.CommandMessage") + "管理员开启【双倍经验】活动！", 5120000);
                 }
             }
             Timer.WorldTimer.getInstance().register(new Runnable() {
@@ -239,12 +290,12 @@ public class GMCommand {
                 @Override
                 public void run() {
                     for (ChannelServer cserv : ChannelServer.getAllInstances()) {
-                         cserv.setDoubleExp(0);
+                        cserv.setDoubleExp(0);
                         for (MapleCharacter chr : cserv.getPlayerStorage().getAllCharacters()) {
                             if (chr == null) {
                                 continue;
                             }
-                            chr.startMapEffect(ServerProperties.getProperty("KinMS.CommandMessage")+"管理员关闭【双倍经验】活动！期待下次活动！", 5120000);
+                            chr.startMapEffect(ServerProperties.getProperty("KinMS.CommandMessage") + "管理员关闭【双倍经验】活动！期待下次活动！", 5120000);
                         }
                     }
                 }
@@ -252,7 +303,7 @@ public class GMCommand {
             return 0;
         }
     }
-    
+
     /**
      *
      */
@@ -275,13 +326,13 @@ public class GMCommand {
                 if (this.change == 1) {
                     for (ChannelServer cserv1 : ChannelServer.getAllInstances()) {
                         for (MapleCharacter mch : cserv1.getPlayerStorage().getAllCharacters()) {
-                                mch.startMapEffect(ServerProperties.getProperty("KinMS.CommandMessage")+"管理员关闭【双倍爆率】活动！快感谢管理员吧！", 5121009);
+                            mch.startMapEffect(ServerProperties.getProperty("KinMS.CommandMessage") + "管理员关闭【双倍爆率】活动！快感谢管理员吧！", 5121009);
                         }
                     }
                 } else if (this.change == 2) {
                     for (ChannelServer cserv1 : ChannelServer.getAllInstances()) {
                         for (MapleCharacter mch : cserv1.getPlayerStorage().getAllCharacters()) {
-                                mch.startMapEffect(ServerProperties.getProperty("KinMS.CommandMessage")+"管理员开启【双倍爆率】活动！快感谢管理员吧！", 5121009);
+                            mch.startMapEffect(ServerProperties.getProperty("KinMS.CommandMessage") + "管理员开启【双倍爆率】活动！快感谢管理员吧！", 5121009);
                         }
                     }
                 }
@@ -314,16 +365,16 @@ public class GMCommand {
                 if (this.change == 1) {
                     for (ChannelServer cserv1 : ChannelServer.getAllInstances()) {
                         for (MapleCharacter mch : cserv1.getPlayerStorage().getAllCharacters()) {
-                                mch.startMapEffect(ServerProperties.getProperty("KinMS.CommandMessage")+"管理员关闭【双倍冒险币】活动！快感谢管理员吧！", 5121020);
-                          
+                            mch.startMapEffect(ServerProperties.getProperty("KinMS.CommandMessage") + "管理员关闭【双倍冒险币】活动！快感谢管理员吧！", 5121020);
+
                         }
                     }
                 } else if (this.change == 2) {
                     for (ChannelServer cserv1 : ChannelServer.getAllInstances()) {
                         for (MapleCharacter mch : cserv1.getPlayerStorage().getAllCharacters()) {
-                          
-                                mch.startMapEffect(ServerProperties.getProperty("KinMS.CommandMessage")+"管理员开启【双倍冒险币】活动！快感谢管理员吧！", 5121020);
-                            
+
+                            mch.startMapEffect(ServerProperties.getProperty("KinMS.CommandMessage") + "管理员开启【双倍冒险币】活动！快感谢管理员吧！", 5121020);
+
                         }
                     }
                 }
@@ -367,15 +418,15 @@ public class GMCommand {
             if (type == 1) {
                 for (ChannelServer cserv1 : ChannelServer.getAllInstances()) {
                     for (MapleCharacter mch : cserv1.getPlayerStorage().getAllCharacters()) {
-                           mch.startMapEffect(ServerProperties.getProperty("KinMS.CommandMessage")+"管理员发放" + quantity + "点卷给在线的所以玩家！快感谢管理员吧！", 5120004);
-                       
+                        mch.startMapEffect(ServerProperties.getProperty("KinMS.CommandMessage") + "管理员发放" + quantity + "点卷给在线的所以玩家！快感谢管理员吧！", 5120004);
+
                     }
                 }
             } else if (type == 2) {
                 for (ChannelServer cserv1 : ChannelServer.getAllInstances()) {
                     for (MapleCharacter mch : cserv1.getPlayerStorage().getAllCharacters()) {
-                            mch.startMapEffect(ServerProperties.getProperty("KinMS.CommandMessage")+"管理员发放" + quantity + "抵用卷给在线的所以玩家！快感谢管理员吧！", 5120004);
-                       
+                        mch.startMapEffect(ServerProperties.getProperty("KinMS.CommandMessage") + "管理员发放" + quantity + "抵用卷给在线的所以玩家！快感谢管理员吧！", 5120004);
+
                     }
                 }
             }
@@ -402,8 +453,8 @@ public class GMCommand {
             }
             for (ChannelServer cserv1 : ChannelServer.getAllInstances()) {
                 for (MapleCharacter mch : cserv1.getPlayerStorage().getAllCharacters()) {
-                      mch.startMapEffect(ServerProperties.getProperty("KinMS.CommandMessage")+"管理员发放" + quantity + "经验给在线的所以玩家！快感谢管理员吧！", 5121020);
-                    
+                    mch.startMapEffect(ServerProperties.getProperty("KinMS.CommandMessage") + "管理员发放" + quantity + "经验给在线的所以玩家！快感谢管理员吧！", 5121020);
+
                 }
             }
             return 1;
@@ -428,8 +479,8 @@ public class GMCommand {
             }
             for (ChannelServer cserv1 : ChannelServer.getAllInstances()) {
                 for (MapleCharacter mch : cserv1.getPlayerStorage().getAllCharacters()) {
-                        mch.startMapEffect(ServerProperties.getProperty("KinMS.CommandMessage")+"管理员发放" + quantity + "冒险币给在线的所以玩家！快感谢管理员吧！", 5121020);
-                   
+                    mch.startMapEffect(ServerProperties.getProperty("KinMS.CommandMessage") + "管理员发放" + quantity + "冒险币给在线的所以玩家！快感谢管理员吧！", 5121020);
+
                 }
             }
             return 1;
@@ -462,11 +513,11 @@ public class GMCommand {
             for (ChannelServer cserv1 : ChannelServer.getAllInstances()) {
                 for (MapleCharacter mch : cserv1.getPlayerStorage().getAllCharacters()) {
                     if (quantity <= 1) {
-                          mch.startMapEffect(ServerProperties.getProperty("KinMS.CommandMessage")+"管理员发放【" + mz + "】物品给在线的所以玩家！快感谢管理员吧！", 5120000);
-                       
+                        mch.startMapEffect(ServerProperties.getProperty("KinMS.CommandMessage") + "管理员发放【" + mz + "】物品给在线的所以玩家！快感谢管理员吧！", 5120000);
+
                     } else {
-                          mch.startMapEffect(ServerProperties.getProperty("KinMS.CommandMessage")+"管理员发放【" + mz + "】物品【" + quantity + "】个给在线的所以玩家！快感谢管理员吧！", 5120000);
-                       
+                        mch.startMapEffect(ServerProperties.getProperty("KinMS.CommandMessage") + "管理员发放【" + mz + "】物品【" + quantity + "】个给在线的所以玩家！快感谢管理员吧！", 5120000);
+
                     }
                 }
             }
@@ -710,7 +761,8 @@ public class GMCommand {
                 case 2:
                     for (ChannelServer cserv : ChannelServer.getAllInstances()) {
                         cserv.getPlayerStorage().disconnectAll(true);
-                    }   c.getPlayer().dropMessage(5, "已成功断开当前游戏所有玩家的连接.");
+                    }
+                    c.getPlayer().dropMessage(5, "已成功断开当前游戏所有玩家的连接.");
                     break;
                 default:
                     break;
@@ -1034,7 +1086,7 @@ public class GMCommand {
             }
             ChannelServer cserv = c.getChannelServer();
             MapleCharacter victim = cserv.getPlayerStorage().getCharacterById(Integer.parseInt(splitted[1]));
-          //  MapleCharacter victim = cserv.getPlayerStorage().getCharacterByName(splitted[1]);
+            //  MapleCharacter victim = cserv.getPlayerStorage().getCharacterByName(splitted[1]);
             victim.changeMap(c.getPlayer().getMap(), c.getPlayer().getMap().findClosestSpawnpoint(c.getPlayer().getPosition()));
             return 0;
         }
@@ -1234,7 +1286,7 @@ public class GMCommand {
             }
             c.getPlayer().dropMessage(5, "[保存雇佣商人系统] 雇佣商人保存" + p + "个频道成功。");
             */
-            
+
             int p = 0;
             for (handling.channel.ChannelServer cserv : handling.channel.ChannelServer.getAllInstances()) {
                 try {
@@ -1555,7 +1607,7 @@ public class GMCommand {
             Map connected = World.getConnected();
             StringBuilder conStr = new StringBuilder("连接数量: ");
             boolean first = true;
-            for (Iterator i$ = connected.keySet().iterator(); i$.hasNext();) {
+            for (Iterator i$ = connected.keySet().iterator(); i$.hasNext(); ) {
                 int i = ((Integer) i$.next());
                 if (!first) {
                     conStr.append(", ");
@@ -1925,7 +1977,7 @@ public class GMCommand {
                          System.out.println("关闭服务端保存雇佣错误 - " + e);
                          }
                          }*/
-                     //   World.Broadcast.broadcastMessage(UIPacket.clearMidMsg());
+                        //   World.Broadcast.broadcastMessage(UIPacket.clearMidMsg());
                         // World.Broadcast.broadcastMessage(UIPacket.getMidMsg("游戏将于 " + GMCommand.ShutdownTime.this.minutesLeft + " 分钟之后关闭维护.请玩家安全下线.", true, 0));
                         World.Broadcast.broadcastMessage(MaplePacketCreator.serverNotice(0, " 游戏将于 " + GMCommand.ShutdownTime.this.minutesLeft + " 分钟之后关闭维护.请玩家安全下线."));
                         //AdminCommand.ShutdownTime.access$010(AdminCommand.ShutdownTime.this);
