@@ -38,13 +38,15 @@ public class CashShopServer {
 
     private static String ip;
     private static InetSocketAddress InetSocketadd;
-    private final static int PORT = 8596;
+    private final static int DEFAULT_PORT = 8596;
+    private static short port;
     private static IoAcceptor acceptor;
     private static PlayerStorage players, playersMTS;
     private static boolean finishedShutdown = false;
 
     public static final void run_startup_configurations() {
-        ip = ServerProperties.getProperty("KinMS.IP") + ":" + PORT;
+        port = Short.parseShort(ServerProperties.getProperty("KinMS.CSPort", String.valueOf(DEFAULT_PORT)));
+        ip = ServerProperties.getProperty("KinMS.IP") + ":" + port;
 
         ByteBuffer.setUseDirectBuffers(false);
         ByteBuffer.setAllocator(new SimpleByteBufferAllocator());
@@ -58,11 +60,11 @@ public class CashShopServer {
         playersMTS = new PlayerStorage(-20);
 
         try {
-            InetSocketadd = new InetSocketAddress(PORT);
+            InetSocketadd = new InetSocketAddress(port);
             acceptor.bind(InetSocketadd, new MapleServerHandler(-1, true), cfg);
-            System.out.println("商城    1: 启动端口 " + PORT);
+            System.out.println("商城    1: 启动端口 " + port);
         } catch (final Exception e) {
-            System.err.println("Binding to port " + PORT + " failed");
+            System.err.println("Binding to port " + port + " failed");
             e.printStackTrace();
             throw new RuntimeException("Binding failed.", e);
         }
@@ -87,7 +89,7 @@ public class CashShopServer {
         System.out.println("Saving all connected clients (CS)...");
         players.disconnectAll();
         playersMTS.disconnectAll();
-       // MTSStorage.getInstance().saveBuyNow(true);
+        // MTSStorage.getInstance().saveBuyNow(true);
         System.out.println("Shutting down CS...");
         acceptor.unbindAll();
         finishedShutdown = true;
