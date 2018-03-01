@@ -487,7 +487,7 @@ public class MapleStatEffect implements Serializable {
                 case 1211002: // charged blow
                 case 1111008: // shout
                 case 4211002: // assaulter
-                case 3101005: // arrow bomb
+                // case 3101005: // arrow bomb 爆炸箭去掉昏迷效果
                 case 1111005: // coma: sword
                 case 1111006: // coma: axe
                 case 4221007: // boomerang step

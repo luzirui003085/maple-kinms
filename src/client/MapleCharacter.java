@@ -3657,6 +3657,7 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
      * @param Premium_Bonus_EXP
      */
     public void gainExpMonster(final int gain, final boolean show, final boolean white, final byte pty, int wedding_EXP, int Class_Bonus_EXP, int Equipment_Bonus_EXP, int Premium_Bonus_EXP) {
+        Premium_Bonus_EXP = 0; // 网吧经验
         if (level < Integer.parseInt(ServerProperties.getProperty("KinMS.MLevel")) || (GameConstants.isKOC(job)) && level < Integer.parseInt(ServerProperties.getProperty("KinMS.QLevel"))) {
             int 结婚经验 = 0;
             if (this.marriageId > 0) {

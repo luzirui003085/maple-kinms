@@ -186,6 +186,15 @@ public class NPCHandler {
         if (chr == null || chr.getMap() == null) {
             return;
         }
+
+        chr.setCurrenttime(System.currentTimeMillis());
+        if (chr.getCurrenttime() - c.getPlayer().getLasttime() < 2000) {
+            chr.dropMessage(1, "悠着点，点的太快会掉线的。");
+            c.getSession().write(MaplePacketCreator.enableActions());
+            return;
+        }
+        chr.setLasttime(System.currentTimeMillis());
+
         final MapleNPC npc = chr.getMap().getNPCByOid(slea.readInt());
 
         slea.readInt();
