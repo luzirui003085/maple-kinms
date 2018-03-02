@@ -418,14 +418,14 @@ public class GMCommand {
             if (type == 1) {
                 for (ChannelServer cserv1 : ChannelServer.getAllInstances()) {
                     for (MapleCharacter mch : cserv1.getPlayerStorage().getAllCharacters()) {
-                        mch.startMapEffect(ServerProperties.getProperty("KinMS.CommandMessage") + "管理员发放" + quantity + "点卷给在线的所以玩家！快感谢管理员吧！", 5120004);
+                        mch.startMapEffect(ServerProperties.getProperty("KinMS.CommandMessage") + "管理员发放" + quantity + "点卷给在线的所有玩家！快感谢管理员吧！", 5120004);
 
                     }
                 }
             } else if (type == 2) {
                 for (ChannelServer cserv1 : ChannelServer.getAllInstances()) {
                     for (MapleCharacter mch : cserv1.getPlayerStorage().getAllCharacters()) {
-                        mch.startMapEffect(ServerProperties.getProperty("KinMS.CommandMessage") + "管理员发放" + quantity + "抵用卷给在线的所以玩家！快感谢管理员吧！", 5120004);
+                        mch.startMapEffect(ServerProperties.getProperty("KinMS.CommandMessage") + "管理员发放" + quantity + "抵用卷给在线的所有玩家！快感谢管理员吧！", 5120004);
 
                     }
                 }
@@ -453,7 +453,7 @@ public class GMCommand {
             }
             for (ChannelServer cserv1 : ChannelServer.getAllInstances()) {
                 for (MapleCharacter mch : cserv1.getPlayerStorage().getAllCharacters()) {
-                    mch.startMapEffect(ServerProperties.getProperty("KinMS.CommandMessage") + "管理员发放" + quantity + "经验给在线的所以玩家！快感谢管理员吧！", 5121020);
+                    mch.startMapEffect(ServerProperties.getProperty("KinMS.CommandMessage") + "管理员发放" + quantity + "经验给在线的所有玩家！快感谢管理员吧！", 5121020);
 
                 }
             }
@@ -479,7 +479,7 @@ public class GMCommand {
             }
             for (ChannelServer cserv1 : ChannelServer.getAllInstances()) {
                 for (MapleCharacter mch : cserv1.getPlayerStorage().getAllCharacters()) {
-                    mch.startMapEffect(ServerProperties.getProperty("KinMS.CommandMessage") + "管理员发放" + quantity + "冒险币给在线的所以玩家！快感谢管理员吧！", 5121020);
+                    mch.startMapEffect(ServerProperties.getProperty("KinMS.CommandMessage") + "管理员发放" + quantity + "冒险币给在线的所有玩家！快感谢管理员吧！", 5121020);
 
                 }
             }
@@ -513,10 +513,10 @@ public class GMCommand {
             for (ChannelServer cserv1 : ChannelServer.getAllInstances()) {
                 for (MapleCharacter mch : cserv1.getPlayerStorage().getAllCharacters()) {
                     if (quantity <= 1) {
-                        mch.startMapEffect(ServerProperties.getProperty("KinMS.CommandMessage") + "管理员发放【" + mz + "】物品给在线的所以玩家！快感谢管理员吧！", 5120000);
+                        mch.startMapEffect(ServerProperties.getProperty("KinMS.CommandMessage") + "管理员发放【" + mz + "】物品给在线的所有玩家！快感谢管理员吧！", 5120000);
 
                     } else {
-                        mch.startMapEffect(ServerProperties.getProperty("KinMS.CommandMessage") + "管理员发放【" + mz + "】物品【" + quantity + "】个给在线的所以玩家！快感谢管理员吧！", 5120000);
+                        mch.startMapEffect(ServerProperties.getProperty("KinMS.CommandMessage") + "管理员发放【" + mz + "】物品【" + quantity + "】个给在线的所有玩家！快感谢管理员吧！", 5120000);
 
                     }
                 }
@@ -561,7 +561,7 @@ public class GMCommand {
                 for (ChannelServer cserv1 : ChannelServer.getAllInstances()) {
                     for (MapleCharacter mch : cserv1.getPlayerStorage().getAllCharacters()) {
                         if (c.getPlayer().getMapId() == mch.getMapId()) {
-                            mch.startMapEffect(ServerProperties.getProperty("KinMS.CommandMessage") + "管理员发放" + quantity + "点卷给当前地图在线的所以玩家！快感谢管理员吧！", 5120004);
+                            mch.startMapEffect(ServerProperties.getProperty("KinMS.CommandMessage") + "管理员发放" + quantity + "点卷给当前地图在线的所有玩家！快感谢管理员吧！", 5120004);
                         }
                     }
                 }
@@ -569,7 +569,7 @@ public class GMCommand {
                 for (ChannelServer cserv1 : ChannelServer.getAllInstances()) {
                     for (MapleCharacter mch : cserv1.getPlayerStorage().getAllCharacters()) {
                         if (c.getPlayer().getMapId() == mch.getMapId()) {
-                            mch.startMapEffect(ServerProperties.getProperty("KinMS.CommandMessage") + "管理员发放" + quantity + "抵用卷给当前地图在线的所以玩家！快感谢管理员吧！", 5120004);
+                            mch.startMapEffect(ServerProperties.getProperty("KinMS.CommandMessage") + "管理员发放" + quantity + "抵用卷给当前地图在线的所有玩家！快感谢管理员吧！", 5120004);
                         }
                     }
                 }
@@ -600,7 +600,7 @@ public class GMCommand {
             for (ChannelServer cserv1 : ChannelServer.getAllInstances()) {
                 for (MapleCharacter mch : cserv1.getPlayerStorage().getAllCharacters()) {
                     if (c.getPlayer().getMapId() == mch.getMapId()) {
-                        mch.startMapEffect(ServerProperties.getProperty("KinMS.CommandMessage") + "管理员发放" + quantity + "经验给当前地图在线的所以玩家！快感谢管理员吧！", 5121020);
+                        mch.startMapEffect(ServerProperties.getProperty("KinMS.CommandMessage") + "管理员发放" + quantity + "经验给当前地图在线的所有玩家！快感谢管理员吧！", 5121020);
                     }
                 }
             }
@@ -629,7 +629,7 @@ public class GMCommand {
             for (ChannelServer cserv1 : ChannelServer.getAllInstances()) {
                 for (MapleCharacter mch : cserv1.getPlayerStorage().getAllCharacters()) {
                     if (c.getPlayer().getMapId() == mch.getMapId()) {
-                        mch.startMapEffect(ServerProperties.getProperty("KinMS.CommandMessage") + "管理员发放" + quantity + "冒险币给当前地图在线的所以玩家！快感谢管理员吧！", 5121020);
+                        mch.startMapEffect(ServerProperties.getProperty("KinMS.CommandMessage") + "管理员发放" + quantity + "冒险币给当前地图在线的所有玩家！快感谢管理员吧！", 5121020);
                     }
 
                 }
@@ -667,12 +667,12 @@ public class GMCommand {
                 for (MapleCharacter mch : cserv1.getPlayerStorage().getAllCharacters()) {
                     if (quantity <= 1) {
                         if (c.getPlayer().getMapId() == mch.getMapId()) {
-                            mch.startMapEffect(ServerProperties.getProperty("KinMS.CommandMessage") + "管理员发放【" + mz + "】物品给当前地图在线的所以玩家！快感谢管理员吧！", 5120000);
+                            mch.startMapEffect(ServerProperties.getProperty("KinMS.CommandMessage") + "管理员发放【" + mz + "】物品给当前地图在线的所有玩家！快感谢管理员吧！", 5120000);
                         }
 
                     } else {
                         if (c.getPlayer().getMapId() == mch.getMapId()) {
-                            mch.startMapEffect(ServerProperties.getProperty("KinMS.CommandMessage") + "管理员发放【" + mz + "】物品【" + quantity + "】个给当前地图在线的所以玩家！快感谢管理员吧！", 5120000);
+                            mch.startMapEffect(ServerProperties.getProperty("KinMS.CommandMessage") + "管理员发放【" + mz + "】物品【" + quantity + "】个给当前地图在线的所有玩家！快感谢管理员吧！", 5120000);
                         }
 
                     }

@@ -783,7 +783,7 @@ public class KinMS extends javax.swing.JFrame {
                             } else if (类型 == 2) {
                                 cash = "抵用卷";
                             }
-                            mch.startMapEffect("管理员发放" + 数量 + cash + "给在线的所以玩家！快感谢管理员吧！", 5121009);
+                            mch.startMapEffect("管理员发放" + 数量 + cash + "给在线的所有玩家！快感谢管理员吧！", 5121009);
                             ret++;
                         }
                     }   break;
@@ -792,7 +792,7 @@ public class KinMS extends javax.swing.JFrame {
                         for (MapleCharacter mch : cserv1.getPlayerStorage().getAllCharacters()) {
                             // mch.modifyCSPoints(类型, 数量);
                             mch.gainMeso(数量, true);
-                            mch.startMapEffect("管理员发放" + 数量 + "冒险币给在线的所以玩家！快感谢管理员吧！", 5121009);
+                            mch.startMapEffect("管理员发放" + 数量 + "冒险币给在线的所有玩家！快感谢管理员吧！", 5121009);
                             ret++;
                         }
                     }   break;
@@ -800,7 +800,7 @@ public class KinMS extends javax.swing.JFrame {
                     for (ChannelServer cserv1 : ChannelServer.getAllInstances()) {
                         for (MapleCharacter mch : cserv1.getPlayerStorage().getAllCharacters()) {
                             mch.gainExp(数量, true, false, true);
-                            mch.startMapEffect("管理员发放" + 数量 + "经验给在线的所以玩家！快感谢管理员吧！", 5121009);
+                            mch.startMapEffect("管理员发放" + 数量 + "经验给在线的所有玩家！快感谢管理员吧！", 5121009);
                             ret++;
                         }
                     }   break;
