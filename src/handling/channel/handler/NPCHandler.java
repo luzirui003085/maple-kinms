@@ -225,6 +225,14 @@ public class NPCHandler {
      * @param chr
      */
     public static final void QuestAction(final SeekableLittleEndianAccessor slea, final MapleClient c, final MapleCharacter chr) {
+        chr.setCurrenttime(System.currentTimeMillis());
+        if (chr.getCurrenttime() - c.getPlayer().getLasttime() < 2000) {
+            chr.dropMessage(1, "悠着点，点的太快会掉线的。");
+            c.getSession().write(MaplePacketCreator.enableActions());
+            return;
+        }
+        chr.setLasttime(System.currentTimeMillis());
+
         final byte action = slea.readByte();
         short quest = slea.readShort();
         if (quest < 0) { //questid 50000 and above, WILL cast to negative, this was tested.
