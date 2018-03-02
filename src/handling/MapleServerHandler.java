@@ -103,10 +103,12 @@ public class MapleServerHandler extends IoHandlerAdapter {
         // Start of IP checking
         final String address = session.getRemoteAddress().toString().split(":")[0];
 
-        if (!address.equals("127.0.0.1")) {
-            session.close();
-            System.out.println("防万能登录器触发");
-            return;
+        if(channel == -1 && !cs){
+            if (!address.equals("/127.0.0.1")) {
+                session.close();
+                System.out.println("防万能登录器触发");
+                return;
+            }
         }
 
         if (BlockedIP.contains(address)) {
