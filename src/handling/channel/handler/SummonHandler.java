@@ -29,12 +29,14 @@ import client.SummonSkillEntry;
 import client.anticheat.CheatingOffense;
 import client.status.MonsterStatus;
 import client.status.MonsterStatusEffect;
+
 import java.awt.Point;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
 import server.AutobanManager;
 import server.MapleStatEffect;
 import server.Timer.CloneTimer;
@@ -51,13 +53,11 @@ import tools.data.input.SeekableLittleEndianAccessor;
 import tools.packet.MobPacket;
 
 /**
- *
  * @author zjj
  */
 public class SummonHandler {
 
     /**
-     *
      * @param slea
      * @param chr
      */
@@ -102,7 +102,6 @@ public class SummonHandler {
     }
 
     /**
-     *
      * @param slea
      * @param chr
      */
@@ -128,28 +127,33 @@ public class SummonHandler {
     }
 
     /**
-     *
      * @param slea
      * @param chr
      */
     public static final void DamageSummon(final SeekableLittleEndianAccessor slea, final MapleCharacter chr) {
         // System.out.println("[DamageSummon]:" + slea.toString());
-        final int unkByte = slea.readByte();
-        final int damage = slea.readInt();
-        final int monsterIdFrom = slea.readInt();
-        final Iterator<MapleSummon> iter = chr.getSummons().values().iterator();
-        MapleSummon summon;
-
-        while (iter.hasNext()) {
-            summon = iter.next();
-            if (summon.isPuppet() && summon.getOwnerId() == chr.getId()) { //We can only have one puppet(AFAIK O.O) so this check is safe.
-                summon.addHP((short) -damage);
-                if (summon.getHP() <= 0) {
-                    chr.cancelEffectFromBuffStat(MapleBuffStat.PUPPET);
+        try {
+            int skillid = slea.readInt();
+            final int unkByte = slea.readByte();
+            final int damage = slea.readInt();
+            final int monsterIdFrom = slea.readInt();
+            final Iterator<MapleSummon> iter = chr.getSummons().values().iterator();
+            MapleSummon summon;
+            if (SkillFactory.getSkill(skillid) != null) {
+                while (iter.hasNext()) {
+                    summon = iter.next();
+                    if (skillid == summon.getSkill() && summon.isPuppet() && summon.getOwnerId() == chr.getId()) { //We can only have one puppet(AFAIK O.O) so this check is safe.
+                        summon.addHP((short) -damage);
+                        if (summon.getHP() <= 0) {
+                            chr.cancelEffectFromBuffStat(MapleBuffStat.PUPPET);
+                        }
+                        chr.getMap().broadcastMessage(chr, MaplePacketCreator.damageSummon(chr.getId(), summon.getSkill(), damage, unkByte, monsterIdFrom), summon.getPosition());
+                        break;
+                    }
                 }
-                chr.getMap().broadcastMessage(chr, MaplePacketCreator.damageSummon(chr.getId(), summon.getSkill(), damage, unkByte, monsterIdFrom), summon.getPosition());
-                break;
             }
+        } catch (Exception e) {
+            chr.getClient().getSession().write(MaplePacketCreator.enableActions());
         }
 
 //       
@@ -177,7 +181,6 @@ public class SummonHandler {
     }
 
     /**
-     *
      * @param slea
      * @param c
      * @param chr
