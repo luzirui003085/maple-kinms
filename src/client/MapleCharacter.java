@@ -3679,7 +3679,7 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
                 total = Integer.MAX_VALUE;
             }
             int needed = GameConstants.getExpNeededForLevel(level);
-            if (level >= 200 || (GameConstants.isKOC(job) && level >= 200)) { //等级限制
+            if (level >= GameConstants.MAX_LEVEL || (GameConstants.isKOC(job) && level >= GameConstants.MAX_LEVEL)) { //等级限制
                 if (exp + total > needed) {
                     setExp(needed);
                 } else {
@@ -4262,7 +4262,12 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
                 sb.append("> ");
             }
             sb.append(getName());
-            sb.append(" 達到了 200 等 是我們的英雄!");
+            sb.append(" 达到了 200 级！");
+            World.Broadcast.broadcastMessage(MaplePacketCreator.serverNotice(6, sb.toString()).getBytes());
+        } else if(level == 255 && !isGM()) {
+            final StringBuilder sb = new StringBuilder("[恭喜] ");
+            sb.append(getName());
+            sb.append(" 达到了 255 级！");
             World.Broadcast.broadcastMessage(MaplePacketCreator.serverNotice(6, sb.toString()).getBytes());
         }
         // maxhp = (short) Math.min(30000, Math.abs(maxhp));
