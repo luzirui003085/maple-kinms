@@ -21,6 +21,7 @@ import constants.GameConstants;
 import handling.channel.ChannelServer;
 import handling.world.MaplePartyCharacter;
 import handling.world.World;
+
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.util.ArrayList;
@@ -29,6 +30,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.locks.Lock;
+
 import scripting.NPCScriptManager;
 import server.*;
 import server.AutobanManager;
@@ -59,13 +61,11 @@ import tools.packet.PetPacket;
 import tools.packet.PlayerShopPacket;
 
 /**
- *
  * @author zjj
  */
 public class InventoryHandler {
 
     /**
-     *
      * @param slea
      * @param c
      */
@@ -95,7 +95,6 @@ public class InventoryHandler {
     }
 
     /**
-     *
      * @param slea
      * @param c
      */
@@ -134,7 +133,6 @@ public class InventoryHandler {
     }
 
     /**
-     *
      * @param slea
      * @param c
      */
@@ -149,19 +147,19 @@ public class InventoryHandler {
 
         final List<IItem> itemMap = new LinkedList<>();
         for (IItem item : Inv.list()) {
-            itemMap.add(item.copy()); // clone all  items T___T.
-        }
-        for (IItem itemStats : itemMap) {
-            if (itemStats.getItemId() != 5110000) {
-                MapleInventoryManipulator.removeById(c, invType, itemStats.getItemId(), itemStats.getQuantity(), true, false);
+            int itemid = item.getItemId();
+            if (itemid != 5110000 && !GameConstants.isPet(itemid)) {
+                itemMap.add(item.copy()); // clone all  items T___T.
             }
+        }
+
+        for (IItem itemStats : itemMap) {
+            MapleInventoryManipulator.removeById(c, invType, itemStats.getItemId(), itemStats.getQuantity(), true, false);
         }
 
         final List<IItem> sortedItems = sortItems(itemMap);
         for (IItem item : sortedItems) {
-            if (item.getItemId() != 5110000) {
-                MapleInventoryManipulator.addFromDrop(c, item, false);
-            }
+            MapleInventoryManipulator.addFromDrop(c, item, false);
         }
         c.getSession().write(MaplePacketCreator.finishedGather(mode));
         c.getSession().write(MaplePacketCreator.enableActions());
@@ -191,7 +189,6 @@ public class InventoryHandler {
     }
 
     /**
-     *
      * @param slot
      * @param itemId
      * @param c
@@ -240,7 +237,6 @@ public class InventoryHandler {
     }
 
     /**
-     *
      * @param slea
      * @param c
      * @param chr
@@ -274,7 +270,6 @@ public class InventoryHandler {
     }
 
     /**
-     *
      * @param slea
      * @param c
      * @param chr
@@ -313,7 +308,6 @@ public class InventoryHandler {
     }
 
     /**
-     *
      * @param slea
      * @param c
      * @param chr
@@ -344,7 +338,6 @@ public class InventoryHandler {
     }
 
     /**
-     *
      * @param slea
      * @param c
      */
@@ -401,7 +394,6 @@ public class InventoryHandler {
     }
 
     /**
-     *
      * @param slot
      * @param dst
      * @param ws
@@ -414,7 +406,6 @@ public class InventoryHandler {
     }
 
     /**
-     *
      * @param slot
      * @param dst
      * @param ws
@@ -587,7 +578,6 @@ public class InventoryHandler {
     }
 
     /**
-     *
      * @param slea
      * @param c
      * @param chr
@@ -666,7 +656,6 @@ public class InventoryHandler {
     }
 
     /**
-     *
      * @param slea
      * @param c
      * @param chr
@@ -699,7 +688,6 @@ public class InventoryHandler {
     }
 
     /**
-     *
      * @param slea
      * @param c
      * @param chr
@@ -922,7 +910,6 @@ public class InventoryHandler {
     }
 
     /**
-     *
      * @param slea
      * @param c
      * @param chr
@@ -968,7 +955,6 @@ public class InventoryHandler {
     }
 
     /**
-     *
      * @param slea
      * @param c
      * @param chr
@@ -1033,7 +1019,6 @@ public class InventoryHandler {
     }
 
     /**
-     *
      * @param slea
      * @param c
      */
@@ -2025,7 +2010,7 @@ public class InventoryHandler {
                 break;
             }
             case 5170000: { // Pet name change
-/*                final int uniqueid = (int) slea.readLong();*/
+                /*                final int uniqueid = (int) slea.readLong();*/
                 MaplePet pet = c.getPlayer().getPet(0);
                 int slo = 0;
 
@@ -2339,7 +2324,6 @@ public class InventoryHandler {
     }
 
     /**
-     *
      * @param slea
      * @param c
      * @param chr
@@ -2422,7 +2406,6 @@ public class InventoryHandler {
     }
 
     /**
-     *
      * @param slea
      * @param c
      * @param chr
@@ -2526,7 +2509,6 @@ public class InventoryHandler {
     }
 
     /**
-     *
      * @param c
      * @param id
      * @return
@@ -2559,7 +2541,6 @@ public class InventoryHandler {
     }
 
     /**
-     *
      * @param chr
      * @param mapitem
      * @param pet
@@ -2597,32 +2578,32 @@ public class InventoryHandler {
             return false;
         }
         final int[] ids = {2430091, 2430092, 2430093, 2430101, 2430102, //mounts 
-            2340000, //rares
-            1152000, 1152001, 1152004, 1152005, 1152006, 1152007, 1152008, //toenail only comes when db is out.
-            1000040, 1102246, 1082276, 1050169, 1051210, 1072447, 1442106, //blizzard
-            3010019, //chairs
-            1001060, 1002391, 1102004, 1050039, 1102040, 1102041, 1102042, 1102043, //equips
-            1082145, 1082146, 1082147, 1082148, 1082149, 1082150, //wg
-            2043704, 2040904, 2040409, 2040307, 2041030, 2040015, 2040109, 2041035, 2041036, 2040009, 2040511, 2040408, 2043804, 2044105, 2044903, 2044804, 2043009, 2043305, 2040610, 2040716, 2041037, 2043005, 2041032, 2040305, //scrolls
-            2040211, 2040212, 1022097, //dragon glasses
-            2049000, 2049001, 2049002, 2049003, //clean slate
-            1012058, 1012059, 1012060, 1012061, //pinocchio nose msea only.
-            1332100, 1382058, 1402073, 1432066, 1442090, 1452058, 1462076, 1472069, 1482051, 1492024, 1342009,//durability weapons level 105
-            2049400, 2049401, 2049301};
+                2340000, //rares
+                1152000, 1152001, 1152004, 1152005, 1152006, 1152007, 1152008, //toenail only comes when db is out.
+                1000040, 1102246, 1082276, 1050169, 1051210, 1072447, 1442106, //blizzard
+                3010019, //chairs
+                1001060, 1002391, 1102004, 1050039, 1102040, 1102041, 1102042, 1102043, //equips
+                1082145, 1082146, 1082147, 1082148, 1082149, 1082150, //wg
+                2043704, 2040904, 2040409, 2040307, 2041030, 2040015, 2040109, 2041035, 2041036, 2040009, 2040511, 2040408, 2043804, 2044105, 2044903, 2044804, 2043009, 2043305, 2040610, 2040716, 2041037, 2043005, 2041032, 2040305, //scrolls
+                2040211, 2040212, 1022097, //dragon glasses
+                2049000, 2049001, 2049002, 2049003, //clean slate
+                1012058, 1012059, 1012060, 1012061, //pinocchio nose msea only.
+                1332100, 1382058, 1402073, 1432066, 1442090, 1452058, 1462076, 1472069, 1482051, 1492024, 1342009,//durability weapons level 105
+                2049400, 2049401, 2049301};
         //out of 1000
         final int[] chances = {100, 100, 100, 100, 100,
-            1,
-            10, 10, 10, 10, 10, 10, 10,
-            5, 5, 5, 5, 5, 5, 5,
-            2,
-            10, 10, 10, 10, 10, 10, 10, 10,
-            5, 5, 5, 5, 5, 5,
-            10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10,
-            5, 5, 10,
-            10, 10, 10, 10,
-            5, 5, 5, 5,
-            2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-            1, 2, 1, 2};
+                1,
+                10, 10, 10, 10, 10, 10, 10,
+                5, 5, 5, 5, 5, 5, 5,
+                2,
+                10, 10, 10, 10, 10, 10, 10, 10,
+                5, 5, 5, 5, 5, 5,
+                10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10,
+                5, 5, 10,
+                10, 10, 10, 10,
+                5, 5, 5, 5,
+                2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+                1, 2, 1, 2};
         int z = Randomizer.nextInt(ids.length);
         while (chances[z] < Randomizer.nextInt(1000)) {
             z = Randomizer.nextInt(ids.length);
@@ -2637,7 +2618,6 @@ public class InventoryHandler {
     }
 
     /**
-     *
      * @param slea
      * @param c
      */
@@ -2659,7 +2639,6 @@ public class InventoryHandler {
     }
 
     /**
-     *
      * @param slea
      * @param c
      */
@@ -2681,7 +2660,6 @@ public class InventoryHandler {
     }
 
     /**
-     *
      * @param slea
      * @param c
      */
@@ -2757,7 +2735,6 @@ public class InventoryHandler {
     }
 
     /**
-     *
      * @param slea
      * @param c
      */
@@ -2778,7 +2755,6 @@ public class InventoryHandler {
     public static final int OWL_ID = 2; //don't change. 0 = owner ID, 1 = store ID, 2 = object ID
 
     /**
-     *
      * @param slea
      * @param c
      * @param chr
@@ -2805,7 +2781,7 @@ public class InventoryHandler {
 
         byte i = 0;
         Integer CurrentLoopedSkillId;
-        for (;;) {
+        for (; ; ) {
             CurrentLoopedSkillId = skilldata.get("skillid" + i);
             i++;
             if (CurrentLoopedSkillId == null) {
@@ -2833,7 +2809,6 @@ public class InventoryHandler {
     }
 
     /**
-     *
      * @param slea
      * @param c
      */
