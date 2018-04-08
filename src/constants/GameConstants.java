@@ -20,6 +20,8 @@ import server.maps.MapleMapObjectType;
  */
 public class GameConstants {
 
+    public static final int MAX_LEVEL = 255;
+
     public static final boolean LIMIT_DAMAGE = false;
 
     public static final int MAX_DAMAGE = 199999;
