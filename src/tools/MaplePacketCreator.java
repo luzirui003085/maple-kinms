@@ -45,9 +45,11 @@ import handling.world.World;
 import handling.world.guild.MapleBBSThread;
 import handling.world.guild.MapleBBSThread.MapleBBSReply;
 import handling.world.guild.MapleGuildAlliance;
+
 import java.net.UnknownHostException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+
 import server.MapleItemInformationProvider;
 import server.MapleShopItem;
 import server.MapleStatEffect;
@@ -76,7 +78,6 @@ import tools.data.output.MaplePacketLittleEndianWriter;
 import tools.packet.PacketHelper;
 
 /**
- *
  * @author zjj
  */
 public class MaplePacketCreator {
@@ -91,7 +92,6 @@ public class MaplePacketCreator {
     ServerConstants ERROR = new ServerConstants();
 
     /**
-     *
      * @param port
      * @param clientId
      * @return
@@ -124,7 +124,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param port
      * @return
      */
@@ -155,7 +154,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param chr
      * @return
      */
@@ -186,7 +184,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @return
      */
     public static final MaplePacket enableActions() {
@@ -197,7 +194,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param stats
      * @param evan
      * @return
@@ -210,7 +206,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param stats
      * @param itemReaction
      * @param evan
@@ -266,7 +261,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @return
      */
     public static MaplePacket blockedPortal() {
@@ -285,7 +279,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @return
      */
     public static MaplePacket weirdStatUpdate() {
@@ -312,7 +305,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param chr
      * @param itemReaction
      * @return
@@ -325,7 +317,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param chr
      * @param itemReaction
      * @param overrideJob
@@ -360,7 +351,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param to
      * @param spawnPoint
      * @param chr
@@ -392,7 +382,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param portal
      * @return
      */
@@ -414,7 +403,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param townId
      * @param targetId
      * @param skillId
@@ -443,7 +431,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param oid
      * @param pos
      * @param town
@@ -468,7 +455,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param oid
      * @param town
      * @return
@@ -497,7 +483,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param summon
      * @param animated
      * @return
@@ -540,7 +525,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param summon
      * @param animated
      * @return
@@ -564,7 +548,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @return
      */
     public static MaplePacket getRelogResponse() {
@@ -614,7 +597,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param message
      * @return
      */
@@ -626,7 +608,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param type
      * @param message
      * @return
@@ -639,7 +620,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param type
      * @param channel
      * @param message
@@ -653,7 +633,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param type
      * @param channel
      * @param message
@@ -720,7 +699,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param name
      * @param message
      * @param item
@@ -749,7 +727,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param message
      * @param ear
      * @param channel
@@ -784,7 +761,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param chr
      * @param channel
      * @param itemId
@@ -814,7 +790,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param msg
      * @param whisper
      * @param channel
@@ -846,7 +821,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param life
      * @param show
      * @return
@@ -876,7 +850,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param objectid
      * @return
      */
@@ -897,7 +870,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param life
      * @param MiniMap
      * @return
@@ -928,7 +900,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param npc
      * @return
      */
@@ -991,7 +962,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param cidfrom
      * @param text
      * @param whiteBG
@@ -1018,7 +988,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param value
      * @return
      */
@@ -1040,7 +1009,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param value
      * @return
      */
@@ -1061,7 +1029,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param hex
      * @return
      */
@@ -1073,7 +1040,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param gain
      * @param white
      * @param partyinc
@@ -1116,7 +1082,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param gain
      * @param inChat
      * @param white
@@ -1155,7 +1120,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param gain
      * @return
      */
@@ -1177,7 +1141,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param gain
      * @param inChat
      * @return
@@ -1207,7 +1170,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param itemId
      * @param quantity
      * @return
@@ -1220,7 +1182,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param itemId
      * @param quantity
      * @param inChat
@@ -1258,7 +1219,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param itemId
      * @param effect
      * @return
@@ -1285,7 +1245,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param itemId
      * @param effect
      * @param from_playerid
@@ -1314,7 +1273,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param drop
      * @param dropfrom
      * @param dropto
@@ -1360,7 +1318,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param chr
      * @return
      */
@@ -1524,7 +1481,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param chr
      * @param 类型
      * @return
@@ -2231,7 +2187,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param cid
      * @param chr
      * @return
@@ -2262,7 +2217,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param from
      * @param expression
      * @return
@@ -2287,7 +2241,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param cid
      * @param moves
      * @param startPos
@@ -2313,7 +2266,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param cid
      * @param oid
      * @param startPos
@@ -2341,7 +2293,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param cid
      * @param summonSkillId
      * @param animation
@@ -2376,7 +2327,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param cid
      * @param tbyte
      * @param skill
@@ -2454,7 +2404,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param cid
      * @param tbyte
      * @param skill
@@ -2517,7 +2466,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param cid
      * @param tbyte
      * @param skill
@@ -2576,7 +2524,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param c
      * @param sid
      * @param items
@@ -2616,7 +2563,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param code
      * @return
      */
@@ -2637,7 +2583,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param type
      * @param item
      * @return
@@ -2650,7 +2595,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param type
      * @param item
      * @param fromDrop
@@ -2689,7 +2633,6 @@ public class MaplePacketCreator {
      */
 
     /**
-     *
      * @param type
      * @param item
      * @param fromDrop
@@ -2724,7 +2667,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param type
      * @param src
      * @param dst
@@ -2738,7 +2680,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param type
      * @param src
      * @param dst
@@ -2767,7 +2708,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param type
      * @param src
      * @param dst
@@ -2797,7 +2737,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param type
      * @param src
      * @param dst
@@ -2829,7 +2768,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param type
      * @param slot
      * @param fromDrop
@@ -2855,7 +2793,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param item
      * @param invType
      * @return
@@ -2868,7 +2805,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param item
      * @param invType
      * @param pos
@@ -2906,7 +2842,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param item
      * @param invType
      * @return
@@ -2919,7 +2854,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param item
      * @param invType
      * @param pos
@@ -2954,7 +2888,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param scroll
      * @param item
      * @param destroyed
@@ -3000,7 +2933,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param chr
      * @param scrollSuccess
      * @param legendarySpirit
@@ -3041,7 +2973,6 @@ public class MaplePacketCreator {
     //miracle cube?
 
     /**
-     *
      * @param chr
      * @param itemid
      * @return
@@ -3065,7 +2996,6 @@ public class MaplePacketCreator {
     //magnify glass
 
     /**
-     *
      * @param chr
      * @param pos
      * @return
@@ -3087,7 +3017,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @return
      */
     public static final MaplePacket ItemMaker_Success() {
@@ -3108,7 +3037,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param from_playerid
      * @return
      */
@@ -3131,7 +3059,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param oid
      * @return
      */
@@ -3154,7 +3081,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param oid
      * @param animation
      * @param cid
@@ -3168,7 +3094,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param oid
      * @param animation
      * @param cid
@@ -3198,7 +3123,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param chr
      * @return
      */
@@ -3234,7 +3158,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param mplew
      * @param rings
      */
@@ -3254,7 +3177,6 @@ public class MaplePacketCreator {
     //丢下道具[扔东西扔全部]
 
     /**
-     *
      * @param type
      * @param src
      * @return
@@ -3282,7 +3204,6 @@ public class MaplePacketCreator {
     //更新掉落装备[扔东西扔一个]/*  if ((item.getItemId() >= 1112800)
 
     /**
-     *
      * @param type
      * @param item
      * @return
@@ -3307,7 +3228,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param skill
      * @param monsteridfrom
      * @param cid
@@ -3319,7 +3239,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param skill
      * @param monsteridfrom
      * @param cid
@@ -3369,7 +3288,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param quest
      * @return
      */
@@ -3403,7 +3321,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param quest
      * @param data
      * @return
@@ -3427,7 +3344,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param c
      * @param quest
      * @param npc
@@ -3454,7 +3370,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param quest
      * @param npc
      * @param nextquest
@@ -3478,7 +3393,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param chr
      * @param isSelf
      * @return
@@ -3679,7 +3593,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param c
      * @param buffid
      * @param skillid
@@ -3727,7 +3640,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param c
      * @param buffid
      * @return
@@ -3799,7 +3711,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param statups
      * @param duration
      * @param skillid
@@ -3826,7 +3737,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param statups
      * @param duration
      * @param cid
@@ -3859,7 +3769,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param skillid
      * @param mobid
      * @return
@@ -3888,7 +3797,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param cid
      * @param barammount
      * @return
@@ -3909,7 +3817,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param bar
      * @param bufflength
      * @return
@@ -3939,7 +3846,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param buffid
      * @param bufflength
      * @param statups
@@ -3974,7 +3880,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param statups
      * @param duration
      * @return
@@ -4008,7 +3913,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param cid
      * @param bar
      * @param bufflength
@@ -4041,7 +3945,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param buffid
      * @param bufflength
      * @param statups
@@ -4079,7 +3982,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param statups
      * @param skillid
      * @param level
@@ -4114,7 +4016,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param cid
      * @param statups
      * @param skillid
@@ -4149,7 +4050,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param cid
      * @param mask
      * @param first
@@ -4174,7 +4074,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param cid
      * @param statups
      * @param itemId
@@ -4208,7 +4107,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param c
      * @param cid
      * @param statups
@@ -4254,7 +4152,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param cid
      * @param statups
      * @return
@@ -4278,7 +4175,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param cid
      * @param statups
      * @return
@@ -4302,7 +4198,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param cid
      * @param statups
      * @return
@@ -4329,7 +4224,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param statups
      * @return
      */
@@ -4358,7 +4252,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param statups
      * @return
      */
@@ -4388,7 +4281,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param statups
      * @return
      */
@@ -4417,7 +4309,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @return
      */
     public static MaplePacket cancelHoming() {
@@ -4439,7 +4330,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param mask
      * @param first
      * @return
@@ -4463,7 +4353,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param chr
      * @param levelup
      * @return
@@ -4489,7 +4378,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param chr
      * @return
      */
@@ -4514,7 +4402,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param c
      * @param slot
      * @return
@@ -4539,7 +4426,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param slot
      * @return
      */
@@ -4560,7 +4446,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param c
      * @return
      */
@@ -4585,7 +4470,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param c
      * @param 现金交易
      * @return
@@ -4610,7 +4494,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param number
      * @param meso
      * @return
@@ -4634,7 +4517,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param number
      * @param item
      * @return
@@ -4658,7 +4540,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param c
      * @param trade
      * @param number
@@ -4697,7 +4578,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @return
      */
     public static MaplePacket getTradeConfirmation() {
@@ -4717,7 +4597,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param UserSlot
      * @param message
      * @return
@@ -4746,7 +4625,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param UserSlot
      * @param unsuccessful
      * @return
@@ -4770,7 +4648,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param npc
      * @param msgType
      * @param talk
@@ -4800,7 +4677,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param npcid
      * @param sel
      * @return
@@ -4827,7 +4703,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param npc
      * @param talk
      * @param card
@@ -4859,7 +4734,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param npc
      * @param talk
      * @param def
@@ -4891,7 +4765,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param npc
      * @param talk
      * @return
@@ -4918,7 +4791,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param cid
      * @param effect
      * @return
@@ -4941,7 +4813,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param cid
      * @param skillid
      * @param effectid
@@ -4955,7 +4826,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param cid
      * @param skillid
      * @param effectid
@@ -4985,7 +4855,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param skillid
      * @param effectid
      * @return
@@ -4998,7 +4867,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param skillid
      * @param effectid
      * @param direction
@@ -5027,7 +4895,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @return
      */
     public static MaplePacket showItemLevelupEffect() {
@@ -5038,7 +4905,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @return
      */
     public static MaplePacket showMonsterBookPickup() {
@@ -5046,7 +4912,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @return
      */
     public static MaplePacket showEquipmentLevelUp() {
@@ -5054,7 +4919,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @return
      */
     public static MaplePacket showItemLevelup() {
@@ -5062,7 +4926,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param cid
      * @return
      */
@@ -5074,7 +4937,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param effect
      * @return
      */
@@ -5095,7 +4957,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param cid
      * @param effect
      * @return
@@ -5118,7 +4979,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param skillid
      * @param level
      * @param masterlevel
@@ -5148,7 +5008,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param status
      * @return
      */
@@ -5178,7 +5037,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param status
      * @return
      */
@@ -5208,7 +5066,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param status
      * @param id
      * @return
@@ -5239,7 +5096,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param id
      * @return
      */
@@ -5260,7 +5116,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param layout
      * @return
      */
@@ -5281,7 +5136,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param sender
      * @param channel
      * @param text
@@ -5307,7 +5161,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param target
      * @param reply
      * @return
@@ -5331,7 +5184,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param target
      * @param mapid
      * @param buddy
@@ -5358,7 +5210,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param target
      * @param channel
      * @param buddy
@@ -5384,7 +5235,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @return
      */
     public static MaplePacket getInventoryFull() {
@@ -5405,7 +5255,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @return
      */
     public static MaplePacket getShowInventoryFull() {
@@ -5416,7 +5265,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @return
      */
     public static MaplePacket showItemUnavailable() {
@@ -5427,7 +5275,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param mode
      * @return
      */
@@ -5451,7 +5298,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param npcId
      * @param slots
      * @param items
@@ -5493,7 +5339,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @return
      */
     public static MaplePacket getStorageFull() {
@@ -5514,7 +5359,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param slots
      * @param meso
      * @return
@@ -5541,7 +5385,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param slots
      * @param type
      * @param items
@@ -5571,7 +5414,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param slots
      * @param type
      * @param items
@@ -5601,7 +5443,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param type
      * @param percent
      * @return
@@ -5627,7 +5468,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param mode
      * @param charname
      * @param newfame
@@ -5654,7 +5494,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param status
      * @return
      */
@@ -5682,7 +5521,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param mode
      * @param charnameFrom
      * @return
@@ -5706,7 +5544,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param partyid
      * @return
      */
@@ -5731,7 +5568,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param from
      * @return
      */
@@ -5757,7 +5593,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param message
      * @return
      */
@@ -5784,7 +5619,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param message
      * @param charname
      * @return
@@ -5862,7 +5696,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param forChannel
      * @param party
      * @param op
@@ -5923,7 +5756,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param townId
      * @param targetId
      * @param skillId
@@ -5951,7 +5783,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param cid
      * @param curhp
      * @param maxhp
@@ -5976,7 +5807,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param name
      * @param chattext
      * @param mode
@@ -6001,7 +5831,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param time
      * @return
      */
@@ -6023,7 +5852,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param hour
      * @param min
      * @param sec
@@ -6049,7 +5877,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param mist
      * @return
      */
@@ -6084,7 +5911,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param oid
      * @param eruption
      * @return
@@ -6107,7 +5933,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param cid
      * @param summonSkillId
      * @param damage
@@ -6137,7 +5962,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param message
      * @return
      */
@@ -6158,7 +5982,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param buddylist
      * @return
      */
@@ -6194,7 +6017,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param cidFrom
      * @param nameFrom
      * @param levelFrom
@@ -6228,7 +6050,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param characterid
      * @param channel
      * @return
@@ -6253,7 +6074,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param characterid
      * @param itemid
      * @return
@@ -6276,7 +6096,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param characterid
      * @param itemid
      * @return
@@ -6299,7 +6118,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param capacity
      * @return
      */
@@ -6321,7 +6139,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param characterid
      * @param itemid
      * @return
@@ -6344,7 +6161,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param id
      * @return
      */
@@ -6369,7 +6185,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param reactor
      * @return
      */
@@ -6395,7 +6210,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param reactor
      * @param stance
      * @return
@@ -6422,7 +6236,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param reactor
      * @return
      */
@@ -6445,7 +6258,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param song
      * @return
      */
@@ -6457,7 +6269,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param effect
      * @return
      */
@@ -6469,7 +6280,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param sound
      * @return
      */
@@ -6481,7 +6291,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param env
      * @param mode
      * @return
@@ -6504,7 +6313,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param env
      * @param mode
      * @return
@@ -6527,7 +6335,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param msg
      * @param itemid
      * @param active
@@ -6554,7 +6361,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @return
      */
     public static MaplePacket removeMapEffect() {
@@ -6565,7 +6371,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param c
      * @return
      */
@@ -6618,7 +6423,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param c
      * @return
      */
@@ -6705,7 +6509,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param gid
      * @param cid
      * @param bOnline
@@ -6731,7 +6534,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param gid
      * @param charName
      * @param levelFrom
@@ -6759,7 +6561,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param charname
      * @return
      */
@@ -6781,7 +6582,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param code
      * @return
      */
@@ -6802,7 +6602,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param mgc
      * @return
      */
@@ -6835,7 +6634,6 @@ public class MaplePacketCreator {
     //someone leaving, mode == 0x2c for leaving, 0x2f for expelled
 
     /**
-     *
      * @param mgc
      * @param bExpelled
      * @return
@@ -6861,7 +6659,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param mgc
      * @return
      */
@@ -6885,7 +6682,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param gid
      * @param notice
      * @return
@@ -6909,7 +6705,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param mgc
      * @return
      */
@@ -6934,7 +6729,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param gid
      * @param ranks
      * @return
@@ -6960,7 +6754,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param gid
      * @return
      */
@@ -6983,7 +6776,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param gid
      * @param bg
      * @param bgcolor
@@ -7013,7 +6805,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param gid
      * @param capacity
      * @return
@@ -7037,7 +6828,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param alliance
      * @param expelledGuild
      * @param expelled
@@ -7062,7 +6852,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param alliance
      * @param in
      * @return
@@ -7104,7 +6893,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param allianceid
      * @param newLeader
      * @param oldLeader
@@ -7129,7 +6917,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param allianceid
      * @param newLeader
      * @param oldLeader
@@ -7154,7 +6941,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param allianceName
      * @param inviter
      * @return
@@ -7179,7 +6965,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param alliance
      * @param guild
      * @param add
@@ -7209,7 +6994,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param allianceid
      * @param player
      * @return
@@ -7233,7 +7017,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param alliance
      * @return
      */
@@ -7265,7 +7048,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param alliance
      * @return
      */
@@ -7289,7 +7071,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param alliance
      * @return
      */
@@ -7310,7 +7091,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param alliance
      * @return
      */
@@ -7350,7 +7130,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param alliance
      * @param newGuild
      * @return
@@ -7392,7 +7171,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param alliance
      * @param gid
      * @param id
@@ -7420,7 +7198,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param mgc
      * @param allianceid
      * @return
@@ -7447,7 +7224,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param allianceid
      * @param mgc
      * @return
@@ -7472,7 +7248,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param alliance
      * @return
      */
@@ -7494,7 +7269,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param bbs
      * @param start
      * @return
@@ -7563,7 +7337,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param thread
      * @return
      */
@@ -7597,7 +7370,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param npcid
      * @param all
      * @return
@@ -7630,7 +7402,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param gid
      * @param GP
      * @return
@@ -7654,7 +7425,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param from
      * @param skillId
      * @param level
@@ -7685,7 +7455,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param from
      * @param skillId
      * @return
@@ -7708,7 +7477,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param mobid
      * @param success
      * @return
@@ -7731,7 +7499,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param hint
      * @param width
      * @param height
@@ -7766,7 +7533,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param from
      * @param messengerid
      * @return
@@ -7792,7 +7558,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param from
      * @param chr
      * @param position
@@ -7820,7 +7585,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param position
      * @return
      */
@@ -7842,7 +7606,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param from
      * @param chr
      * @param position
@@ -7870,7 +7633,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param position
      * @return
      */
@@ -7892,7 +7654,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param text
      * @return
      */
@@ -7914,7 +7675,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param text
      * @param mode
      * @param mode2
@@ -7939,7 +7699,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param target
      * @param buddy
      * @return
@@ -7964,7 +7723,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param target
      * @param buddy
      * @return
@@ -7989,7 +7747,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @return
      */
     public static MaplePacket showEquipEffect() {
@@ -8008,7 +7765,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param team
      * @return
      */
@@ -8028,7 +7784,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param cid
      * @param summonSkillId
      * @param newStance
@@ -8053,7 +7808,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param sid
      * @param time
      * @return
@@ -8076,7 +7830,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param chr
      * @param skillid
      * @param maxlevel
@@ -8107,7 +7860,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param macros
      * @return
      */
@@ -8143,7 +7895,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param name
      * @param score
      * @param empty
@@ -8169,7 +7920,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param mobid
      * @param itemid
      * @param success
@@ -8188,7 +7938,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param mobid
      * @param itemid
      * @param success
@@ -8217,7 +7966,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @return
      */
     public static MaplePacket showAriantScoreBoard() {
@@ -8240,7 +7988,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param type
      * @return
      */
@@ -8260,7 +8007,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param effect
      * @return
      */
@@ -8283,7 +8029,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param effect
      * @return
      */
@@ -8306,7 +8051,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param remove
      * @param Package
      * @return
@@ -8330,7 +8074,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param operation
      * @param packages
      * @return
@@ -8381,7 +8124,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @return
      */
     public static MaplePacket Mulung_DojoUp2() {
@@ -8401,7 +8143,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @return
      */
     public static MaplePacket dojoWarpUp() {
@@ -8420,7 +8161,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param msg
      * @return
      */
@@ -8440,7 +8180,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param m
      * @return
      */
@@ -8452,7 +8191,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param recv
      * @param total
      * @return
@@ -8465,7 +8203,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param questionSet
      * @param questionId
      * @param askQuestion
@@ -8488,7 +8225,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @return
      */
     public static MaplePacket leftKnockBack() {
@@ -8505,7 +8241,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param type
      * @param ball1
      * @param ball2
@@ -8532,7 +8267,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @return
      */
     public static MaplePacket enterSnowBall() {
@@ -8543,7 +8277,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param team
      * @param damage
      * @param distance
@@ -8568,7 +8301,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param team
      * @param message
      * @return
@@ -8589,7 +8321,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param type
      * @return
      */
@@ -8611,7 +8342,6 @@ public class MaplePacketCreator {
     // 00 01 00 00 00 00
 
     /**
-     *
      * @param coconutscore
      * @return
      */
@@ -8631,7 +8361,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param spawn
      * @param id
      * @param type
@@ -8659,7 +8388,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param type
      * @return
      */
@@ -8679,7 +8407,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param msg
      * @return
      */
@@ -8699,7 +8426,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param itemId
      * @param quantity
      * @param itemId2
@@ -8727,7 +8453,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param family
      * @param level
      * @param name
@@ -8752,7 +8477,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param family
      * @param name
      * @return
@@ -8775,7 +8499,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param family
      * @param jobid
      * @param name
@@ -8800,7 +8523,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param spawned
      * @param time
      * @return
@@ -8821,7 +8543,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param spawned
      * @param time
      * @return
@@ -8842,7 +8563,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param spawned
      * @param time
      * @return
@@ -8863,7 +8583,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param spawned
      * @param time
      * @return
@@ -8884,7 +8603,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @return
      */
     public static MaplePacket stopClock() {
@@ -8901,7 +8619,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param d
      * @return
      */
@@ -8925,7 +8642,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param chrid
      * @return
      */
@@ -8944,7 +8660,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param d
      * @param startPos
      * @param moves
@@ -8971,7 +8686,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @return
      */
     public static MaplePacket addTutorialStats() {
@@ -8998,7 +8712,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @return
      */
     public static final MaplePacket temporaryStats_Aran() {
@@ -9019,7 +8732,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param chr
      * @return
      */
@@ -9040,7 +8752,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param stats
      * @return
      */
@@ -9094,7 +8805,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @return
      */
     public static final MaplePacket temporaryStats_Reset() {
@@ -9113,7 +8823,6 @@ public class MaplePacketCreator {
     //its likely that durability items use this
 
     /**
-     *
      * @param cid
      * @param amount
      * @return
@@ -9135,7 +8844,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param amount
      * @return
      */
@@ -9155,7 +8863,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param npc
      * @return
      */
@@ -9175,7 +8882,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param amount
      * @return
      */
@@ -9207,7 +8913,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param rank
      * @param amount
      * @return
@@ -9234,7 +8939,6 @@ public class MaplePacketCreator {
     //update_quest_info - 08 51 1E 00 00 00 00 00 00 00 00
 
     /**
-     *
      * @param type
      * @param amount
      * @return
@@ -9247,7 +8951,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param type
      * @param object
      * @param amount
@@ -9279,7 +8982,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param type
      * @param amount
      * @return
@@ -9292,7 +8994,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param type
      * @param amount
      * @return
@@ -9305,7 +9006,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param energy
      * @return
      */
@@ -9317,7 +9017,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @return
      */
     public static MaplePacket getPollQuestion() {
@@ -9343,7 +9042,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param message
      * @return
      */
@@ -9364,7 +9062,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param data
      * @return
      */
@@ -9391,7 +9088,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @return
      */
     public static MaplePacket showEventInstructions() {
@@ -9409,7 +9105,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @return
      */
     public static MaplePacket getOwlOpen() { //best items! hardcoded
@@ -9431,7 +9126,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param itemSearch
      * @param hms
      * @return
@@ -9486,7 +9180,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param mode
      * @param mesos
      * @param selection
@@ -9526,7 +9219,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param invType
      * @param newSlots
      * @return
@@ -9548,7 +9240,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param chrid
      * @return
      */
@@ -9567,7 +9258,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param initiator
      * @param replier
      * @param toMap
@@ -9596,7 +9286,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param opcode
      * @return
      */
@@ -9615,7 +9304,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param otherStart
      * @param myStart
      * @param otherEnd
@@ -9648,7 +9336,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param msg
      * @return
      */
@@ -9669,7 +9356,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param objectid
      * @param map
      * @return
@@ -9708,7 +9394,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param map
      * @return
      */
@@ -9744,7 +9429,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param map
      * @return
      */
@@ -9768,7 +9452,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param name
      * @param cid
      * @return
@@ -9790,8 +9473,7 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
-     * @param type - (0:Light&Long 1:Heavy&Short)
+     * @param type  - (0:Light&Long 1:Heavy&Short)
      * @param delay - seconds
      * @return
      */
@@ -9812,7 +9494,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param msg
      * @param item
      * @param male
@@ -9867,7 +9548,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param msg
      * @return
      */
@@ -9889,7 +9569,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param beansCount
      * @param type
      * @return
@@ -9910,7 +9589,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param cid
      * @param beansCount
      * @return
@@ -9932,7 +9610,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param b
      * @param a
      * @return
@@ -9950,7 +9627,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @return
      */
     public static MaplePacket BeansHJG() {//黄金狗
@@ -9965,7 +9641,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param a
      * @return
      */
@@ -9982,7 +9657,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param a
      * @param a1
      * @param a2
@@ -10010,7 +9684,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @return
      */
     public static MaplePacket BeansQR() {//(null)请拿到凯？琳处确认
@@ -10025,7 +9698,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param beansInfo
      * @return
      */
@@ -10115,7 +9787,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param chr
      * @return
      */
@@ -10137,7 +9808,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param oid
      * @param itemid
      * @param name
@@ -10166,7 +9836,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param oid
      * @return
      */
@@ -10185,7 +9854,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @return
      */
     public static MaplePacket licenseRequest() {
@@ -10204,7 +9872,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @return
      */
     public static MaplePacket licenseResult() {
@@ -10223,7 +9890,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @return
      */
     public static MaplePacket showForcedEquip() {
@@ -10241,7 +9907,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @return
      */
     public static MaplePacket removeTutorialStats() {
@@ -10258,7 +9923,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param type
      * @return
      */
@@ -10277,7 +9941,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param cidFrom
      * @param nameFrom
      * @return
@@ -10309,7 +9972,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param itemId
      * @return
      */
@@ -10330,7 +9992,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param itemId
      * @return
      */
@@ -10351,7 +10012,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param testmsg
      * @return
      */
@@ -10369,7 +10029,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param cid
      * @param x
      * @param laba
@@ -10392,7 +10051,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param npc
      * @param lx
      * @return
@@ -10420,7 +10078,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param web
      * @return
      */
@@ -10439,7 +10096,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param barammount
      * @return
      */
@@ -10465,7 +10121,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param i
      * @return
      */
@@ -10479,7 +10134,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param i
      * @return
      */
@@ -10492,7 +10146,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param i
      * @param Zhaohuan
      * @return
@@ -10517,7 +10170,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param npc
      * @param talk
      * @param type
@@ -10540,7 +10192,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param npc
      * @param talk
      * @param type
@@ -10563,7 +10214,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param npcid
      * @param rs
      * @return
@@ -10593,7 +10243,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param npcid
      * @param rs
      * @return
@@ -10623,7 +10272,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param npcid
      * @param rs
      * @return
@@ -10653,7 +10301,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param npcid
      * @param rs
      * @return
@@ -10683,7 +10330,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param npcid
      * @param rs
      * @return
@@ -10714,7 +10360,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param npcid
      * @param rs
      * @return
@@ -10745,7 +10390,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param npcid
      * @param rs
      * @return
@@ -10777,7 +10421,6 @@ public class MaplePacketCreator {
     //renwu 2
 
     /**
-     *
      * @param npcid
      * @param rs
      * @return
@@ -10808,7 +10451,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param npcid
      * @param rs
      * @return
@@ -10839,7 +10481,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param v1
      * @return
      */
@@ -10857,7 +10498,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param n
      * @param value
      * @return
@@ -10878,7 +10518,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param item
      * @return
      */
@@ -10901,7 +10540,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     *
      * @param chrId
      * @param type
      * @param monsteridfrom
@@ -10922,4 +10560,23 @@ public class MaplePacketCreator {
         mplew.writeInt(damage);
         return mplew.getPacket();
     }
+
+    public static MaplePacket petAutoHP(int itemId) {
+        MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter();
+
+        mplew.writeShort(SendPacketOpcode.AUTO_HP_POT.getValue());
+        mplew.writeInt(itemId);
+
+        return mplew.getPacket();
+    }
+
+    public static MaplePacket petAutoMP(int itemId) {
+        MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter();
+
+        mplew.writeShort(SendPacketOpcode.AUTO_MP_POT.getValue());
+        mplew.writeInt(itemId);
+
+        return mplew.getPacket();
+    }
+
 }

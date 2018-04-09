@@ -246,6 +246,7 @@ public class InterServerHandler {
         player.showNote();
         player.updatePartyMemberHP();
         player.startFairySchedule(false);
+        player.updatePetEquip();
         player.baseSkills(); //fix people who've lost skills.
         c.getSession().write(MaplePacketCreator.getKeymap(player.getKeyLayout()));
         for (MapleQuestStatus status : player.getStartedQuests()) {
