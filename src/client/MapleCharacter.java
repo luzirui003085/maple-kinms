@@ -9917,4 +9917,28 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
         mount_id = id;
     }
 
+    public int getIntNoRecord(int questID) {
+        final MapleQuestStatus stat = getQuestNoAdd(MapleQuest.getInstance(questID));
+        if (stat == null || stat.getCustomData() == null) {
+            return 0;
+        }
+        return Integer.parseInt(stat.getCustomData());
+    }
+
+    public int getIntRecord(int questID) {
+        final MapleQuestStatus stat = getQuestNAdd(MapleQuest.getInstance(questID));
+        if (stat.getCustomData() == null) {
+            stat.setCustomData("0");
+        }
+        return Integer.parseInt(stat.getCustomData());
+    }
+
+    public void updatePetEquip() {
+        if (getIntNoRecord(122221) > 0) {
+            client.getSession().write(MaplePacketCreator.petAutoHP(getIntRecord(122221)));
+        }
+        if (getIntNoRecord(122222) > 0) {
+            client.getSession().write(MaplePacketCreator.petAutoMP(getIntRecord(122222)));
+        }
+    }
 }
