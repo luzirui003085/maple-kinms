@@ -4707,6 +4707,7 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
      */
     public final void equipChanged() {
         map.broadcastMessage(this, MaplePacketCreator.updateCharLook(this), false);
+        map.broadcastMessage(MaplePacketCreator.loveEffect());
         stats.recalcLocalStats();
         if (getMessenger() != null) {
             World.Messenger.updateMessenger(getMessenger().getId(), getName(), client.getChannel());
@@ -5858,7 +5859,7 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
         if (beholderBuffSchedule != null) {
             beholderBuffSchedule.cancel(false);
         }
-        ISkill bHealing = SkillFactory.getSkill(1320008);
+        ISkill bHealing = SkillFactory.getSkill(1320008); // 灵魂治愈
         final int bHealingLvl = getSkillLevel(bHealing);
         final int berserkLvl = getSkillLevel(SkillFactory.getSkill(1320006));
 
@@ -5873,13 +5874,14 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
                     if (berserkLvl == 0 || remhppercentage >= berserkLvl + 10) {
                         addHP(healEffect.getHp());
                     }
-                    client.getSession().write(MaplePacketCreator.showOwnBuffEffect(1321007, 2));
-                    map.broadcastMessage(MaplePacketCreator.summonSkill(getId(), 1321007, 5));
-                    map.broadcastMessage(MapleCharacter.this, MaplePacketCreator.showBuffeffect(getId(), 1321007, 2), false);
+                    // 去掉广播效果
+                    // client.getSession().write(MaplePacketCreator.showOwnBuffEffect(1321007, 2));
+                    // map.broadcastMessage(MaplePacketCreator.summonSkill(getId(), 1321007, 5));
+                    // map.broadcastMessage(MapleCharacter.this, MaplePacketCreator.showBuffeffect(getId(), 1321007, 2), false);
                 }
             }, healInterval, healInterval);
         }
-        ISkill bBuff = SkillFactory.getSkill(1320009);
+        ISkill bBuff = SkillFactory.getSkill(1320009); // 灵魂祝福
         final int bBuffLvl = getSkillLevel(bBuff);
         if (bBuffLvl > 0) {
             final MapleStatEffect buffEffect = bBuff.getEffect(bBuffLvl);
@@ -5889,9 +5891,10 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
                 @Override
                 public void run() {
                     buffEffect.applyTo(MapleCharacter.this);
-                    client.getSession().write(MaplePacketCreator.showOwnBuffEffect(1321007, 2));
-                    map.broadcastMessage(MaplePacketCreator.summonSkill(getId(), 1321007, Randomizer.nextInt(3) + 6));
-                    map.broadcastMessage(MapleCharacter.this, MaplePacketCreator.showBuffeffect(getId(), 1321007, 2), false);
+                    // 去掉广播效果
+                    // client.getSession().write(MaplePacketCreator.showOwnBuffEffect(1321007, 2));
+                    // map.broadcastMessage(MaplePacketCreator.summonSkill(getId(), 1321007, Randomizer.nextInt(3) + 6));
+                    // map.broadcastMessage(MapleCharacter.this, MaplePacketCreator.showBuffeffect(getId(), 1321007, 2), false);
                 }
             }, buffInterval, buffInterval);
         }
