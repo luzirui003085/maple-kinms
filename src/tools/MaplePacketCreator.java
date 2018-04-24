@@ -10579,4 +10579,11 @@ public class MaplePacketCreator {
         return mplew.getPacket();
     }
 
+    public static MaplePacket loveEffect() {
+        MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter();
+        mplew.writeShort(72);
+        mplew.writeZeroBytes(20);
+
+        return mplew.getPacket();
+    }
 }
