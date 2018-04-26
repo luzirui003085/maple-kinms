@@ -27,15 +27,14 @@ import client.inventory.MaplePet;
 import constants.ServerConstants;
 import handling.MaplePacket;
 import handling.SendPacketOpcode;
+
 import java.util.List;
+
 import server.movement.LifeMovementFragment;
 import tools.MaplePacketCreator;
 import tools.data.output.MaplePacketLittleEndianWriter;
 
 public class PetPacket {
-
-    private final static byte[] ITEM_MAGIC = new byte[]{(byte) 0x80, 5};
-
     public static final MaplePacket updatePet(final MaplePet pet, final IItem item, boolean active) {
         final MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter();
 
@@ -64,22 +63,6 @@ public class PetPacket {
         return mplew.getPacket();
     }
 
-    public static final MaplePacket removePet(final MapleCharacter chr, final int slot) {
-        final MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter();
-
-        if (ServerConstants.调试输出封包) {
-            System.out.println("removePet--------------------");
-        }
-        mplew.writeShort(SendPacketOpcode.SPAWN_PET.getValue());
-        mplew.writeInt(chr.getId());
-        mplew.writeShort(slot);
-        if (ServerConstants.PACKET_ERROR_OFF) {
-            ServerConstants ERROR = new ServerConstants();
-            ERROR.setPACKET_ERROR("removePet-78" + "：\r\n" + mplew.getPacket() + "\r\n\r\n");
-        }
-        return mplew.getPacket();
-    }
-
     public static final MaplePacket showPet(final MapleCharacter chr, final MaplePet pet, final boolean remove, final boolean hunger) {
         final MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter();
 
@@ -103,44 +86,10 @@ public class PetPacket {
             mplew.writeShort(pet.getPos().y - 20);
             mplew.write(pet.getStance());
             mplew.writeLong(pet.getFh());
-           // mplew.writeInt(pet.getFh());
-            //  mplew.writeLong(pet.getFh());
         }
         if (ServerConstants.PACKET_ERROR_OFF) {
             ServerConstants ERROR = new ServerConstants();
             ERROR.setPACKET_ERROR("showPet-111" + "：\r\n" + mplew.getPacket() + "\r\n\r\n");
-        }
-        return mplew.getPacket();
-    }
-
-    public static void addPetInfo(MaplePacketLittleEndianWriter mplew, MapleCharacter chr, MaplePet pet, boolean showpet) {//079
-        if (showpet) {
-            mplew.write(1);
-            mplew.write(chr.getPetIndex(pet));
-        }
-        mplew.writeInt(pet.getPetItemId());
-        mplew.writeMapleAsciiString(pet.getName());
-        mplew.writeLong(pet.getUniqueId());
-        mplew.writeShort(pet.getPos().x);
-        mplew.writeShort(pet.getPos().y);
-        mplew.write(pet.getStance());
-        mplew.writeLong(pet.getFh());
-        //   mplew.writeShort(pet.getFh());
-    }
-
-    public static final MaplePacket removePet(final int cid, final int index) {
-        final MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter();
-
-        if (ServerConstants.调试输出封包) {
-            System.out.println("removePet--------------------");
-        }
-        mplew.writeShort(SendPacketOpcode.SPAWN_PET.getValue());
-        mplew.writeInt(cid);
-        mplew.write(index);
-        mplew.writeShort(0);
-        if (ServerConstants.PACKET_ERROR_OFF) {
-            ServerConstants ERROR = new ServerConstants();
-            ERROR.setPACKET_ERROR("removePet-143" + "：\r\n" + mplew.getPacket() + "\r\n\r\n");
         }
         return mplew.getPacket();
     }
@@ -250,23 +199,6 @@ public class PetPacket {
             System.out.println("emptyStatUpdate--------------------");
         }
         return MaplePacketCreator.enableActions();
-    }
-
-    public static final MaplePacket petStatUpdate_Empty() {
-        final MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter();
-
-        if (ServerConstants.调试输出封包) {
-            System.out.println("petStatUpdate_Empty--------------------");
-        }
-        mplew.writeShort(SendPacketOpcode.UPDATE_STATS.getValue());
-        mplew.write(0);
-        mplew.writeInt(MapleStat.PET.getValue());
-        mplew.writeZeroBytes(25);
-        if (ServerConstants.PACKET_ERROR_OFF) {
-            ServerConstants ERROR = new ServerConstants();
-            ERROR.setPACKET_ERROR("petStatUpdate_Empty-267" + "：\r\n" + mplew.getPacket() + "\r\n\r\n");
-        }
-        return mplew.getPacket();
     }
 
     public static final MaplePacket petStatUpdate(final MapleCharacter chr) {

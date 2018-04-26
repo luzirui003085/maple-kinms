@@ -232,8 +232,8 @@ public class MaplePet implements Serializable {
     }
 
     public final void setCloseness(int closeness) {
-        if (closeness > 30000) {
-            closeness = 30000;
+        if(closeness >= 2147483647 || closeness <= 0){
+            closeness = 1;
         }
         this.closeness = (short) closeness;
         this.changed = true;

@@ -1883,7 +1883,7 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
         } else if (effect.isMonsterRiding_()) {
             getMount().startSchedule();
         } else if (effect.isBeholder()) {
-            prepareBeholderEffect();
+            // prepareBeholderEffect();
         }
         int clonez = 0;
         for (Pair<MapleBuffStat, Integer> statup : statups) {
@@ -2268,139 +2268,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
         return getSkillLevel(SkillFactory.getSkill(skillid));
     }
 
-    /* public void handleEnergyCharge(int skillid, int targets) {
-        ISkill echskill = SkillFactory.getSkill(skillid);
-        int skilllevel = getSkillLevel(echskill);
-        if (skilllevel > 0) {
-            MapleStatEffect echeff = echskill.getEffect(skilllevel);
-            if (targets > 0) {
-                if (getBuffedValue(MapleBuffStat.ENERGY_CHARGE) == null) {
-                    echeff.applyEnergyBuff(this, true);
-                } else {
-                    Integer energyLevel = getBuffedValue(MapleBuffStat.ENERGY_CHARGE);
-
-                    if (energyLevel.intValue() < 10000) {
-                        energyLevel = Integer.valueOf(energyLevel.intValue() + echeff.getX() * targets);
-                        this.client.getSession().write(MaplePacketCreator.showOwnBuffEffect(skillid, 2));
-                        this.map.broadcastMessage(this, MaplePacketCreator.showBuffeffect(this.id, skillid, 2, (byte) 3), false);
-                        if (energyLevel.intValue() >= 10000) {
-                            energyLevel = Integer.valueOf(10000);
-                        }
-                        this.client.getSession().write(MaplePacketCreator.giveEnergyCharge(energyLevel));
-                        // this.client.getSession().write(MaplePacketCreator.giveEnergyChargeTest(energyLevel.intValue(), echeff.getDuration() / 1000));
-                        setBuffedValue(MapleBuffStat.ENERGY_CHARGE, Integer.valueOf(energyLevel.intValue()).intValue());
-                    } else if (energyLevel.intValue() == 10000) {
-                        this.map.broadcastMessage(MaplePacketCreator.giveForeignEnergyCharge(id, energyLevel));
-                        echeff.applyEnergyBuff(this, false);
-                        setBuffedValue(MapleBuffStat.ENERGY_CHARGE, Integer.valueOf(10001).intValue());
-                    }
-                }
-            }
-        }
-    }*/
-
-    /**
-     * @param skillid
-     * @param targets
-     */
-    public final void handleEnergyCharge1(final int skillid, final int targets) {
-        final ISkill echskill = SkillFactory.getSkill(skillid);
-        final byte skilllevel = getSkillLevel(echskill);
-        if (skilllevel > 0) {
-            final MapleStatEffect echeff = echskill.getEffect(skilllevel);
-            System.out.println("获取技能等级：" + skilllevel);
-            if (targets > 0) {
-                //     System.out.println("获取能量C："+ targets);
-                //if(nengl <= 10){
-                // nengl = nengl + 1;
-                // }else{
-                if (getBuffedValue(MapleBuffStat.ENERGY_CHARGE) == null) {//判断能量状态
-                    echeff.applyEnergyBuff(this, true); // Infinity time//给状态
-                    //    System.out.println("获取能量D：");
-                } else {//有能量状态
-                    Integer energyLevel = getBuffedValue(MapleBuffStat.ENERGY_CHARGE);
-                    //TODO: bar going down
-                    System.out.println("获取能量等级：" + energyLevel);
-                    if (energyLevel > 10000) {
-                        energyLevel = 10000;
-                    }
-                    if (energyLevel <= 10000) {//能量少于1w或者
-                        energyLevel += (echeff.getX() * targets);
-                        System.out.println("获取能等级：" + energyLevel);
-                        client.getSession().write(MaplePacketCreator.showOwnBuffEffect(skillid, 2));
-                        map.broadcastMessage(this, MaplePacketCreator.showBuffeffect(id, skillid, 2), false);
-
-                        // if (energyLevel >= 15000) {
-                        //energyLevel = 10000;
-                        // }
-                        if (energyLevel > 10000) {
-                            energyLevel = 10000;
-                        }
-                        System.out.println("获取能量E：" + energyLevel);
-                        List<Pair<MapleBuffStat, Integer>> stat = Collections.singletonList(new Pair<>(MapleBuffStat.ENERGY_CHARGE, energyLevel));
-                        client.getSession().write(MaplePacketCreator.能量条(stat, energyLevel / 10000)); //????????????????
-
-                        if (energyLevel == 10000) {
-                            //energyLevel = 10000;
-                            client.getSession().write(MaplePacketCreator.givePirateBuff(energyLevel, 50, stat));
-                            client.getSession().write(MaplePacketCreator.giveEnergyChargeTest(energyLevel, echeff.getDuration() / 10000));
-                        }
-
-                        setBuffedValue(MapleBuffStat.ENERGY_CHARGE, energyLevel);
-                        Timer.WorldTimer.getInstance().register(new Runnable() {
-
-                            @Override
-                            public void run() {
-                                Integer energyLevel = getBuffedValue(MapleBuffStat.ENERGY_CHARGE);
-                                try {
-                                    energyLevel -= 100;
-                                    //System.out.println("获取能量Z：" + energyLevel);
-                                    if (energyLevel <= 0) {
-                                        energyLevel = 0;
-                                        //echeff.applyEnergyBuff(this, true)
-                                        //echeff.applyEnergyBuff(this, false);// One with time
-                                        setBuffedValue(MapleBuffStat.ENERGY_CHARGE, energyLevel);
-                                    }
-                                    List<Pair<MapleBuffStat, Integer>> stat = Collections.singletonList(new Pair<>(MapleBuffStat.ENERGY_CHARGE, energyLevel));
-                                    client.getSession().write(MaplePacketCreator.能量条(stat, energyLevel / 10000)); //????????????????
-                                    setBuffedValue(MapleBuffStat.ENERGY_CHARGE, energyLevel);
-                                } catch (Exception e) {
-                                }
-                            }
-                        }, 10000 * 60);
-//                    } else if (nengls > 20) {
-//                        nengls = 0;
-//                        nengl = 0;
-//             //  System.out.println("获取能量F："+ energyLevel);
-//                     List<Pair<MapleBuffStat, Integer>> stat = Collections.singletonList(new Pair<MapleBuffStat, Integer>(MapleBuffStat.ENERGY_CHARGE, 0));
-//                      client.getSession().write(MaplePacketCreator.能量条(stat, 0)); //????????????????
-//                      //client.getSession().write(MaplePacketCreator.givePirateBuff(energyLevel, 0, stat));
-//                       // client.getSession().write(MaplePacketCreator.giveEnergyChargeTest(energyLevel, echeff.getDuration() / 1000));
-//                        setBuffedValue(MapleBuffStat.ENERGY_CHARGE, Integer.valueOf(0));
-//                      //   echeff.applyEnergyBuff(this, false); // One with time
-//                      //  setBuffedValue(MapleBuffStat.ENERGY_CHARGE, Integer.valueOf(10001));
-                    }
-                }
-                // System.out.println("能量S："+ nengls);
-                // System.out.println("能量："+ nengl);
-                /* Timer.WorldTimer.getInstance().register(new Runnable() {
-                     @Override
-                     public void run() {
-                         energyPoint -= 200;
-                         if (energyPoint <= 0) {
-                             echeff.applyEnergyBuff(chrs, false); // One with time
-                             setBuffedValue(MapleBuffStat.ENERGY_CHARGE, Integer.valueOf(10001));
-                         }
-                    try {
-                         } catch (Exception e) {
-                         }
-                     }
-                 }, 60000 * 1);*/
-                //}
-            }
-        }
-    }
-
     /**
      * @param skillid
      * @param targets
@@ -2410,14 +2277,11 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
         final byte skilllevel = getSkillLevel(echskill);
         if (skilllevel > 0) {
             final MapleStatEffect echeff = echskill.getEffect(skilllevel);
-            //  System.out.println("获取能量B："+ skilllevel);
             if (targets > 0) {
-                //     System.out.println("获取能量C："+ targets);
                 if (nengl <= 10) {
                     nengl = nengl + 1;
                 } else if (getBuffedValue(MapleBuffStat.ENERGY_CHARGE) == null) {
                     echeff.applyEnergyBuff(this, true); // Infinity time
-                    //    System.out.println("获取能量D：");
                 } else {
                     Integer energyLevel = getBuffedValue(MapleBuffStat.ENERGY_CHARGE);
                     //TODO: bar going down
@@ -2427,59 +2291,22 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
                         client.getSession().write(MaplePacketCreator.showOwnBuffEffect(skillid, 2));
                         map.broadcastMessage(this, MaplePacketCreator.showBuffeffect(id, skillid, 2), false);
 
-                        // if (energyLevel >= 15000) {
                         energyLevel = 15000;
-                        // }
                         if (nengls <= 20) {
                             nengls = nengls + 1;
                         }
-                        //System.out.println("获取能量E："+ energyLevel);
                         List<Pair<MapleBuffStat, Integer>> stat = Collections.singletonList(new Pair<>(MapleBuffStat.ENERGY_CHARGE, energyLevel));
                         client.getSession().write(MaplePacketCreator.能量条(stat, energyLevel / 1000)); //????????????????
-                        //client.getSession().write(MaplePacketCreator.givePirateBuff(energyLevel, 0, stat));
-                        // client.getSession().write(MaplePacketCreator.giveEnergyChargeTest(energyLevel, echeff.getDuration() / 1000));
                         setBuffedValue(MapleBuffStat.ENERGY_CHARGE, energyLevel);
-                        /*  Timer.WorldTimer.getInstance().register(new Runnable() {
 
-                            public void run() {
-                                Integer energyLevel = getBuffedValue(MapleBuffStat.ENERGY_CHARGE);
-                                try {
-                                        energyLevel = 1;
-                                    System.out.println("获取能量Z：" + energyLevel);
-                                    List<Pair<MapleBuffStat, Integer>> stat = Collections.singletonList(new Pair<MapleBuffStat, Integer>(MapleBuffStat.ENERGY_CHARGE, energyLevel));
-                                    client.getSession().write(MaplePacketCreator.能量条(stat, energyLevel / 1000)); //????????????????
-                                    setBuffedValue(MapleBuffStat.ENERGY_CHARGE, Integer.valueOf(energyLevel));
-                                } catch (Exception e) {
-                                }
-                            }
-                        }, 10000);*/
                     } else if (nengls > 20) {
                         nengls = 0;
                         nengl = 0;
-                        //  System.out.println("获取能量F："+ energyLevel);
                         List<Pair<MapleBuffStat, Integer>> stat = Collections.singletonList(new Pair<>(MapleBuffStat.ENERGY_CHARGE, 0));
                         client.getSession().write(MaplePacketCreator.能量条(stat, 0)); //????????????????
-                        //client.getSession().write(MaplePacketCreator.givePirateBuff(energyLevel, 0, stat));
-                        // client.getSession().write(MaplePacketCreator.giveEnergyChargeTest(energyLevel, echeff.getDuration() / 1000));
                         setBuffedValue(MapleBuffStat.ENERGY_CHARGE, 0);
-                        //   echeff.applyEnergyBuff(this, false); // One with time
-                        //  setBuffedValue(MapleBuffStat.ENERGY_CHARGE, Integer.valueOf(10001));
                     }
-                } // System.out.println("能量S："+ nengls);
-                // System.out.println("能量："+ nengl);
-                /* Timer.WorldTimer.getInstance().register(new Runnable() {
-                     @Override
-                     public void run() {
-                         energyPoint -= 200;
-                         if (energyPoint <= 0) {
-                             echeff.applyEnergyBuff(chrs, false); // One with time
-                             setBuffedValue(MapleBuffStat.ENERGY_CHARGE, Integer.valueOf(10001));
-                         }
-                    try {
-                         } catch (Exception e) {
-                         }
-                     }
-                 }, 60000 * 1);*/
+                }
             }
         }
     }
@@ -2759,19 +2586,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     /**
      * @return
      */
-    public int getRemainingSpSize() {
-        int ret = 0;
-        for (int i = 0; i < remainingSp.length; i++) {
-            if (remainingSp[i] > 0) {
-                ret++;
-            }
-        }
-        return ret;
-    }
-
-    /**
-     * @return
-     */
     public short getHpApUsed() {
         return hpApUsed;
     }
@@ -2969,10 +2783,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
      */
     public void addFame(int famechange) {
         this.fame += famechange;
-        /*
-         * if (this.fame >= 50) { finishAchievement(7);
-         }
-         */
     }
 
     /**
@@ -3051,7 +2861,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
      *
      */
     public void leaveMap() {
-        //controlled.clear();
         visibleMapObjectsLock.writeLock().lock();
         try {
             visibleMapObjects.clear();
@@ -4684,6 +4493,7 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
             for (final MaplePet pet : pets) {
                 if (pet.getSummoned()) {
                     client.getSession().write(PetPacket.showPet(this, pet, false, false));
+                    client.sendPacket(PetPacket.petStatUpdate(this));
                 }
             }
             for (final WeakReference<MapleCharacter> chr : clones) {
@@ -4874,6 +4684,51 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
             client.getSession().write(PetPacket.petStatUpdate(this));
             client.getSession().write(MaplePacketCreator.enableActions());
         }
+    }
+
+    public void unequipPet(MaplePet pet, boolean hunger) {
+        if (pet.getSummoned()) {
+            pet.saveToDb();
+
+            List<MaplePet> summonedPets = getSummonedPets();
+            if (summonedPets.contains(pet)) {
+                summonedPets.remove(pet);
+                int i = 1;
+                for (MaplePet p : summonedPets) {
+                    if (p == null) {
+                        continue;
+                    }
+                    p.setSummoned(i);
+                    i++;
+                }
+            }
+            if (map != null) {
+                map.broadcastMessage(this, PetPacket.showPet(this, pet, true, hunger), true);
+            }
+            //List<Pair<MapleStat, Integer>> stats = new ArrayList<Pair<MapleStat, Integer>>();
+            //stats.add(new Pair<MapleStat, Integer>(MapleStat.PET, Integer.valueOf(0)));
+            pet.setSummoned(0);
+            client.sendPacket(PetPacket.petStatUpdate(this));
+            client.sendPacket(MaplePacketCreator.enableActions());
+        }
+    }
+
+    public final List<MaplePet> getSummonedPets() {
+        List<MaplePet> ret = new ArrayList<>();
+        for (int i = 0; i < 3; i++) {
+            ret.add(null);
+        }
+        for (final MaplePet pet : pets) {
+            if (pet != null && pet.getSummoned()) {
+                int index = pet.getSummonedValue() - 1;
+                ret.remove(index);
+                ret.add(index, pet);
+            }
+        }
+        List<Integer> nullArr = new ArrayList();
+        nullArr.add(null);
+        ret.removeAll(nullArr);
+        return ret;
     }
 
     /*
@@ -6734,13 +6589,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
 
     /**
      * @param slot
-     */
-    public void spawnPet(byte slot) {
-        spawnPet(slot, false, true);
-    }
-
-    /**
-     * @param slot
      * @param lead
      */
     public void spawnPet(byte slot, boolean lead) {
@@ -6754,7 +6602,8 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
      */
     public void spawnPet(byte slot, boolean lead, boolean broadcast) {
         final IItem item = getInventory(MapleInventoryType.CASH).getItem(slot);
-        if (item == null || item.getItemId() > 5001000 || item.getItemId() < 5000000) {
+        MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
+        if (item == null || item.getItemId() > 5010000 || item.getItemId() < 5000000) {
             return;
         }
         switch (item.getItemId()) {
@@ -6771,22 +6620,18 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
                 final MaplePet pet = item.getPet();
                 if (pet != null && (item.getItemId() != 5000054 || pet.getSecondsLeft() > 0) && (item.getExpiration() == -1 || item.getExpiration() > System.currentTimeMillis())) {
                     if (pet.getSummoned()) { // Already summoned, let's keep it
-                        unequipPet(pet, true, false);
+                        unequipPet(pet, false);
                     } else {
                         int leadid = 8;
                         if (GameConstants.isKOC(getJob())) {
                             leadid = 10000018;
                         } else if (GameConstants.isAran(getJob())) {
                             leadid = 20000024;
-                        } else if (GameConstants.isEvan(getJob())) {
-                            leadid = 20010024;
-                        } else if (GameConstants.isResist(getJob())) {
-                            leadid = 30000024;
                         }
                         if (getSkillLevel(SkillFactory.getSkill(leadid)) == 0 && getPet(0) != null) {
-                            unequipPet(getPet(0), false, false);
-                        } else if (lead && getSkillLevel(SkillFactory.getSkill(leadid)) > 0) { // Follow the Lead
-                            //			    shiftPetsRight();
+                            unequipPet(getPet(0), false);
+                        } else if (lead) { // Follow the Lead
+                            shiftPetsRight();
                         }
                         final Point pos = getPosition();
                         pet.setPos(pos);
@@ -6796,24 +6641,88 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
                             pet.setFh(0); //lol, it can be fixed by movement
                         }
                         pet.setStance(0);
-                        pet.setSummoned(slot);
-                        //  pet.setSummoned(getPetIndex(pet));
+                        pet.setSummoned(getPetSlotNext() + 1);
 
                         addPet(pet);
                         if (broadcast) {
                             getMap().broadcastMessage(this, PetPacket.showPet(this, pet, false, false), true);
-                            client.getSession().write(PetPacket.updatePet(pet, getInventory(MapleInventoryType.CASH).getItem(pet.getInventoryPosition()), true));
 
                             //final List<Pair<MapleStat, Integer>> stats = new ArrayList<Pair<MapleStat, Integer>>(1);
                             //stats.add(new Pair<MapleStat, Integer>(MapleStat.PET, Integer.valueOf(pet.getUniqueId())));
-                            client.getSession().write(PetPacket.petStatUpdate(this));
+                            client.sendPacket(PetPacket.petStatUpdate(this));
                         }
                     }
                 }
                 break;
             }
         }
-        client.getSession().write(PetPacket.emptyStatUpdate());
+        client.sendPacket(PetPacket.emptyStatUpdate());
+    }
+
+
+    public final int getPetSlotNext() {
+        List<MaplePet> petsz = getSummonedPets();
+        int index = 0;
+        if (petsz.size() >= 3) {
+            unequipPet(getSummonedPet(0), false);
+        } else {
+            boolean[] indexBool = new boolean[]{false, false, false};
+            for (int i = 0; i < 3; i++) {
+                for (MaplePet p : petsz) {
+                    if (p.getSummonedValue() == i + 1) {
+                        indexBool[i] = true;
+                    }
+                }
+            }
+            for (boolean b : indexBool) {
+                if (!b) {
+                    break;
+                }
+                index++;
+            }
+            index = Math.min(index, 2);
+            for (MaplePet p : petsz) {
+                if (p.getSummonedValue() == index + 1) {
+                    unequipPet(p, false);
+                }
+            }
+        }
+        return index;
+    }
+
+    public final MaplePet getSummonedPet(final int index) {
+        for (final MaplePet pet : getSummonedPets()) {
+            if (pet.getSummonedValue() - 1 == index) {
+                return pet;
+            }
+        }
+        return null;
+    }
+
+    public final void shiftPetsRight() {
+        List<MaplePet> petsz = getSummonedPets();
+        if (petsz.size() >= 3 || petsz.size() < 1) {
+            return;
+        } else {
+            boolean[] indexBool = new boolean[]{false, false, false};
+            for (int i = 0; i < 3; i++) {
+                for (MaplePet p : petsz) {
+                    if (p.getSummonedValue() == i + 1) {
+                        indexBool[i] = true;
+                    }
+                }
+            }
+            if (petsz.size() > 1) {
+                if (!indexBool[2]) {
+                    petsz.get(0).setSummoned(2);
+                    petsz.get(1).setSummoned(3);
+                } else if (!indexBool[1]) {
+                    petsz.get(0).setSummoned(2);
+                }
+            } else if (indexBool[0]) {
+                petsz.get(0).setSummoned(2);
+            }
+        }
     }
 
     /**

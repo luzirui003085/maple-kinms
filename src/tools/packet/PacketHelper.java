@@ -35,6 +35,7 @@ import client.inventory.MaplePet;
 import client.inventory.MapleRing;
 import constants.GameConstants;
 import constants.ServerConstants;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -44,6 +45,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.SimpleTimeZone;
+
 import server.movement.LifeMovementFragment;
 import server.shops.AbstractPlayerStore;
 import server.shops.IMaplePlayerShop;
@@ -54,7 +56,6 @@ import tools.data.output.LittleEndianWriter;
 import tools.data.output.MaplePacketLittleEndianWriter;
 
 /**
- *
  * @author zjj
  */
 public class PacketHelper {
@@ -87,7 +88,6 @@ public class PacketHelper {
     public static final byte unk2[] = new byte[]{(byte) 0x3B, (byte) 0x37, (byte) 0x4F, (byte) 0x01};
 
     /**
-     *
      * @param realTimestamp
      * @return
      */
@@ -105,7 +105,6 @@ public class PacketHelper {
     }
 
     /**
-     *
      * @param realTimestamp
      * @return
      */
@@ -118,7 +117,6 @@ public class PacketHelper {
     }
 
     /**
-     *
      * @param timeStampinMillis
      * @param roundToMinutes
      * @return
@@ -137,7 +135,6 @@ public class PacketHelper {
     }
 
     /**
-     *
      * @param mplew
      * @param chr
      */
@@ -163,7 +160,6 @@ public class PacketHelper {
     }
 
     /**
-     *
      * @param mplew
      * @param chr
      */
@@ -181,7 +177,6 @@ public class PacketHelper {
     }
 
     /**
-     *
      * @param mplew
      * @param chr
      */
@@ -195,7 +190,6 @@ public class PacketHelper {
     }
 
     /**
-     *
      * @param mplew
      * @param chr
      */
@@ -212,7 +206,6 @@ public class PacketHelper {
     }
 
     /**
-     *
      * @param mplew
      * @param chr
      */
@@ -223,7 +216,6 @@ public class PacketHelper {
     }
 
     /**
-     *
      * @param mplew
      * @param chr
      */
@@ -251,7 +243,6 @@ public class PacketHelper {
     }
 
     /**
-     *
      * @param mplew
      * @param chr
      */
@@ -345,7 +336,6 @@ public class PacketHelper {
     }
 
     /**
-     *
      * @param mplew
      * @param chr
      */
@@ -384,7 +374,6 @@ public class PacketHelper {
     }
 
     /**
-     *
      * @param mplew
      * @param chr
      * @param mega
@@ -394,7 +383,6 @@ public class PacketHelper {
     }
 
     /**
-     *
      * @param mplew
      * @param chr
      * @param mega
@@ -444,13 +432,7 @@ public class PacketHelper {
         final IItem cWeapon = equip.getItem((byte) -111);
         mplew.writeInt(cWeapon != null ? cWeapon.getItemId() : 0);
 
-        /*final IItem invA = chr.getInventory(MapleInventoryType.EQUIPPED).getItem((byte) -114);
-         final IItem invB = chr.getInventory(MapleInventoryType.EQUIPPED).getItem((byte) -122);
-         final IItem invC = chr.getInventory(MapleInventoryType.EQUIPPED).getItem((byte) -124);
-         //final int peteqid = inv != null ? inv.getItemId() : 0;
-         mplew.writeInt(invA != null ? invA.getItemId() : 0);
-         mplew.writeInt(invB != null ? invB.getItemId() : 0);
-         mplew.writeInt(invC != null ? invC.getItemId() : 0);*/
+
         for (int i = 0; i < 3; i++) {
             if (channelserver) {
                 mplew.writeInt(chr.getPet(i) != null ? chr.getPet(i).getPetItemId() : 0);
@@ -461,7 +443,6 @@ public class PacketHelper {
     }
 
     /**
-     *
      * @param mplew
      * @param time
      */
@@ -480,7 +461,6 @@ public class PacketHelper {
     }
 
     /**
-     *
      * @param mplew
      * @param item
      * @param zeroPosition
@@ -543,22 +523,16 @@ public class PacketHelper {
             // 0 无绑定; 1 绑定
             mplew.write(0);
             mplew.write(0);
-            // if (!masking && !cs) {
             mplew.writeLong(0);
             mplew.writeShort(0);
             mplew.writeShort(0);
             mplew.writeShort(0);
             mplew.writeLong(DateUtil.getFileTimestamp(System.currentTimeMillis()));
-            // } else {
-            //  mplew.write(HexTool.getByteArrayFromHexString("00 00 00 00 00 00"));
-            // mplew.writeLong(DateUtil.getFileTimestamp(System.currentTimeMillis()));
-            //}
             mplew.writeInt(-1);
         } else {
             mplew.writeShort(item.getQuantity());
             mplew.writeMapleAsciiString(item.getOwner());
             mplew.writeShort(0); // this seems to end the item entry
-            // but only if its not a THROWING STAR :))9 O.O!
 
             if (GameConstants.isThrowingStar(item.getItemId()) || GameConstants.isBullet(item.getItemId())) {
                 mplew.writeInt(2);
@@ -570,7 +544,6 @@ public class PacketHelper {
     }
 
     /**
-     *
      * @param mplew
      * @param item
      * @param zeroPosition
@@ -581,7 +554,6 @@ public class PacketHelper {
     }
 
     /**
-     *
      * @param mplew
      * @param item
      * @param zeroPosition
@@ -616,7 +588,6 @@ public class PacketHelper {
         mplew.write(item.getPet() != null ? 3 : item.getType());
         mplew.writeInt(item.getItemId());
         boolean hasUniqueId = item.getUniqueId() > 0;
-        //marriage rings arent cash items so dont have uniqueids, but we assign them anyway for the sake of rings
         mplew.write(hasUniqueId ? 1 : 0);
         if (hasUniqueId) {
             if (isPet) {
@@ -677,8 +648,6 @@ public class PacketHelper {
                 }
 
                 mplew.writeInt(-1);
-                // mplew.write(unk1);
-                //  mplew.write(unk2);
             } else {
                 mplew.writeShort(item.getQuantity());
                 mplew.writeMapleAsciiString(item.getOwner());
@@ -692,101 +661,9 @@ public class PacketHelper {
                 }
             }
         }
-//        short pos = item.getPosition();
-//        if (zeroPosition) {
-//            if (!leaveOut) {
-//                mplew.write(0);
-//            }
-//        } else if (pos <= -1) {
-//            pos = (byte) (pos * -1);
-//            if (pos > 100) {
-//
-//                mplew.write(pos - 100);
-//            } else {
-//                mplew.write(pos);
-//            }
-//        } else {
-//            mplew.write(item.getPosition());
-//        }
-//        mplew.write(item.getPet() != null ? 3 : item.getType());
-//        mplew.writeInt(item.getItemId());
-//        boolean hasUniqueId = item.getUniqueId() > 0;
-//        //marriage rings arent cash items so dont have uniqueids, but we assign them anyway for the sake of rings
-//        mplew.write(hasUniqueId ? 1 : 0);
-//        if (hasUniqueId) {
-//            mplew.writeLong(item.getUniqueId());
-//        }
-//
-//        if (item.getPet() != null) { // Pet
-//            addPetItemInfo(mplew, item, item.getPet(), true);
-//        } else {
-//            addExpirationTime(mplew, item.getExpiration());
-//            if (item.getType() == 1) {
-//                final IEquip equip = (IEquip) item;
-//                mplew.write(equip.getUpgradeSlots());
-//                mplew.write(equip.getLevel());
-//
-//                mplew.writeShort(equip.getStr());
-//                mplew.writeShort(equip.getDex());
-//                mplew.writeShort(equip.getInt());
-//                mplew.writeShort(equip.getLuk());
-//
-//                mplew.writeShort(equip.getHp());
-//                mplew.writeShort(equip.getMp());
-//
-//                mplew.writeShort(equip.getWatk());
-//                mplew.writeShort(equip.getMatk());
-//                mplew.writeShort(equip.getWdef());
-//                mplew.writeShort(equip.getMdef());
-//
-//                mplew.writeShort(equip.getAcc());
-//                mplew.writeShort(equip.getAvoid());
-//                mplew.writeShort(equip.getHands());
-//                mplew.writeShort(equip.getSpeed());
-//                mplew.writeShort(equip.getJump());
-//
-//                mplew.writeMapleAsciiString(equip.getOwner());//拥有者名字
-//                mplew.writeShort(equip.getFlag());//是否可交易
-//                if (!hasUniqueId) {
-//                    mplew.write(0);//是否为锁定物品 equip.getLocked()
-//                    mplew.write(Math.max(equip.getBaseLevel(), equip.getEquipLevel())); // Item level
-//                    mplew.writeInt(equip.getExpPercentage()); // Item Exp... 98% = 25%
-//                    mplew.writeInt(equip.getViciousHammer());
-//                    mplew.writeLong(0); //some tracking ID
-//                } else {
-//                    mplew.writeShort(0);
-//                    mplew.writeShort(0);
-//                    mplew.writeShort(0);
-//                    mplew.writeShort(0);
-//                    mplew.writeShort(0);
-//                }
-//                if (GameConstants.is豆豆装备(equip.getItemId())) {
-//                    mplew.writeInt(0);
-//                    mplew.writeLong(DateUtil.getFileTimestamp(System.currentTimeMillis()));
-//                } else {
-//                    addExpirationTime(mplew, item.getExpiration());
-//                }
-//
-//                mplew.writeInt(-1);
-//                // mplew.write(unk1);
-//                //  mplew.write(unk2);
-//            } else {
-//                mplew.writeShort(item.getQuantity());
-//                mplew.writeMapleAsciiString(item.getOwner());
-//                mplew.writeShort(item.getFlag());
-//
-//                if (GameConstants.isThrowingStar(item.getItemId()) || GameConstants.isBullet(item.getItemId())) {
-//                    mplew.writeInt(2);
-//                    mplew.writeShort(0x54);
-//                    mplew.write(0);
-//                    mplew.write(0x34);
-//                }
-//            }
-//        }
     }
 
     /**
-     *
      * @param lew
      * @param moves
      */
@@ -798,7 +675,6 @@ public class PacketHelper {
     }
 
     /**
-     *
      * @param mplew
      * @param chr
      */
@@ -811,7 +687,6 @@ public class PacketHelper {
     }
 
     /**
-     *
      * @param mplew
      * @param shop
      */
@@ -831,7 +706,6 @@ public class PacketHelper {
     }
 
     /**
-     *
      * @param mplew
      * @param chr
      */
@@ -840,14 +714,7 @@ public class PacketHelper {
         mplew.write(0);
         addCharStats(mplew, chr);
         mplew.write(chr.getBuddylist().getCapacity());
-        // Bless
-        //  if (chr.getBlessOfFairyOrigin() != null) {
-        //     mplew.write(1);
-        //     mplew.writeMapleAsciiString(chr.getBlessOfFairyOrigin());
-        //  } else {
         mplew.write(1);
-        // }
-        // End
         addInventoryInfo(mplew, chr);
         addSkillInfo(mplew, chr);
         addCoolDownInfo(mplew, chr);
@@ -861,7 +728,6 @@ public class PacketHelper {
     }
 
     /**
-     *
      * @param mplew
      * @param item
      * @param pet
@@ -873,7 +739,6 @@ public class PacketHelper {
         } else {
             addExpirationTime(mplew, item.getExpiration() <= System.currentTimeMillis() ? -1 : item.getExpiration());
         }
-        //PacketHelper.addExpirationTime(mplew, -1); //always
         mplew.writeAsciiString(pet.getName(), 13);
         mplew.write(pet.getLevel());
         mplew.writeShort(pet.getCloseness());
@@ -888,19 +753,5 @@ public class PacketHelper {
         mplew.writeInt(pet.getPetItemId() == 5000054 && pet.getSecondsLeft() > 0 ? pet.getSecondsLeft() : 0); //in seconds, 3600 = 1 hr.
 
         mplew.writeShort(0);
-//        mplew.write(0);
-//        mplew.write(active ? pet.getSummoned() ? pet.getSummonedValue() : 0 : 0);//显示装备栏上宠物的位置
-        /*for (int i = 0; i < 4; i++) {
-         mplew.write(0); //0x40 before, changed to 0?
-         }*/
- /*        if (pet.getPetItemId() == 5000054) {
-         mplew.writeInt(0);
-         mplew.writeInt(pet.getSecondsLeft() > 0 ? pet.getSecondsLeft() : 0); //in seconds, 3600 = 1 hr.
-         mplew.writeShort(0);
-         } else {
-         mplew.writeShort(0);
-         mplew.writeLong(item != null && item.getExpiration() <= System.currentTimeMillis() ? 0 : 1);
-         }*/
-//        mplew.writeZeroBytes(5); // 1C 5C 98 C6 0
     }
 }

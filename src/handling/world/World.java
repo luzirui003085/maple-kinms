@@ -2049,14 +2049,14 @@ public class World {
                     if (pet.getPetItemId() == 5000054 && pet.getSecondsLeft() > 0) {
                         pet.setSecondsLeft(pet.getSecondsLeft() - 1);
                         if (pet.getSecondsLeft() <= 0) {
-                            chr.unequipPet(pet, true, true);
+                            chr.unequipPet(pet, true);
                             return;
                         }
                     }
                     int newFullness = pet.getFullness() - PetDataFactory.getHunger(pet.getPetItemId());
                     if (newFullness <= 5) {
                         pet.setFullness(15);
-                        chr.unequipPet(pet, true, true);
+                        chr.unequipPet(pet, true);
                     } else {
                         pet.setFullness(newFullness);
                         chr.getClient().getSession().write(PetPacket.updatePet(pet, chr.getInventory(MapleInventoryType.CASH).getItem(pet.getInventoryPosition()), true));

@@ -497,25 +497,14 @@ public class MaplePacketCreator {
         mplew.writeInt(summon.getOwnerId());
         mplew.writeInt(summon.getObjectId());
         mplew.writeInt(summon.getSkill());
-        //  mplew.write(114);
         mplew.write(summon.getOwnerLevel());
         mplew.write(summon.getSkillLevel()); //idk but nexon sends 1 for octo, so we'll leave it
         mplew.writeShort(summon.getPosition().x);
         mplew.writeInt(summon.getPosition().y);
-        //1mplew.writePos(summon.getPosition());
-        //   mplew.write(4); //reaper = 5?
-        //  mplew.writeShort(0/*summon.getFh()*/);
-        //  mplew.write(31);
         mplew.write(0);
         mplew.write(summon.getMovementType().getValue());
         mplew.write(summon.getSummonType()); // 0 = Summon can't attack - but puppets don't attack with 1 either ^.-
-        //  mplew.write(0/*animated ? 0 : 1*/);
         mplew.write(animated ? 0 : 1);
-        //final MapleCharacter chr = summon.getOwner();
-        /*        mplew.write(summon.getSkill() == 4341006 && chr != null ? 1 : 0); //mirror target
-         if (summon.getSkill() == 4341006 && chr != null) {
-         PacketHelper.addCharLook(mplew, chr, true);
-         }*/
 
         if (ServerConstants.PACKET_ERROR_OFF) {
             ServerConstants ERROR = new ServerConstants();
@@ -543,55 +532,6 @@ public class MaplePacketCreator {
         if (ServerConstants.PACKET_ERROR_OFF) {
             ServerConstants ERROR = new ServerConstants();
             ERROR.setPACKET_ERROR("removeSummon-470" + "：\r\n" + mplew.getPacket() + "\r\n\r\n");
-        }
-        return mplew.getPacket();
-    }
-
-    /**
-     * @return
-     */
-    public static MaplePacket getRelogResponse() {
-        MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter(3);
-
-        if (ServerConstants.调试输出封包) {
-            System.out.println("getRelogResponse--------------------");
-        }
-        mplew.writeShort(SendPacketOpcode.RELOG_RESPONSE.getValue());
-        mplew.write(1);
-
-        if (ServerConstants.PACKET_ERROR_OFF) {
-            ServerConstants ERROR = new ServerConstants();
-            ERROR.setPACKET_ERROR("getRelogResponse-486" + "：\r\n" + mplew.getPacket() + "\r\n\r\n");
-        }
-        return mplew.getPacket();
-    }
-
-    /**
-     * Possible values for <code>type</code>:<br>
-     * 1: You cannot move that channel. Please try again later.<br>
-     * 2: You cannot go into the cash shop. Please try again later.<br>
-     * 3: The Item-Trading shop is currently unavailable, please try again
-     * later.<br>
-     * 4: You cannot go into the trade shop, due to the limitation of user
-     * count.<br>
-     * 5: You do not meet the minimum level requirement to access the Trade
-     * Shop.<br>
-     *
-     * @param type The type
-     * @return The "block" packet.
-     */
-    public static MaplePacket serverBlocked(int type) {
-        MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter();
-
-        if (ServerConstants.调试输出封包) {
-            System.out.println("serverBlocked--------------------");
-        }
-        mplew.writeShort(SendPacketOpcode.SERVER_BLOCKED.getValue());
-        mplew.write(type);
-
-        if (ServerConstants.PACKET_ERROR_OFF) {
-            ServerConstants ERROR = new ServerConstants();
-            ERROR.setPACKET_ERROR("serverBlocked-516" + "：\r\n" + mplew.getPacket() + "\r\n\r\n");
         }
         return mplew.getPacket();
     }
@@ -987,26 +927,6 @@ public class MaplePacketCreator {
         return mplew.getPacket();
     }
 
-    /**
-     * @param value
-     * @return
-     */
-    public static MaplePacket GameMaster_Func(int value) {
-        MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter();
-
-        if (ServerConstants.调试输出封包) {
-            System.out.println("GameMaster_Func--------------------");
-        }
-        mplew.writeShort(SendPacketOpcode.GM_EFFECT.getValue());
-        mplew.write(value);
-        mplew.writeZeroBytes(17);
-
-        if (ServerConstants.PACKET_ERROR_OFF) {
-            ServerConstants ERROR = new ServerConstants();
-            ERROR.setPACKET_ERROR("GameMaster_Func-848" + "：\r\n" + mplew.getPacket() + "\r\n\r\n");
-        }
-        return mplew.getPacket();
-    }
 
     /**
      * @param value
@@ -3423,20 +3343,14 @@ public class MaplePacketCreator {
         }
         mplew.writeMapleAsciiString(guildName);
         mplew.writeMapleAsciiString(allianceName); // Alliance
-//        mplew.write(isSelf ? 1 : 0);
-        /*  mplew.writeMapleAsciiString(chr.getcharmessage()); // 角色訊息
-         mplew.write(chr.getexpression());// 表情
-         mplew.write(chr.getconstellation());// 星座
-         mplew.write(chr.getblood());// 血型
-         mplew.write(chr.getmonth());// 月
-         mplew.write(chr.getday());// 日*/
 
         final IItem inv = chr.getInventory(MapleInventoryType.EQUIPPED).getItem((byte) -114);
         final int peteqid = inv != null ? inv.getItemId() : 0; //宠物装备1
-        final IItem inv1 = chr.getInventory(MapleInventoryType.EQUIPPED).getItem((byte) -122);
-        final int peteqid1 = inv1 != null ? inv1.getItemId() : 0; //宠物装备2
-        final IItem inv2 = chr.getInventory(MapleInventoryType.EQUIPPED).getItem((byte) -124);
-        final int peteqid2 = inv2 != null ? inv2.getItemId() : 0; //宠物装备2
+        System.out.println("宠物装备" + peteqid);
+//        final IItem inv1 = chr.getInventory(MapleInventoryType.EQUIPPED).getItem((byte) -122);
+//        final int peteqid1 = inv1 != null ? inv1.getItemId() : 0; //宠物装备2
+//        final IItem inv2 = chr.getInventory(MapleInventoryType.EQUIPPED).getItem((byte) -124);
+//        final int peteqid2 = inv2 != null ? inv2.getItemId() : 0; //宠物装备2
 
         for (final MaplePet pet : chr.getPets()) {
             if (pet.getSummoned()) {
@@ -3465,15 +3379,6 @@ public class MaplePacketCreator {
         } else {
             mplew.write(0);
         }
-
-        /*        final int wishlistSize = chr.getWishlistSize();
-         mplew.write(wishlistSize);
-         if (wishlistSize > 0) {
-         final int[] wishlist = chr.getWishlist();
-         for (int x = 0; x < wishlistSize; x++) {
-         mplew.writeInt(wishlist[x]);
-         }
-         }*/
         mplew.write(0);
         chr.getMonsterBook().addCharInfoPacket(chr.getMonsterBookCover(), mplew);
 
@@ -10012,23 +9917,6 @@ public class MaplePacketCreator {
     }
 
     /**
-     * @param testmsg
-     * @return
-     */
-    public static MaplePacket testPacket(byte[] testmsg) {
-        MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter();
-        if (ServerConstants.调试输出封包) {
-            System.out.println("testPacket--------------------");
-        }
-        mplew.write(testmsg);
-        if (ServerConstants.PACKET_ERROR_OFF) {
-            ServerConstants ERROR = new ServerConstants();
-            ERROR.setPACKET_ERROR("testPacket-8196" + "：\r\n" + mplew.getPacket() + "\r\n\r\n");
-        }
-        return mplew.getPacket();
-    }
-
-    /**
      * @param cid
      * @param x
      * @param laba
@@ -10335,36 +10223,6 @@ public class MaplePacketCreator {
      * @return
      * @throws SQLException
      */
-    public static MaplePacket showVipRanks(int npcid, ResultSet rs) throws SQLException {
-        MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter();
-
-        mplew.writeShort(SendPacketOpcode.GUILD_OPERATION.getValue());
-        mplew.write(0x49);
-        mplew.writeInt(npcid);
-        if (!rs.last()) { //no guilds o.o
-            mplew.writeInt(0);
-            return mplew.getPacket();
-        }
-        mplew.writeInt(rs.getRow()); //number of entries
-        rs.beforeFirst();
-        while (rs.next()) {
-            mplew.writeMapleAsciiString(rs.getString("name"));
-            mplew.writeInt(rs.getInt("vip"));
-            mplew.writeInt(rs.getInt("level"));
-            mplew.writeInt(rs.getInt("meso"));
-            mplew.writeInt(0);
-            mplew.writeInt(0);
-        }
-
-        return mplew.getPacket();
-    }
-
-    /**
-     * @param npcid
-     * @param rs
-     * @return
-     * @throws SQLException
-     */
     public static MaplePacket showLevelRanks(int npcid, ResultSet rs) throws SQLException {
         MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter();
 
@@ -10477,43 +10335,6 @@ public class MaplePacketCreator {
             mplew.writeInt(rs.getInt("logoBGColor"));
         }
 
-        return mplew.getPacket();
-    }
-
-    /**
-     * @param v1
-     * @return
-     */
-    public static MaplePacket sub_93F0BE(int v1) {
-        MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter();
-        //mplew.writeShort(SendPacketOpcode.OPEN_WEB.getValue());
-
-        mplew.writeShort(0xEB);
-        mplew.writeInt(v1);
-        if (ServerConstants.PACKET_ERROR_OFF) {
-            ServerConstants ERROR = new ServerConstants();
-            ERROR.setPACKET_ERROR("" + "：\r\n" + mplew.getPacket() + "\r\n\r\n");
-        }
-        return mplew.getPacket();
-    }
-
-    /**
-     * @param n
-     * @param value
-     * @return
-     */
-    public static MaplePacket rechargeCombo(String n, int value) {
-        MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter();
-
-        //mplew.writeShort(SendPacketOpcode.ARAN_COMBO_RECHARGE.getValue());
-        mplew.writeShort(0xE8);
-        mplew.writeMapleAsciiString(n);
-        mplew.writeInt(value);
-
-        if (ServerConstants.PACKET_ERROR_OFF) {
-            ServerConstants ERROR = new ServerConstants();
-            ERROR.setPACKET_ERROR("" + "：\r\n" + mplew.getPacket() + "\r\n\r\n");
-        }
         return mplew.getPacket();
     }
 
