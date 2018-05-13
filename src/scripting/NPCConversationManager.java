@@ -13,12 +13,10 @@ import constants.GameConstants;
 import database.DatabaseConnection;
 import handling.channel.ChannelServer;
 import handling.channel.MapleGuildRanking;
-import handling.world.Lottery;
-import handling.world.MapleParty;
-import handling.world.MaplePartyCharacter;
-import handling.world.World;
+import handling.world.*;
 import handling.world.guild.MapleGuild;
 import handling.world.guild.MapleGuildAlliance;
+
 import java.rmi.RemoteException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -32,6 +30,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import javax.script.Invocable;
+
 import server.*;
 import server.MapleCarnivalChallenge;
 import server.MapleCarnivalParty;
@@ -60,7 +59,6 @@ import tools.StringUtil;
 import tools.packet.PlayerShopPacket;
 
 /**
- *
  * @author zjj
  */
 public class NPCConversationManager extends AbstractPlayerInteraction {
@@ -92,7 +90,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
      */
 
     /**
-     *
      * @param c
      * @param npc
      * @param questid
@@ -112,7 +109,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @return
      */
     public int getwh() {
@@ -120,7 +116,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @return
      */
     public Invocable getIv() {
@@ -128,7 +123,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @return
      */
     public String serverName() {
@@ -136,7 +130,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @return
      */
     public int getNpc() {
@@ -144,7 +137,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @return
      */
     public int getQuest() {
@@ -152,7 +144,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @return
      */
     public byte getType() {
@@ -174,7 +165,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @param sel
      */
     public void askMapSelection(final String sel) {
@@ -186,7 +176,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @param text
      */
     public void sendNext(String text) {
@@ -202,7 +191,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @param text
      * @param type
      */
@@ -219,7 +207,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @param text
      */
     public void sendPrev(String text) {
@@ -235,7 +222,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @param text
      * @param type
      */
@@ -252,7 +238,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @param text
      */
     public void sendNextPrev(String text) {
@@ -268,7 +253,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @param text
      */
     public void PlayerToNpc(String text) {
@@ -276,7 +260,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @param text
      */
     public void sendNextPrevS(String text) {
@@ -284,7 +267,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @param text
      * @param type
      */
@@ -301,7 +283,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @param text
      */
     public void sendOk(String text) {
@@ -317,7 +298,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @param text
      * @param type
      */
@@ -334,7 +314,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @param text
      */
     public void sendYesNo(String text) {
@@ -350,7 +329,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @param text
      * @param type
      */
@@ -367,7 +345,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @param text
      */
     public void sendAcceptDecline(String text) {
@@ -375,7 +352,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @param text
      */
     public void sendAcceptDeclineNoESC(String text) {
@@ -383,7 +359,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @param text
      */
     public void askAcceptDecline(String text) {
@@ -399,7 +374,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @param text
      */
     public void askAcceptDeclineNoESC(String text) {
@@ -415,7 +389,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @param text
      * @param card
      * @param args
@@ -429,7 +402,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @param text
      */
     public void sendSimple(String text) {
@@ -445,7 +417,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @param text
      * @param type
      */
@@ -462,7 +433,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @param text
      * @param caid
      * @param styles
@@ -476,7 +446,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @param text
      * @param def
      * @param min
@@ -495,7 +464,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @param slot
      * @param lock
      * @return
@@ -522,7 +490,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @param slot
      * @param lock
      * @return
@@ -548,7 +515,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @param text
      */
     public void sendGetText(String text) {
@@ -568,7 +534,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @param text
      * @param type
      */
@@ -577,7 +542,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @param text
      * @param type
      */
@@ -586,7 +550,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @param text
      */
     public void setGetText(String text) {
@@ -594,7 +557,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @return
      */
     public String getText() {
@@ -602,7 +564,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @param hair
      */
     public void setHair(int hair) {
@@ -612,7 +573,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @param face
      */
     public void setFace(int face) {
@@ -622,7 +582,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @param color
      */
     public void setSkin(int color) {
@@ -632,7 +591,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @param ticket
      * @param args_all
      * @return
@@ -660,7 +618,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @param ticket
      * @param args
      * @return
@@ -695,7 +652,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @param id
      */
     public void openShop(int id) {
@@ -703,7 +659,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @param id
      * @param quantity
      * @return
@@ -713,7 +668,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @param id
      * @param quantity
      * @param msg
@@ -741,7 +695,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @param id
      * @param quantity
      * @param msg
@@ -772,7 +725,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @param id
      * @param quantity
      * @param msg
@@ -802,7 +754,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @param job
      */
     public void changeJob(int job) {
@@ -810,7 +761,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @param id
      */
     public void startQuest(int id) {
@@ -818,7 +768,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @param id
      */
     @Override
@@ -827,7 +776,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @param id
      */
     public void forfeitQuest(int id) {
@@ -842,7 +790,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @param id
      */
     @Override
@@ -851,7 +798,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @param customData
      */
     public void forceStartQuest(String customData) {
@@ -866,7 +812,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @param id
      */
     @Override
@@ -875,7 +820,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @return
      */
     public String getQuestCustomData() {
@@ -883,7 +827,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @param customData
      */
     public void setQuestCustomData(String customData) {
@@ -891,7 +834,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @return
      */
     public int getLevel() {
@@ -899,7 +841,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @return
      */
     public int getMeso() {
@@ -907,7 +848,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @param amount
      */
     public void gainAp(final int amount) {
@@ -915,7 +855,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @param type
      * @param amt
      */
@@ -949,7 +888,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @param skillid
      * @return
      */
@@ -962,7 +900,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @param broadcast
      * @param effect
      */
@@ -975,7 +912,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @param broadcast
      * @param sound
      */
@@ -988,7 +924,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @param broadcast
      * @param env
      */
@@ -1001,7 +936,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @param capacity
      */
     public void updateBuddyCapacity(int capacity) {
@@ -1009,7 +943,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @return
      */
     public int getBuddyCapacity() {
@@ -1017,7 +950,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @return
      */
     public int partyMembersInMap() {
@@ -1031,7 +963,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @return
      */
     public List<MapleCharacter> getPartyMembers() {
@@ -1051,7 +982,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @param mapId
      * @param exp
      */
@@ -1067,7 +997,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @param mapId
      * @param exp
      * @param meso
@@ -1085,7 +1014,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @param type
      * @return
      */
@@ -1094,7 +1022,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @param type
      * @return
      */
@@ -1107,7 +1034,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @param type
      * @param minutes
      * @param startText
@@ -1131,7 +1057,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @param type
      * @param type_
      * @return
@@ -1157,7 +1082,8 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
                     sendSimple(squad.getSquadMemberString(type_));
                 } else {
                     sendNext(squad.getSquadMemberString(type_));
-                }   break;
+                }
+                break;
             default:
                 break;
         }
@@ -1170,7 +1096,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @param type
      * @return
      */
@@ -1186,7 +1111,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @param eim
      * @param squad
      * @return
@@ -1203,7 +1127,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @param type
      * @param pos
      */
@@ -1215,7 +1138,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @param type
      * @param pos
      */
@@ -1227,7 +1149,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @param startMillis
      * @param endMillis
      * @return
@@ -1237,7 +1158,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @param type
      * @param join
      * @return
@@ -1251,7 +1171,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @param type
      * @return
      */
@@ -1276,7 +1195,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @param code
      */
     public void genericGuildMessage(int code) {
@@ -1318,7 +1236,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @return
      */
     public boolean removePlayerFromInstance() {
@@ -1330,7 +1247,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @return
      */
     public boolean isPlayerInstance() {
@@ -1338,7 +1254,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @param slot
      * @param type
      * @param amount
@@ -1482,7 +1397,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @return
      */
     public long getMerchantMesos() {
@@ -1580,7 +1494,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @return
      */
     public final int getDojoPoints() {
@@ -1588,7 +1501,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @return
      */
     public final int getDojoRecord() {
@@ -1596,7 +1508,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @param reset
      */
     public void setDojoRecord(final boolean reset) {
@@ -1604,7 +1515,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @param dojo
      * @param party
      * @return
@@ -1617,7 +1527,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @param pyramid
      * @return
      */
@@ -1629,7 +1538,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @param pyramid
      * @return
      */
@@ -1641,7 +1549,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @return
      */
     public final short getKegs() {
@@ -1649,7 +1556,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @param kegs
      */
     public void giveKegs(final int kegs) {//未知副本
@@ -1657,7 +1563,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @return
      */
     public final short getSunshines() {
@@ -1665,7 +1570,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @param kegs
      */
     public void addSunshines(final int kegs) {
@@ -1673,7 +1577,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @return
      */
     public final short getDecorations() {
@@ -1681,7 +1584,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @param kegs
      */
     public void addDecorations(final int kegs) {
@@ -1693,7 +1595,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @param type
      * @return
      */
@@ -1702,7 +1603,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @return
      */
     public final MapleCarnivalParty getCarnivalParty() {
@@ -1710,7 +1610,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @return
      */
     public final MapleCarnivalChallenge getNextCarnivalRequest() {
@@ -1718,7 +1617,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @param chr
      * @return
      */
@@ -1727,7 +1625,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @param hp
      */
     public void setHP(short hp) {
@@ -1762,7 +1659,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @param typ
      * @return
      */
@@ -1775,7 +1671,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @param ma
      * @param sel
      * @return
@@ -1790,7 +1685,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @param itemid
      * @return
      */
@@ -1799,7 +1693,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @param statsSel
      * @param expire
      */
@@ -1810,7 +1703,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @param statsSel
      */
     public void setLock(Object statsSel) {
@@ -1825,7 +1717,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @param statsSel
      * @return
      */
@@ -1838,7 +1729,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @param slot
      * @param invType
      * @param statsSel
@@ -1851,7 +1741,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @param slot
      * @param invType
      * @param statsSel
@@ -1936,7 +1825,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @param slot
      * @param invType
      * @param statsSel
@@ -1948,7 +1836,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @param itemId
      * @return
      */
@@ -1957,7 +1844,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @param buff
      * @param duration
      * @param msg
@@ -1978,7 +1864,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @param alliancename
      * @return
      */
@@ -1997,7 +1882,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @return
      */
     public boolean addCapacityToAlliance() {
@@ -2016,7 +1900,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @return
      */
     public boolean disbandAlliance() {
@@ -2034,7 +1917,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @return
      */
     public byte getLastMsg() {
@@ -2042,7 +1924,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @param last
      */
     public final void setLastMsg(final byte last) {
@@ -2050,7 +1931,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @param bossid
      * @return
      */
@@ -2059,7 +1939,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @param bossid
      */
     public void setBossLog(String bossid) {
@@ -2067,7 +1946,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @param bossid
      */
     public final void givePartyBossLog(String bossid) {
@@ -2084,7 +1962,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @param bossid
      * @param b
      * @return
@@ -2117,7 +1994,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @param str
      * @param dex
      * @param z
@@ -2128,7 +2004,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @param slot
      * @param invType
      * @param quantity
@@ -2143,7 +2018,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @return
      */
     public final List<Integer> getAllPotentialInfo() {
@@ -2151,7 +2025,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @param id
      * @return
      */
@@ -2183,7 +2056,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @param ch
      * @param questid
      * @param data
@@ -2193,7 +2065,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @param ch
      */
     public final void doWeddingEffect(final Object ch) {
@@ -2246,7 +2117,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @param type
      */
     public void openDD(int type) {
@@ -2254,7 +2124,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @param text
      */
     public void worldMessage(String text) {
@@ -2262,7 +2131,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @return
      */
     public int getBeans() {
@@ -2270,7 +2138,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @param s
      */
     public void gainBeans(int s) {
@@ -2279,7 +2146,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @param type
      * @return
      */
@@ -2288,7 +2154,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @param ss
      */
     public void szhs(String ss) {
@@ -2296,7 +2161,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @param ss
      * @param id
      */
@@ -2305,7 +2169,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @param hypay
      * @return
      */
@@ -2314,7 +2177,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @param hypay
      * @return
      */
@@ -2323,7 +2185,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @param pay
      * @return
      */
@@ -2332,7 +2193,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @param id
      * @return
      */
@@ -2349,7 +2209,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @param days
      */
     public void xlkc(long days) {
@@ -2411,7 +2270,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @return
      */
     public String checkMapDrop() {
@@ -2453,7 +2311,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @param lx
      */
     public void sendEventWindow(int lx) {
@@ -2461,7 +2318,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @param aa
      * @return
      */
@@ -2471,7 +2327,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @param name
      */
     public void petName(String name) {
@@ -2479,7 +2334,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @return
      */
     public boolean petgm() {
@@ -2493,7 +2347,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @param str
      * @return
      */
@@ -2514,7 +2367,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @param str
      * @return
      */
@@ -2530,12 +2382,11 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @param str
      * @return
      */
     public static boolean isNumeric(String str) {
-        for (int i = str.length(); --i >= 0;) {
+        for (int i = str.length(); --i >= 0; ) {
             if (!Character.isDigit(str.charAt(i))) {
                 return false;
             }
@@ -2544,7 +2395,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @param name
      */
     public void setgrname(int name) {
@@ -2552,7 +2402,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @param name
      */
     public void setjzname(int name) {
@@ -2560,7 +2409,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @return
      */
     public int getgrname() {
@@ -2568,7 +2416,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @return
      */
     public int getjzname() {
@@ -2576,7 +2423,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @param name
      */
     public void setName(String name) {
@@ -2586,7 +2432,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @return
      */
     public boolean Gzz() {
@@ -2594,7 +2439,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @param name
      */
     public void setGName(String name) {
@@ -2604,7 +2448,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @return
      */
     public int getHour() {
@@ -2612,7 +2455,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @return
      */
     public int getMin() {
@@ -2620,7 +2462,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @return
      */
     public int getSec() {
@@ -2628,7 +2469,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @return
      */
     public int gethour() {
@@ -2638,7 +2478,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @return
      */
     public int getmin() {
@@ -2648,7 +2487,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @return
      */
     public int getsec() {
@@ -2658,7 +2496,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @param s
      * @return
      */
@@ -2667,7 +2504,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @return
      */
     public int gethyt() {
@@ -2675,7 +2511,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @param a
      */
     public void sethyt(int a) {
@@ -2683,7 +2518,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @param a
      */
     public void gainhyt(int a) {
@@ -2725,7 +2559,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @return
      */
     public int getdxs() {
@@ -2733,7 +2566,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @param a
      */
     public void setdxs(int a) {
@@ -2741,7 +2573,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @param a
      */
     public void gaindxs(int a) {
@@ -2783,7 +2614,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @param lx
      * @param msg
      * @throws RemoteException
@@ -2800,7 +2630,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
                 break;
             case 3:
                 World.Broadcast.broadcastSmega(MaplePacketCreator.serverNotice(3, c.getChannel(), new StringBuilder().append("全服喇叭]").append(c.getPlayer().getName()).append(" : ").append(msg).toString()).getBytes());
-            //  World.Broadcast.broadcastSmega(MaplePacketCreator.serverNotice(3, this.c.getChannel(), msg).getBytes());
+                //  World.Broadcast.broadcastSmega(MaplePacketCreator.serverNotice(3, this.c.getChannel(), msg).getBytes());
         }
     }
 
@@ -2840,7 +2670,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     *
      * @throws InterruptedException
      * @throws SQLException
      */
@@ -2905,20 +2734,20 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
             }
         }
     }
-    
+
     public boolean createLottery(String number, int rate) {
-        return Lottery.createLottery(getPlayer().getId(), Lottery.formatNumber(number), rate);
+        return LotteryV2.createLottery(getPlayer().getId(), LotteryV2.formatNumber(number), rate);
     }
 
     public ArrayList<Map<String, Object>> getLotteries() {
-        return Lottery.getLotteries(getPlayer().getId());
+        return LotteryV2.getLotteries(getPlayer().getId(), 100);
     }
 
     public Map<String, Object> getLottery(int id) {
-        return Lottery.getLottery(id);
+        return LotteryV2.getLottery(id);
     }
 
     public boolean updateLottery(int id) {
-        return Lottery.updateLottery(id);
+        return LotteryV2.updateLottery(id);
     }
 }

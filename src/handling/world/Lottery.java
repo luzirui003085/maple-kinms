@@ -30,6 +30,7 @@ import tools.MaplePacketCreator;
 
 /**
  * 彩票
+ * @deprecated
  *
  * @author zjj
  */

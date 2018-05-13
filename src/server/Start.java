@@ -8,9 +8,10 @@ import handling.channel.ChannelServer;
 import handling.channel.MapleGuildRanking;
 import handling.login.LoginInformationProvider;
 import handling.login.LoginServer;
-import handling.world.Lottery;
+import handling.world.LotteryV2;
 import handling.world.World;
 import handling.world.family.MapleFamilyBuff;
+
 import java.net.ServerSocket;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -20,6 +21,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.Map;
+
 import server.Timer.BuffTimer;
 import server.Timer.CheatTimer;
 import server.Timer.CloneTimer;
@@ -37,7 +39,6 @@ import tools.FileoutputUtil;
 import tools.StringUtil;
 
 /**
- *
  * @author zjj
  */
 public class Start {
@@ -58,7 +59,6 @@ public class Start {
     public static ArrayList<Integer> unCheckList = new ArrayList<>();
 
     /**
-     *
      * @param args
      */
     public static void main(final String args[]) {
@@ -113,8 +113,8 @@ public class Start {
         开启双倍(1);
         回收内存(360);
         刷新地图(480);
-        
-        Lottery.init();
+
+        LotteryV2.init();
         // 防万能(3);
 //        if (Boolean.parseBoolean(ServerProperties.getProperty("KinMS.RandDrop"))) {
 //            ChannelServer.getInstance(1).getMapFactory().getMap(910000000).spawnRandDrop();
@@ -139,7 +139,6 @@ public class Start {
     }
 
     /**
-     *
      * @throws InterruptedException
      */
     public void startServer() throws InterruptedException {
@@ -192,8 +191,8 @@ public class Start {
         //自动存档(30);
         回收内存(360);
         在线时间(1);
-        
-        Lottery.init();
+
+        LotteryV2.init();
         //   防万能(3);
 //        if (Boolean.parseBoolean(ServerProperties.getProperty("KinMS.RandDrop"))) {
 //            ChannelServer.getInstance(1).getMapFactory().getMap(910000000).spawnRandDrop();
@@ -217,8 +216,8 @@ public class Start {
     }
 
     // 自动检测物品和金币
+
     /**
-     *
      * @param interval
      */
     public static void 自动检测(int interval) {
@@ -284,7 +283,6 @@ public class Start {
     }
 
     /**
-     *
      * @param time
      */
     public static void 自动存档(int time) {
@@ -310,7 +308,6 @@ public class Start {
     }
 
     /**
-     *
      * @param time
      */
     public static void 开启双倍(int time) {
@@ -349,7 +346,6 @@ public class Start {
     }
 
     /**
-     *
      * @param time
      */
     public static void 刷新地图(int time) {
@@ -389,7 +385,6 @@ public class Start {
     }
 
     /**
-     *
      * @param time
      */
     public static void 防万能(int time) {
@@ -409,7 +404,6 @@ public class Start {
     }
 
     /**
-     *
      * @param time
      */
     public static void 在线统计(int time) {
@@ -420,7 +414,7 @@ public class Start {
             public void run() {
                 Map connected = World.getConnected();
                 StringBuilder conStr = new StringBuilder(new StringBuilder().append(FileoutputUtil.CurrentReadable_Time()).append(" 在线人数: ").toString());
-                for (Iterator i$ = connected.keySet().iterator(); i$.hasNext();) {
+                for (Iterator i$ = connected.keySet().iterator(); i$.hasNext(); ) {
                     int i = ((Integer) i$.next());
                     if (i == 0) {
                         int users = ((Integer) connected.get(i));
@@ -442,7 +436,6 @@ public class Start {
     }
 
     /**
-     *
      * @param time
      */
     public static void 在线时间(int time) {
@@ -496,7 +489,6 @@ public class Start {
     }
 
     /**
-     *
      * @param property
      */
     public static void 设置白名单(String property) {
@@ -524,7 +516,6 @@ public class Start {
     }
 
     /**
-     *
      * @param time
      */
     public static void 回收内存(int time) {
