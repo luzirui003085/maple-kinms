@@ -1,10 +1,6 @@
 package handling.channel.handler;
 
-import client.ISkill;
-import client.MapleBuffStat;
-import client.MapleCharacter;
-import client.PlayerStats;
-import client.SkillFactory;
+import client.*;
 import client.anticheat.CheatTracker;
 import client.anticheat.CheatingOffense;
 import client.inventory.IItem;
@@ -12,16 +8,11 @@ import client.inventory.MapleInventoryType;
 import client.status.MonsterStatus;
 import client.status.MonsterStatusEffect;
 import constants.GameConstants;
-import java.awt.Point;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 import pvp.MaplePvp;
 import server.MapleStatEffect;
 import server.Randomizer;
 import server.Timer.MapTimer;
 import server.life.Element;
-import server.life.MapleLifeFactory;
 import server.life.MapleMonster;
 import server.life.MapleMonsterStats;
 import server.maps.MapleMap;
@@ -34,8 +25,12 @@ import tools.MaplePacketCreator;
 import tools.Pair;
 import tools.data.input.LittleEndianAccessor;
 
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 /**
- *
  * @author zjj
  */
 public class DamageParse {
@@ -48,7 +43,6 @@ public class DamageParse {
     public static MapleMonster pvpMob;
 
     /**
-     *
      * @param attack
      * @param theSkill
      * @param player
@@ -61,6 +55,9 @@ public class DamageParse {
         if (!player.isAlive()) {
             player.getCheatTracker().registerOffense(CheatingOffense.ATTACKING_WHILE_DEAD);
             return;
+        }
+        if (attack.real) {
+            player.getCheatTracker().checkAttack(attack.skill, attack.lastAttackTickCount);
         }
         if (attack.skill != 0) {
             if (effect == null) {
@@ -241,6 +238,9 @@ public class DamageParse {
                 }
                 totDamage += totDamageToOneMonster;
                 player.checkMonsterAggro(monster);
+                if (player.getGMLevel() >= 6) {
+                    player.dropMessage("你与攻击怪物的距离是 [" + player.getPosition().distanceSq(monster.getPosition()) + "]");
+                }
                 if (player.getPosition().distanceSq(monster.getPosition()) > 700000.0) { // 815^2 <-- the most ranged attack in the game is Flame Wheel at 815 range
                     player.getCheatTracker().registerOffense(CheatingOffense.ATTACK_FARAWAY_MONSTER); // , Double.toString(Math.sqrt(distance))
                 }
@@ -486,7 +486,6 @@ public class DamageParse {
     }
 
     /**
-     *
      * @param attack
      * @param theSkill
      * @param player
@@ -865,7 +864,6 @@ public class DamageParse {
     }
 
     /**
-     *
      * @param attack
      * @param rate
      * @return
@@ -886,7 +884,6 @@ public class DamageParse {
     }
 
     /**
-     *
      * @param attack
      * @param chr
      * @param type
@@ -924,7 +921,6 @@ public class DamageParse {
     }
 
     /**
-     *
      * @param lea
      * @param chr
      * @return
@@ -988,7 +984,6 @@ public class DamageParse {
     }
 
     /**
-     *
      * @param lea
      * @param chr
      * @return
@@ -1056,7 +1051,6 @@ public class DamageParse {
     }
 
     /**
-     *
      * @param lea
      * @param chr
      * @return
@@ -1125,7 +1119,6 @@ public class DamageParse {
     }
 
     /**
-     *
      * @param lea
      * @param ret
      * @param chr
@@ -1174,7 +1167,6 @@ public class DamageParse {
     }
 
     /**
-     *
      * @param c
      * @param monster
      * @param ret
@@ -1203,7 +1195,6 @@ public class DamageParse {
     }
 
     /**
-     *
      * @param c
      * @param monster
      * @param ret
@@ -1349,7 +1340,6 @@ public class DamageParse {
     }
 
     /**
-     *
      * @param c
      * @param damage
      * @param ret
@@ -1376,7 +1366,6 @@ public class DamageParse {
     }
 
     /**
-     *
      * @param c
      * @param damage
      * @return
@@ -1455,7 +1444,6 @@ public class DamageParse {
     }
 
     /**
-     *
      * @param c
      * @param damage
      * @param ret

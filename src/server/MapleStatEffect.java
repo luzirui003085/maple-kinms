@@ -1,13 +1,6 @@
 package server;
 
-import client.ISkill;
-import client.MapleBuffStat;
-import client.MapleCharacter;
-import client.MapleCoolDownValueHolder;
-import client.MapleDisease;
-import client.MapleStat;
-import client.PlayerStats;
-import client.SkillFactory;
+import client.*;
 import client.inventory.IItem;
 import client.inventory.MapleInventory;
 import client.inventory.MapleInventoryType;
@@ -15,33 +8,21 @@ import client.status.MonsterStatus;
 import client.status.MonsterStatusEffect;
 import constants.GameConstants;
 import handling.channel.ChannelServer;
-
-import java.awt.Point;
-import java.awt.Rectangle;
-import java.io.Serializable;
-import java.lang.ref.WeakReference;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.EnumMap;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ScheduledFuture;
-
 import provider.MapleData;
 import provider.MapleDataTool;
 import server.MapleCarnivalFactory.MCSkill;
 import server.Timer.BuffTimer;
 import server.life.MapleMonster;
-import server.maps.MapleDoor;
-import server.maps.MapleMap;
-import server.maps.MapleMapObject;
-import server.maps.MapleMapObjectType;
-import server.maps.MapleMist;
-import server.maps.MapleSummon;
-import server.maps.SummonMovementType;
+import server.maps.*;
 import tools.MaplePacketCreator;
 import tools.Pair;
+
+import java.awt.*;
+import java.io.Serializable;
+import java.lang.ref.WeakReference;
+import java.util.*;
+import java.util.List;
+import java.util.concurrent.ScheduledFuture;
 
 /**
  * @author zjj
@@ -787,11 +768,11 @@ public class MapleStatEffect implements Serializable {
      * @return
      */
     public final boolean applyTo(final MapleCharacter applyfrom, final MapleCharacter applyto, final boolean primary, final Point pos, int newDuration) {
-        if (isBeholder()) {
-            applyfrom.dropMessage(-2, "技能修复中");
-            applyfrom.getClient().getSession().write(MaplePacketCreator.enableActions());
-            return false;
-        }
+//        if (isBeholder()) {
+//            applyfrom.dropMessage(-2, "技能修复中");
+//            applyfrom.getClient().getSession().write(MaplePacketCreator.enableActions());
+//            return false;
+//        }
         int mapid = applyto.getMapId();
         int channelid = applyto.getClient().getChannel();
         boolean inPVPmode = mapid == GameConstants.PVP_MAP && channelid == GameConstants.PVP_CHANEL;
@@ -842,24 +823,30 @@ public class MapleStatEffect implements Serializable {
 
         if (inPVPmode && skill == false && hpchange > 0 && mpchange > 0) {
             applyfrom.dropMessage("PK地图不能加血加蓝!!!");
-        } else {
-            if (hpchange != 0) {
-                if (hpchange < 0 && (-hpchange) > stat.getHp() && !applyto.hasDisease(MapleDisease.ZOMBIFY)) {
-                    return false;
-                }
-
-                stat.setHp(stat.getHp() + hpchange);
-            }
-            if (mpchange != 0) {
-                if (mpchange < 0 && (-mpchange) > stat.getMp()) {
-                    return false;
-                }
-                //short converting needs math.min cuz of overflow
-                stat.setMp(stat.getMp() + mpchange);
-            }
+            applyfrom.getClient().getSession().write(MaplePacketCreator.enableActions());
+            return false;
         }
-        hpmpupdate.add(new Pair<>(MapleStat.HP, Integer.valueOf(stat.getHp())));
-        hpmpupdate.add(new Pair<>(MapleStat.MP, Integer.valueOf(stat.getMp())));
+        if (hpchange != 0) {
+            if (hpchange < 0 && (-hpchange) > stat.getHp() && !applyto.hasDisease(MapleDisease.ZOMBIFY)) {
+                applyfrom.getClient().getSession().write(MaplePacketCreator.enableActions());
+                return false;
+            }
+
+            stat.setHp(stat.getHp() + hpchange);
+        }
+
+        if (mpchange <= 0 && (-mpchange) > stat.getMp()) {
+            applyto.dropMessage("invalid mp loss!!!!");
+            applyto.getClient().getSession().write(MaplePacketCreator.enableActions());
+            return false;
+        }
+        //short converting needs math.min cuz of overflow
+        if (mpchange != 0) {
+            stat.setMp(stat.getMp() + mpchange);
+        }
+
+        hpmpupdate.add(new Pair<>(MapleStat.HP, (int) stat.getHp()));
+        hpmpupdate.add(new Pair<>(MapleStat.MP, (int) stat.getMp()));
 
         applyto.getClient().getSession().write(MaplePacketCreator.updatePlayerStats(hpmpupdate, true, applyto.getJob()));
 

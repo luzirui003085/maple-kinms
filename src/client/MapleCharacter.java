@@ -1883,7 +1883,7 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
         } else if (effect.isMonsterRiding_()) {
             getMount().startSchedule();
         } else if (effect.isBeholder()) {
-            // prepareBeholderEffect();
+            prepareBeholderEffect();
         }
         int clonez = 0;
         for (Pair<MapleBuffStat, Integer> statup : statups) {
@@ -5730,9 +5730,9 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
                         addHP(healEffect.getHp());
                     }
                     // 去掉广播效果
-                    // client.getSession().write(MaplePacketCreator.showOwnBuffEffect(1321007, 2));
-                    // map.broadcastMessage(MaplePacketCreator.summonSkill(getId(), 1321007, 5));
-                    // map.broadcastMessage(MapleCharacter.this, MaplePacketCreator.showBuffeffect(getId(), 1321007, 2), false);
+                    client.getSession().write(MaplePacketCreator.showOwnBuffEffect(1321007, 2));
+                    map.broadcastMessage(MaplePacketCreator.summonSkill(getId(), 1321007, 5));
+                    map.broadcastMessage(MapleCharacter.this, MaplePacketCreator.showBuffeffect(getId(), 1321007, 2), false);
                 }
             }, healInterval, healInterval);
         }
@@ -5747,9 +5747,9 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
                 public void run() {
                     buffEffect.applyTo(MapleCharacter.this);
                     // 去掉广播效果
-                    // client.getSession().write(MaplePacketCreator.showOwnBuffEffect(1321007, 2));
-                    // map.broadcastMessage(MaplePacketCreator.summonSkill(getId(), 1321007, Randomizer.nextInt(3) + 6));
-                    // map.broadcastMessage(MapleCharacter.this, MaplePacketCreator.showBuffeffect(getId(), 1321007, 2), false);
+                    client.getSession().write(MaplePacketCreator.showOwnBuffEffect(1321007, 2));
+                    map.broadcastMessage(MaplePacketCreator.summonSkill(getId(), 1321007, Randomizer.nextInt(3) + 6));
+                    map.broadcastMessage(MapleCharacter.this, MaplePacketCreator.showBuffeffect(getId(), 1321007, 2), false);
                 }
             }, buffInterval, buffInterval);
         }

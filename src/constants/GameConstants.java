@@ -5,17 +5,18 @@ import client.inventory.MapleInventoryType;
 import client.inventory.MapleWeaponType;
 import client.status.MonsterStatus;
 import handling.login.Balloon;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
+
 import server.Randomizer;
 import server.ServerProperties;
 import server.maps.MapleMapObjectType;
 
 /**
- *
  * @author zjj
  */
 public class GameConstants {
@@ -43,30 +44,30 @@ public class GameConstants {
             MapleMapObjectType.LOVE,
             MapleMapObjectType.MIST));
     private static final int[] exp = {0, 15, 34, 57, 92, 135, 372, 560, 840, 1242, 1716,
-        2360, 3216, 4200, 5460, 7050, 8840, 11040, 13716, 16680, 20216,
-        24402, 28980, 34320, 40512, 47216, 54900, 63666, 73080, 83720, 95700,
-        108480, 122760, 138666, 155540, 174216, 194832, 216600, 240500, 266682, 294216,
-        324240, 356916, 391160, 428280, 468450, 510420, 555680, 604416, 655200, 709716, // 51等到這
-        748608, 789631, 832902, 878545, 926689, 977471, 1031036, 1087536, 1147132, 1209994,
-        1276301, 1346242, 1420016, 1497832, 1579913, 1666492, 1757815, 1854143, 1955750, 2062925, // 71等到這
-        2175973, 2295216, 2410993, 2553663, 2693603, 2841212, 2996910, 3161140, 3334370, 3517093,
-        3709829, 3913127, 4127566, 4353756, 4592341, 4844001, 5109452, 5389449, 5684790, 5996316,
-        6324914, 6671519, 7037118, 7422752, 7829518, 8258575, 8711144, 9188514, 9692044, 10223168, // 101等到這
-        10783397, 11374327, 11997640, 12655110, 13348610, 14080113, 14851703, 15665576, 16524049, 17429566,
-        18384706, 19392187, 20454878, 21575805, 22758159, 24005306, 25320796, 26708375, 28171993, 29715818,//121等到這
-        31344244, 33061908, 34873700, 36784778, 38800583, 40926854, 43169645, 45535341, 48030677, 50662758,//131等到這
-        53439077, 56367538, 59456479, 62714694, 66151459, 69776558, 73600313, 77633610, 81887931, 86375389,//141等到這
-        91108760, 96101520, 101367883, 106922842, 112782213, 118962678, 125481832, 132358236, 139611467, 147262175,//151等到這
-        155332142, 163844343, 172823012, 182293713, 192283408, 202820538, 213935103, 225658746, 238024845, 251068606, //160
-        264827165, 279339693, 294647508, 310794191, 327825712, 345790561, 364739883, 384727628, 405810702, 428049128, //170
-        451506220, 476248760, 502347192, 529875818, 558913012, 589541445, 621848316, 655925603, 691870326, 729784819,
-        769777027, 811960808, 856456260, 903390063, 952895838, 1005114529, 1060194805, 1118293480, 1179575962, 1244216724,
-        1312399800, 1384319309, 1460180007, 1540197871, 1624600714, 1713628833, 1807535693, 1906588648, 2011069705, 2121276324};
+            2360, 3216, 4200, 5460, 7050, 8840, 11040, 13716, 16680, 20216,
+            24402, 28980, 34320, 40512, 47216, 54900, 63666, 73080, 83720, 95700,
+            108480, 122760, 138666, 155540, 174216, 194832, 216600, 240500, 266682, 294216,
+            324240, 356916, 391160, 428280, 468450, 510420, 555680, 604416, 655200, 709716, // 51等到這
+            748608, 789631, 832902, 878545, 926689, 977471, 1031036, 1087536, 1147132, 1209994,
+            1276301, 1346242, 1420016, 1497832, 1579913, 1666492, 1757815, 1854143, 1955750, 2062925, // 71等到這
+            2175973, 2295216, 2410993, 2553663, 2693603, 2841212, 2996910, 3161140, 3334370, 3517093,
+            3709829, 3913127, 4127566, 4353756, 4592341, 4844001, 5109452, 5389449, 5684790, 5996316,
+            6324914, 6671519, 7037118, 7422752, 7829518, 8258575, 8711144, 9188514, 9692044, 10223168, // 101等到這
+            10783397, 11374327, 11997640, 12655110, 13348610, 14080113, 14851703, 15665576, 16524049, 17429566,
+            18384706, 19392187, 20454878, 21575805, 22758159, 24005306, 25320796, 26708375, 28171993, 29715818,//121等到這
+            31344244, 33061908, 34873700, 36784778, 38800583, 40926854, 43169645, 45535341, 48030677, 50662758,//131等到這
+            53439077, 56367538, 59456479, 62714694, 66151459, 69776558, 73600313, 77633610, 81887931, 86375389,//141等到這
+            91108760, 96101520, 101367883, 106922842, 112782213, 118962678, 125481832, 132358236, 139611467, 147262175,//151等到這
+            155332142, 163844343, 172823012, 182293713, 192283408, 202820538, 213935103, 225658746, 238024845, 251068606, //160
+            264827165, 279339693, 294647508, 310794191, 327825712, 345790561, 364739883, 384727628, 405810702, 428049128, //170
+            451506220, 476248760, 502347192, 529875818, 558913012, 589541445, 621848316, 655925603, 691870326, 729784819,
+            769777027, 811960808, 856456260, 903390063, 952895838, 1005114529, 1060194805, 1118293480, 1179575962, 1244216724,
+            1312399800, 1384319309, 1460180007, 1540197871, 1624600714, 1713628833, 1807535693, 1906588648, 2011069705, 2121276324};
     private static final int[] closeness = {0, 1, 3, 6, 14, 31, 60, 108, 181, 287, 434, 632, 891, 1224, 1642, 2161, 2793,
-        3557, 4467, 5542, 6801, 8263, 9950, 11882, 14084, 16578, 19391, 22547, 26074,
-        30000};
+            3557, 4467, 5542, 6801, 8263, 9950, 11882, 14084, 16578, 19391, 22547, 26074,
+            30000};
     private static final int[] mountexp = {0, 6, 25, 50, 105, 134, 196, 254, 263, 315, 367, 430, 543, 587, 679, 725, 897, 1146, 1394, 1701, 2247,
-        2543, 2898, 3156, 3313, 3584, 3923, 4150, 4305, 4550};
+            2543, 2898, 3156, 3313, 3584, 3923, 4150, 4305, 4550};
 
     /**
      *
@@ -77,13 +78,13 @@ public class GameConstants {
      *
      */
     public static final int[] cashBlock = {5062000, 5650000, 5431000, 5431001, 5432000, 5450000, 5550000, 5550001, 5640000, 5530013, 5150039, 5150046, 5150054, 1812006, 5650000, 5222000, 5221001, 5220014, 5220015, 5420007, 5451000,
-        5210000, 5210001, 5210002, 5210003, 5210004, 5210005, 5210006, 5210007, 5210008, 5210009, 5210010, 5210011, 5211000, 5211001, 5211002, 5211003, 5211004, 5211005, 5211006, 5211007, 5211008, 5211009, 5211010, 5211011, 5211012, 5211013, 5211014, 5211015, 5211016, 5211017, 5211018,
-        5211019, 5211020, 5211021, 5211022, 5211023, 5211024, 5211025, 5211026, 5211027, 5211028, 5211029, 5211030, 5211031, 5211032, 5211033, 5211034, 5211035, 5211036, 5211037, 5211038, 5211039, 5211040, 5211041, 5211042, 5211043,
-        5211044, 5211045, 5211046, 5211047, 5211048, 5211049, 5211050, 5211051, 5211052, 5211053, 5211054, 5211055, 5211056, 5211057, 5211058, 5211059, 5211060, 5211061,//2x exp
-        5360000, 5360001, 5360002, 5360003, 5360004, 5360005, 5360006, 5360007, 5360008, 5360009, 5360010, 5360011, 5360012, 5360013, 5360014, 5360017, 5360050, 5211050, 5360042, 5360052, 5360053, 5360050, //2x drop
-        1112810, 1112811, 5530013, 4001431, 4001432, 4032605,
-        5270000, 5270001, 5270002, 5270003, 5270004, 5270005, 5270006, //2x meso
-        9102328, 9102329, 9102330, 9102331, 9102332, 9102333}; //miracle cube and stuff
+            5210000, 5210001, 5210002, 5210003, 5210004, 5210005, 5210006, 5210007, 5210008, 5210009, 5210010, 5210011, 5211000, 5211001, 5211002, 5211003, 5211004, 5211005, 5211006, 5211007, 5211008, 5211009, 5211010, 5211011, 5211012, 5211013, 5211014, 5211015, 5211016, 5211017, 5211018,
+            5211019, 5211020, 5211021, 5211022, 5211023, 5211024, 5211025, 5211026, 5211027, 5211028, 5211029, 5211030, 5211031, 5211032, 5211033, 5211034, 5211035, 5211036, 5211037, 5211038, 5211039, 5211040, 5211041, 5211042, 5211043,
+            5211044, 5211045, 5211046, 5211047, 5211048, 5211049, 5211050, 5211051, 5211052, 5211053, 5211054, 5211055, 5211056, 5211057, 5211058, 5211059, 5211060, 5211061,//2x exp
+            5360000, 5360001, 5360002, 5360003, 5360004, 5360005, 5360006, 5360007, 5360008, 5360009, 5360010, 5360011, 5360012, 5360013, 5360014, 5360017, 5360050, 5211050, 5360042, 5360052, 5360053, 5360050, //2x drop
+            1112810, 1112811, 5530013, 4001431, 4001432, 4032605,
+            5270000, 5270001, 5270002, 5270003, 5270004, 5270005, 5270006, //2x meso
+            9102328, 9102329, 9102330, 9102331, 9102332, 9102333}; //miracle cube and stuff
 
     /**
      *
@@ -122,7 +123,6 @@ public class GameConstants {
     // 5 糖果单机
 
     /**
-     *
      * @param level
      * @return
      */
@@ -134,7 +134,6 @@ public class GameConstants {
     }
 
     /**
-     *
      * @param level
      * @return
      */
@@ -143,7 +142,6 @@ public class GameConstants {
     }
 
     /**
-     *
      * @param level
      * @return
      */
@@ -152,7 +150,6 @@ public class GameConstants {
     }
 
     /**
-     *
      * @param level
      * @return
      */
@@ -161,7 +158,6 @@ public class GameConstants {
     }
 
     /**
-     *
      * @param level
      * @return
      */
@@ -170,7 +166,6 @@ public class GameConstants {
     }
 
     /**
-     *
      * @param level
      * @return
      */
@@ -179,7 +174,6 @@ public class GameConstants {
     }
 
     /**
-     *
      * @return
      */
     public static int maxViewRangeSq() {
@@ -188,7 +182,6 @@ public class GameConstants {
     }
 
     /**
-     *
      * @param baseJob
      * @param currentJob
      * @return
@@ -198,7 +191,6 @@ public class GameConstants {
     }
 
     /**
-     *
      * @param job
      * @return
      */
@@ -207,7 +199,6 @@ public class GameConstants {
     }
 
     /**
-     *
      * @param job
      * @return
      */
@@ -216,7 +207,6 @@ public class GameConstants {
     }
 
     /**
-     *
      * @param job
      * @return
      */
@@ -225,7 +215,6 @@ public class GameConstants {
     }
 
     /**
-     *
      * @param job
      * @return
      */
@@ -234,7 +223,6 @@ public class GameConstants {
     }
 
     /**
-     *
      * @param job
      * @return
      */
@@ -243,7 +231,6 @@ public class GameConstants {
     }
 
     /**
-     *
      * @param id
      * @return
      */
@@ -261,7 +248,6 @@ public class GameConstants {
     }
 
     /**
-     *
      * @param id
      * @return
      */
@@ -270,7 +256,6 @@ public class GameConstants {
     }
 
     /**
-     *
      * @param id
      * @return
      */
@@ -300,7 +285,6 @@ public class GameConstants {
     }
 
     /**
-     *
      * @param job
      * @return
      */
@@ -318,7 +302,6 @@ public class GameConstants {
     }
 
     /**
-     *
      * @param skill
      * @return
      */
@@ -334,7 +317,6 @@ public class GameConstants {
     }
 
     /**
-     *
      * @param job
      * @return
      */
@@ -357,7 +339,6 @@ public class GameConstants {
     }
 
     /**
-     *
      * @param job
      * @return
      */
@@ -384,7 +365,6 @@ public class GameConstants {
     }
 
     /**
-     *
      * @param skill
      * @return
      */
@@ -401,7 +381,6 @@ public class GameConstants {
     }
 
     /**
-     *
      * @param skill
      * @return
      */
@@ -428,7 +407,6 @@ public class GameConstants {
     }
 
     /**
-     *
      * @param itemId
      * @return
      */
@@ -438,7 +416,6 @@ public class GameConstants {
     }
 
     /**
-     *
      * @param itemId
      * @return
      */
@@ -447,7 +424,6 @@ public class GameConstants {
     }
 
     /**
-     *
      * @param itemId
      * @return
      */
@@ -456,7 +432,6 @@ public class GameConstants {
     }
 
     /**
-     *
      * @param itemId
      * @return
      */
@@ -465,7 +440,6 @@ public class GameConstants {
     }
 
     /**
-     *
      * @param itemId
      * @return
      */
@@ -474,7 +448,6 @@ public class GameConstants {
     }
 
     /**
-     *
      * @param itemId
      * @return
      */
@@ -483,7 +456,6 @@ public class GameConstants {
     }
 
     /**
-     *
      * @param itemId
      * @return
      */
@@ -492,7 +464,6 @@ public class GameConstants {
     }
 
     /**
-     *
      * @param itemId
      * @return
      */
@@ -502,7 +473,6 @@ public class GameConstants {
     }
 
     /**
-     *
      * @param itemId
      * @return
      */
@@ -511,7 +481,6 @@ public class GameConstants {
     }
 
     /**
-     *
      * @param itemId
      * @return
      */
@@ -524,7 +493,6 @@ public class GameConstants {
     }
 
     /**
-     *
      * @param itemId
      * @return
      */
@@ -571,7 +539,6 @@ public class GameConstants {
     }
 
     /**
-     *
      * @param itemId
      * @return
      */
@@ -582,7 +549,6 @@ public class GameConstants {
     }
 
     /**
-     *
      * @param itemId
      * @return
      */
@@ -591,7 +557,6 @@ public class GameConstants {
     }
 
     /**
-     *
      * @param itemId
      * @return
      */
@@ -600,7 +565,6 @@ public class GameConstants {
     }
 
     /**
-     *
      * @param itemId
      * @return
      */
@@ -609,7 +573,6 @@ public class GameConstants {
     }
 
     /**
-     *
      * @param itemId
      * @return
      */
@@ -621,7 +584,6 @@ public class GameConstants {
     }
 
     /**
-     *
      * @param itemId
      * @return
      */
@@ -630,7 +592,6 @@ public class GameConstants {
     }
 
     /**
-     *
      * @param scrollId
      * @return
      */
@@ -639,7 +600,6 @@ public class GameConstants {
     }
 
     /**
-     *
      * @param scrollId
      * @return
      */
@@ -648,7 +608,6 @@ public class GameConstants {
     }
 
     /**
-     *
      * @param scrollId
      * @return
      */
@@ -657,7 +616,6 @@ public class GameConstants {
     }
 
     /**
-     *
      * @param scrollId
      * @return
      */
@@ -671,7 +629,6 @@ public class GameConstants {
     }
 
     /**
-     *
      * @param itemId
      * @return
      */
@@ -694,7 +651,6 @@ public class GameConstants {
     }
 
     /**
-     *
      * @param id
      * @return
      */
@@ -703,7 +659,6 @@ public class GameConstants {
     }
 
     /**
-     *
      * @param id
      * @return
      */
@@ -712,7 +667,6 @@ public class GameConstants {
     }
 
     /**
-     *
      * @param id
      * @return
      */
@@ -721,7 +675,6 @@ public class GameConstants {
     }
 
     /**
-     *
      * @param id
      * @return
      */
@@ -730,7 +683,6 @@ public class GameConstants {
     }
 
     /**
-     *
      * @param id
      * @return
      */
@@ -739,7 +691,6 @@ public class GameConstants {
     }
 
     /**
-     *
      * @param id
      * @return
      */
@@ -748,7 +699,6 @@ public class GameConstants {
     }
 
     /**
-     *
      * @param id
      * @return
      */
@@ -757,7 +707,6 @@ public class GameConstants {
     }
 
     /**
-     *
      * @param id
      * @return
      */
@@ -766,7 +715,6 @@ public class GameConstants {
     }
 
     /**
-     *
      * @param id
      * @return
      */
@@ -775,7 +723,6 @@ public class GameConstants {
     }
 
     /**
-     *
      * @param id
      * @return
      */
@@ -808,7 +755,6 @@ public class GameConstants {
     }
 
     /**
-     *
      * @param id
      * @return
      */
@@ -817,7 +763,6 @@ public class GameConstants {
     }
 
     /**
-     *
      * @param meso
      * @return
      */
@@ -839,7 +784,6 @@ public class GameConstants {
     }
 
     /**
-     *
      * @param meso
      * @return
      */
@@ -861,7 +805,6 @@ public class GameConstants {
     }
 
     /**
-     *
      * @param id
      * @return
      */
@@ -899,25 +842,24 @@ public class GameConstants {
     }
 
     /**
-     *
      * @param id
      * @return
      */
     public static short getAttackDelay(final int id) {
         switch (id) { // Assume it's faster(2)
-            case 4321001: //tornado spin
+            case 4321001: // 龙卷风(攻击)
                 return 40; //reason being you can spam with final assaulter
-            case 3121004: // Storm of Arrow
-            case 33121009:
-            case 13111002: // Storm of Arrow
-            case 5221004: // Rapidfire
+            case 3121004: // 暴风箭雨
+            case 33121009: // 奥义箭乱舞
+            case 13111002: // 暴风箭雨
+            case 5221004: // 金属风暴
             case 4221001: // 暗杀
-            case 5201006: // Recoil shot/ Back stab shot
+            case 5201006: // 激退射杀
                 return 120;
-            case 13101005: // Storm Break
+            case 13101005: // 暴风射击
                 return 360;
-            case 5001003: // Double Fire
-            case 2301002: // Heal
+            case 5001003: // 双弹射击
+            case 2301002: // 群体治愈
                 return 390;
             case 5001001: // Straight/ Flash Fist
             case 15001001: // Straight/ Flash Fist
@@ -978,13 +920,14 @@ public class GameConstants {
                 return 600;
             case 5201004: // Blank Shot/ Fake shot
             case 5211000: // Burst Fire/ Triple Fire
-            case 5001002: // Sommersault Kick
-            case 15001002: // Sommersault Kick
             case 4221007: // Boomerang Stab
             case 1311001: // Spear Crusher, 16~30 pts = 810
             case 1311002: // PA Crusher, 16~30 pts = 810
             case 2221006: // Chain Lightning
                 return 660;
+            case 5001002: // 半月提
+            case 15001002: // 半月提
+                return 400;
             case 4121008: // Ninja Storm
             case 5211006: // Homing Beacon
             case 5221008: // Battleship Torpedo
@@ -997,7 +940,6 @@ public class GameConstants {
             case 2221001: // Big Bang
             case 2321001: // Big Bang
             case 2321007: // Angel's Ray
-            case 2201005: // Thunderbolt
             case 2201004: // Cold Beam
             case 2211002: // Ice Strike
             case 4211006: // Meso Explosion
@@ -1005,6 +947,8 @@ public class GameConstants {
             case 12111006: // Fire Strike
             case 11101004: // Soul Blade
                 return 750;
+            case 2201005: // 雷电术
+                return 400;
             case 15111007: // Shark Wave
             case 2111006: // Elemental Composition
             case 2211006: // Elemental Composition
@@ -1057,7 +1001,6 @@ public class GameConstants {
     }
 
     /**
-     *
      * @param id
      * @return
      */
@@ -1134,290 +1077,289 @@ public class GameConstants {
      *
      */
     public final static int[] goldrewards = {
-        2340000, 1, // white scroll
-        2070018, 1, // balance fury 沒有的物品
-        1402037, 1, // Rigbol Sword
-        2290096, 1, // Maple Warrior 20
-        2290049, 1, // Genesis 30
-        2290041, 1, // Meteo 30
-        2290047, 1, // Blizzard 30
-        2290095, 1, // Smoke 30
-        2290017, 1, // Enrage 30
-        2290075, 1, // Snipe 30
-        2290085, 1, // Triple Throw 30
-        2290116, 1, // Areal Strike
-        1302059, 3, // Dragon Carabella
-        2049100, 1, // Chaos Scroll
-        2340000, 1, // White Scroll
-        1092049, 1, // Dragon Kanjar
-        1102041, 1, // Pink Cape
-        1432018, 3, // Sky Ski
-        1022047, 3, // Owl Mask
-        3010051, 1, // Chair
-        3010020, 1, // Portable meal table
-        2040914, 1, // Shield for Weapon Atk
+            2340000, 1, // white scroll
+            2070018, 1, // balance fury 沒有的物品
+            1402037, 1, // Rigbol Sword
+            2290096, 1, // Maple Warrior 20
+            2290049, 1, // Genesis 30
+            2290041, 1, // Meteo 30
+            2290047, 1, // Blizzard 30
+            2290095, 1, // Smoke 30
+            2290017, 1, // Enrage 30
+            2290075, 1, // Snipe 30
+            2290085, 1, // Triple Throw 30
+            2290116, 1, // Areal Strike
+            1302059, 3, // Dragon Carabella
+            2049100, 1, // Chaos Scroll
+            2340000, 1, // White Scroll
+            1092049, 1, // Dragon Kanjar
+            1102041, 1, // Pink Cape
+            1432018, 3, // Sky Ski
+            1022047, 3, // Owl Mask
+            3010051, 1, // Chair
+            3010020, 1, // Portable meal table
+            2040914, 1, // Shield for Weapon Atk
 
-        1432011, 3, // Fair Frozen
-        1442020, 3, // HellSlayer
-        1382035, 3, // Blue Marine
-        1372010, 3, // Dimon Wand
-        1332027, 3, // Varkit
-        1302056, 3, // Sparta
-        1402005, 3, // Bezerker
-        1472053, 3, // Red Craven
-        1462018, 3, // Casa Crow
-        1452017, 3, // Metus
-        1422013, 3, // Lemonite
-        1322029, 3, // Ruin Hammer
-        1412010, 3, // Colonian Axe
+            1432011, 3, // Fair Frozen
+            1442020, 3, // HellSlayer
+            1382035, 3, // Blue Marine
+            1372010, 3, // Dimon Wand
+            1332027, 3, // Varkit
+            1302056, 3, // Sparta
+            1402005, 3, // Bezerker
+            1472053, 3, // Red Craven
+            1462018, 3, // Casa Crow
+            1452017, 3, // Metus
+            1422013, 3, // Lemonite
+            1322029, 3, // Ruin Hammer
+            1412010, 3, // Colonian Axe
 
-        1472051, 1, // Green Dragon Sleeve
-        1482013, 1, // Emperor's Claw
-        1492013, 1, // Dragon fire Revlover
+            1472051, 1, // Green Dragon Sleeve
+            1482013, 1, // Emperor's Claw
+            1492013, 1, // Dragon fire Revlover
 
-        1382050, 1, // Blue Dragon Staff
-        1382045, 1, // Fire Staff, Level 105
-        1382047, 1, // Ice Staff, Level 105
-        1382048, 1, // Thunder Staff
-        1382046, 1, // Poison Staff
+            1382050, 1, // Blue Dragon Staff
+            1382045, 1, // Fire Staff, Level 105
+            1382047, 1, // Ice Staff, Level 105
+            1382048, 1, // Thunder Staff
+            1382046, 1, // Poison Staff
 
-        1332032, 4, // Christmas Tree
-        1482025, 3, // Flowery Tube
+            1332032, 4, // Christmas Tree
+            1482025, 3, // Flowery Tube
 
-        4001011, 4, // Lupin Eraser
-        4001010, 4, // Mushmom Eraser
-        4001009, 4, // Stump Eraser
+            4001011, 4, // Lupin Eraser
+            4001010, 4, // Mushmom Eraser
+            4001009, 4, // Stump Eraser
 
-        2030008, 5, // Bottle, return scroll
-        1442018, 3, // Frozen Tuna
-        2040900, 4, // Shield for DEF
-        2000005, 10, // Power Elixir
-        2000004, 10, // Elixir
-        4280000, 4}; // Gold Box
+            2030008, 5, // Bottle, return scroll
+            1442018, 3, // Frozen Tuna
+            2040900, 4, // Shield for DEF
+            2000005, 10, // Power Elixir
+            2000004, 10, // Elixir
+            4280000, 4}; // Gold Box
 
     /**
      *
      */
     public final static int[] silverrewards = {
-        3010041, 1, // skull throne
-        1002452, 3, // Starry Bandana
-        1002455, 3, // Starry Bandana
-        2290084, 1, // Triple Throw 20
-        2290048, 1, // Genesis 20
-        2290040, 1, // Meteo 20
-        2290046, 1, // Blizzard 20
-        2290074, 1, // Sniping 20
-        2290064, 1, // Concentration 20
-        2290094, 1, // Smoke 20
-        2290022, 1, // Berserk 20
-        2290056, 1, // Bow Expert 30
-        2290066, 1, // xBow Expert 30
-        2290020, 1, // Sanc 20
-        1102082, 1, // Black Raggdey Cape
-        1302049, 1, // Glowing Whip
-        2340000, 1, // White Scroll
-        1102041, 1, // Pink Cape
-        1452019, 2, // White Nisrock
-        4001116, 3, // Hexagon Pend
-        4001012, 3, // Wraith Eraser
-        1022060, 2, // Foxy Racoon Eye
+            3010041, 1, // skull throne
+            1002452, 3, // Starry Bandana
+            1002455, 3, // Starry Bandana
+            2290084, 1, // Triple Throw 20
+            2290048, 1, // Genesis 20
+            2290040, 1, // Meteo 20
+            2290046, 1, // Blizzard 20
+            2290074, 1, // Sniping 20
+            2290064, 1, // Concentration 20
+            2290094, 1, // Smoke 20
+            2290022, 1, // Berserk 20
+            2290056, 1, // Bow Expert 30
+            2290066, 1, // xBow Expert 30
+            2290020, 1, // Sanc 20
+            1102082, 1, // Black Raggdey Cape
+            1302049, 1, // Glowing Whip
+            2340000, 1, // White Scroll
+            1102041, 1, // Pink Cape
+            1452019, 2, // White Nisrock
+            4001116, 3, // Hexagon Pend
+            4001012, 3, // Wraith Eraser
+            1022060, 2, // Foxy Racoon Eye
 
-        1432011, 3, // Fair Frozen
-        1442020, 3, // HellSlayer
-        1382035, 3, // Blue Marine
-        1372010, 3, // Dimon Wand
-        1332027, 3, // Varkit
-        1302056, 3, // Sparta
-        1402005, 3, // Bezerker
-        1472053, 3, // Red Craven
-        1462018, 3, // Casa Crow
-        1452017, 3, // Metus
-        1422013, 3, // Lemonite
-        1322029, 3, // Ruin Hammer
-        1412010, 3, // Colonian Axe
+            1432011, 3, // Fair Frozen
+            1442020, 3, // HellSlayer
+            1382035, 3, // Blue Marine
+            1372010, 3, // Dimon Wand
+            1332027, 3, // Varkit
+            1302056, 3, // Sparta
+            1402005, 3, // Bezerker
+            1472053, 3, // Red Craven
+            1462018, 3, // Casa Crow
+            1452017, 3, // Metus
+            1422013, 3, // Lemonite
+            1322029, 3, // Ruin Hammer
+            1412010, 3, // Colonian Axe
 
-        1002587, 3, // Black Wisconsin
-        1402044, 1, // Pumpkin lantern
-        2101013, 4, // Summoning Showa boss
-        1442046, 1, // Super Snowboard
-        1422031, 1, // Blue Seal Cushion
-        1332054, 3, // Lonzege Dagger
-        1012056, 3, // Dog Nose
-        1022047, 3, // Owl Mask
-        3012002, 1, // Bathtub
-        1442012, 3, // Sky snowboard
-        1442018, 3, // Frozen Tuna
-        1432010, 3, // Omega Spear
-        1432036, 1, // Fishing Pole 沒用的物品
-        2000005, 10, // Power Elixir
-        2000004, 10, // Elixir
-        4280001, 4}; // Silver Box
+            1002587, 3, // Black Wisconsin
+            1402044, 1, // Pumpkin lantern
+            2101013, 4, // Summoning Showa boss
+            1442046, 1, // Super Snowboard
+            1422031, 1, // Blue Seal Cushion
+            1332054, 3, // Lonzege Dagger
+            1012056, 3, // Dog Nose
+            1022047, 3, // Owl Mask
+            3012002, 1, // Bathtub
+            1442012, 3, // Sky snowboard
+            1442018, 3, // Frozen Tuna
+            1432010, 3, // Omega Spear
+            1432036, 1, // Fishing Pole 沒用的物品
+            2000005, 10, // Power Elixir
+            2000004, 10, // Elixir
+            4280001, 4}; // Silver Box
 
     /**
      *
      */
     public static int[] eventCommonReward = {
-        0, 40,
-        1, 10,
-        //        5060003, 18,
-        //        4170023, 18,
-        4031019, 5,
-        4280000, 3,
-        4280001, 4,
-        5490000, 3,
-        5490001, 4
+            0, 40,
+            1, 10,
+            //        5060003, 18,
+            //        4170023, 18,
+            4031019, 5,
+            4280000, 3,
+            4280001, 4,
+            5490000, 3,
+            5490001, 4
     };
 
     /**
      *
      */
     public static int[] eventUncommonReward = {
-        2, 4,
-        3, 4,
-        5160000, 5,
-        5160001, 5,
-        5160002, 5,
-        5160003, 5,
-        5160004, 5,
-        5160005, 5,
-        5160006, 5,
-        5160007, 5,
-        5160008, 5,
-        5160009, 5,
-        5160010, 5,
-        5160011, 5,
-        5160012, 5,
-        5160013, 5,
-        5240017, 5,
-        5240000, 5,
-        4080000, 5,
-        4080001, 5,
-        4080002, 5,
-        4080003, 5,
-        4080004, 5,
-        4080005, 5,
-        4080006, 5,
-        4080007, 5,
-        4080008, 5,
-        4080009, 5,
-        4080010, 5,
-        4080011, 5,
-        4080100, 5,
-        4031019, 5,
-        5121003, 5,
-        5150000, 5,
-        5150001, 5,
-        5150002, 1,
-        5150003, 1,
-        5150004, 1,
-        5150005, 2,
-        5150006, 2,
-        5150007, 2,
-        5150008, 2,
-        5150009, 14,
-        2022459, 5,
-        2022460, 5,
-        2022461, 5,
-        2022462, 5,
-        2022463, 5,
-        2450000, 2,
-        5152000, 5,
-        5152001, 5
+            2, 4,
+            3, 4,
+            5160000, 5,
+            5160001, 5,
+            5160002, 5,
+            5160003, 5,
+            5160004, 5,
+            5160005, 5,
+            5160006, 5,
+            5160007, 5,
+            5160008, 5,
+            5160009, 5,
+            5160010, 5,
+            5160011, 5,
+            5160012, 5,
+            5160013, 5,
+            5240017, 5,
+            5240000, 5,
+            4080000, 5,
+            4080001, 5,
+            4080002, 5,
+            4080003, 5,
+            4080004, 5,
+            4080005, 5,
+            4080006, 5,
+            4080007, 5,
+            4080008, 5,
+            4080009, 5,
+            4080010, 5,
+            4080011, 5,
+            4080100, 5,
+            4031019, 5,
+            5121003, 5,
+            5150000, 5,
+            5150001, 5,
+            5150002, 1,
+            5150003, 1,
+            5150004, 1,
+            5150005, 2,
+            5150006, 2,
+            5150007, 2,
+            5150008, 2,
+            5150009, 14,
+            2022459, 5,
+            2022460, 5,
+            2022461, 5,
+            2022462, 5,
+            2022463, 5,
+            2450000, 2,
+            5152000, 5,
+            5152001, 5
     };
 
     /**
      *
      */
     public static int[] eventRareReward = {
-        4031019, 5,
-        2049100, 5,
-        //        1122017, 1,
-        2049401, 10,
-        2049301, 20,
-        2049400, 3,
-        2340000, 1,
-        3010130, 5,
-        3010131, 5,
-        3010132, 5,
-        3010133, 5,
-        3010136, 5,
-        3010116, 5,
-        3010117, 5,
-        3010118, 5,
-        1112405, 1,
-        1112413, 1,
-        1112414, 1,
-        //        1022097, 1,
-        2040211, 1,
-        2040212, 1,
-        2049000, 2,
-        2049001, 2,
-        2049002, 2,
-        2049003, 2,
-        1012058, 2,
-        1012059, 2,
-        1012060, 2,
-        1012061, 2
+            4031019, 5,
+            2049100, 5,
+            //        1122017, 1,
+            2049401, 10,
+            2049301, 20,
+            2049400, 3,
+            2340000, 1,
+            3010130, 5,
+            3010131, 5,
+            3010132, 5,
+            3010133, 5,
+            3010136, 5,
+            3010116, 5,
+            3010117, 5,
+            3010118, 5,
+            1112405, 1,
+            1112413, 1,
+            1112414, 1,
+            //        1022097, 1,
+            2040211, 1,
+            2040212, 1,
+            2049000, 2,
+            2049001, 2,
+            2049002, 2,
+            2049003, 2,
+            1012058, 2,
+            1012059, 2,
+            1012060, 2,
+            1012061, 2
     };
 
     /**
      *
      */
     public static int[] eventSuperReward = {
-        4031019, 5,
-        2022121, 10,
-        4031307, 50,
-        3010127, 10,
-        3010128, 10,
-        3010137, 10,
-        2049300, 10,
-        1012139, 10,
-        1012140, 10,
-        1012141, 10
+            4031019, 5,
+            2022121, 10,
+            4031307, 50,
+            3010127, 10,
+            3010128, 10,
+            3010137, 10,
+            2049300, 10,
+            1012139, 10,
+            1012140, 10,
+            1012141, 10
     };
 
     /**
      *
      */
     public static int[] fishingReward = {
-        0, 90, // Meso
-        1, 70, // EXP
-        // 1302021, 5, // Pico Pico Hammer
-        // 1072238, 1, // Voilet Snowshoe
-        // 1072239, 1, // Yellow Snowshoe
-        //2049100, 1, // Chaos Scroll
-        // 2049301, 1, // Equip Enhancer Scroll
-        // 2049401, 1, // Potential Scroll
-        // 1302000, 3, // Sword
-        // 1442011, 1, // Surfboard
-        //  4000517, 8, // Golden Fish
-        //  4000518, 25, // Golden Fish Egg
-        4031627, 2, // White Bait (3cm)
-        4031628, 1, // Sailfish (120cm)
-        4031630, 1, // Carp (30cm)
-        4031631, 1, // Salmon(150cm)
-        4031632, 1, // Shovel
-        4031633, 2, // Whitebait (3.6cm)
-        4031634, 1, // Whitebait (5cm)
-        4031635, 1, // Whitebait (6.5cm)
-        4031636, 1, // Whitebait (10cm)
-        4031637, 2, // Carp (53cm)
-        4031638, 2, // Carp (60cm)
-        4031639, 1, // Carp (100cm)
-        4031640, 1, // Carp (113cm)
-        4031641, 2, // Sailfish (128cm)
-        4031642, 2, // Sailfish (131cm)
-        4031643, 1, // Sailfish (140cm)
-        4031644, 1, // Sailfish (148cm)
-        4031645, 2, // Salmon (166cm)
-        4031646, 2, // Salmon (183cm)
-        4031647, 1, // Salmon (227cm)
-        4031648, 1, // Salmon (288cm)
-        4031629, 1 // Pot
+            0, 90, // Meso
+            1, 70, // EXP
+            // 1302021, 5, // Pico Pico Hammer
+            // 1072238, 1, // Voilet Snowshoe
+            // 1072239, 1, // Yellow Snowshoe
+            //2049100, 1, // Chaos Scroll
+            // 2049301, 1, // Equip Enhancer Scroll
+            // 2049401, 1, // Potential Scroll
+            // 1302000, 3, // Sword
+            // 1442011, 1, // Surfboard
+            //  4000517, 8, // Golden Fish
+            //  4000518, 25, // Golden Fish Egg
+            4031627, 2, // White Bait (3cm)
+            4031628, 1, // Sailfish (120cm)
+            4031630, 1, // Carp (30cm)
+            4031631, 1, // Salmon(150cm)
+            4031632, 1, // Shovel
+            4031633, 2, // Whitebait (3.6cm)
+            4031634, 1, // Whitebait (5cm)
+            4031635, 1, // Whitebait (6.5cm)
+            4031636, 1, // Whitebait (10cm)
+            4031637, 2, // Carp (53cm)
+            4031638, 2, // Carp (60cm)
+            4031639, 1, // Carp (100cm)
+            4031640, 1, // Carp (113cm)
+            4031641, 2, // Sailfish (128cm)
+            4031642, 2, // Sailfish (131cm)
+            4031643, 1, // Sailfish (140cm)
+            4031644, 1, // Sailfish (148cm)
+            4031645, 2, // Salmon (166cm)
+            4031646, 2, // Salmon (183cm)
+            4031647, 1, // Salmon (227cm)
+            4031648, 1, // Salmon (288cm)
+            4031629, 1 // Pot
     };
 
     /**
-     *
      * @param itemId
      * @return
      */
@@ -1447,8 +1389,8 @@ public class GameConstants {
     }
 
     // 重生
+
     /**
-     *
      * @param itemId
      * @return
      */
@@ -1501,8 +1443,8 @@ public class GameConstants {
     }
 
     // 永恒
+
     /**
-     *
      * @param itemId
      * @return
      */
@@ -1562,7 +1504,6 @@ public class GameConstants {
     }
 
     /**
-     *
      * @param itemId
      * @return
      */
@@ -1571,8 +1512,8 @@ public class GameConstants {
     }// 112xxxx - pendants, 113xxxx - belts
 
     //if only there was a way to find in wz files -.-
+
     /**
-     *
      * @param itemid
      * @return
      */
@@ -1582,7 +1523,6 @@ public class GameConstants {
     }
 
     /**
-     *
      * @param itemId
      * @return
      */
@@ -1591,7 +1531,7 @@ public class GameConstants {
             case 1_112_800:
             case 1_112_801:
             case 1_112_802:
-            //  case 1112804:
+                //  case 1112804:
             case 1_112_810: //new
             case 1_112_811: //new, doesnt work in friendship?
             case 1_112_812: //new, im ASSUMING it's friendship cuz of itemID, not sure.
@@ -1606,7 +1546,6 @@ public class GameConstants {
     }
 
     /**
-     *
      * @param itemId
      * @return
      */
@@ -1620,7 +1559,7 @@ public class GameConstants {
             case 1_112_007:
             case 1_112_012:
             case 1_112_015:
-            //case 1112804:
+                //case 1112804:
             case 1_048_000:
             case 1_048_001:
             case 1_048_002:
@@ -1635,7 +1574,6 @@ public class GameConstants {
     public static int[] Equipments_Bonus = {1122017};
 
     /**
-     *
      * @param itemid
      * @return
      */
@@ -1654,7 +1592,6 @@ public class GameConstants {
     //If you can think of more maps that could be exploitable via npc,block nao pliz!
 
     /**
-     *
      * @param i
      * @param itemId
      * @return
@@ -1669,8 +1606,8 @@ public class GameConstants {
     }
 
     // 永恒
+
     /**
-     *
      * @param itemId
      * @return
      */
@@ -1722,7 +1659,6 @@ public class GameConstants {
     }
 
     /**
-     *
      * @return
      */
     public static int getStatChance() {
@@ -1730,7 +1666,6 @@ public class GameConstants {
     }
 
     /**
-     *
      * @param itemid
      * @return
      */
@@ -1773,7 +1708,6 @@ public class GameConstants {
     }
 
     /**
-     *
      * @param stat
      * @return
      */
@@ -1788,7 +1722,6 @@ public class GameConstants {
     }
 
     /**
-     *
      * @param stat
      * @return
      */
@@ -1806,124 +1739,123 @@ public class GameConstants {
      *
      */
     public final static int[] normalDrops = {
-        4001009, //real
-        4001010,
-        4001011,
-        4001012,
-        4001013,
-        4001014, //real
-        4001021,
-        4001038, //fake
-        4001039,
-        4001040,
-        4001041,
-        4001042,
-        4001043, //fake
-        4001038, //fake
-        4001039,
-        4001040,
-        4001041,
-        4001042,
-        4001043, //fake
-        4001038, //fake
-        4001039,
-        4001040,
-        4001041,
-        4001042,
-        4001043, //fake
-        4000164, //start
-        2000000,
-        2000003,
-        2000004,
-        2000005,
-        4000019,
-        4000000,
-        4000016,
-        4000006,
-        2100121,
-        4000029,
-        4000064,
-        5110000,
-        4000306,
-        4032181,
-        4006001,
-        4006000,
-        2050004,
-        3994102,
-        3994103,
-        3994104,
-        3994105,
-        2430007, //end
-        4000164, //start
-        2000000,
-        2000003,
-        2000004,
-        2000005,
-        4000019,
-        4000000,
-        4000016,
-        4000006,
-        2100121,
-        4000029,
-        4000064,
-        5110000,
-        4000306,
-        4032181,
-        4006001,
-        4006000,
-        2050004,
-        3994102,
-        3994103,
-        3994104,
-        3994105,
-        2430007, //end
-        4000164, //start
-        2000000,
-        2000003,
-        2000004,
-        2000005,
-        4000019,
-        4000000,
-        4000016,
-        4000006,
-        2100121,
-        4000029,
-        4000064,
-        5110000,
-        4000306,
-        4032181,
-        4006001,
-        4006000,
-        2050004,
-        3994102,
-        3994103,
-        3994104,
-        3994105,
-        2430007}; //end
+            4001009, //real
+            4001010,
+            4001011,
+            4001012,
+            4001013,
+            4001014, //real
+            4001021,
+            4001038, //fake
+            4001039,
+            4001040,
+            4001041,
+            4001042,
+            4001043, //fake
+            4001038, //fake
+            4001039,
+            4001040,
+            4001041,
+            4001042,
+            4001043, //fake
+            4001038, //fake
+            4001039,
+            4001040,
+            4001041,
+            4001042,
+            4001043, //fake
+            4000164, //start
+            2000000,
+            2000003,
+            2000004,
+            2000005,
+            4000019,
+            4000000,
+            4000016,
+            4000006,
+            2100121,
+            4000029,
+            4000064,
+            5110000,
+            4000306,
+            4032181,
+            4006001,
+            4006000,
+            2050004,
+            3994102,
+            3994103,
+            3994104,
+            3994105,
+            2430007, //end
+            4000164, //start
+            2000000,
+            2000003,
+            2000004,
+            2000005,
+            4000019,
+            4000000,
+            4000016,
+            4000006,
+            2100121,
+            4000029,
+            4000064,
+            5110000,
+            4000306,
+            4032181,
+            4006001,
+            4006000,
+            2050004,
+            3994102,
+            3994103,
+            3994104,
+            3994105,
+            2430007, //end
+            4000164, //start
+            2000000,
+            2000003,
+            2000004,
+            2000005,
+            4000019,
+            4000000,
+            4000016,
+            4000006,
+            2100121,
+            4000029,
+            4000064,
+            5110000,
+            4000306,
+            4032181,
+            4006001,
+            4006000,
+            2050004,
+            3994102,
+            3994103,
+            3994104,
+            3994105,
+            2430007}; //end
 
     /**
      *
      */
     public final static int[] rareDrops = {
-        2049100,
-        2049301,
-        2049401,
-        2022326,
-        2022193,
-        2049000,
-        2049001,
-        2049002};
+            2049100,
+            2049301,
+            2049401,
+            2022326,
+            2022193,
+            2049000,
+            2049001,
+            2049002};
 
     /**
      *
      */
     public final static int[] superDrops = {
-        2040804,
-        2049400,
-        2049100};
+            2040804,
+            2049400,
+            2049100};
 
     /**
-     *
      * @param job
      * @return
      */
@@ -1949,7 +1881,6 @@ public class GameConstants {
     }
 
     /**
-     *
      * @param skillid
      * @return
      */
@@ -1958,7 +1889,6 @@ public class GameConstants {
     }
 
     /**
-     *
      * @param s
      * @return
      */
@@ -2612,7 +2542,6 @@ public class GameConstants {
     }
 
     /**
-     *
      * @param sourceid
      * @return
      */
@@ -2652,7 +2581,7 @@ public class GameConstants {
             case 20001016:
             case 20011016:
             case 30001016:
-            //  case 1017:
+                //  case 1017:
             case 1007:
             case 10001017:
             case 20001017:
@@ -2671,8 +2600,8 @@ public class GameConstants {
             case 30001018:
                 return 1932003;
             case 1019:
-            // case 10001019:
-            // case 20001019:
+                // case 10001019:
+                // case 20001019:
             case 20011019:
             case 30001019:
                 return 1932005;
@@ -2832,7 +2761,6 @@ public class GameConstants {
     }
 
     /**
-     *
      * @param itemId
      * @return
      */
@@ -2841,7 +2769,6 @@ public class GameConstants {
     }
 
     /**
-     *
      * @param itemId
      * @return
      */
@@ -2850,7 +2777,6 @@ public class GameConstants {
     }
 
     /**
-     *
      * @param skil
      * @return
      */
@@ -2859,7 +2785,6 @@ public class GameConstants {
     }
 
     /**
-     *
      * @param skil
      * @return
      */
@@ -2868,7 +2793,6 @@ public class GameConstants {
     }
 
     /**
-     *
      * @param itemId
      * @return
      */
@@ -2877,7 +2801,6 @@ public class GameConstants {
     }
 
     /**
-     *
      * @param scrollId
      * @param level
      * @return
@@ -2944,7 +2867,6 @@ public class GameConstants {
     }
 
     /**
-     *
      * @param scrollId
      * @param level
      * @return
@@ -3011,7 +2933,6 @@ public class GameConstants {
     }
 
     /**
-     *
      * @param itemId
      * @return
      */
@@ -3020,7 +2941,6 @@ public class GameConstants {
     }
 
     /**
-     *
      * @param potentialID
      * @param newstate
      * @param i
@@ -3043,7 +2963,6 @@ public class GameConstants {
     }
 
     /**
-     *
      * @param optionType
      * @param itemId
      * @return
@@ -3078,7 +2997,6 @@ public class GameConstants {
     }
 
     /**
-     *
      * @param mountid
      * @param jobid
      * @return
@@ -3107,7 +3025,6 @@ public class GameConstants {
     }
 
     /**
-     *
      * @param itemId
      * @return
      */
@@ -3116,7 +3033,6 @@ public class GameConstants {
     }
 
     /**
-     *
      * @param itemId
      * @return
      */
@@ -3125,7 +3041,6 @@ public class GameConstants {
     }
 
     /**
-     *
      * @param itemId
      * @return
      */
@@ -3142,19 +3057,18 @@ public class GameConstants {
      *
      */
     public static int[] owlItems = new int[]{
-        1082002, // work gloves
-        2070005,
-        2070006,
-        1022047,
-        1102041,
-        2044705,
-        2340000, // white scroll
-        2040017,
-        1092030,
-        2040804};
+            1082002, // work gloves
+            2070005,
+            2070006,
+            1022047,
+            1102041,
+            2044705,
+            2340000, // white scroll
+            2040017,
+            1092030,
+            2040804};
 
     /**
-     *
      * @param job
      * @return
      */
@@ -3170,7 +3084,6 @@ public class GameConstants {
     }
 
     /**
-     *
      * @param job
      * @return
      */
@@ -3184,7 +3097,6 @@ public class GameConstants {
     }
 
     /**
-     *
      * @param level
      * @return
      */
@@ -3193,7 +3105,6 @@ public class GameConstants {
     }
 
     /**
-     *
      * @param id
      * @return
      */
@@ -3207,7 +3118,6 @@ public class GameConstants {
     }
 
     /**
-     *
      * @param rid
      * @param iid
      * @param original
@@ -3223,7 +3133,6 @@ public class GameConstants {
     }
 
     /**
-     *
      * @param jobz
      * @return
      */
@@ -3239,7 +3148,6 @@ public class GameConstants {
     }
 
     /**
-     *
      * @param mapid
      * @return
      */
@@ -3253,7 +3161,6 @@ public class GameConstants {
     }
 
     /**
-     *
      * @param vip
      * @param gm
      * @return
@@ -3263,7 +3170,6 @@ public class GameConstants {
     }
 
     /**
-     *
      * @param summoner
      * @param def
      * @return
@@ -3279,7 +3185,6 @@ public class GameConstants {
     }
 
     /**
-     *
      * @param questid
      * @return
      */
@@ -3296,7 +3201,6 @@ public class GameConstants {
     }
 
     /**
-     *
      * @param mapid
      * @return
      */
@@ -3305,7 +3209,6 @@ public class GameConstants {
     }
 
     /**
-     *
      * @param itemId
      * @return
      */
@@ -3323,14 +3226,14 @@ public class GameConstants {
             case 1002583://蝙蝠客头套
             case 1002543://板栗帽
             case 1002448://紫色头巾
-            //衣服
+                //衣服
             case 1052137://西红柿外套
-            //盾牌
+                //盾牌
             case 1092051://啤酒杯盾牌
-            //武器
+                //武器
             case 1702232://我的朋友金猎犬
             case 1702138://大火腿
-            //坐骑
+                //坐骑
             case 1902031:
             case 1902032:
             case 1902033:
@@ -3338,7 +3241,7 @@ public class GameConstants {
             case 1902035:
             case 1902036:
             case 1902037:
-            //鞍子
+                //鞍子
             case 1912024:
             case 1912025:
             case 1912026:
@@ -3352,7 +3255,6 @@ public class GameConstants {
     }
 
     /**
-     *
      * @param rid
      * @param original
      * @return
@@ -3366,7 +3268,6 @@ public class GameConstants {
     }
 
     /**
-     *
      * @param SkillID
      * @return
      */
@@ -3379,7 +3280,6 @@ public class GameConstants {
     }
 
     /**
-     *
      * @param SkillID
      * @return
      */
@@ -3393,7 +3293,6 @@ public class GameConstants {
     }
 
     /**
-     *
      * @param SkillID
      * @return
      */
@@ -3406,7 +3305,6 @@ public class GameConstants {
     }
 
     /**
-     *
      * @param SkillID
      * @return
      */
@@ -3419,7 +3317,6 @@ public class GameConstants {
     }
 
     /**
-     *
      * @param SkillID
      * @return
      */
@@ -3432,7 +3329,6 @@ public class GameConstants {
     }
 
     /**
-     *
      * @param SkillID
      * @return
      */
@@ -3445,7 +3341,6 @@ public class GameConstants {
     }
 
     /**
-     *
      * @param SkillID
      * @return
      */
@@ -3458,7 +3353,6 @@ public class GameConstants {
     }
 
     /**
-     *
      * @param SkillID
      * @return
      */
@@ -3471,7 +3365,6 @@ public class GameConstants {
     }
 
     /**
-     *
      * @param SkillID
      * @return
      */
@@ -3484,7 +3377,6 @@ public class GameConstants {
     }
 
     /**
-     *
      * @param SkillID
      * @return
      */
@@ -3498,7 +3390,6 @@ public class GameConstants {
     }
 
     /**
-     *
      * @param SkillID
      * @return
      */
@@ -3515,7 +3406,6 @@ public class GameConstants {
     }
 
     /**
-     *
      * @param skill
      * @param c
      * @param damage
@@ -3551,7 +3441,6 @@ public class GameConstants {
     }
 
     /**
-     *
      * @param skill
      * @return
      */
@@ -3568,7 +3457,6 @@ public class GameConstants {
     }
 
     /**
-     *
      * @param skill
      * @return
      */
@@ -3585,7 +3473,6 @@ public class GameConstants {
     }
 
     /**
-     *
      * @param skill
      * @return
      */
@@ -3601,7 +3488,6 @@ public class GameConstants {
     }
 
     /**
-     *
      * @param skill
      * @return
      */
@@ -3615,7 +3501,6 @@ public class GameConstants {
     }
 
     /**
-     *
      * @param skill
      * @return
      */
@@ -3633,7 +3518,6 @@ public class GameConstants {
     }
 
     /**
-     *
      * @param skill
      * @return
      */
@@ -3648,7 +3532,6 @@ public class GameConstants {
     }
 
     /**
-     *
      * @param skill
      * @return
      */
@@ -3661,7 +3544,6 @@ public class GameConstants {
     }
 
     /**
-     *
      * @param skill
      * @return
      */
@@ -3679,7 +3561,6 @@ public class GameConstants {
     }
 
     /**
-     *
      * @param skill
      * @return
      */
@@ -3696,7 +3577,6 @@ public class GameConstants {
     }
 
     /**
-     *
      * @param skill
      * @return
      */
@@ -3710,7 +3590,6 @@ public class GameConstants {
     }
 
     /**
-     *
      * @param skill
      * @return
      */
@@ -3727,7 +3606,6 @@ public class GameConstants {
     }
 
     /**
-     *
      * @param skill
      * @return
      */
@@ -3740,7 +3618,6 @@ public class GameConstants {
     }
 
     /**
-     *
      * @param skill
      * @return
      */
@@ -3759,7 +3636,6 @@ public class GameConstants {
     }
 
     /**
-     *
      * @param skill
      * @return
      */
@@ -3785,7 +3661,6 @@ public class GameConstants {
     }
 
     /**
-     *
      * @param skill
      * @return
      */
@@ -3801,7 +3676,6 @@ public class GameConstants {
     }
 
     /**
-     *
      * @param skill
      * @return
      */
@@ -3816,7 +3690,6 @@ public class GameConstants {
     }
 
     /**
-     *
      * @param skill
      * @return
      */
@@ -3830,7 +3703,6 @@ public class GameConstants {
     }
 
     /**
-     *
      * @param skill
      * @return
      */
@@ -3843,7 +3715,6 @@ public class GameConstants {
     }
 
     /**
-     *
      * @param skill
      * @return
      */
@@ -3863,7 +3734,6 @@ public class GameConstants {
     }
 
     /**
-     *
      * @param skill
      * @return
      */
@@ -3876,7 +3746,6 @@ public class GameConstants {
     }
 
     /**
-     *
      * @param skill
      * @return
      */
@@ -3898,7 +3767,6 @@ public class GameConstants {
 //    }
 
     /**
-     *
      * @param skill
      * @return
      */
@@ -3922,7 +3790,6 @@ public class GameConstants {
     }
 
     /**
-     *
      * @param skill
      * @return
      */
@@ -3938,7 +3805,6 @@ public class GameConstants {
     }
 
     /**
-     *
      * @param skill
      * @return
      */
@@ -3951,7 +3817,6 @@ public class GameConstants {
     }
 
     /**
-     *
      * @param skill
      * @return
      */
@@ -3966,7 +3831,6 @@ public class GameConstants {
     }
 
     /**
-     *
      * @param skill
      * @return
      */
@@ -3989,7 +3853,6 @@ public class GameConstants {
     }
 
     /**
-     *
      * @param skill
      * @return
      */
@@ -4005,7 +3868,6 @@ public class GameConstants {
     }
 
     /**
-     *
      * @param skill
      * @return
      */
@@ -4039,8 +3901,8 @@ public class GameConstants {
 //        }
 //        return false;
 //    }
+
     /**
-     *
      * @param skill
      * @return
      */
@@ -4070,7 +3932,6 @@ public class GameConstants {
     }
 
     /**
-     *
      * @param skill
      * @return
      */
@@ -4086,7 +3947,6 @@ public class GameConstants {
     }
 
     /**
-     *
      * @param MobID
      * @return
      */
@@ -4174,7 +4034,6 @@ public class GameConstants {
     }
 
     /**
-     *
      * @param SkillID
      * @return
      */
@@ -4196,7 +4055,6 @@ public class GameConstants {
     }
 
     /**
-     *
      * @param level
      * @return
      */
@@ -4214,7 +4072,6 @@ public class GameConstants {
     public static final List<Balloon> lBalloon = new ArrayList<>();
 
     /**
-     *
      * @return
      */
     public static List<Balloon> getBalloons() {
@@ -4248,7 +4105,6 @@ public class GameConstants {
     }
 
     /**
-     *
      * @param itemId
      * @return
      */
@@ -4273,7 +4129,7 @@ public class GameConstants {
             case 1_112_319:
             case 1_112_320:
             case 1_112_803:
-            // case 1112804:
+                // case 1112804:
             case 1_112_806:
             case 1_112_807:
             case 1_112_808:
@@ -4285,7 +4141,6 @@ public class GameConstants {
     }
 
     /**
-     *
      * @param itemId
      * @return
      */

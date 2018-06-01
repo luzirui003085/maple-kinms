@@ -2735,19 +2735,19 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         }
     }
 
-    public boolean createLottery(String number, int rate) {
-        return LotteryV2.createLottery(getPlayer().getId(), LotteryV2.formatNumber(number), rate);
-    }
-
-    public ArrayList<Map<String, Object>> getLotteries() {
-        return LotteryV2.getLotteries(getPlayer().getId(), 100);
-    }
-
-    public Map<String, Object> getLottery(int id) {
-        return LotteryV2.getLottery(id);
-    }
-
-    public boolean updateLottery(int id) {
-        return LotteryV2.updateLottery(id);
-    }
+//    public boolean createLottery(String number, int rate) {
+//        return LotteryV2.createLottery(getPlayer().getId(), LotteryV2.formatNumber(number), rate);
+//    }
+//
+//    public ArrayList<Map<String, Object>> getLotteries() {
+//        return LotteryV2.getLotteries(getPlayer().getId(), 100);
+//    }
+//
+//    public Map<String, Object> getLottery(int id) {
+//        return LotteryV2.getLottery(id);
+//    }
+//
+//    public boolean updateLottery(int id) {
+//        return LotteryV2.updateLottery(id);
+//    }
 }
