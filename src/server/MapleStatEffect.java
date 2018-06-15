@@ -565,7 +565,7 @@ public class MapleStatEffect implements Serializable {
                 case 3121006: // phoenix
                 case 2221005: // ifrit
                 case 2321003: // bahamut
-                case 1321007: // Beholder
+                // case 1321007: // Beholder
                 case 5211002: // Pirate bird summon
                 case 11001004:
                 case 12001004:
@@ -2014,7 +2014,7 @@ public class MapleStatEffect implements Serializable {
      * @return
      */
     public final boolean isBeholder() {
-        return skill && sourceid == 1321007;
+        return skill && sourceid == 1321007 && false;
     }
 
     /**
@@ -2272,7 +2272,7 @@ public class MapleStatEffect implements Serializable {
                 return SummonMovementType.CIRCLE_STATIONARY;
             case 32111006: //reaper
                 return SummonMovementType.WALK_STATIONARY;
-            case 1321007: // beholder
+            // case 1321007: // beholder
             case 2121005: // elquines
             case 2221005: // ifrit
             case 2321003: // bahamut
