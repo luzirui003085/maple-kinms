@@ -226,11 +226,14 @@ public class NPCHandler {
      */
     public static final void QuestAction(final SeekableLittleEndianAccessor slea, final MapleClient c, final MapleCharacter chr) {
         chr.setCurrenttime(System.currentTimeMillis());
+        /*
+        // 可能导致任务做不了
         if (chr.getCurrenttime() - c.getPlayer().getLasttime() < 2000) {
             chr.dropMessage(1, "悠着点，点的太快会掉线的。");
             c.getSession().write(MaplePacketCreator.enableActions());
             return;
         }
+        */
         chr.setLasttime(System.currentTimeMillis());
 
         final byte action = slea.readByte();
