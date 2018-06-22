@@ -3569,6 +3569,52 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
         client.getSession().write(MaplePacketCreator.updatePlayerStats(Collections.singletonList(statpair), itemReaction, getJob()));
     }
 
+    protected boolean addExp(final int total) {
+        if (total <= 0) {
+            return false;
+        }
+        try {
+            int 当前经验 = getExp();
+            int 升级需要经验 = GameConstants.getExpNeededForLevel(level);
+            int 冒险家最大等级 = Integer.parseInt(ServerProperties.getProperty("KinMS.MLevel"));
+            int 骑士团最大等级 = Integer.parseInt(ServerProperties.getProperty("KinMS.QLevel"));
+
+            if ((!GameConstants.isKOC(job) && level >= 冒险家最大等级) || (GameConstants.isKOC(job) && level >= 骑士团最大等级)) {
+                if (exp + total > 升级需要经验) {
+                    exp = 升级需要经验;
+                } else {
+                    exp += total;
+                }
+            } else {
+                boolean 是否升级 = false;
+                if (exp + total >= 升级需要经验) {
+                    exp += total;
+                    levelUp();
+                    是否升级 = true;
+                    升级需要经验 = GameConstants.getExpNeededForLevel(level);
+                    if (exp > 升级需要经验) {
+                        exp = 升级需要经验;
+                    }
+                } else {
+                    exp += total;
+                }
+                if (total > 0) {
+                    familyRep(当前经验, 升级需要经验, 是否升级);
+                }
+            }
+            if (exp < 0) { // After adding, and negative
+                setExp(升级需要经验);
+            }
+
+            stats.checkEquipLevels(this, total); //gms like
+            updateSingleStat(MapleStat.EXP, getExp());
+            return true;
+        } catch (Exception e) {
+            return false;
+            // FileoutputUtil.outputFileError(FileoutputUtil.ScriptEx_Log, e); //all jobs throw errors :(
+        }
+    }
+
     /**
      * @param total
      * @param show
@@ -3576,52 +3622,8 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
      * @param white
      */
     public void gainExp(final int total, final boolean show, final boolean inChat, final boolean white) {
-        try {
-            int prevexp = getExp();
-            int needed = GameConstants.getExpNeededForLevel(level);
-            if (level >= Integer.parseInt(ServerProperties.getProperty("KinMS.MLevel")) || (GameConstants.isKOC(job) && level >= Integer.parseInt(ServerProperties.getProperty("KinMS.QLevel")))) {//等级限制
-                if (exp + total > needed) {
-                    setExp(needed);
-                } else {
-                    exp += total;
-                }
-            } else {
-                boolean leveled = false;
-                if (exp + total >= needed) {
-                    exp += total;
-                    levelUp();
-                    leveled = true;
-                    needed = GameConstants.getExpNeededForLevel(level);
-                    if (exp > needed) {
-                        setExp(needed);
-                    }
-                } else {
-                    exp += total;
-                }
-                if (total > 0) {
-                    familyRep(prevexp, needed, leveled);
-                }
-            }
-            if (total != 0) {
-                if (exp < 0) { // After adding, and negative
-                    if (total > 0) {
-                        setExp(needed);
-                    } else if (total < 0) {
-                        setExp(0);
-                    }
-                }
-                if (show) { // still show the expgain even if it's not there
-                    client.getSession().write(MaplePacketCreator.GainEXP_Others(total, inChat, white));
-                }
-
-                // 装备道具经验
-                if (total > 0) {
-                    stats.checkEquipLevels(this, total); //gms like
-                }
-                updateSingleStat(MapleStat.EXP, getExp());
-            }
-        } catch (Exception e) {
-            // FileoutputUtil.outputFileError(FileoutputUtil.ScriptEx_Log, e); //all jobs throw errors :(
+        if (addExp(total) && show) {
+            client.getSession().write(MaplePacketCreator.GainEXP_Others(total, inChat, white));
         }
     }
 
@@ -3651,73 +3653,25 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
      * @param show
      * @param white
      * @param pty
-     * @param wedding_EXP
+     * @param 结婚经验
      * @param Class_Bonus_EXP
      * @param Equipment_Bonus_EXP
-     * @param Premium_Bonus_EXP
+     * @param 网吧经验
      */
-    public void gainExpMonster(final int gain, final boolean show, final boolean white, final byte pty, int wedding_EXP, int Class_Bonus_EXP, int Equipment_Bonus_EXP, int Premium_Bonus_EXP) {
-        Premium_Bonus_EXP = 0; // 网吧经验
-        if (level < Integer.parseInt(ServerProperties.getProperty("KinMS.MLevel")) || (GameConstants.isKOC(job)) && level < Integer.parseInt(ServerProperties.getProperty("KinMS.QLevel"))) {
-            int 结婚经验 = 0;
-            if (this.marriageId > 0) {
-                MapleCharacter MarrChr = this.map.getCharacterById(this.marriageId);
-                if (MarrChr != null) {
-                    结婚经验 += (int) (gain / 100.0D * 20.0D);
-                }
-            }
+    public void gainExpMonster(final int gain, final boolean show, final boolean white, final byte pty, int 结婚经验, int Class_Bonus_EXP, int Equipment_Bonus_EXP, int 网吧经验) {
+        网吧经验 = 0; // 网吧经验
+        // 组队经验
+        int 组队经验 = 0;
+        if (pty > 1) {
+            组队经验 = (int) (((float) (gain / 50.0)) * (pty + 1));
+        }
+        int total = gain + Class_Bonus_EXP + Equipment_Bonus_EXP + 网吧经验 + 结婚经验 + 组队经验;
+        if (gain > 0 && total < gain) {
+            total = Integer.MAX_VALUE;
+        }
 
-            int total = gain + Class_Bonus_EXP + Equipment_Bonus_EXP + Premium_Bonus_EXP + 结婚经验;
-            int partyinc = 0;
-            int prevexp = getExp();
-            if (pty > 1) {
-                partyinc = (int) (((float) (gain / 50.0)) * (pty + 1));
-                total += partyinc;
-            }
-
-            if (gain > 0 && total < gain) { //just in case
-                total = Integer.MAX_VALUE;
-            }
-            int needed = GameConstants.getExpNeededForLevel(level);
-            if (level >= 200 || (GameConstants.isKOC(job) && level >= 200)) { //等级限制
-                if (exp + total > needed) {
-                    setExp(needed);
-                } else {
-                    exp += total;
-                }
-            } else {
-                boolean leveled = false;
-                if (exp + total >= needed) {
-                    exp += total;
-                    levelUp();
-                    leveled = true;
-                    needed = GameConstants.getExpNeededForLevel(level);
-                    if (exp > needed) {
-                        setExp(needed);
-                    }
-                } else {
-                    exp += total;
-                }
-                if (total > 0) {
-                    familyRep(prevexp, needed, leveled);
-                }
-            }
-            if (gain != 0) {
-                if (exp < 0) { // After adding, and negative
-                    if (gain > 0) {
-                        setExp(GameConstants.getExpNeededForLevel(level));
-                    } else if (gain < 0) {
-                        setExp(0);
-                    }
-                }
-                updateSingleStat(MapleStat.EXP, getExp());
-                if (show) { // still show the expgain even if it's not there
-                    //    client.getSession().write(MaplePacketCreator.GainEXP_Monster(gain, white, wedding_EXP, partyinc, Class_Bonus_EXP, Equipment_Bonus_EXP, Premium_Bonus_EXP));
-                    client.getSession().write(MaplePacketCreator.GainEXP_Monster(gain, white, partyinc, Class_Bonus_EXP, Equipment_Bonus_EXP, Premium_Bonus_EXP, 结婚经验));
-                }
-                // 装备道具经验
-                stats.checkEquipLevels(this, total);
-            }
+        if (addExp(total) && show) {
+            client.getSession().write(MaplePacketCreator.GainEXP_Monster(gain, white, 组队经验, Class_Bonus_EXP, Equipment_Bonus_EXP, 网吧经验, 结婚经验));
         }
     }
 

@@ -490,7 +490,7 @@ public class MapleMonster extends AbstractLoadedMapleLife {
 
             int wedding_EXP = 0;
             if (attacker.getMarriageId() > 0 && attacker.getMap().getCharacterById_InMap(attacker.getMarriageId()) != null) {
-                wedding_EXP += (exp / 100) * 1.;
+                wedding_EXP += (int) (exp / 100.0D * 20.0D);
             }
             // attacker.gainExpMonster(exp, true, highestDamage, pty, Class_Bonus_EXP, Equipment_Bonus_EXP, Premium_Bonus_EXP);
             attacker.gainExpMonster(exp, true, highestDamage, pty, wedding_EXP, Class_Bonus_EXP, Equipment_Bonus_EXP, Premium_Bonus_EXP);
