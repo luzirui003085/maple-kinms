@@ -3335,15 +3335,17 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
 
     protected boolean addExp(final int total) {
         if (total <= 0) {
-            return false;
+            exp = Math.max(exp - total, 0);
+            updateSingleStat(MapleStat.EXP, getExp());
+            return true;
         }
         try {
             int 当前经验 = getExp();
             int 升级需要经验 = GameConstants.getExpNeededForLevel(level);
-            int 冒险家最大等级 = Integer.parseInt(ServerProperties.getProperty("KinMS.MLevel"));
-            int 骑士团最大等级 = Integer.parseInt(ServerProperties.getProperty("KinMS.QLevel"));
+            int 冒险家最大等级 = Integer.parseInt(ServerProperties.getProperty("KinMS.MLevel", "200"));
+            int 骑士团最大等级 = Integer.parseInt(ServerProperties.getProperty("KinMS.QLevel", "120"));
 
-            if ((!GameConstants.isKOC(job) && level >= 冒险家最大等级) || (GameConstants.isKOC(job) && level >= 骑士团最大等级)) {
+            if ((level >= 冒险家最大等级 && !GameConstants.isKOC(job)) || (level >= 骑士团最大等级 && GameConstants.isKOC(job))) {
                 if (exp + total > 升级需要经验) {
                     exp = 升级需要经验;
                 } else {
@@ -3351,10 +3353,10 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
                 }
             } else {
                 boolean 是否升级 = false;
-                if (exp + total >= 升级需要经验) {
+                if ((long) exp + (long) total >= 升级需要经验) {
                     exp += total;
-                    levelUp();
                     是否升级 = true;
+                    levelUp();
                     升级需要经验 = GameConstants.getExpNeededForLevel(level);
                     if (exp > 升级需要经验) {
                         exp = 升级需要经验;
