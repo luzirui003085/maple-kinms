@@ -606,7 +606,7 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
                 status.setForfeited(rs.getInt("forfeited"));
                 status.setCustomData(rs.getString("customData"));
                 ret.quests.put(q, status);
-                pse.setInt(1, rs.getInt("queststatusid"));
+                pse.setLong(1, rs.getLong("queststatusid"));
                 final ResultSet rsMobs = pse.executeQuery();
 
                 while (rsMobs.next()) {

@@ -344,7 +344,7 @@ public class DueyHandler {
 
     private static final MapleDueyActions getItemByPID(final int packageid) {
         try {
-            Map<Integer, Pair<IItem, MapleInventoryType>> iter = ItemLoader.DUEY.loadItems(false, packageid);
+            Map<Long, Pair<IItem, MapleInventoryType>> iter = ItemLoader.DUEY.loadItems(false, packageid);
             if (iter != null && iter.size() > 0) {
                 for (Pair<IItem, MapleInventoryType> i : iter.values()) {
                     return new MapleDueyActions(packageid, i.getLeft());

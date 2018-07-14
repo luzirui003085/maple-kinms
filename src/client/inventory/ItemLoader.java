@@ -2,6 +2,7 @@
 package client.inventory;
 
 import constants.GameConstants;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -9,14 +10,16 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
 import java.util.Map;
+
 import database.DatabaseConnection;
+
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+
 import tools.Pair;
 
 /**
- *
  * @author zjj
  */
 public enum ItemLoader {
@@ -92,7 +95,6 @@ public enum ItemLoader {
     }
 
     /**
-     *
      * @return
      */
     public int getValue() {
@@ -102,15 +104,14 @@ public enum ItemLoader {
     //does not need connection con to be auto commit
 
     /**
-     *
      * @param login
      * @param id
      * @return
      * @throws SQLException
      */
-    public Map<Integer, Pair<IItem, MapleInventoryType>> loadItems(boolean login, Integer... id) throws SQLException {
+    public Map<Long, Pair<IItem, MapleInventoryType>> loadItems(boolean login, Integer... id) throws SQLException {
         List<Integer> lulz = Arrays.asList(id);
-        Map<Integer, Pair<IItem, MapleInventoryType>> items = new LinkedHashMap<>();
+        Map<Long, Pair<IItem, MapleInventoryType>> items = new LinkedHashMap<>();
         if (lulz.size() != arg.size()) {
             return items;
         }
@@ -185,7 +186,7 @@ public enum ItemLoader {
                         }
                     }
                 }
-                items.put(rs.getInt("inventoryitemid"), new Pair<>(equip.copy(), mit));
+                items.put(rs.getLong("inventoryitemid"), new Pair<>(equip.copy(), mit));
             } else {
                 Item item = new Item(rs.getInt("itemid"), rs.getShort("position"), rs.getShort("quantity"), rs.getByte("flag"));
                 item.setUniqueId(rs.getInt("uniqueid"));
@@ -206,15 +207,17 @@ public enum ItemLoader {
                         item.setPet(MaplePet.createPet(item.getItemId(), new_unique));
                     }
                 }
-                items.put(rs.getInt("inventoryitemid"), new Pair<>(item.copy(), mit));
+                items.put(rs.getLong("inventoryitemid"), new Pair<>(item.copy(), mit));
             }
         }
 
         rs.close();
         ps.close();
         return items;
-    }public Map<Integer, Pair<IItem, MapleInventoryType>> loadItems_hm(int packageid, int accountid) throws SQLException {
-        Map<Integer, Pair<IItem, MapleInventoryType>> items = new LinkedHashMap<>();
+    }
+
+    public Map<Long, Pair<IItem, MapleInventoryType>> loadItems_hm(int packageid, int accountid) throws SQLException {
+        Map<Long, Pair<IItem, MapleInventoryType>> items = new LinkedHashMap<>();
         StringBuilder query = new StringBuilder();
         query.append("SELECT * FROM `hiredmerchitems` LEFT JOIN `hiredmerchequipment` USING(`inventoryitemid`) WHERE `type` = ? AND `packageid` = ? AND `accountid` = ? ");
         try (PreparedStatement ps = DatabaseConnection.getConnection().prepareStatement(query.toString())) {
@@ -266,7 +269,7 @@ public enum ItemLoader {
                             }
                         }
                     }
-                    items.put(rs.getInt("inventoryitemid"), new Pair<>(equip.copy(), mit));
+                    items.put(rs.getLong("inventoryitemid"), new Pair<>(equip.copy(), mit));
                 } else {
                     Item item = new Item(rs.getInt("itemid"), rs.getShort("position"), rs.getShort("quantity"), rs.getByte("flag"));
                     item.setUniqueId(rs.getInt("uniqueid"));
@@ -287,17 +290,16 @@ public enum ItemLoader {
                             item.setPet(MaplePet.createPet(item.getItemId(), new_unique));
                         }
                     }
-                    items.put(rs.getInt("inventoryitemid"), new Pair<>(item.copy(), mit));
+                    items.put(rs.getLong("inventoryitemid"), new Pair<>(item.copy(), mit));
                 }
             }
-            
+
             rs.close();
         }
         return items;
     }
 
     /**
-     *
      * @param items
      * @param id
      * @throws SQLException
@@ -329,7 +331,6 @@ public enum ItemLoader {
     }
 
     /**
-     *
      * @param items
      * @param con
      * @param id

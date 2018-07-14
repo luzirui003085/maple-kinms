@@ -190,7 +190,7 @@ public class MTSStorage {
     private void loadBuyNow() {
         int lastPackage = 0;
         int cId;
-        Map<Integer, Pair<IItem, MapleInventoryType>> items;
+        Map<Long, Pair<IItem, MapleInventoryType>> items;
         final Connection con = DatabaseConnection.getConnection();
         try {
             try (PreparedStatement ps = con.prepareStatement("SELECT * FROM mts_items WHERE tab = 1")) {
