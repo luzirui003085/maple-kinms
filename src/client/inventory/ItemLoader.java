@@ -411,7 +411,7 @@ public enum ItemLoader {
                     throw new RuntimeException("Inserting item failed.");
                 }
 
-                pse.setInt(1, rs.getInt(1));
+                pse.setLong(1, rs.getLong(1));
                 rs.close();
                 IEquip equip = (IEquip) item;
                 pse.setInt(2, equip.getUpgradeSlots());
