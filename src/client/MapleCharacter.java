@@ -21,17 +21,7 @@
 package client;
 
 import client.anticheat.CheatTracker;
-import client.inventory.Equip;
-import client.inventory.IItem;
-import client.inventory.Item;
-import client.inventory.ItemFlag;
-import client.inventory.ItemLoader;
-import client.inventory.MapleInventory;
-import client.inventory.MapleInventoryIdentifier;
-import client.inventory.MapleInventoryType;
-import client.inventory.MapleMount;
-import client.inventory.MaplePet;
-import client.inventory.MapleRing;
+import client.inventory.*;
 import constants.GameConstants;
 import constants.ServerConstants;
 import database.DatabaseConnection;
@@ -39,57 +29,20 @@ import database.DatabaseException;
 import handling.MaplePacket;
 import handling.channel.ChannelServer;
 import handling.login.LoginServer;
-import handling.world.CharacterTransfer;
-import handling.world.MapleMessenger;
-import handling.world.MapleMessengerCharacter;
-import handling.world.MapleParty;
-import handling.world.MaplePartyCharacter;
-import handling.world.PartyOperation;
-import handling.world.PlayerBuffStorage;
-import handling.world.PlayerBuffValueHolder;
-import handling.world.World;
+import handling.world.*;
 import handling.world.family.MapleFamily;
 import handling.world.family.MapleFamilyBuff;
 import handling.world.family.MapleFamilyBuff.MapleFamilyBuffEntry;
 import handling.world.family.MapleFamilyCharacter;
 import handling.world.guild.MapleGuild;
 import handling.world.guild.MapleGuildCharacter;
-
-import java.awt.Point;
-import java.awt.Rectangle;
-import java.io.File;
-import java.io.Serializable;
-import java.lang.ref.WeakReference;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Deque;
-import java.util.EnumMap;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
-
 import provider.MapleData;
 import provider.MapleDataProvider;
 import provider.MapleDataProviderFactory;
 import scripting.EventInstanceManager;
 import scripting.NPCScriptManager;
 import server.*;
+import server.Timer;
 import server.Timer.BuffTimer;
 import server.Timer.EtcTimer;
 import server.Timer.MapTimer;
@@ -100,17 +53,20 @@ import server.maps.*;
 import server.movement.LifeMovementFragment;
 import server.quest.MapleQuest;
 import server.shops.IMaplePlayerShop;
-import tools.ConcurrentEnumMap;
-import tools.FileoutputUtil;
-import tools.MaplePacketCreator;
-import tools.MockIOSession;
-import tools.Pair;
-import tools.packet.MTSCSPacket;
-import tools.packet.MobPacket;
-import tools.packet.MonsterCarnivalPacket;
-import tools.packet.PetPacket;
-import tools.packet.PlayerShopPacket;
-import tools.packet.UIPacket;
+import tools.*;
+import tools.packet.*;
+
+import java.awt.*;
+import java.io.File;
+import java.io.Serializable;
+import java.lang.ref.WeakReference;
+import java.sql.*;
+import java.util.*;
+import java.util.List;
+import java.util.Map.Entry;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 /**
  * @author zjj
@@ -486,6 +442,50 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
         ret.numClones = ct.clonez;
         ret.mount = new MapleMount(ret, ct.mount_itemid, GameConstants.isKOC(ret.job) ? 10001004 : (GameConstants.isAran(ret.job) ? 20001004 : (GameConstants.isEvan(ret.job) ? 20011004 : 1004)), ct.mount_Fatigue, ct.mount_level, ct.mount_exp);
 
+        Connection con = DatabaseConnection.getConnection();
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        try {
+            ps = con.prepareStatement("SELECT * FROM accounts WHERE id = ?");
+            ps.setInt(1, ret.accountid);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                ret.getClient().setAccountName(rs.getString("name"));
+                ret.acash = rs.getInt("ACash");
+                ret.maplepoints = rs.getInt("mPoints");
+                ret.points = rs.getInt("points");
+                ret.vpoints = rs.getInt("vpoints");
+
+                if (rs.getTimestamp("lastlogon") != null) {
+                    final Calendar cal = Calendar.getInstance();
+                    cal.setTimeInMillis(rs.getTimestamp("lastlogon").getTime());
+                }
+                rs.close();
+                ps.close();
+
+                ps = con.prepareStatement("UPDATE accounts SET lastlogon = CURRENT_TIMESTAMP() WHERE id = ?");
+                ps.setInt(1, ret.accountid);
+                ps.executeUpdate();
+            } else {
+                rs.close();
+            }
+            ps.close();
+        } catch (SQLException ess) {
+            ess.printStackTrace();
+            System.out.println("reconstructor 加载角色出错...");
+            FileoutputUtil.outputFileError("log\\Packet_Except.log", ess);
+        } finally {
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+                if (rs != null) {
+                    rs.close();
+                }
+            } catch (SQLException ignore) {
+            }
+        }
+
         ret.stats.recalcLocalStats(true);
 
         return ret;
@@ -703,10 +703,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
                     if (rs.getTimestamp("lastlogon") != null) {
                         final Calendar cal = Calendar.getInstance();
                         cal.setTimeInMillis(rs.getTimestamp("lastlogon").getTime());
-                        //  if (cal.get(7) + 1 != Calendar.getInstance().get(7));
-                        /*if (cal.get(Calendar.DAY_OF_WEEK) + 1 == Calendar.getInstance().get(Calendar.DAY_OF_WEEK)) {
-                            ret.acash += 500;
-                        }*/
                     }
                     rs.close();
                     ps.close();

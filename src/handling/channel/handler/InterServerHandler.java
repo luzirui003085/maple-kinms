@@ -21,26 +21,19 @@
 package handling.channel.handler;
 
 import client.*;
-import java.util.List;
-
 import handling.MaplePacket;
 import handling.cashshop.CashShopServer;
 import handling.channel.ChannelServer;
-import handling.world.CharacterTransfer;
-import handling.world.MapleMessenger;
-import handling.world.MapleMessengerCharacter;
-import handling.world.CharacterIdChannelPair;
-import handling.world.MaplePartyCharacter;
-import handling.world.PartyOperation;
-import handling.world.PlayerBuffStorage;
-import handling.world.World;
+import handling.world.*;
 import handling.world.guild.MapleGuild;
 import scripting.NPCScriptManager;
 import server.maps.FieldLimitType;
 import tools.FileoutputUtil;
 import tools.MaplePacketCreator;
-import tools.packet.FamilyPacket;
 import tools.data.input.SeekableLittleEndianAccessor;
+import tools.packet.FamilyPacket;
+
+import java.util.List;
 
 public class InterServerHandler {
 
@@ -130,11 +123,12 @@ public class InterServerHandler {
         MapleCharacter player;
         final CharacterTransfer transfer = channelServer.getPlayerStorage().getPendingCharacter(playerid);
 
-        if (transfer == null) { // Player isn't in storage, probably isn't CC
-            player = MapleCharacter.loadCharFromDB(playerid, c, true);
-        } else {
-            player = MapleCharacter.ReconstructChr(transfer, c, true);
-        }
+        player = MapleCharacter.loadCharFromDB(playerid, c, true);
+//        if (transfer == null) { // Player isn't in storage, probably isn't CC
+//            player = MapleCharacter.loadCharFromDB(playerid, c, true);
+//        } else {
+//            player = MapleCharacter.ReconstructChr(transfer, c, true);
+//        }
         c.setPlayer(player);
         c.setAccID(player.getAccountID());
 
