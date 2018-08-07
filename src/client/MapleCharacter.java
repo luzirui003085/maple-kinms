@@ -441,6 +441,50 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
         ret.numClones = ct.clonez;
         ret.mount = new MapleMount(ret, ct.mount_itemid, GameConstants.isKOC(ret.job) ? 10001004 : (GameConstants.isAran(ret.job) ? 20001004 : (GameConstants.isEvan(ret.job) ? 20011004 : 1004)), ct.mount_Fatigue, ct.mount_level, ct.mount_exp);
 
+        Connection con = DatabaseConnection.getConnection();
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        try {
+            ps = con.prepareStatement("SELECT * FROM accounts WHERE id = ?");
+            ps.setInt(1, ret.accountid);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                ret.getClient().setAccountName(rs.getString("name"));
+                ret.acash = rs.getInt("ACash");
+                ret.maplepoints = rs.getInt("mPoints");
+                ret.points = rs.getInt("points");
+                ret.vpoints = rs.getInt("vpoints");
+
+                if (rs.getTimestamp("lastlogon") != null) {
+                    final Calendar cal = Calendar.getInstance();
+                    cal.setTimeInMillis(rs.getTimestamp("lastlogon").getTime());
+                }
+                rs.close();
+                ps.close();
+
+                ps = con.prepareStatement("UPDATE accounts SET lastlogon = CURRENT_TIMESTAMP() WHERE id = ?");
+                ps.setInt(1, ret.accountid);
+                ps.executeUpdate();
+            } else {
+                rs.close();
+            }
+            ps.close();
+        } catch (SQLException ess) {
+            ess.printStackTrace();
+            System.out.println("reconstructor 加载角色出错...");
+            FileoutputUtil.outputFileError("log\\Packet_Except.log", ess);
+        } finally {
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+                if (rs != null) {
+                    rs.close();
+                }
+            } catch (SQLException ignore) {
+            }
+        }
+
         ret.stats.recalcLocalStats(true);
 
         return ret;

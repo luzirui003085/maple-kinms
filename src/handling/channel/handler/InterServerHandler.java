@@ -129,12 +129,12 @@ public class InterServerHandler {
         final ChannelServer channelServer = c.getChannelServer();
         MapleCharacter player;
         final CharacterTransfer transfer = channelServer.getPlayerStorage().getPendingCharacter(playerid);
-
-        if (transfer == null) { // Player isn't in storage, probably isn't CC
-            player = MapleCharacter.loadCharFromDB(playerid, c, true);
-        } else {
-            player = MapleCharacter.ReconstructChr(transfer, c, true);
-        }
+        player = MapleCharacter.loadCharFromDB(playerid, c, true);
+//        if (transfer == null) { // Player isn't in storage, probably isn't CC
+//            player = MapleCharacter.loadCharFromDB(playerid, c, true);
+//        } else {
+//            player = MapleCharacter.ReconstructChr(transfer, c, true);
+//        }
         c.setPlayer(player);
         c.setAccID(player.getAccountID());
 
