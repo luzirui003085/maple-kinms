@@ -8,25 +8,10 @@ import client.inventory.MapleInventoryType;
 import constants.GameConstants;
 import constants.MapConstants;
 import handling.channel.ChannelServer;
-
-import java.awt.Point;
-import java.lang.ref.WeakReference;
-import java.util.ArrayList;
-import java.util.List;
-
-import server.AutobanManager;
-import server.MapleInventoryManipulator;
-import server.MapleItemInformationProvider;
-import server.MaplePortal;
-import server.MapleStatEffect;
-import server.Randomizer;
+import server.*;
 import server.Timer.CloneTimer;
 import server.events.MapleSnowball.MapleSnowballs;
-import server.life.MapleMonster;
-import server.life.MobAttackInfo;
-import server.life.MobAttackInfoFactory;
-import server.life.MobSkill;
-import server.life.MobSkillFactory;
+import server.life.*;
 import server.maps.FakeCharacter;
 import server.maps.FieldLimitType;
 import server.maps.MapleMap;
@@ -36,6 +21,11 @@ import tools.MaplePacketCreator;
 import tools.data.input.SeekableLittleEndianAccessor;
 import tools.packet.MTSCSPacket;
 import tools.packet.MobPacket;
+
+import java.awt.*;
+import java.lang.ref.WeakReference;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author zjj
@@ -551,6 +541,10 @@ public class PlayerHandler {
         final byte speed = slea.readByte();
         final byte unk = slea.readByte(); // Added on v.82
 
+        if (skillId == 1321007) { // 灵魂助力
+            chr.getClient().getSession().write(MaplePacketCreator.enableActions());
+            return;
+        }
         final ISkill skill = SkillFactory.getSkill(skillId);
         if (chr == null) {
             return;
@@ -579,6 +573,10 @@ public class PlayerHandler {
         final ISkill skill = SkillFactory.getSkill(skillid);
 
         if (chr.getSkillLevel(skill) <= 0 || chr.getSkillLevel(skill) != skillLevel) {
+            if (skillid == 1321007) { // 灵魂助力
+                c.getSession().write(MaplePacketCreator.enableActions());
+                return;
+            }
             if (!GameConstants.isMulungSkill(skillid) && !GameConstants.isPyramidSkill(skillid)) {
                 //  c.getSession().close();
                 return;

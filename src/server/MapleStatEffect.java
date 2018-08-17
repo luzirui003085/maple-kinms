@@ -584,7 +584,7 @@ public class MapleStatEffect implements Serializable {
                 case 3121006: // phoenix
                 case 2221005: // ifrit
                 case 2321003: // bahamut
-                case 1321007: // Beholder
+                // case 1321007: // Beholder
                 case 5211002: // Pirate bird summon
                 case 11001004:
                 case 12001004:

@@ -1879,7 +1879,7 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
         } else if (effect.isMonsterRiding_()) {
             getMount().startSchedule();
         } else if (effect.isBeholder()) {
-            prepareBeholderEffect();
+           // prepareBeholderEffect();
         }
         int clonez = 0;
         for (Pair<MapleBuffStat, Integer> statup : statups) {
