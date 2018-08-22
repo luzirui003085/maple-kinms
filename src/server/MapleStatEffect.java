@@ -1,13 +1,6 @@
 package server;
 
-import client.ISkill;
-import client.MapleBuffStat;
-import client.MapleCharacter;
-import client.MapleCoolDownValueHolder;
-import client.MapleDisease;
-import client.MapleStat;
-import client.PlayerStats;
-import client.SkillFactory;
+import client.*;
 import client.inventory.IItem;
 import client.inventory.MapleInventory;
 import client.inventory.MapleInventoryType;
@@ -15,33 +8,21 @@ import client.status.MonsterStatus;
 import client.status.MonsterStatusEffect;
 import constants.GameConstants;
 import handling.channel.ChannelServer;
-
-import java.awt.Point;
-import java.awt.Rectangle;
-import java.io.Serializable;
-import java.lang.ref.WeakReference;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.EnumMap;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ScheduledFuture;
-
 import provider.MapleData;
 import provider.MapleDataTool;
 import server.MapleCarnivalFactory.MCSkill;
 import server.Timer.BuffTimer;
 import server.life.MapleMonster;
-import server.maps.MapleDoor;
-import server.maps.MapleMap;
-import server.maps.MapleMapObject;
-import server.maps.MapleMapObjectType;
-import server.maps.MapleMist;
-import server.maps.MapleSummon;
-import server.maps.SummonMovementType;
+import server.maps.*;
 import tools.MaplePacketCreator;
 import tools.Pair;
+
+import java.awt.*;
+import java.io.Serializable;
+import java.lang.ref.WeakReference;
+import java.util.*;
+import java.util.List;
+import java.util.concurrent.ScheduledFuture;
 
 /**
  * @author zjj
@@ -487,7 +468,7 @@ public class MapleStatEffect implements Serializable {
                 case 1211002: // charged blow
                 case 1111008: // shout
                 case 4211002: // assaulter
-                // case 3101005: // arrow bomb 爆炸箭去掉昏迷效果
+                    // case 3101005: // arrow bomb 爆炸箭去掉昏迷效果
                 case 1111005: // coma: sword
                 case 1111006: // coma: axe
                 case 4221007: // boomerang step
@@ -584,7 +565,7 @@ public class MapleStatEffect implements Serializable {
                 case 3121006: // phoenix
                 case 2221005: // ifrit
                 case 2321003: // bahamut
-                // case 1321007: // Beholder
+                    // case 1321007: // Beholder
                 case 5211002: // Pirate bird summon
                 case 11001004:
                 case 12001004:
@@ -787,6 +768,11 @@ public class MapleStatEffect implements Serializable {
      * @return
      */
     public final boolean applyTo(final MapleCharacter applyfrom, final MapleCharacter applyto, final boolean primary, final Point pos, int newDuration) {
+        if (skill && sourceid == 1321007) {
+            applyfrom.dropMessage(-2, "技能修复中");
+            applyfrom.getClient().getSession().write(MaplePacketCreator.enableActions());
+            return false;
+        }
         int mapid = applyto.getMapId();
         int channelid = applyto.getClient().getChannel();
         boolean inPVPmode = mapid == GameConstants.PVP_MAP && channelid == GameConstants.PVP_CHANEL;
@@ -2022,7 +2008,7 @@ public class MapleStatEffect implements Serializable {
      * @return
      */
     public final boolean isBeholder() {
-        return skill && sourceid == 1321007;
+        return skill && sourceid == 1321007 && false;
     }
 
     /**
@@ -2280,7 +2266,7 @@ public class MapleStatEffect implements Serializable {
                 return SummonMovementType.CIRCLE_STATIONARY;
             case 32111006: //reaper
                 return SummonMovementType.WALK_STATIONARY;
-            case 1321007: // beholder
+            // case 1321007: // beholder
             case 2121005: // elquines
             case 2221005: // ifrit
             case 2321003: // bahamut
