@@ -512,7 +512,7 @@ public class MapleStatEffect implements Serializable {
                 case 2121006: // Paralyze
                 case 21120006: // Tempest
                 case 22121000:
-                   // monsterStatus.put(MonsterStatus.FREEZE, 1);
+                    monsterStatus.put(MonsterStatus.FREEZE, 1);
                     ret.duration *= 2; // freezing skills are a little strange
                     break;
                 case 2211002: // 冰咆哮
@@ -562,7 +562,7 @@ public class MapleStatEffect implements Serializable {
                 case 3221005: // frostprey
                 case 2121005: // elquines
                     statups.add(new Pair<>(MapleBuffStat.SUMMON, 1));
-                    // monsterStatus.put(MonsterStatus.FREEZE, 1);
+                    monsterStatus.put(MonsterStatus.FREEZE, 1);
                     break;
                 case 2311006: // summon dragon
                 case 3121006: // phoenix
