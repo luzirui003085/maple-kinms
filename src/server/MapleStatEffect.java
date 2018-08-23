@@ -515,7 +515,7 @@ public class MapleStatEffect implements Serializable {
                     monsterStatus.put(MonsterStatus.FREEZE, 1);
                     ret.duration *= 2; // freezing skills are a little strange
                     break;
-                case 2211002: // 冰咆哮
+                case 2211002: // ice strike
                     // monsterStatus.put(MonsterStatus.FREEZE, 1);
                     ret.duration *= 2; // freezing skills are a little strange
                     break;
