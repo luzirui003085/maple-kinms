@@ -505,7 +505,6 @@ public class MapleStatEffect implements Serializable {
                     monsterStatus.put(MonsterStatus.WDEF, ret.x);
                     break;
                 case 2201004: // cold beam1
-                case 2211002: // ice strike
                 case 3211003: // blizzard
                 case 2211006: // il elemental compo
                 case 2221007: // Blizzard
@@ -513,7 +512,11 @@ public class MapleStatEffect implements Serializable {
                 case 2121006: // Paralyze
                 case 21120006: // Tempest
                 case 22121000:
-                   // monsterStatus.put(MonsterStatus.FREEZE, 1);
+                    monsterStatus.put(MonsterStatus.FREEZE, 1);
+                    ret.duration *= 2; // freezing skills are a little strange
+                    break;
+                case 2211002: // ice strike
+                    // monsterStatus.put(MonsterStatus.FREEZE, 1);
                     ret.duration *= 2; // freezing skills are a little strange
                     break;
                 case 2101003: // fp slow
@@ -559,7 +562,7 @@ public class MapleStatEffect implements Serializable {
                 case 3221005: // frostprey
                 case 2121005: // elquines
                     statups.add(new Pair<>(MapleBuffStat.SUMMON, 1));
-                    // monsterStatus.put(MonsterStatus.FREEZE, 1);
+                    monsterStatus.put(MonsterStatus.FREEZE, 1);
                     break;
                 case 2311006: // summon dragon
                 case 3121006: // phoenix
