@@ -36,6 +36,10 @@ public class GenericLittleEndianWriter implements LittleEndianWriter {
     private static Charset ASCII = Charset.forName("GBK"); // ISO-8859-1, UTF-8
     private ByteOutputStream bos;
 
+    public static final int getlength(final String str) {
+        byte[] bt = str.getBytes(Charset.forName("GBK"));
+        return bt.length;
+    }
 
     /**
      * Class constructor - Protected to prevent instantiation with no arguments.
@@ -96,10 +100,6 @@ public class GenericLittleEndianWriter implements LittleEndianWriter {
         bos.writeByte(b);
     }
 
-    /**
-     *
-     * @param b
-     */
     @Override
     public void write(int b) {
         bos.writeByte((byte) b);
@@ -116,10 +116,6 @@ public class GenericLittleEndianWriter implements LittleEndianWriter {
         bos.writeByte((byte) ((i >>> 8) & 0xFF));
     }
 
-    /**
-     *
-     * @param i
-     */
     @Override
     public void writeShort(int i) {
         bos.writeByte((byte) (i & 0xFF));
@@ -149,11 +145,6 @@ public class GenericLittleEndianWriter implements LittleEndianWriter {
         write(s.getBytes(ASCII));
     }
 
-    /**
-     *
-     * @param s
-     * @param max
-     */
     @Override
     public void writeAsciiString(String s, int max) {
         if (s.getBytes(ASCII).length > max) {

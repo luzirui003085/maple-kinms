@@ -259,7 +259,7 @@ public class PlayerStorage {
 
                 if (!chr.isGM() || !checkGM) {
                     chr.getClient().disconnect(false, false, true);
-                    chr.getClient().getSession().close();
+                    chr.getClient().getSession().close(false);
                     World.Find.forceDeregister(chr.getId(), chr.getName());
                     itr.remove();
                 }
@@ -388,5 +388,11 @@ public class PlayerStorage {
                 wL2.unlock();
             }
         }
+    }
+
+
+    public final List<MapleCharacter> getAllCharactersThreadSafe() {
+        List<MapleCharacter> ret = new ArrayList<>(getAllCharacters());
+        return ret;
     }
 }

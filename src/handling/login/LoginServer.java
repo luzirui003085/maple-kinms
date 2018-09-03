@@ -1,27 +1,25 @@
 
 package handling.login;
 
-import java.io.IOException;
-import java.net.InetSocketAddress;
-import java.util.HashMap;
-import java.util.Map;
-
 import handling.MapleServerHandler;
 import handling.mina.MapleCodecFactory;
-import java.net.InetAddress;
-import java.util.HashSet;
-import org.apache.mina.common.ByteBuffer;
-import org.apache.mina.common.SimpleByteBufferAllocator;
-import org.apache.mina.common.IoAcceptor;
-
+import org.apache.mina.core.buffer.IoBuffer;
+import org.apache.mina.core.buffer.SimpleBufferAllocator;
+import org.apache.mina.core.filterchain.IoFilter;
+import org.apache.mina.core.service.IoAcceptor;
 import org.apache.mina.filter.codec.ProtocolCodecFilter;
-import org.apache.mina.transport.socket.nio.SocketAcceptorConfig;
-import org.apache.mina.transport.socket.nio.SocketAcceptor;
+import org.apache.mina.transport.socket.SocketSessionConfig;
+import org.apache.mina.transport.socket.nio.NioSocketAcceptor;
 import server.ServerProperties;
 import tools.Triple;
 
+import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+
 /**
- *
  * @author zjj
  */
 public class LoginServer {
@@ -29,22 +27,19 @@ public class LoginServer {
     /**
      *
      */
-    public static  int PORT = 8484;
-    private static String ip;
-    private static InetSocketAddress InetSocketadd;
+    public static int PORT = 8484;
     private static IoAcceptor acceptor;
     private static Map<Integer, Integer> load = new HashMap<>();
     private static String serverName, eventMessage;
     private static byte flag;
     private static int maxCharacters, userLimit, usersOn = 0;
     private static boolean finishedShutdown = true, adminOnly = false;
-    private static final HashMap<Integer, Triple<String, String, Integer>> loginAuth = new HashMap();
-    private static final HashSet<String> loginIPAuth = new HashSet();
+    private static final HashMap<Integer, Triple<String, String, Integer>> loginAuth = new HashMap<>();
+    private static final HashSet<String> loginIPAuth = new HashSet<>();
 
     private static LoginServer instance = new LoginServer();
 
     /**
-     *
      * @return
      */
     public static LoginServer getInstance() {
@@ -52,7 +47,6 @@ public class LoginServer {
     }
 
     /**
-     *
      * @param chrid
      * @param ip
      * @param tempIp
@@ -64,7 +58,6 @@ public class LoginServer {
     }
 
     /**
-     *
      * @param chrid
      * @return
      */
@@ -73,7 +66,6 @@ public class LoginServer {
     }
 
     /**
-     *
      * @param ip
      * @return
      */
@@ -82,7 +74,6 @@ public class LoginServer {
     }
 
     /**
-     *
      * @param ip
      */
     public static void removeIPAuth(String ip) {
@@ -90,7 +81,6 @@ public class LoginServer {
     }
 
     /**
-     *
      * @param ip
      */
     public static void addIPAuth(String ip) {
@@ -98,7 +88,6 @@ public class LoginServer {
     }
 
     /**
-     *
      * @param channel
      */
     public static final void addChannel(final int channel) {
@@ -106,7 +95,6 @@ public class LoginServer {
     }
 
     /**
-     *
      * @param channel
      */
     public static final void removeChannel(final int channel) {
@@ -117,14 +105,7 @@ public class LoginServer {
      *
      */
     public static final void run_startup_configurations() {
-        /*userLimit = Integer.parseInt(ServerProperties.getProperty("net.sf.odinms.login.userlimit"));
-         serverName = ServerProperties.getProperty("net.sf.odinms.login.serverName");
-         eventMessage = ServerProperties.getProperty("net.sf.odinms.login.eventMessage");
-         flag = Byte.parseByte(ServerProperties.getProperty("net.sf.odinms.login.flag"));
-         adminOnly = Boolean.parseBoolean(ServerProperties.getProperty("net.sf.odinms.world.admin", "false"));
-         maxCharacters = Integer.parseInt(ServerProperties.getProperty("net.sf.odinms.login.maxCharacters"));*/
         userLimit = Integer.parseInt(ServerProperties.getProperty("KinMS.UserLimit"));
-       // userLimit = 1;
         serverName = ServerProperties.getProperty("KinMS.ServerName");
         eventMessage = ServerProperties.getProperty("KinMS.EventMessage");
         flag = Byte.parseByte(ServerProperties.getProperty("KinMS.Flag"));
@@ -132,19 +113,17 @@ public class LoginServer {
         adminOnly = Boolean.parseBoolean(ServerProperties.getProperty("KinMS.Admin", "false"));
         maxCharacters = Integer.parseInt(ServerProperties.getProperty("KinMS.MaxCharacters"));
 
-        ByteBuffer.setUseDirectBuffers(false);
-        ByteBuffer.setAllocator(new SimpleByteBufferAllocator());
+        IoBuffer.setUseDirectBuffer(false);
+        IoBuffer.setAllocator(new SimpleBufferAllocator());
+        acceptor = new NioSocketAcceptor();
+        acceptor.getFilterChain().addLast("codec", (IoFilter) new ProtocolCodecFilter(new MapleCodecFactory()));
 
-        acceptor = new SocketAcceptor();
-        final SocketAcceptorConfig cfg = new SocketAcceptorConfig();
-        cfg.getSessionConfig().setTcpNoDelay(true);
-        cfg.setDisconnectOnUnbind(true);
-        cfg.getFilterChain().addLast("codec", new ProtocolCodecFilter(new MapleCodecFactory()));
+        acceptor.setHandler(new MapleServerHandler(-1, false));
+        //acceptor.getSessionConfig().setIdleTime(IdleStatus.BOTH_IDLE, 30);
+        ((SocketSessionConfig) acceptor.getSessionConfig()).setTcpNoDelay(true);
 
         try {
-            InetAddress a = InetAddress.getLocalHost();
-            InetSocketadd = new InetSocketAddress(PORT);
-            acceptor.bind(InetSocketadd, new MapleServerHandler(-1, false), cfg);
+            acceptor.bind(new InetSocketAddress(PORT));
             System.out.println("服务器   蓝蜗牛: 启动端口 " + PORT);
         } catch (IOException e) {
             System.err.println("Binding to port " + PORT + " failed" + e);
@@ -159,12 +138,11 @@ public class LoginServer {
             return;
         }
         System.out.println("Shutting down login...");
-        acceptor.unbindAll();
+        acceptor.unbind(new InetSocketAddress(PORT));
         finishedShutdown = true; //nothing. lol
     }
 
     /**
-     *
      * @return
      */
     public static final String getServerName() {
@@ -172,7 +150,6 @@ public class LoginServer {
     }
 
     /**
-     *
      * @return
      */
     public static final String getEventMessage() {
@@ -180,7 +157,6 @@ public class LoginServer {
     }
 
     /**
-     *
      * @return
      */
     public static final byte getFlag() {
@@ -188,7 +164,6 @@ public class LoginServer {
     }
 
     /**
-     *
      * @return
      */
     public static final int getMaxCharacters() {
@@ -196,7 +171,6 @@ public class LoginServer {
     }
 
     /**
-     *
      * @return
      */
     public static final Map<Integer, Integer> getLoad() {
@@ -204,7 +178,6 @@ public class LoginServer {
     }
 
     /**
-     *
      * @param load_
      * @param usersOn_
      */
@@ -214,7 +187,6 @@ public class LoginServer {
     }
 
     /**
-     *
      * @param newMessage
      */
     public static final void setEventMessage(final String newMessage) {
@@ -222,7 +194,6 @@ public class LoginServer {
     }
 
     /**
-     *
      * @param newflag
      */
     public static final void setFlag(final byte newflag) {
@@ -230,7 +201,6 @@ public class LoginServer {
     }
 
     /**
-     *
      * @return
      */
     public static final int getUserLimit() {
@@ -238,7 +208,6 @@ public class LoginServer {
     }
 
     /**
-     *
      * @return
      */
     public static final int getUsersOn() {
@@ -246,7 +215,6 @@ public class LoginServer {
     }
 
     /**
-     *
      * @param newLimit
      */
     public static final void setUserLimit(final int newLimit) {
@@ -254,15 +222,13 @@ public class LoginServer {
     }
 
     /**
-     *
      * @return
      */
     public static final int getNumberOfSessions() {
-        return acceptor.getManagedSessions(InetSocketadd).size();
+        return acceptor.getManagedSessions().size();
     }
 
     /**
-     *
      * @return
      */
     public static final boolean isAdminOnly() {
@@ -270,7 +236,6 @@ public class LoginServer {
     }
 
     /**
-     *
      * @return
      */
     public static final boolean isShutdown() {

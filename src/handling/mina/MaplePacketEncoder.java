@@ -24,17 +24,21 @@ import client.MapleClient;
 import constants.ServerConstants;
 import handling.MaplePacket;
 import handling.SendPacketOpcode;
+import java.nio.ByteBuffer;
+import tools.MapleAESOFB;
+import tools.MapleCustomEncryption;
+
 import java.util.concurrent.locks.Lock;
-import org.apache.mina.common.ByteBuffer;
-import org.apache.mina.common.IoSession;
+import org.apache.mina.core.buffer.IoBuffer;
+import org.apache.mina.core.session.IoSession;
+
+
 import org.apache.mina.filter.codec.ProtocolEncoder;
 import org.apache.mina.filter.codec.ProtocolEncoderOutput;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import tools.FileoutputUtil;
 import tools.HexTool;
-import tools.MapleAESOFB;
-import tools.MapleCustomEncryption;
 import tools.data.input.ByteArrayByteStream;
 import tools.data.input.GenericLittleEndianAccessor;
 
@@ -56,11 +60,14 @@ public class MaplePacketEncoder implements ProtocolEncoder {
                 int pHeader = readFirstShort(inputInitialPacket);
                 String pHeaderStr = Integer.toHexString(pHeader).toUpperCase();
                 String op = lookupRecv(pHeader);
+                boolean show = true;
                 String Recv = "服务端发送 " + op + " [" + pHeaderStr + "] (" + packetLen + ")\r\n";
                 if (packetLen <= 50000) {
                     String RecvTo = Recv + HexTool.toString(inputInitialPacket) + "\r\n" + HexTool.toStringFromAscii(inputInitialPacket);
-                    FileoutputUtil.packetLog("log\\服务端封包.log", RecvTo);
-                    //log.info("服务端发送" + "\r\n" + HexTool.toString(inputInitialPacket));
+                    if (show) {
+                        FileoutputUtil.packetLog("日志\\log\\服务端封包.log", RecvTo);
+                        System.out.println(RecvTo);
+                    } //log.info("服务端发送" + "\r\n" + HexTool.toString(inputInitialPacket));
                 } else {
                     log.info(HexTool.toString(new byte[]{inputInitialPacket[0], inputInitialPacket[1]}) + " ...");
                 }
@@ -81,9 +88,9 @@ public class MaplePacketEncoder implements ProtocolEncoder {
                 mutex.unlock();
             }
             System.arraycopy(unencrypted, 0, ret, 4, unencrypted.length); // Copy the unencrypted > "ret"
-            out.write(ByteBuffer.wrap(ret));
+            out.write(IoBuffer.wrap(ret));
         } else { // no client object created yet, send unencrypted (hello)
-            out.write(ByteBuffer.wrap(((MaplePacket) message).getBytes()));
+            out.write(IoBuffer.wrap(((MaplePacket) message).getBytes()));
             // out.write(ByteBuffer.wrap(((byte[]) message)));
         }
     }

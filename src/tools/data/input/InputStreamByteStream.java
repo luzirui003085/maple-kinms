@@ -89,11 +89,6 @@ public class InputStreamByteStream implements ByteInputStream {
         }
     }
 
-    /**
-     *
-     * @param b
-     * @return
-     */
     @Override
     public final String toString(final boolean b) { //?
         return toString();

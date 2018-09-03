@@ -20,7 +20,9 @@
  */
 package tools.data.output;
 
-import org.apache.mina.common.ByteBuffer;
+import org.apache.mina.core.buffer.IoBuffer;
+
+
 
 /**
  * Uses a <code>org.apache.mina.common.ByteBuffer</code> to implement a generic
@@ -32,7 +34,7 @@ import org.apache.mina.common.ByteBuffer;
  */
 public class ByteBufferLittleEndianWriter extends GenericLittleEndianWriter {
 
-    private ByteBuffer bb;
+    private IoBuffer bb;
 
     /**
      * Constructor - Constructs this object as fixed at the default size.
@@ -58,7 +60,7 @@ public class ByteBufferLittleEndianWriter extends GenericLittleEndianWriter {
      * @param autoExpand Expand if needed.
      */
     public ByteBufferLittleEndianWriter(final int initialSize, final boolean autoExpand) {
-        bb = ByteBuffer.allocate(initialSize);
+        bb = IoBuffer.allocate(initialSize);
         bb.setAutoExpand(autoExpand);
         setByteOutputStream(new ByteBufferOutputstream(bb));
     }
@@ -68,7 +70,7 @@ public class ByteBufferLittleEndianWriter extends GenericLittleEndianWriter {
      *
      * @return A flipped version of the underlying bytebuffer.
      */
-    public ByteBuffer getFlippedBB() {
+    public IoBuffer getFlippedBB() {
         return bb.flip();
     }
 
@@ -77,7 +79,7 @@ public class ByteBufferLittleEndianWriter extends GenericLittleEndianWriter {
      *
      * @return The underlying bytebuffer.
      */
-    public ByteBuffer getByteBuffer() {
+    public IoBuffer getByteBuffer() {
         return bb;
     }
 }

@@ -23,11 +23,12 @@ package handling.mina;
 import client.MapleClient;
 import constants.ServerConstants;
 import handling.RecvPacketOpcode;
+import org.apache.mina.core.buffer.IoBuffer;
+import org.apache.mina.core.session.IoSession;
 import tools.MapleAESOFB;
 import tools.MapleCustomEncryption;
 
-import org.apache.mina.common.ByteBuffer;
-import org.apache.mina.common.IoSession;
+
 import org.apache.mina.filter.codec.CumulativeProtocolDecoder;
 import org.apache.mina.filter.codec.ProtocolDecoderOutput;
 import org.slf4j.Logger;
@@ -47,8 +48,7 @@ public class MaplePacketDecoder extends CumulativeProtocolDecoder {
         public int packetlength = -1;
     }
 
-    @Override
-    protected boolean doDecode(IoSession session, ByteBuffer in, ProtocolDecoderOutput out) throws Exception {
+    protected boolean doDecode(IoSession session, IoBuffer in, ProtocolDecoderOutput out) throws Exception {
         DecoderState decoderState = (DecoderState) session.getAttribute(DECODER_STATE_KEY);
 
         if (decoderState == null) {
@@ -62,12 +62,7 @@ public class MaplePacketDecoder extends CumulativeProtocolDecoder {
             if (in.remaining() >= 4) {
                 final int packetHeader = in.getInt();
                 if (!client.getReceiveCrypto().checkPacket(packetHeader)) {
-                    session.close();
-                    String note = "时间：" + FileoutputUtil.CurrentReadable_Time() + " "
-                            + "|| packetHeader：" + packetHeader + ""
-                            + "|| 玩家名字：" + client.getPlayer().getName() + ""
-                            + "|| 玩家地图：" + client.getPlayer().getMapId() + "\r\n";
-                    FileoutputUtil.packetLog("logs\\客户端包掉线.log", note);
+                    session.close(false);
                     return false;
                 }
                 decoderState.packetlength = MapleAESOFB.getPacketLength(packetHeader);
@@ -84,18 +79,43 @@ public class MaplePacketDecoder extends CumulativeProtocolDecoder {
             client.getReceiveCrypto().crypt(decryptedPacket);
             MapleCustomEncryption.decryptData(decryptedPacket);
             out.write(decryptedPacket);
+            if (ServerConstants.封包显示) {
+                int packetLen = decryptedPacket.length;
+                int pHeader = readFirstShort(decryptedPacket);
+                String pHeaderStr = Integer.toHexString(pHeader).toUpperCase();
+                String op = lookupSend(pHeader);
+                boolean show = true;
+                switch (op) {
+                    case "PONG":
+                    case "NPC_ACTION":
+                    case "MOVE_LIFE":
+                    case "MOVE_PLAYER":
+                    case "MOVE_ANDROID":
+                    case "MOVE_SUMMON":
+                    case "AUTO_AGGRO":
+                    case "HEAL_OVER_TIME":
+                    case "BUTTON_PRESSED":
+                    case "STRANGE_DATA":
+                        show = false;
+                }
+                String Send = "客户端发送 " + op + " [" + pHeaderStr + "] (" + packetLen + ")\r\n";
+                if (packetLen <= 3000) {
+                    String SendTo = Send + HexTool.toString(decryptedPacket) + "\r\n" + HexTool.toStringFromAscii(decryptedPacket);
+                    //log.info(HexTool.toString(decryptedPacket) + "客户端发送");
+                    if (show) {
+                        FileoutputUtil.packetLog("日志\\log\\客户端封包.log", SendTo);
+                        System.out.println(SendTo);
+                    }
+                    String SendTos = "\r\n时间：" + FileoutputUtil.CurrentReadable_Time() + "  ";
+                    if (op.equals("UNKNOWN")) {
+                        FileoutputUtil.packetLog("日志\\log\\未知客服端封包.log", SendTos + SendTo);
+                    }
+                } else {
+                    log.info(HexTool.toString(new byte[]{decryptedPacket[0], decryptedPacket[1]}) + "...");
+                }
+            }
             return true;
         }
-        /* if (in.remaining() >= decoderState.packetlength) {
-            final byte decryptedPacket[] = new byte[decoderState.packetlength];
-            in.get(decryptedPacket, 0, decoderState.packetlength);
-            decoderState.packetlength = -1;
-
-            client.getReceiveCrypto().crypt(decryptedPacket);
-//	    MapleCustomEncryption.decryptData(decryptedPacket);
-            out.write(decryptedPacket);
-            return true;
-        }*/
         return false;
     }
 

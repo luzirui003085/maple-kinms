@@ -103,7 +103,7 @@ public class GameConstants {
     /**
      *
      */
-    public static final String MASTER = "%&HYGEomgLOL";
+    // public static final String MASTER = "%&HYGEomgLOL";
 
     /**
      *

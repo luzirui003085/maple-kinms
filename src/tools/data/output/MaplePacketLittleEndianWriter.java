@@ -20,9 +20,10 @@
  */
 package tools.data.output;
 
+import java.io.ByteArrayOutputStream;
+
 import handling.ByteArrayMaplePacket;
 import handling.MaplePacket;
-import java.io.ByteArrayOutputStream;
 import server.ServerProperties;
 import tools.HexTool;
 
@@ -36,7 +37,7 @@ import tools.HexTool;
 public class MaplePacketLittleEndianWriter extends GenericLittleEndianWriter {
 
     private final ByteArrayOutputStream baos;
-    private static boolean debugMode = Boolean.parseBoolean(ServerProperties.getProperty("KinMS.Debug", "false"));
+    private static boolean debugMode = Boolean.parseBoolean(ServerProperties.getProperty("MinaMS.Debug", "false"));
 
     /**
      * Constructor - initializes this stream with a default size.

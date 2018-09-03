@@ -38,10 +38,6 @@ public interface LittleEndianAccessor {
      */
     byte readByte();
 
-    /**
-     *
-     * @return
-     */
     int readByteAsInt();
 
     /**
@@ -136,10 +132,5 @@ public interface LittleEndianAccessor {
      */
     long available();
 
-    /**
-     *
-     * @param b
-     * @return
-     */
     String toString(final boolean b);
 }

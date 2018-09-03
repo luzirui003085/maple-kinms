@@ -1,42 +1,36 @@
 package handling;
 
-import constants.ServerConstants;
-import java.util.Map;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.concurrent.ConcurrentHashMap;
-
 import client.MapleClient;
+import constants.ServerConstants;
 import handling.cashshop.CashShopServer;
+import handling.cashshop.handler.CashShopOperation;
+import handling.cashshop.handler.MTSOperation;
 import handling.channel.ChannelServer;
-import handling.cashshop.handler.*;
 import handling.channel.handler.*;
 import handling.login.LoginServer;
-import handling.login.handler.*;
+import handling.login.handler.CharLoginHandler;
+import handling.login.handler.PacketErrorHandler;
 import handling.mina.MaplePacketDecoder;
-import java.io.File;
-import java.io.FileWriter;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.EnumSet;
-import java.util.HashMap;
+import org.apache.mina.core.service.IoHandlerAdapter;
+import org.apache.mina.core.session.IdleStatus;
+import org.apache.mina.core.session.IoSession;
+import server.MTSStorage;
 import server.Randomizer;
+import server.ServerProperties;
+import tools.FileoutputUtil;
 import tools.MapleAESOFB;
-import tools.packet.LoginPacket;
+import tools.Pair;
 import tools.data.input.ByteArrayByteStream;
 import tools.data.input.GenericSeekableLittleEndianAccessor;
 import tools.data.input.SeekableLittleEndianAccessor;
-import tools.Pair;
+import tools.packet.LoginPacket;
 
-import org.apache.mina.common.IoHandlerAdapter;
-import org.apache.mina.common.IdleStatus;
-import org.apache.mina.common.IoSession;
-import server.MTSStorage;
-import server.ServerProperties;
-import tools.FileoutputUtil;
+import java.io.File;
+import java.io.FileWriter;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
- *
  * @author zjj
  */
 public class MapleServerHandler extends IoHandlerAdapter {
@@ -59,7 +53,6 @@ public class MapleServerHandler extends IoHandlerAdapter {
     private static final EnumSet<RecvPacketOpcode> blocked = EnumSet.noneOf(RecvPacketOpcode.class);
 
     /**
-     *
      * @param channel
      * @param cs
      */
@@ -69,7 +62,6 @@ public class MapleServerHandler extends IoHandlerAdapter {
     }
 
     /**
-     *
      * @param session
      * @param message
      * @throws Exception
@@ -84,7 +76,6 @@ public class MapleServerHandler extends IoHandlerAdapter {
     }
 
     /**
-     *
      * @param session
      * @param cause
      * @throws Exception
@@ -94,7 +85,6 @@ public class MapleServerHandler extends IoHandlerAdapter {
     }
 
     /**
-     *
      * @param session
      * @throws Exception
      */
@@ -102,19 +92,8 @@ public class MapleServerHandler extends IoHandlerAdapter {
     public void sessionOpened(final IoSession session) throws Exception {
         // Start of IP checking
         final String address = session.getRemoteAddress().toString().split(":")[0];
-
-        /*
-        if(channel == -1 && !cs){
-            if (!address.equals("/127.0.0.1")) {
-                session.close();
-                System.out.println("防万能登录器触发");
-                return;
-            }
-        }
-        */
-
         if (BlockedIP.contains(address)) {
-            session.close();
+            session.close(false);
             return;
         }
         final Pair<Long, Byte> track = tracker.get(address);
@@ -134,7 +113,7 @@ public class MapleServerHandler extends IoHandlerAdapter {
             if (count >= 10) {
                 BlockedIP.add(address);
                 tracker.remove(address); // Cleanup
-                session.close();
+                session.close(false);
                 return;
             }
         }
@@ -144,20 +123,16 @@ public class MapleServerHandler extends IoHandlerAdapter {
 
         if (channel > -1) {
             if (ChannelServer.getInstance(channel).isShutdown()) {
-                session.close();
+                session.close(false);
                 return;
-            }
-            if (!LoginServer.containsIPAuth(IP)) {
-                //         session.close();
-                //      return;
             }
         } else if (cs) {
             if (CashShopServer.isShutdown()) {
-                session.close();
+                session.close(false);
                 return;
             }
         } else if (LoginServer.isShutdown()) {
-            session.close();
+            session.close(false);
             return;
         }
         LoginServer.removeIPAuth(IP);
@@ -178,8 +153,8 @@ public class MapleServerHandler extends IoHandlerAdapter {
         session.write(LoginPacket.getHello(ServerConstants.MAPLE_VERSION,
                 ServerConstants.Use_Fixed_IV ? serverSend : ivSend, ServerConstants.Use_Fixed_IV ? serverRecv : ivRecv));
         session.setAttribute(MapleClient.CLIENT_KEY, client);
-        session.setIdleTime(IdleStatus.READER_IDLE, 60);
-        session.setIdleTime(IdleStatus.WRITER_IDLE, 60);
+        session.setAttribute(IdleStatus.READER_IDLE, 60);
+        session.setAttribute(IdleStatus.WRITER_IDLE, 60);
 
         StringBuilder sb = new StringBuilder();
         if (channel > -1) {
@@ -194,7 +169,6 @@ public class MapleServerHandler extends IoHandlerAdapter {
     }
 
     /**
-     *
      * @param session
      * @throws Exception
      */
@@ -206,7 +180,7 @@ public class MapleServerHandler extends IoHandlerAdapter {
             try {
                 client.disconnect(true, cs);
             } finally {
-                session.close();
+                session.close(false);
                 session.removeAttribute(MapleClient.CLIENT_KEY);
             }
         }
@@ -214,7 +188,6 @@ public class MapleServerHandler extends IoHandlerAdapter {
     }
 
     /**
-     *
      * @param session
      * @param message
      */
@@ -245,29 +218,10 @@ public class MapleServerHandler extends IoHandlerAdapter {
                             return;
                         }
                     }
-//                    if (c.getPlayer() != null && (c.getPlayer().getId() == 313 || c.getPlayer().getId() == 1517)) {
-//                        try (FileWriter fw = new FileWriter(new File("Logs/MonitorLogs/" + c.getPlayer().getName() + "_log.txt"), true)) {
-//                            fw.write("[" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()) + "]" + String.valueOf(recv) + " (" + Integer.toHexString(header_num) + ") Handled: \r\n" + slea.toString() + "\r\n");
-//                            fw.flush();
-//                        }
-//                    }
-//                    if (c.getPlayer() != null && c.isMonitored()) {
-//                        if (!blocked.contains(recv)) {
-//                            try (FileWriter fw = new FileWriter(new File("Logs/MonitorLogs/" + c.getPlayer().getName() + "_log.txt"), true)) {
-//                                fw.write(String.valueOf(recv) + " (" + Integer.toHexString(header_num) + ") Handled: \r\n" + slea.toString() + "\r\n");
-//                                fw.flush();
-//                            }
-//                        }
-//                    }
                     handlePacket(recv, slea, c, cs);
                     return;
                 }
             }
-//            if (debugMode) {
-//                final StringBuilder sb = new StringBuilder("Received data 未處理 : ");
-//                sb.append(tools.HexTool.toString((byte[]) message)).append("\n").append(tools.HexTool.toStringFromAscii((byte[]) message));
-//                System.out.println(sb.toString());
-//            }
         } catch (Exception e) {
             FileoutputUtil.outputFileError(FileoutputUtil.PacketEx_Log, e);
         }
@@ -275,7 +229,6 @@ public class MapleServerHandler extends IoHandlerAdapter {
     }
 
     /**
-     *
      * @param session
      * @param status
      * @throws Exception
@@ -286,12 +239,14 @@ public class MapleServerHandler extends IoHandlerAdapter {
 
         if (client != null) {
             client.sendPing();
+        } else {
+            session.close(false);
+            return;
         }
         super.sessionIdle(session, status);
     }
 
     /**
-     *
      * @param header
      * @param slea
      * @param c

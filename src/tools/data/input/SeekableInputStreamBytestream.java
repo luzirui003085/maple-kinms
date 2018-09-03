@@ -48,11 +48,5 @@ public interface SeekableInputStreamBytestream extends ByteInputStream {
      */
     long getPosition() throws IOException;
 
-    /**
-     *
-     * @param b
-     * @return
-     */
-    @Override
-String toString(final boolean b);
+    String toString(final boolean b);
 }

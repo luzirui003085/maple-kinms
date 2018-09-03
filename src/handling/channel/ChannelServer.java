@@ -1,10 +1,12 @@
 package handling.channel;
 
 import client.MapleCharacter;
+import client.MapleClient;
 import database.DatabaseConnection;
 import handling.ByteArrayMaplePacket;
 import handling.MaplePacket;
 import handling.MapleServerHandler;
+import handling.cashshop.CashShopServer;
 import handling.login.LoginServer;
 import handling.mina.MapleCodecFactory;
 import handling.world.CheaterData;
@@ -16,12 +18,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
-import org.apache.mina.common.ByteBuffer;
-import org.apache.mina.common.IoAcceptor;
-import org.apache.mina.common.SimpleByteBufferAllocator;
+import org.apache.mina.core.buffer.IoBuffer;
+import org.apache.mina.core.buffer.SimpleBufferAllocator;
+import org.apache.mina.core.filterchain.IoFilter;
+import org.apache.mina.core.service.IoAcceptor;
 import org.apache.mina.filter.codec.ProtocolCodecFilter;
-import org.apache.mina.transport.socket.nio.SocketAcceptor;
-import org.apache.mina.transport.socket.nio.SocketAcceptorConfig;
+import org.apache.mina.transport.socket.SocketSessionConfig;
+import org.apache.mina.transport.socket.nio.NioSocketAcceptor;
 import scripting.EventScriptManager;
 import server.MapleSquad;
 import server.MapleSquad.MapleSquadType;
@@ -154,20 +157,24 @@ public class ChannelServer implements Serializable {
 
         ip = "127.0.0.1" + ":" + port;
 
-        ByteBuffer.setUseDirectBuffers(false);
-        ByteBuffer.setAllocator(new SimpleByteBufferAllocator());
+        IoBuffer.setUseDirectBuffer(false);
+        IoBuffer.setAllocator(new SimpleBufferAllocator());
 
-        acceptor = new SocketAcceptor();
-        final SocketAcceptorConfig acceptor_config = new SocketAcceptorConfig();
-        acceptor_config.getSessionConfig().setTcpNoDelay(true);
-        acceptor_config.setDisconnectOnUnbind(true);
-        acceptor_config.getFilterChain().addLast("codec", new ProtocolCodecFilter(new MapleCodecFactory()));
+        acceptor = new NioSocketAcceptor();
+        acceptor.getFilterChain().addLast("codec", (IoFilter) new ProtocolCodecFilter(new MapleCodecFactory()));
+//        final SocketAcceptorConfig acceptor_config = new SocketAcceptorConfig();
+//        acceptor_config.getSessionConfig().setTcpNoDelay(true);
+//        acceptor_config.setDisconnectOnUnbind(true);
+//        acceptor_config.getFilterChain().addLast("codec", new ProtocolCodecFilter(new MapleCodecFactory()));
         players = new PlayerStorage(this.channel);
         loadEvents();
+
         try {
-            this.serverHandler = new MapleServerHandler(this.channel, false);
-            acceptor.bind(new InetSocketAddress(port), serverHandler, acceptor_config);
-            System.out.println("频道 " + this.channel + ": 启动端口 " + port + ": 服务器IP " + ip + "");
+            acceptor.setHandler(new MapleServerHandler(this.channel, false));
+            acceptor.bind(new InetSocketAddress(port));
+            ((SocketSessionConfig) acceptor.getSessionConfig()).setTcpNoDelay(true);
+
+            System.out.println("频道 " + this.channel + ": 绑定端口 " + port + ": 服务器IP " + ip + "");
             eventSM.init();
         } catch (IOException e) {
             System.out.println("Binding to port " + port + " failed (ch: " + getChannel() + ")" + e);
@@ -185,38 +192,19 @@ public class ChannelServer implements Serializable {
         broadcastPacket(MaplePacketCreator.serverNotice(0, "這個頻道正在關閉中."));
         // dc all clients by hand so we get sessionClosed...
         shutdown = true;
-
         System.out.println("Channel " + channel + ", Saving hired merchants...");
-
         closeAllMerchants();
-
         System.out.println("Channel " + channel + ", Saving characters...");
-
         getPlayerStorage().disconnectAll();
-
         System.out.println("Channel " + channel + ", Unbinding...");
 
-        acceptor.unbindAll();
-        acceptor = null;
-
+        acceptor.unbind(new InetSocketAddress(port));
+//        org.apache.mina
         //temporary while we dont have !addchannel
         instances.remove(channel);
         LoginServer.removeChannel(channel);
         setFinishShutdown();
-//        if (threadToNotify != null) {
-//            synchronized (threadToNotify) {
-//                threadToNotify.notify();
-//            }
-//        }
     }
-
-    /**
-     *
-     */
-    public final void unbind() {
-        acceptor.unbindAll();
-    }
-
     /**
      *
      * @return
@@ -1184,8 +1172,7 @@ public class ChannelServer implements Serializable {
 
         System.out.println("频道 " + this.channel + " 解除绑定端口...");
 
-        this.acceptor.unbindAll();
-        this.acceptor = null;
+        acceptor.unbind(new InetSocketAddress(port));
 
         instances.remove(this.channel);
         setFinishShutdown();
@@ -1197,14 +1184,6 @@ public class ChannelServer implements Serializable {
      */
     public void addClone(FakeCharacter fc) {
         clones.add(fc);
-    }
-
-    /**
-     *
-     * @param fc
-     */
-    public void removeClone(FakeCharacter fc) {
-        clones.remove(fc);
     }
 
     /**
@@ -1285,4 +1264,49 @@ public class ChannelServer implements Serializable {
         return count;
     }
 
+
+    public static void forceRemovePlayerByAccId(MapleClient c, int accid) {
+        for (ChannelServer ch : ChannelServer.getAllInstances()) {
+            Collection<MapleCharacter> chrs = ch.getPlayerStorage().getAllCharactersThreadSafe();
+            for (MapleCharacter chr : chrs) {
+                if (chr.getAccountID() == accid) {
+                    try {
+                        if (chr.getClient() != null) {
+                            if (chr.getClient() != c) {
+                                chr.getClient().getSession().close(false);
+                                chr.getClient().disconnect(true, false);
+                            }
+                        }
+                    } catch (Exception ex) {
+                    }
+                    chrs = ch.getPlayerStorage().getAllCharactersThreadSafe();
+                    if (chr.getClient() != c) {
+                        if (chrs.contains(chr)) {
+                            ch.removePlayer(chr);
+                        }
+                        if (chr.getMap() != null) {
+                            chr.getMap().removePlayer(chr);
+                        }
+                    }
+                }
+            }
+        }
+        try {
+            Collection<MapleCharacter> chrs = CashShopServer.getPlayerStorage().getAllCharactersThreadSafe();
+            for (MapleCharacter chr : chrs) {
+                if (chr.getAccountID() == accid) {
+                    try {
+                        if (chr.getClient() != null) {
+                            if (chr.getClient() != c) {
+                                chr.getClient().getSession().close(false);
+                                chr.getClient().disconnect(true, false, true);
+                            }
+                        }
+                    } catch (Exception ex) {
+                    }
+                }
+            }
+        } catch (Exception ex) {
+        }
+    }
 }

@@ -50,10 +50,5 @@ public interface ByteInputStream {
      */
     long available();
 
-    /**
-     *
-     * @param b
-     * @return
-     */
     String toString(final boolean b);
 }
