@@ -973,7 +973,7 @@ public class MapleMonster extends AbstractLoadedMapleLife {
      * @param checkboss
      */
     public final void applyStatus(final MapleCharacter from, final MonsterStatusEffect status, final boolean poison, final long duration, final boolean venom, final boolean checkboss) {
-        if (!isAlive()) {
+        if (true || !isAlive()) {
             return;
         }
         ISkill skilz = SkillFactory.getSkill(status.getSkill());
@@ -1149,6 +1149,9 @@ public class MapleMonster extends AbstractLoadedMapleLife {
      * @param reflection
      */
     public final void applyMonsterBuff(final Map<MonsterStatus, Integer> effect, final int skillId, final long duration, final MobSkill skill, final List<Integer> reflection) {
+        if (true){
+            return;
+        }
         MobTimer timerManager = MobTimer.getInstance();
         final Runnable cancelTask = new Runnable() {
 
