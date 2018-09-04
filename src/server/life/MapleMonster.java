@@ -964,7 +964,7 @@ public class MapleMonster extends AbstractLoadedMapleLife {
     }
 
     /**
-     *
+     * 怪物被命中的debuff
      * @param from
      * @param status
      * @param poison
@@ -973,7 +973,7 @@ public class MapleMonster extends AbstractLoadedMapleLife {
      * @param checkboss
      */
     public final void applyStatus(final MapleCharacter from, final MonsterStatusEffect status, final boolean poison, final long duration, final boolean venom, final boolean checkboss) {
-        if (true || !isAlive()) {
+        if (!isAlive()) {
             return;
         }
         ISkill skilz = SkillFactory.getSkill(status.getSkill());
@@ -1141,7 +1141,7 @@ public class MapleMonster extends AbstractLoadedMapleLife {
     }
 
     /**
-     *
+     * 怪物主动的buff
      * @param effect
      * @param skillId
      * @param duration
